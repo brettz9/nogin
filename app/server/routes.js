@@ -1,8 +1,12 @@
+'use strict';
 
-const AccountManager = require('./modules/account-manager');
-const EmailDispatcher = require('./modules/email-dispatcher');
+const { join } = require('path');
+const express = require('express');
 
-const { isNullish, hasOwn } = require('./modules/common');
+const AccountManager = require('./modules/account-manager.js');
+const EmailDispatcher = require('./modules/email-dispatcher.js');
+
+const { isNullish, hasOwn } = require('./modules/common.js');
 
 module.exports = async function (app, config) {
   const {
@@ -13,6 +17,7 @@ module.exports = async function (app, config) {
     NL_SITE_URL,
     DB_URL,
     DB_NAME,
+    SERVE_COVERAGE,
     countries
   } = config;
 
@@ -228,6 +233,20 @@ module.exports = async function (app, config) {
     await AM.deleteAllAccounts();
     res.redirect('/print');
   });
+
+  if (SERVE_COVERAGE) {
+    // SHOW COVERAGE HTML ON SERVER
+    // We could add this in a separate file, but we'll leverage express here
+    app.use('/coverage', express.static(join(__dirname, '../../coverage')));
+  }
+
+  if (global.__coverage__) {
+    // See https://github.com/cypress-io/code-coverage
+
+    // ADD APP
+    // eslint-disable-next-line node/no-unpublished-require, global-require
+    require('@cypress/code-coverage/middleware/express.js')(app);
+  }
 
   app.get('*', function (req, res) {
     res.render('404', { title: 'Page Not Found' });

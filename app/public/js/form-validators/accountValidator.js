@@ -1,4 +1,6 @@
 /* global $ */
+'use strict';
+
 window.AccountValidator = class AccountValidator {
   constructor () {
     // build array maps of the form inputs & control groups

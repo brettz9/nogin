@@ -1,4 +1,6 @@
 /* global $, AccountValidator, SignupController */
+'use strict';
+
 $(document).ready(function () {
   const av = new AccountValidator();
   /* const sc = */ new SignupController(); // eslint-disable-line no-new
@@ -21,7 +23,7 @@ $(document).ready(function () {
   $('#name-tf').focus();
 
   // customize the account signup form
-  $('#account-form h2').text('Signup');
+  $('#account-form div.heading2').text('Signup');
   $('#account-form #sub').text('Please tell us a little about yourself');
   $('#account-form-btn1').html('Cancel');
   $('#account-form-btn2').html('Submit');
@@ -29,7 +31,7 @@ $(document).ready(function () {
 
   // setup the alert that displays when an account is successfully created
   $('.modal-alert').modal({ show: false, keyboard: false, backdrop: 'static' });
-  $('.modal-alert .modal-header h4').text('Account Created!');
+  $('.modal-alert .modal-header h1').text('Account Created!');
   $('.modal-alert .modal-body p').html(
     'Your account has been created.</br>Click OK to return to the login page.'
   );

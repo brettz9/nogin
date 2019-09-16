@@ -1,4 +1,6 @@
 /* global $, HomeController, AccountValidator */
+'use strict';
+
 $(document).ready(function () {
   const hc = new HomeController();
   const av = new AccountValidator();
@@ -26,7 +28,7 @@ $(document).ready(function () {
   $('#name-tf').focus();
 
   // customize the account settings form
-  $('#account-form h2').text('Account Settings');
+  $('#account-form div.heading2').text('Account Settings');
   $('#account-form #sub').text(
     'Here are the current settings for your account.'
   );
@@ -39,7 +41,7 @@ $(document).ready(function () {
   // setup the confirm window that displays when the user chooses to
   //  delete their account
   $('.modal-confirm').modal({ show: false, keyboard: true, backdrop: true });
-  $('.modal-confirm .modal-header h4').text('Delete Account');
+  $('.modal-confirm .modal-header h1').text('Delete Account');
   $('.modal-confirm .modal-body p').html(
     'Are you sure you want to delete your account?'
   );

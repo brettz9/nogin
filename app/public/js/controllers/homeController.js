@@ -1,4 +1,6 @@
 /* global $ */
+'use strict';
+
 window.HomeController = class HomeController {
   constructor () {
     // handle user logout
@@ -51,7 +53,7 @@ window.HomeController = class HomeController {
       $('.modal-alert').modal({
         show: false, keyboard: false, backdrop: 'static'
       });
-      $('.modal-alert .modal-header h4').text('Success!');
+      $('.modal-alert .modal-header h1').text('Success!');
       $('.modal-alert .modal-body p').html(msg);
       $('.modal-alert').modal('show');
       $('.modal-alert button').click(() => {
@@ -64,7 +66,7 @@ window.HomeController = class HomeController {
   // eslint-disable-next-line class-methods-use-this
   onUpdateSuccess () {
     $('.modal-alert').modal({ show: false, keyboard: true, backdrop: true });
-    $('.modal-alert .modal-header h4').text('Success!');
+    $('.modal-alert .modal-header h1').text('Success!');
     $('.modal-alert .modal-body p').html('Your account has been updated.');
     $('.modal-alert').modal('show');
     $('.modal-alert button').off('click');

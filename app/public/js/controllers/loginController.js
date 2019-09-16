@@ -1,4 +1,6 @@
 /* global $ */
+'use strict';
+
 window.LoginController = function LoginController () {
   // bind event listeners to button clicks
   $('#retrieve-password-submit').click(() => {

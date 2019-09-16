@@ -1,3 +1,4 @@
+'use strict';
 
 const isNullish = (o) => o === null || o === undefined;
 

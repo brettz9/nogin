@@ -1,4 +1,6 @@
 /* global $ */
+'use strict';
+
 window.EmailValidator = class EmailValidator {
   constructor () {
     const modal = $('#get-credentials');

@@ -1,4 +1,6 @@
 /* global $, ResetValidator */
+'use strict';
+
 $(document).ready(function () {
   const rv = new ResetValidator();
 

@@ -1,4 +1,6 @@
 /* eslint-disable quotes */
+'use strict';
+
 module.exports = [
   { short: "  ", name: "Please select a country" },
   { short: "AF", name: "Afghanistan" },

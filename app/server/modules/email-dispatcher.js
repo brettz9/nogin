@@ -1,3 +1,5 @@
+'use strict';
+
 const emailjs = require('emailjs/email');
 
 class EmailDispatcher {

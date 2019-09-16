@@ -1,4 +1,5 @@
 /* global $ */
+'use strict';
 
 window.ResetValidator = class ResetValidator {
   constructor () {

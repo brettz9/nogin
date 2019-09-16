@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "codeCoverage": {
+    "url": "http://localhost:3000/__coverage__"
+  },
+  "projectId": "35quw5"
+}

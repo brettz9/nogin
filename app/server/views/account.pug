@@ -1,46 +1,48 @@
 
 // preset form values if we receive a userdata object
-- user = typeof udata !== 'undefined' ? udata : { }
+-var user = typeof udata !== 'undefined' ? udata : { }
 // store the userId on the client side in a hidden input field
-input(type='hidden', value= user._id)#userId
+input#userId(type='hidden' value=user._id)
 
-#account-form-container.center-vertical
-	form.card.card-body.bg-light(method='post')#account-form
-		h2
-		h6#sub Please tell us a little about yourself.
+#account-form-container.center-vertical(role='form')
+	form.card.card-body.bg-light#account-form(method='post')
+		.heading2
+		.heading6#sub Please tell us a little about yourself.
 		hr
 		.form-group.row
-			label.col-sm-3.col-form-label.col-form-label-sm Name
+			label.col-sm-3.col-form-label.col-form-label-sm(for='name-tf') Name
 			.col-sm-9
-				input.form-control#name-tf(type='text', name='name', value= user.name)
+				input.form-control#name-tf(type='text' name='name' value= user.name)
 
 		.form-group.row
-			label.col-sm-3.col-form-label.col-form-label-sm Email
+			label.col-sm-3.col-form-label.col-form-label-sm(for='email-tf') Email
 			.col-sm-9
-				input.form-control#email-tf(type='email', name='email', value= user.email)
+				input.form-control#email-tf(type='email' name='email' value= user.email)
 
 		.form-group.row.margin-zero
 			label.col-sm-3.col-form-label.col-form-label-sm Location
 			.col-sm-9
 				select.custom-select#country-list(name='country')
 					each item in countries
-						option(selected=item.name == user.country)= item.name
+						option(selected=item.name == user.country)=item.name
 		hr
 		.form-group.row
-			label.col-sm-3.col-form-label.col-form-label-sm Username
+			label.col-sm-3.col-form-label.col-form-label-sm(for='user-tf') Username
 			.col-sm-9
-				input.form-control#user-tf(type='text', name='user', value= user.user).disabled
+				input.form-control.disabled#user-tf(
+					type='text' name='user' value= user.user
+				)
 
 		.form-group.row.margin-zero
-			label.col-sm-3.col-form-label.col-form-label-sm Password
+			label.col-sm-3.col-form-label.col-form-label-sm(for='pass-tf') Password
 			.col-sm-9
-				input.form-control#pass-tf(type='password', name='pass', value='')
+				input.form-control#pass-tf(type='password' name='pass' value='')
 
 		hr
 		.form-buttons
-			button(type='button')#account-form-btn1.btn.btn-outline-dark
-			button(type='submit')#account-form-btn2.btn.btn-primary
+			button#account-form-btn1.btn.btn-outline-dark(type='button')
+			button#account-form-btn2.btn.btn-primary(type='submit')
 
 // display form errors in a custom modal window
 
-include modals/form-errors
+include modals/form-errors.pug

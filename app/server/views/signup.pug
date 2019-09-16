@@ -1,10 +1,10 @@
 
-extends layout
+extends layout.pug
 
 block content
 
-	include account
-	include modals/alert
+	include account.pug
+	include modals/alert.pug
 
 block scripts
 	script(src='/js/views/signup.js')

@@ -1,9 +1,11 @@
+'use strict';
+
 /* eslint-disable-next-line no-shadow  */
 const crypto = require('crypto');
 const moment = require('moment');
 const { MongoClient, ObjectID } = require('mongodb');
 
-const { isNullish } = require('./common');
+const { isNullish } = require('./common.js');
 
 const guid = function () {
   /* eslint-disable no-bitwise */
@@ -40,7 +42,7 @@ const saltAndHash = function (pass) {
 };
 
 const validatePassword = function (plainPass, hashedPass) {
-  const salt = hashedPass.substr(0, 10);
+  const salt = hashedPass.slice(0, 10);
   const validHash = salt + md5(plainPass + salt);
   return hashedPass === validHash;
 };

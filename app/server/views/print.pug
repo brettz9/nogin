@@ -1,21 +1,21 @@
 
-extends layout
+extends layout.pug
 
 block content
-	div.container(style='margin:20px auto')
+	.container.print(role='main')
 		table.table.table-bordered.table-striped
 			thead.thead-dark
 				tr
-					th(style='width:50px;text-align:center') #
-					th(style='width:220px') Name
-					th(style='width:220px') Username
-					th(style='width:240px') Location
+					th.print.number #
+					th.print.name Name
+					th.print.username Username
+					th.print.location Location
 					th Account Created
 			tbody
-			- for (const [i, {name, user, country, date}] of accts.entries())
+			-for (const [i, {name, user, country, date}] of accts.entries())
 				tr
-					td(style='text-align:center')= i+1
-					td= name
-					td= user
-					td= country
-					td= date
+					td.print.number=i+1
+					td=name
+					td=user
+					td=country
+					td=date
