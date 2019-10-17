@@ -7,6 +7,8 @@ const { MongoClient, ObjectID } = require('mongodb');
 
 const { isNullish } = require('./common.js');
 
+const PASS_VER = 1;
+
 const guid = function () {
   /* eslint-disable no-bitwise */
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, (c) => {
@@ -21,30 +23,68 @@ const guid = function () {
   private encryption & validation methods
 */
 
-const generateSalt = function () {
-  // eslint-disable-next-line max-len
-  const set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ';
-  let salt = '';
-  for (let i = 0; i < 10; i++) {
-    const p = Math.floor(Math.random() * set.length);
-    salt += set[p];
-  }
-  return salt;
-};
-
 const md5 = function (str) {
   return crypto.createHash('md5').update(str).digest('hex');
 };
 
 const saltAndHash = function (pass) {
-  const salt = generateSalt();
-  return salt + md5(pass + salt);
+  const hasher = 'sha256';
+  const iterations = 10000;
+  const hashLength = 32;
+  const saltBytes = 16;
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line promise/prefer-await-to-callbacks
+    crypto.randomBytes(saltBytes, function (err, buf) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const salt = buf.toString('hex');
+      crypto.pbkdf2(
+        pass, salt, iterations, hashLength, hasher,
+        function (error, derivedKey) {
+          if (error) {
+            reject(error);
+            return;
+          }
+          const hash = derivedKey.toString('hex');
+          resolve([salt, hash].join('$'));
+        }
+      );
+    });
+  });
 };
 
-const validatePassword = function (plainPass, hashedPass) {
+const validatePasswordV0 = function (plainPass, hashedPass) {
   const salt = hashedPass.slice(0, 10);
   const validHash = salt + md5(plainPass + salt);
-  return hashedPass === validHash;
+  if (hashedPass !== validHash) {
+    throw new Error('invalid-password');
+  }
+};
+
+const validatePasswordV1 = function (plainPass, hashedPass) {
+  const hasher = 'sha256';
+  const iterations = 10000;
+  const hashLength = 32;
+  const salt = hashedPass.split('$')[0];
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    crypto.pbkdf2(
+      plainPass, salt, iterations, hashLength, hasher,
+      // eslint-disable-next-line promise/prefer-await-to-callbacks
+      function (err, derivedKey) {
+        if (err) {
+          reject(new Error('invalid-password'));
+          return;
+        }
+        const plainPassHash = derivedKey.toString('hex');
+        const validHash = [salt, plainPassHash].join('$');
+        resolve(hashedPass === validHash);
+      }
+    );
+  });
 };
 
 const getObjectId = function (id) {
@@ -112,11 +152,13 @@ class AccountManager {
     if (isNullish(o)) {
       throw new Error('user-not-found');
     }
-    const res = validatePassword(pass, o.pass);
-    if (res) {
-      return o;
+    // These may throw
+    if (o.pass_ver === undefined || o.pass_ver === 0) {
+      validatePasswordV0(pass, o.pass);
+    } else if (o.pass_ver === 1) {
+      await validatePasswordV1(pass, o.pass);
     }
-    throw new Error('invalid-password');
+    return o;
   }
 
   async generateLoginKey (user, ipAddress) {
@@ -176,16 +218,17 @@ class AccountManager {
       throw new Error('email-taken');
     }
 
-    const hash = saltAndHash(newData.pass);
+    const hash = await saltAndHash(newData.pass);
     // eslint-disable-next-line require-atomic-updates
     newData.pass = hash;
+    // eslint-disable-next-line require-atomic-updates
+    newData.pass_ver = PASS_VER;
     // append date stamp when record was created
     // eslint-disable-next-line require-atomic-updates
     newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
     return this.accounts.insertOne(newData);
   }
 
-  // eslint-disable-next-line require-await
   async updateAccount (newData) {
     // eslint-disable-next-line require-await
     const findOneAndUpdate = async (data) => {
@@ -194,28 +237,31 @@ class AccountManager {
         email: data.email,
         country: data.country
       };
-      if (data.pass) o.pass = data.pass;
+      if (data.pass) {
+        o.pass = data.pass;
+        o.pass_ver = PASS_VER;
+      }
       return this.accounts.findOneAndUpdate(
         { _id: getObjectId(data.id) },
         { $set: o },
-        { returnOriginal: false }
+        { upsert: true, returnOriginal: false }
       );
     };
     if (newData.pass === '') {
       return findOneAndUpdate(newData);
     }
-    const hash = saltAndHash(newData.pass);
+    const hash = await saltAndHash(newData.pass);
+    // eslint-disable-next-line require-atomic-updates
     newData.pass = hash;
     return findOneAndUpdate(newData);
   }
 
-  // eslint-disable-next-line require-await
   async updatePassword (passKey, newPass) {
-    const hash = saltAndHash(newPass);
-    newPass = hash;
+    const hash = await saltAndHash(newPass);
     return this.accounts.findOneAndUpdate({ passKey }, {
-      $set: { pass: newPass }, $unset: { passKey: '' }
-    }, { returnOriginal: false });
+      $set: { pass: hash, pass_ver: PASS_VER },
+      $unset: { passKey: '' }
+    }, { upsert: true, returnOriginal: false });
   }
 
   /*
