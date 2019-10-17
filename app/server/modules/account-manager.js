@@ -91,17 +91,6 @@ const getObjectId = function (id) {
   return new ObjectID(id);
 };
 
-/*
-const listIndexes = function () {
-  accounts.indexes(null, (e, indexes) => {
-    // eslint-disable-next-line unicorn/no-for-loop
-    for (let i = 0; i < indexes.length; i++) {
-      console.log('index:', i, indexes[i]);
-    }
-  });
-};
-*/
-
 class AccountManager {
   constructor (config) {
     this.config = config;
@@ -129,6 +118,14 @@ class AccountManager {
       console.log(err);
     }
     return this;
+  }
+
+  // Not currently exposed/in use
+  async listIndexes () {
+    const indexes = await this.accounts.indexes();
+    for (const [i, index] of indexes.entries()) {
+      console.log('index:', i, index);
+    }
   }
 
   /*
@@ -230,19 +227,16 @@ class AccountManager {
   }
 
   async updateAccount (newData) {
-    // eslint-disable-next-line require-await
-    const findOneAndUpdate = async (data) => {
-      const o = {
-        name: data.name,
-        email: data.email,
-        country: data.country
-      };
-      if (data.pass) {
-        o.pass = data.pass;
+    const findOneAndUpdate = ({
+      name, email, country, pass, id
+    }) => {
+      const o = { name, email, country };
+      if (pass) {
+        o.pass = pass;
         o.pass_ver = PASS_VER;
       }
       return this.accounts.findOneAndUpdate(
-        { _id: getObjectId(data.id) },
+        { _id: getObjectId(id) },
         { $set: o },
         { upsert: true, returnOriginal: false }
       );
