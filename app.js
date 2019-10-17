@@ -11,6 +11,9 @@ const { join } = require('path');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+// Though not needed for `express-session`, `cookie-parser` is needed for
+//   creating signed cookies (see `routes.js`) (or if we were to use
+//   non-signed cookies and access `req.cookies`).
 const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo')(session);
 const stylus = require('stylus');
@@ -64,10 +67,15 @@ exports.createServer = async function (options) {
     config = cwd ? `${cwd}/node-login.json` : null
   } = options;
 
-  const cfg = config
+  let cfg;
+  try {
+    cfg = config
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    ? require(config)
-    : null;
+      ? require(config)
+      : null;
+  } catch (err) {
+    log('noConfigFileDetected', { config });
+  }
 
   const {
     NL_EMAIL_HOST,
@@ -93,7 +101,7 @@ exports.createServer = async function (options) {
   app.set('port', PORT);
   app.set('views', join(__dirname, '/app/server/views'));
   app.set('view engine', 'pug');
-  app.use(cookieParser());
+  app.use(cookieParser(secret));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(
@@ -137,6 +145,6 @@ exports.createServer = async function (options) {
     // Todo: Add more (i18nized) logging messages and on client,
     //   making log/substitute utilities external or in own repo;
     //   also make i18n tool for optionDefinitions definitions?
-    log(_.express_server_listening, { port: app.get('port') });
+    log('express_server_listening', { port: app.get('port') });
   });
 };

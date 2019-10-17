@@ -38,14 +38,15 @@ module.exports = async function (app, config) {
   */
   app.get('/', async function (req, res) {
     // check if the user has an auto login key saved in a cookie
-    if (req.cookies.login === undefined) {
+    if (req.signedCookies.login === undefined) {
       res.render('login', { title: 'Hello - Please Login To Your Account' });
     } else {
       // attempt automatic login
       let o;
       try {
-        o = await AM.validateLoginKey(req.cookies.login, req.ip);
-      } catch (err) {}
+        o = await AM.validateLoginKey(req.signedCookies.login, req.ip);
+      } catch (err) {
+      }
 
       if (o) {
         const _o = await AM.autoLogin(o.user, o.pass);
@@ -75,7 +76,8 @@ module.exports = async function (app, config) {
       res.status(200).send(o);
     } else {
       const key = await AM.generateLoginKey(o.user, req.ip);
-      res.cookie('login', key, { maxAge: 900000 });
+      // `signed` requires `cookie-parser` with express
+      res.cookie('login', key, { maxAge: 900000, signed: true });
       res.status(200).send(o);
     }
   });
