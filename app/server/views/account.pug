@@ -7,34 +7,34 @@ input#userId(type='hidden' value=user._id)
 #account-form-container.center-vertical(role='form')
 	form.card.card-body.bg-light#account-form(method='post')
 		.heading2
-		.heading6#sub Please tell us a little about yourself.
+		.heading6#sub _(PleaseTellAboutYourself)
 		hr
 		.form-group.row
-			label.col-sm-3.col-form-label.col-form-label-sm(for='name-tf') Name
+			label.col-sm-3.col-form-label.col-form-label-sm(for='name-tf') _(Name)
 			.col-sm-9
 				input.form-control#name-tf(type='text' name='name' value= user.name)
 
 		.form-group.row
-			label.col-sm-3.col-form-label.col-form-label-sm(for='email-tf') Email
+			label.col-sm-3.col-form-label.col-form-label-sm(for='email-tf') _(Email)
 			.col-sm-9
 				input.form-control#email-tf(type='email' name='email' value= user.email)
 
 		.form-group.row.margin-zero
-			label.col-sm-3.col-form-label.col-form-label-sm Location
+			label.col-sm-3.col-form-label.col-form-label-sm _(Location)
 			.col-sm-9
 				select.custom-select#country-list(name='country')
 					each item in countries
 						option(selected=item.name == user.country)=item.name
 		hr
 		.form-group.row
-			label.col-sm-3.col-form-label.col-form-label-sm(for='user-tf') Username
+			label.col-sm-3.col-form-label.col-form-label-sm(for='user-tf') _(Username)
 			.col-sm-9
 				input.form-control.disabled#user-tf(
 					type='text' name='user' value= user.user
 				)
 
 		.form-group.row.margin-zero
-			label.col-sm-3.col-form-label.col-form-label-sm(for='pass-tf') Password
+			label.col-sm-3.col-form-label.col-form-label-sm(for='pass-tf') _(Password)
 			.col-sm-9
 				input.form-control#pass-tf(type='password' name='pass' value='')
 

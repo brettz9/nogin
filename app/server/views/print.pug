@@ -7,10 +7,10 @@ block content
 			thead.thead-dark
 				tr
 					th.print.number #
-					th.print.name Name
-					th.print.username Username
-					th.print.location Location
-					th Account Created
+					th.print.name _(Name)
+					th.print.username _(Username)
+					th.print.location _(Location)
+					th _(AccountCreated)
 			tbody
 			-for (const [i, {name, user, country, date}] of accts.entries())
 				tr

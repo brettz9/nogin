@@ -4,27 +4,27 @@ extends layout.pug
 block content
 	#login.center-vertical(role='main')
 		form.card.card-body.bg-light(method='post')
-			.heading2 Hello!
-			.heading6 Please Login To Your Account
+			.heading2 _(Hello)
+			.heading6 _(PleaseLoginToYourAccount)
 			.form-group
-				label(for='user-tf') Username
+				label(for='user-tf') _(Username)
 				input.form-control(type='text' id='user-tf' name='user')
 			.form-group
-				label(for='pass-tf') Password
+				label(for='pass-tf') _(Password)
 				input.form-control(type='password' id='pass-tf' name='pass')
 			#row1
 				button#btn_remember.btn.btn-light.btn-left(type='button')
 					span.fa.fa-check-square
-					| Remember Me
+					| _(RememberMe)
 				button#btn_sign_in.btn.btn-primary(type='submit')
 					span.fa.fa-lock
-					| Sign In
+					| _(SignIn)
 			hr
 			.btm-links
 				#forgot-password
-					a(href='#') Forgot Your Password?
+					a(href='#') _(ForgotYourPassword)
 				#create-account
-					a(href='/signup') Create An Account
+					a(href='/signup') _(CreateAnAccount)
 
 	include modals/alert.pug
 	include modals/lost-password.pug

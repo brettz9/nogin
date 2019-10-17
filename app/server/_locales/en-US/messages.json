@@ -1,0 +1,109 @@
+{
+  "body": {
+    "_1": "404",
+    "SorryUnavailable": {
+      "message": "I'm sorry, the page or resource you are searching for is currently unavailable."
+    },
+
+    "_2": "ALERT",
+    "OK": {
+      "message": "OK"
+    },
+
+    "_3": "CONFIRM",
+    "Ok": {
+      "message": "Ok"
+    },
+    "Cancel": {
+      "message": "Cancel"
+    },
+
+    "_4": "FORM-ERRORS",
+    "Whoops": {
+      "message": "Whoops!"
+    },
+    "LooksLikeProblem": {
+      "message": "It looks like there was a problem."
+    },
+
+    "_5": "LOST-PASSWORD",
+    "RetrievePassword": {
+      "message": "Retrieve Password"
+    },
+    "PleaseEnterEmail": {
+      "message": "Please enter the email address associated with your account"
+    },
+    "Submit": {
+      "message": "Submit"
+    },
+
+    "_6": "RESET-PASSWORD",
+    "ResetPassword": {
+      "message": "Reset Password"
+    },
+    "PleaseEnterNewPassword": {
+      "message": "Please enter your new password"
+    },
+    "ACloseButton": {
+      "message": "×"
+    },
+
+    "_7": "LOGIN",
+    "Hello": {
+      "message": "Hello!"
+    },
+    "PleaseLoginToYourAccount": {
+      "message": "Please Login To Your Account"
+    },
+    "Username": {
+      "message": "Username"
+    },
+    "Password": {
+      "message": "Password"
+    },
+    "RememberMe": {
+      "message": "Remember Me"
+    },
+    "SignIn": {
+      "message": "Sign In"
+    },
+    "ForgotYourPassword": {
+      "message": "Forgot Your Password?"
+    },
+    "CreateAnAccount": {
+      "message": "Create An Account"
+    },
+
+    "_8": "ACCOUNT",
+    "PleaseTellAboutYourself": {
+      "message": "Please tell us a little about yourself."
+    },
+    "Name": {
+      "message": "Name"
+    },
+    "Email": {
+      "message": "Email"
+    },
+    "Location": {
+      "message": "Location"
+    },
+
+    "_9": "HOME",
+    "ControlPanel": {
+      "message": "Control Panel"
+    },
+    "SignOut": {
+      "message": "Sign Out"
+    },
+
+    "_10": "LAYOUT",
+    "Login": {
+      "message": "Login"
+    },
+
+    "_11": "PRINT",
+    "AccountCreated": {
+      "message": "Account Created"
+    }
+  }
+}

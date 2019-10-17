@@ -216,12 +216,9 @@ class AccountManager {
     }
 
     const hash = await saltAndHash(newData.pass);
-    // eslint-disable-next-line require-atomic-updates
     newData.pass = hash;
-    // eslint-disable-next-line require-atomic-updates
     newData.pass_ver = PASS_VER;
     // append date stamp when record was created
-    // eslint-disable-next-line require-atomic-updates
     newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
     return this.accounts.insertOne(newData);
   }
@@ -245,7 +242,6 @@ class AccountManager {
       return findOneAndUpdate(newData);
     }
     const hash = await saltAndHash(newData.pass);
-    // eslint-disable-next-line require-atomic-updates
     newData.pass = hash;
     return findOneAndUpdate(newData);
   }

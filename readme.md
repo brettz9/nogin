@@ -62,6 +62,15 @@ To view as non-embedded HTML or SVG files (for copy-pasteable commands):
 
 - TODO
 
+## Steps for getting port that may block Mongo DB
+
+MongoDB may end up with a process that interferes with starting a new instance.
+
+On the Mac, you can follow these steps to resolve:
+
+1. Get the port `sudo lsof -i :27017`
+2. Then kill by `kill PID` with PID as the result of step 1 (or if necessary `kill -9 PID`).
+
 ## Contributing
 
 Questions and suggestions for improvement are welcome.

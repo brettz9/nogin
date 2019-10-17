@@ -3,7 +3,7 @@
 describe('Registration', function () {
   it('Testing', function () {
     cy.visit('/');
-    expect(true).to.be.true;
+    // expect(true).to.be.true;
   });
 });
 

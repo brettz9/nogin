@@ -7,6 +7,7 @@ const AccountManager = require('./modules/account-manager.js');
 const EmailDispatcher = require('./modules/email-dispatcher.js');
 
 const { isNullish, hasOwn } = require('./modules/common.js');
+const setPugI18n = require('./modules/pug-i18n.js')();
 
 module.exports = async function (app, config) {
   const {
@@ -37,9 +38,13 @@ module.exports = async function (app, config) {
     login & logout
   */
   app.get('/', async function (req, res) {
+    await setPugI18n(req, res);
     // check if the user has an auto login key saved in a cookie
     if (req.signedCookies.login === undefined) {
-      res.render('login', { title: 'Hello - Please Login To Your Account' });
+      res.render('login', {
+        // Todo: Localize these dynamic strings (on server and client)
+        title: 'Hello - Please Login To Your Account'
+      });
     } else {
       // attempt automatic login
       let o;
@@ -50,7 +55,6 @@ module.exports = async function (app, config) {
 
       if (o) {
         const _o = await AM.autoLogin(o.user, o.pass);
-        // eslint-disable-next-line require-atomic-updates
         req.session.user = _o;
         res.redirect('/home');
       } else {
@@ -70,7 +74,6 @@ module.exports = async function (app, config) {
       return;
     }
 
-    // eslint-disable-next-line require-atomic-updates
     req.session.user = o;
     if (req.body['remember-me'] === 'false') {
       res.status(200).send(o);
@@ -90,10 +93,11 @@ module.exports = async function (app, config) {
   /*
     control panel
   */
-  app.get('/home', function (req, res) {
+  app.get('/home', async function (req, res) {
     if (isNullish(req.session.user)) {
       res.redirect('/');
     } else {
+      await setPugI18n(req, res);
       res.render('home', {
         title: 'Control Panel',
         countries,
@@ -120,7 +124,6 @@ module.exports = async function (app, config) {
         res.status(400).send('error-updating-account');
         return;
       }
-      // eslint-disable-next-line require-atomic-updates
       req.session.user = o.value;
       res.status(200).send('ok');
     }
@@ -129,8 +132,12 @@ module.exports = async function (app, config) {
   /*
     new accounts
   */
-  app.get('/signup', function (req, res) {
-    res.render('signup', { title: 'Signup', countries });
+  app.get('/signup', async function (req, res) {
+    await setPugI18n(req, res);
+    res.render('signup', {
+      title: 'Signup',
+      countries
+    });
   });
 
   app.post('/signup', async function (req, res) {
@@ -188,9 +195,11 @@ module.exports = async function (app, config) {
     if (e || isNullish(o)) {
       res.redirect('/');
     } else {
-      // eslint-disable-next-line require-atomic-updates
+      await setPugI18n(req, res);
       req.session.passKey = req.query.key;
-      res.render('reset', { title: 'Reset Password' });
+      res.render('reset', {
+        title: 'Reset Password'
+      });
     }
   });
 
@@ -214,8 +223,14 @@ module.exports = async function (app, config) {
     view, delete & reset accounts
   */
   app.get('/print', async function (req, res) {
-    const accounts = await AM.getAllRecords();
-    res.render('print', { title: 'Account List', accts: accounts });
+    const [accounts] = await Promise.all([
+      AM.getAllRecords(),
+      setPugI18n(req, res)
+    ]);
+    res.render('print', {
+      title: 'Account List',
+      accts: accounts
+    });
   });
 
   app.post('/delete', async function (req, res) {
@@ -250,7 +265,10 @@ module.exports = async function (app, config) {
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
-  app.get('*', function (req, res) {
-    res.render('404', { title: 'Page Not Found' });
+  app.get('*', async function (req, res) {
+    await setPugI18n(req, res);
+    res.render('404', {
+      title: 'Page Not Found'
+    });
   });
 };

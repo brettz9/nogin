@@ -1,11 +1,4 @@
 module.exports = {
-    "env": {
-      "es6": true
-    },
-    "settings": {
-      "polyfills": [
-      ]
-    },
     "extends": [
       "ash-nazg/sauron",
       "plugin:node/recommended-script",
@@ -14,18 +7,24 @@ module.exports = {
     "plugins": [
       "pug"
     ],
+    "env": {
+      "es6": true
+    },
+    "settings": {
+      "polyfills": [
+      ]
+    },
     "globals": {
       "Atomics": "readonly",
       "SharedArrayBuffer": "readonly"
     },
     "overrides": [{
       files: ["cypress/integration/**/*.js"],
-      plugins: [
-        'chai-friendly'
+      extends: [
+        'plugin:chai-expect/recommended',
+        'plugin:chai-friendly/recommended'
       ],
       rules: {
-        'no-unused-expressions': 'off',
-        'chai-friendly/no-unused-expressions': ['error']
       }
     }, {
       files: [

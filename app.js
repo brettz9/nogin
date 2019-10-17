@@ -1,9 +1,9 @@
 'use strict';
 
 /**
-  * Node.js Login Boilerplate
-  * More Info : https://github.com/braitsch/node-login
-  * Copyright (c) 2013-2018 Stephen Braitsch
+  * Node.js Login Boilerplate.
+  * More Info: https://github.com/braitsch/node-login.
+  * @copyright (c) 2013-2018 Stephen Braitsch
 **/
 
 const http = require('http');
