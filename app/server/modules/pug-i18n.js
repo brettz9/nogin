@@ -1,5 +1,7 @@
 'use strict';
 
+// Todo: Move to own repo
+
 const {i18n} = require('intl-dom');
 const walk = require('pug-walk');
 const fileFetch = require('file-fetch');
@@ -8,8 +10,6 @@ global.fetch = fileFetch; // For `intl-dom`
 
 module.exports = function (scoped = false) {
   return async function (req, res, next = () => { /**/ }) {
-    // Todo: Support more locales!
-
     const _ = await i18n({
       // Detects locale from `req.headers['accept-language']` and
       //   requires appropriate i18n file; this is for Express;
@@ -18,11 +18,6 @@ module.exports = function (scoped = false) {
       localesBasePath: 'app/server'
     });
     res.locals.plugins = [{
-      // Todo: Make layout title configurable instead?
-      // Todo: i18nize country names (account and print pages);
-      //   format for date on print page
-      // Todo: How to get AST of attributes for, e.g., internationalizing
-      //   aria-label and such?
       // Other available methods:
       // preLex, postLex, preParse, postParse, preLoad, postLoad,
       //  preFilters, postFilters, preLink, postLink, preCodeGen, postCodeGen
@@ -42,6 +37,8 @@ module.exports = function (scoped = false) {
               (`node.mustEscape` will indicate whether this is `#{}` or `!{}`);
               see https://pugjs.org/language/interpolation.html
           1. `)` with `node.type` 'Text'
+          // Todo: How to get AST of attributes for, e.g., internationalizing
+          //   aria-label and such?
 
           console.log('type', node.type);
           if (node.type === 'Code') {

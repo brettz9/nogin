@@ -1,5 +1,11 @@
 'use strict';
 
+// Todo: Support more locales!
+// Todo: Make layout title configurable instead?
+// Todo: i18nize country names (account and print pages);
+//   format for date on print page
+// Todo: Internationalize attributes like `aria-label`
+
 /**
   * Node.js Login Boilerplate.
   * More Info: https://github.com/braitsch/node-login.
@@ -17,9 +23,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo')(session);
 const stylus = require('stylus');
+const RateLimit = require('express-rate-limit');
 
 const routes = require('./app/server/routes.js');
-
 const _ = require('./app/server/messages/en/messages.json');
 
 /**
@@ -30,7 +36,8 @@ const _ = require('./app/server/messages/en/messages.json');
  */
 const substitute = (str, data = {}) => {
   return Object.entries(data).reduce((s, [ky, val]) => {
-    // Todo: This only allows one replacement
+    // Todo: This only allows one replacement; need escaping function; put
+    // one in RegExtras?
     return s.replace('${' + ky + '}', val);
   }, str) || str;
 };
@@ -52,7 +59,7 @@ const getLogger = (options) => {
   };
 };
 
-// Todo: Small repo to convert command-line-usage into jsdoc (and
+// Todo: Small repo to convert `command-line-usage` into jsdoc (and
 //   use here in place of `PlainObject` `options`)
 /**
  * @param {PlainObject} options
@@ -96,11 +103,19 @@ exports.createServer = async function (options) {
     SERVE_COVERAGE = false
   } = {...cfg, ...options, config: null};
 
+  // Doubles as limiting automated login attempts!
+  const limiter = new RateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 10 // Todo: Make configurable
+  });
+
   app.locals.pretty = true;
 
   app.set('port', PORT);
   app.set('views', join(__dirname, '/app/server/views'));
   app.set('view engine', 'pug');
+
+  app.use(limiter);
   app.use(cookieParser(secret));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
@@ -144,7 +159,7 @@ exports.createServer = async function (options) {
   http.createServer(app).listen(app.get('port'), () => {
     // Todo: Add more (i18nized) logging messages and on client,
     //   making log/substitute utilities external or in own repo;
-    //   also make i18n tool for optionDefinitions definitions?
+    //   also make i18n tool for `optionDefinitions` definitions?
     log('express_server_listening', {port: app.get('port')});
   });
 };
