@@ -2,7 +2,7 @@
 
 'use strict';
 
-$(document).ready(function () {
+$(() => {
   const lv = new LoginValidator();
   /* const lc = */ new LoginController(); // eslint-disable-line no-new
 

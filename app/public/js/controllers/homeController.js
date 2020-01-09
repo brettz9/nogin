@@ -21,7 +21,7 @@ window.HomeController = {
       $.ajax({
         url: '/delete',
         type: 'POST',
-        success (data) {
+        success: (data) => {
           this.showLockedAlert(
             'Your account has been deleted.<br>' +
             'Redirecting you back to the homepage.'
@@ -33,7 +33,7 @@ window.HomeController = {
       });
     };
 
-    this.attemptLogout = function () {
+    this.attemptLogout = () => {
       $.ajax({
         url: '/logout',
         type: 'POST',
@@ -49,7 +49,7 @@ window.HomeController = {
       });
     };
 
-    this.showLockedAlert = function (msg) {
+    this.showLockedAlert = (msg) => {
       $('.modal-alert').modal({
         show: false, keyboard: false, backdrop: 'static'
       });

@@ -1,7 +1,7 @@
 /* global $, ResetValidator */
 'use strict';
 
-$(document).ready(function () {
+$(() => {
   const rv = new ResetValidator();
 
   $('#set-password-form').ajaxForm({

@@ -1,7 +1,7 @@
 /* global $, AccountValidator, SignupController */
 'use strict';
 
-$(document).ready(function () {
+$(() => {
   const av = new AccountValidator();
   /* const sc = */ new SignupController(); // eslint-disable-line no-new
 

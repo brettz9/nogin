@@ -1,7 +1,7 @@
 /* global $, HomeController, AccountValidator */
 'use strict';
 
-$(document).ready(function () {
+$(() => {
   const av = new AccountValidator();
   HomeController.init();
 
@@ -11,11 +11,15 @@ $(document).ready(function () {
         return false;
       }
       // push the disabled username field onto the form data array
-      formData.push({name: 'user', value: $('#user-tf').val()});
+      formData.push({
+        name: 'user', value: $('#user-tf').val()
+      });
       return true;
     },
     success (responseText, status, xhr, $form) {
-      if (status === 'success') HomeController.onUpdateSuccess();
+      if (status === 'success') {
+        HomeController.onUpdateSuccess();
+      }
     },
     error (e) {
       if (e.responseText === 'email-taken') {
@@ -40,7 +44,9 @@ $(document).ready(function () {
 
   // setup the confirm window that displays when the user chooses to
   //  delete their account
-  $('.modal-confirm').modal({show: false, keyboard: true, backdrop: true});
+  $('.modal-confirm').modal({
+    show: false, keyboard: true, backdrop: true
+  });
   $('.modal-confirm .modal-header h1').text('Delete Account');
   $('.modal-confirm .modal-body p').html(
     'Are you sure you want to delete your account?'
