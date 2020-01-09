@@ -1,8 +1,8 @@
 /* global $ */
 'use strict';
 
-window.HomeController = class HomeController {
-  constructor () {
+window.HomeController = {
+  init () {
     // handle user logout
     $('#btn-logout').click(() => { this.attemptLogout(); });
 
@@ -61,9 +61,7 @@ window.HomeController = class HomeController {
       });
       setTimeout(() => { location.href = '/'; }, 3000);
     };
-  }
-
-  // eslint-disable-next-line class-methods-use-this
+  },
   onUpdateSuccess () {
     $('.modal-alert').modal({show: false, keyboard: true, backdrop: true});
     $('.modal-alert .modal-header h1').text('Success!');

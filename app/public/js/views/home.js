@@ -2,8 +2,8 @@
 'use strict';
 
 $(document).ready(function () {
-  const hc = new HomeController();
   const av = new AccountValidator();
+  HomeController.init();
 
   $('#account-form').ajaxForm({
     beforeSubmit (formData, jqForm, options) {
@@ -15,7 +15,7 @@ $(document).ready(function () {
       return true;
     },
     success (responseText, status, xhr, $form) {
-      if (status === 'success') hc.onUpdateSuccess();
+      if (status === 'success') HomeController.onUpdateSuccess();
     },
     error (e) {
       if (e.responseText === 'email-taken') {

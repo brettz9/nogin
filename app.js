@@ -106,7 +106,7 @@ exports.createServer = async function (options) {
   // Doubles as limiting automated login attempts!
   const limiter = new RateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 10 // Todo: Make configurable
+    max: 100 // Todo: Make configurable
   });
 
   app.locals.pretty = true;
