@@ -7,7 +7,7 @@
 **/
 
 const http = require('http');
-const { join } = require('path');
+const {join} = require('path');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -74,7 +74,7 @@ exports.createServer = async function (options) {
       ? require(config)
       : null;
   } catch (err) {
-    log('noConfigFileDetected', { config });
+    log('noConfigFileDetected', {config});
   }
 
   const {
@@ -94,7 +94,7 @@ exports.createServer = async function (options) {
     DB_PASS,
     JS_DIR = '/app/public',
     SERVE_COVERAGE = false
-  } = { ...cfg, ...options, config: null };
+  } = {...cfg, ...options, config: null};
 
   app.locals.pretty = true;
 
@@ -103,9 +103,9 @@ exports.createServer = async function (options) {
   app.set('view engine', 'pug');
   app.use(cookieParser(secret));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(
-    stylus.middleware({ src: join(__dirname, JS_DIR), sourcemap: true })
+    stylus.middleware({src: join(__dirname, JS_DIR), sourcemap: true})
   );
   app.use(express.static(join(__dirname, JS_DIR)));
 
@@ -125,7 +125,7 @@ exports.createServer = async function (options) {
     saveUninitialized: true,
     store: new MongoStore({
       url: DB_URL,
-      mongoOptions: { useUnifiedTopology: true, useNewUrlParser: true }
+      mongoOptions: {useUnifiedTopology: true, useNewUrlParser: true}
     })
   }));
 
@@ -145,6 +145,6 @@ exports.createServer = async function (options) {
     // Todo: Add more (i18nized) logging messages and on client,
     //   making log/substitute utilities external or in own repo;
     //   also make i18n tool for optionDefinitions definitions?
-    log('express_server_listening', { port: app.get('port') });
+    log('express_server_listening', {port: app.get('port')});
   });
 };

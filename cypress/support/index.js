@@ -30,7 +30,7 @@ import './commands.js';
  *    With `testExamples` only: `skip` and `only`
  * @see https://github.com/cypress-io/cypress-fiddle
  * @example
- * import { testExamples } from '@cypress/fiddle';
+ * import {testExamples} from '@cypress/fiddle';
  */
 import '@cypress/fiddle';
 

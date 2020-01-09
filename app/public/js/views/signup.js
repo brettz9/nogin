@@ -30,7 +30,7 @@ $(document).ready(function () {
   $('#account-form-btn2').addClass('btn-primary');
 
   // setup the alert that displays when an account is successfully created
-  $('.modal-alert').modal({ show: false, keyboard: false, backdrop: 'static' });
+  $('.modal-alert').modal({show: false, keyboard: false, backdrop: 'static'});
   $('.modal-alert .modal-header h1').text('Account Created!');
   $('.modal-alert .modal-body p').html(
     'Your account has been created.</br>Click OK to return to the login page.'

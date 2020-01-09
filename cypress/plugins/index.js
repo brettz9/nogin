@@ -13,8 +13,8 @@
 'use strict';
 
 const fs = require('fs');
-const { dirname } = require('path');
-const { spawn } = require('child_process');
+const {dirname} = require('path');
+const {spawn} = require('child_process');
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-extraneous-dependencies,node/no-extraneous-require
@@ -34,7 +34,7 @@ module.exports = (on, config) => {
   // If using Babel, use this instead:
   //   `@cypress/code-coverage/use-babelrc` per https://docs.cypress.io/guides/tooling/code-coverage.html#E2E-and-unit-code-coverage
   on('file:preprocessor', (file) => {
-    const { filePath, shouldWatch /* , outputPath */ } = file;
+    const {filePath, shouldWatch /* , outputPath */} = file;
 
     console.log(
       'preprocess1', filePath, '::', config.integrationFolder.replace(/\/$/u, '') + '/'

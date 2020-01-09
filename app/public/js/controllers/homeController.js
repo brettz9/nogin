@@ -37,7 +37,7 @@ window.HomeController = class HomeController {
       $.ajax({
         url: '/logout',
         type: 'POST',
-        data: { logout: true },
+        data: {logout: true},
         success: (data) => {
           this.showLockedAlert(
             'You are now logged out.<br>Redirecting you back to the homepage.'
@@ -65,7 +65,7 @@ window.HomeController = class HomeController {
 
   // eslint-disable-next-line class-methods-use-this
   onUpdateSuccess () {
-    $('.modal-alert').modal({ show: false, keyboard: true, backdrop: true });
+    $('.modal-alert').modal({show: false, keyboard: true, backdrop: true});
     $('.modal-alert .modal-header h1').text('Success!');
     $('.modal-alert .modal-body p').html('Your account has been updated.');
     $('.modal-alert').modal('show');

@@ -4,7 +4,7 @@
 window.ResetValidator = class ResetValidator {
   constructor () {
     this.modal = $('#set-password');
-    this.modal.modal({ show: false, keyboard: false, backdrop: 'static' });
+    this.modal.modal({show: false, keyboard: false, backdrop: 'static'});
     this.alert = $('#set-password .alert');
     this.alert.hide();
   }

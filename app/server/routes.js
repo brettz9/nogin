@@ -1,12 +1,12 @@
 'use strict';
 
-const { join } = require('path');
+const {join} = require('path');
 const express = require('express');
 
 const AccountManager = require('./modules/account-manager.js');
 const EmailDispatcher = require('./modules/email-dispatcher.js');
 
-const { isNullish, hasOwn } = require('./modules/common.js');
+const {isNullish, hasOwn} = require('./modules/common.js');
 const setPugI18n = require('./modules/pug-i18n.js')();
 
 module.exports = async function (app, config) {
@@ -80,7 +80,7 @@ module.exports = async function (app, config) {
     } else {
       const key = await AM.generateLoginKey(o.user, req.ip);
       // `signed` requires `cookie-parser` with express
-      res.cookie('login', key, { maxAge: 900000, signed: true });
+      res.cookie('login', key, {maxAge: 900000, signed: true});
       res.status(200).send(o);
     }
   });
@@ -110,7 +110,7 @@ module.exports = async function (app, config) {
     if (isNullish(req.session.user)) {
       res.redirect('/');
     } else {
-      const { name, email, pass, country } = req.body;
+      const {name, email, pass, country} = req.body;
       let o;
       try {
         o = await AM.updateAccount({
@@ -141,7 +141,7 @@ module.exports = async function (app, config) {
   });
 
   app.post('/signup', async function (req, res) {
-    const { name, email, user, pass, country } = req.body;
+    const {name, email, user, pass, country} = req.body;
     try {
       await AM.addNewAccount({
         name,
@@ -161,7 +161,7 @@ module.exports = async function (app, config) {
     password reset
   */
   app.post('/lost-password', async function (req, res) {
-    const { email } = req.body;
+    const {email} = req.body;
     let account;
     try {
       account = await AM.generatePasswordKey(email, req.ip);
@@ -205,7 +205,7 @@ module.exports = async function (app, config) {
 
   app.post('/reset-password', async function (req, res) {
     const newPass = req.body.pass;
-    const { passKey } = req.session;
+    const {passKey} = req.session;
     // destory the session immediately after retrieving the stored passkey
     req.session.destroy();
     let o;

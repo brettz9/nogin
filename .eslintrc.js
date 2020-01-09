@@ -53,8 +53,6 @@ module.exports = {
       }
     }],
     "rules": {
-      "object-curly-spacing": ["error", "always"],
-
       "import/no-commonjs": 0,
       "import/unambiguous": 0,
 

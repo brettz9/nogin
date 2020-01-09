@@ -15,7 +15,7 @@ window.AccountValidator = class AccountValidator {
     // bind the form-error modal window to this controller to display any errors
 
     this.alert = $('.modal-form-errors');
-    this.alert.modal({ show: false, keyboard: true, backdrop: true });
+    this.alert.modal({show: false, keyboard: true, backdrop: true});
 
     this.validateName = function (s) {
       return s.length >= 3;

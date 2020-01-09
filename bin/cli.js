@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-const { cliBasics } = require('command-line-basics');
+const {cliBasics} = require('command-line-basics');
 
-const { createServer } = require('../app.js');
+const {createServer} = require('../app.js');
 
 const options = cliBasics({
   optionsPath: '../app/server/optionDefinitions.js',

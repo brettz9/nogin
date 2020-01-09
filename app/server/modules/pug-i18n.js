@@ -1,6 +1,6 @@
 'use strict';
 
-const { i18n } = require('intl-dom');
+const {i18n} = require('intl-dom');
 const walk = require('pug-walk');
 const fileFetch = require('file-fetch');
 
@@ -51,9 +51,9 @@ module.exports = function (scoped = false) {
           if (node.type === 'Text') {
             let templateName;
             if (scoped) {
-              const { filename } = node;
+              const {filename} = node;
               const fn = filename.match(/(?<templateName>[^/]*?)\.pug/u);
-              ({ templateName } = (fn && fn.groups) || {});
+              ({templateName} = (fn && fn.groups) || {});
             }
             // Todo: We could parse object options specified (as text) within
             //  templates, e.g., after a comma

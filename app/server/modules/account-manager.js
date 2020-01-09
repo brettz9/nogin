@@ -3,9 +3,9 @@
 /* eslint-disable-next-line no-shadow  */
 const crypto = require('crypto');
 const moment = require('moment');
-const { MongoClient, ObjectID } = require('mongodb');
+const {MongoClient, ObjectID} = require('mongodb');
 
-const { isNullish } = require('./common.js');
+const {isNullish} = require('./common.js');
 
 const PASS_VER = 1;
 
@@ -110,7 +110,7 @@ class AccountManager {
       this.db = client.db(DB_NAME);
       this.accounts = this.db.collection('accounts');
       // index fields 'user' & 'email' for faster new account validation
-      await this.accounts.createIndex({ user: 1, email: 1 });
+      await this.accounts.createIndex({user: 1, email: 1});
       console.log(
         'mongo :: connected to database :: "' + DB_NAME + '"'
       );
@@ -134,7 +134,7 @@ class AccountManager {
 
   async autoLogin (user, pass) {
     try {
-      const o = await this.accounts.findOne({ user });
+      const o = await this.accounts.findOne({user});
       return o.pass === pass ? o : null;
     } catch (err) {
       return null;
@@ -144,7 +144,7 @@ class AccountManager {
   async manualLogin (user, pass) {
     let o;
     try {
-      o = await this.accounts.findOne({ user });
+      o = await this.accounts.findOne({user});
     } catch (err) {}
     if (isNullish(o)) {
       throw new Error('user-not-found');
@@ -160,27 +160,27 @@ class AccountManager {
 
   async generateLoginKey (user, ipAddress) {
     const cookie = guid();
-    await this.accounts.findOneAndUpdate({ user }, { $set: {
+    await this.accounts.findOneAndUpdate({user}, {$set: {
       ip: ipAddress,
       cookie
-    } }, { returnOriginal: false });
+    }}, {returnOriginal: false});
     return cookie;
   }
 
   // eslint-disable-next-line require-await
   async validateLoginKey (cookie, ipAddress) {
     // ensure the cookie maps to the user's last recorded ip address
-    return this.accounts.findOne({ cookie, ip: ipAddress });
+    return this.accounts.findOne({cookie, ip: ipAddress});
   }
 
   async generatePasswordKey (email, ipAddress) {
     const passKey = guid();
     let o, e;
     try {
-      o = await this.accounts.findOneAndUpdate({ email }, { $set: {
+      o = await this.accounts.findOneAndUpdate({email}, {$set: {
         ip: ipAddress,
         passKey
-      }, $unset: { cookie: '' } }, { returnOriginal: false });
+      }, $unset: {cookie: ''}}, {returnOriginal: false});
     } catch (err) {
       e = err;
     }
@@ -193,7 +193,7 @@ class AccountManager {
   // eslint-disable-next-line require-await
   async validatePasswordKey (passKey, ipAddress) {
     // ensure the passKey maps to the user's last recorded ip address
-    return this.accounts.findOne({ passKey, ip: ipAddress });
+    return this.accounts.findOne({passKey, ip: ipAddress});
   }
 
   /*
@@ -202,14 +202,14 @@ class AccountManager {
   async addNewAccount (newData) {
     let o;
     try {
-      o = await this.accounts.findOne({ user: newData.user });
+      o = await this.accounts.findOne({user: newData.user});
     } catch (err) {}
     if (o) {
       throw new Error('username-taken');
     }
     let _o;
     try {
-      _o = await this.accounts.findOne({ email: newData.email });
+      _o = await this.accounts.findOne({email: newData.email});
     } catch (err) {}
     if (_o) {
       throw new Error('email-taken');
@@ -227,15 +227,15 @@ class AccountManager {
     const findOneAndUpdate = ({
       name, email, country, pass, id
     }) => {
-      const o = { name, email, country };
+      const o = {name, email, country};
       if (pass) {
         o.pass = pass;
         o.pass_ver = PASS_VER;
       }
       return this.accounts.findOneAndUpdate(
-        { _id: getObjectId(id) },
-        { $set: o },
-        { upsert: true, returnOriginal: false }
+        {_id: getObjectId(id)},
+        {$set: o},
+        {upsert: true, returnOriginal: false}
       );
     };
     if (newData.pass === '') {
@@ -248,10 +248,10 @@ class AccountManager {
 
   async updatePassword (passKey, newPass) {
     const hash = await saltAndHash(newPass);
-    return this.accounts.findOneAndUpdate({ passKey }, {
-      $set: { pass: hash, pass_ver: PASS_VER },
-      $unset: { passKey: '' }
-    }, { upsert: true, returnOriginal: false });
+    return this.accounts.findOneAndUpdate({passKey}, {
+      $set: {pass: hash, pass_ver: PASS_VER},
+      $unset: {passKey: ''}
+    }, {upsert: true, returnOriginal: false});
   }
 
   /*
@@ -265,7 +265,7 @@ class AccountManager {
 
   // eslint-disable-next-line require-await
   async deleteAccount (id) {
-    return this.accounts.deleteOne({ _id: getObjectId(id) });
+    return this.accounts.deleteOne({_id: getObjectId(id)});
   }
 
   // eslint-disable-next-line require-await

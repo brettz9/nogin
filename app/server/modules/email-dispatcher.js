@@ -45,7 +45,7 @@ class EmailDispatcher {
       Cheers,<br>
       <a href='https://braitsch.io'>braitsch</a><br><br>
       </body></html>`;
-    return [{ data: html, alternative: true }];
+    return [{data: html, alternative: true}];
   }
 }
 
