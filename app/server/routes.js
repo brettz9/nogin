@@ -184,7 +184,7 @@ module.exports = async function (app, config) {
     }
     try {
       /* const { status, text } = */
-      await ED.dispatchResetPasswordLink(account);
+      await ED.dispatchResetPasswordLink(account, _);
       // TODO this promise takes a moment to return, add a loader to
       //   give user feedback
       res.status(200).send(_('OK'));

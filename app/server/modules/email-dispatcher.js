@@ -24,18 +24,20 @@ class EmailDispatcher {
     });
   }
 
-  dispatchResetPasswordLink (account) {
+  dispatchResetPasswordLink (account, _) {
     return this.server.send({
       from: this.NL_EMAIL_FROM,
       to: account.email,
-      subject: 'Password Reset',
-      text: 'something went wrong... :(',
-      attachment: this.composeEmail(account)
+      subject: _('PasswordReset'),
+      text: _('SomethingWentWrong'),
+      attachment: this.composeEmail(account, _)
     });
   }
 
-  composeEmail (o) {
+  composeEmail (o, _) {
     const baseurl = this.NL_SITE_URL;
+
+    // Todo: i18nize
     const html = `<html><body>
       Hi ${o.name},<br><br>
       Your username is <b>${o.user}</b><br><br>

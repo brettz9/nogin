@@ -154,6 +154,14 @@
     "SIGNUP (BUSINESS LOGIC)": true,
     "Signup": {
       "message": "Signup"
+    },
+
+    "EMAIL DISPATCHER (BUSINESS LOGIC)": true,
+    "PasswordReset": {
+      "message": "Password Reset"
+    },
+    "SomethingWentWrong": {
+      "message": "Something went wrong... :("
     }
   }
 }
