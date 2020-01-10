@@ -34,14 +34,14 @@ class EmailDispatcher {
     });
   }
 
-  composeEmail (o, _) {
+  composeEmail ({name, user, passKey}, _) {
     const baseurl = this.NL_SITE_URL;
 
     // Todo: i18nize
     const html = `<html><body>
-      Hi ${o.name},<br><br>
-      Your username is <b>${o.user}</b><br><br>
-      <a href="${baseurl}/reset-password?key=${o.passKey}">
+      Hi ${name},<br><br>
+      Your username is <b>${user}</b><br><br>
+      <a href="${baseurl}/reset-password?key=${passKey}">
         Click here to reset your password
       </a><br><br>
       Cheers,<br>
