@@ -2,8 +2,6 @@
 
 // Todo: Support more locales!
 // Todo: Make layout title configurable instead?
-// Todo: i18nize country names (account and print pages);
-//   format for date on print page
 // Todo: Internationalize attributes like `aria-label`
 
 /**

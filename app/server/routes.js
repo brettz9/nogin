@@ -38,12 +38,12 @@ module.exports = async function (app, config) {
     login & logout
   */
   app.get('/', async function (req, res) {
-    await setPugI18n(req, res);
+    const _ = await setPugI18n(req, res);
     // check if the user has an auto login key saved in a cookie
     if (req.signedCookies.login === undefined) {
       res.render('login', {
         // Todo: Localize these dynamic strings (on server and client)
-        title: 'Hello - Please Login To Your Account'
+        title: _('PleaseLoginToAccount')
       });
     } else {
       // attempt automatic login
@@ -59,7 +59,7 @@ module.exports = async function (app, config) {
         res.redirect('/home');
       } else {
         res.render('login', {
-          title: 'Hello - Please Login To Your Account'
+          title: _('PleaseLoginToAccount')
         });
       }
     }
@@ -85,9 +85,10 @@ module.exports = async function (app, config) {
     }
   });
 
-  app.post('/logout', function (req, res) {
+  app.post('/logout', async function (req, res) {
     res.clearCookie('login');
-    req.session.destroy((e) => { res.status(200).send('ok'); });
+    const _ = await setPugI18n(req, res);
+    req.session.destroy((e) => { res.status(200).send(_('OK')); });
   });
 
   /*
@@ -97,9 +98,10 @@ module.exports = async function (app, config) {
     if (isNullish(req.session.user)) {
       res.redirect('/');
     } else {
-      await setPugI18n(req, res);
+      const _ = await setPugI18n(req, res);
       res.render('home', {
-        title: 'Control Panel',
+        title: _('ControlPanel'),
+        // Todo: i18nize visible values
         countries,
         udata: req.session.user
       });
@@ -111,21 +113,24 @@ module.exports = async function (app, config) {
       res.redirect('/');
     } else {
       const {name, email, pass, country} = req.body;
-      let o;
+      let o, _;
       try {
-        o = await AM.updateAccount({
-          id: req.session.user._id,
-          name,
-          email,
-          pass,
-          country
-        });
+        [o, _] = await Promise.all([
+          AM.updateAccount({
+            id: req.session.user._id,
+            name,
+            email,
+            pass,
+            country
+          }),
+          setPugI18n(req, res)
+        ]);
       } catch (e) {
-        res.status(400).send('error-updating-account');
+        res.status(400).send(_('ErrorUpdatingAccount'));
         return;
       }
       req.session.user = o.value;
-      res.status(200).send('ok');
+      res.status(200).send(_('OK'));
     }
   });
 
@@ -133,28 +138,33 @@ module.exports = async function (app, config) {
     new accounts
   */
   app.get('/signup', async function (req, res) {
-    await setPugI18n(req, res);
+    const _ = await setPugI18n(req, res);
     res.render('signup', {
-      title: 'Signup',
+      title: _('Signup'),
+      // Todo: i18nize visible values
       countries
     });
   });
 
   app.post('/signup', async function (req, res) {
     const {name, email, user, pass, country} = req.body;
+    let _;
     try {
-      await AM.addNewAccount({
-        name,
-        email,
-        user,
-        pass,
-        country
-      });
+      [_] = await Promise.all([
+        setPugI18n(req, res),
+        AM.addNewAccount({
+          name,
+          email,
+          user,
+          pass,
+          country
+        })
+      ]);
     } catch (e) {
       res.status(400).send(e.message);
       return;
     }
-    res.status(200).send('ok');
+    res.status(200).send(_('OK'));
   });
 
   /*
@@ -162,9 +172,12 @@ module.exports = async function (app, config) {
   */
   app.post('/lost-password', async function (req, res) {
     const {email} = req.body;
-    let account;
+    let account, _;
     try {
-      account = await AM.generatePasswordKey(email, req.ip);
+      [account, _] = await Promise.all([
+        AM.generatePasswordKey(email, req.ip),
+        setPugI18n(req, res)
+      ]);
     } catch (e) {
       res.status(400).send(e.message);
       return;
@@ -174,31 +187,33 @@ module.exports = async function (app, config) {
       await ED.dispatchResetPasswordLink(account);
       // TODO this promise takes a moment to return, add a loader to
       //   give user feedback
-      res.status(200).send('ok');
+      res.status(200).send(_('OK'));
     } catch (_e) {
       for (const k in _e) {
         if (hasOwn(_e, k)) {
           console.log('ERROR:', k, _e[k]);
         }
       }
-      res.status(400).send('unable to dispatch password reset');
+      res.status(400).send(_('UnableToDispatchPasswordReset'));
     }
   });
 
   app.get('/reset-password', async function (req, res) {
-    let o, e;
+    let o, _, e;
     try {
-      o = await AM.validatePasswordKey(req.query.key, req.ip);
+      [o, _] = await Promise.all([
+        AM.validatePasswordKey(req.query.key, req.ip),
+        setPugI18n(req, res)
+      ]);
     } catch (err) {
       e = err;
     }
     if (e || isNullish(o)) {
       res.redirect('/');
     } else {
-      await setPugI18n(req, res);
       req.session.passKey = req.query.key;
       res.render('reset', {
-        title: 'Reset Password'
+        title: _('ResetPassword')
       });
     }
   });
@@ -208,14 +223,17 @@ module.exports = async function (app, config) {
     const {passKey} = req.session;
     // destory the session immediately after retrieving the stored passkey
     req.session.destroy();
-    let o;
+    let o, _;
     try {
-      o = await AM.updatePassword(passKey, newPass);
+      [o, _] = await Promise.all([
+        AM.updatePassword(passKey, newPass),
+        setPugI18n(req, res)
+      ]);
     } catch (err) {}
     if (o) {
-      res.status(200).send('ok');
+      res.status(200).send(_('OK'));
     } else {
-      res.status(400).send('unable to update password');
+      res.status(400).send(_('UnableToUpdatePassword'));
     }
   });
 
@@ -223,27 +241,29 @@ module.exports = async function (app, config) {
     view, delete & reset accounts
   */
   app.get('/print', async function (req, res) {
-    const [accounts] = await Promise.all([
+    const [accounts, _] = await Promise.all([
       AM.getAllRecords(),
       setPugI18n(req, res)
     ]);
     res.render('print', {
-      title: 'Account List',
+      title: _('AccountList'),
+      // Todo: i18nize?
       accts: accounts
     });
   });
 
   app.post('/delete', async function (req, res) {
+    const _ = await setPugI18n(req, res);
     try {
       /* obj = */ await AM.deleteAccount(req.session.user._id);
     } catch (err) {
       res.clearCookie('login');
       req.session.destroy((_e) => {
-        res.status(200).send('ok');
+        res.status(200).send(_('OK'));
       });
       return;
     }
-    res.status(400).send('record not found');
+    res.status(400).send(_('RecordNotFound'));
   });
 
   app.get('/reset', async function (req, res) {
@@ -266,9 +286,9 @@ module.exports = async function (app, config) {
   }
 
   app.get('*', async function (req, res) {
-    await setPugI18n(req, res);
+    const _ = await setPugI18n(req, res);
     res.render('404', {
-      title: 'Page Not Found'
+      title: _('PageNotFound')
     });
   });
 };

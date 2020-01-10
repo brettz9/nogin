@@ -218,7 +218,9 @@ class AccountManager {
     const hash = await saltAndHash(newData.pass);
     newData.pass = hash;
     newData.pass_ver = PASS_VER;
-    // append date stamp when record was created
+    // Todo: store as timestamp and use i18n to format for
+    //   date (e.g., on print page)
+    // Append date stamp when record was created
     newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
     return this.accounts.insertOne(newData);
   }

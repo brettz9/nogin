@@ -1,16 +1,29 @@
 {
   "body": {
-    "_1": "404",
+
+    "ROOT (BUSINESS)": true,
+    "PleaseLoginToAccount": {
+      "message": "Hello - Please Login To Your Account"
+    },
+
+    "404 (TEMPLATES)": true,
     "SorryUnavailable": {
       "message": "I'm sorry, the page or resource you are searching for is currently unavailable."
     },
 
-    "_2": "ALERT",
+    "404 (BUSINESS LOGIC)": true,
+    "PageNotFound": {
+      "message": "Page Not Found"
+    },
+
+
+    "ALERT (TEMPLATES)": true,
     "OK": {
       "message": "OK"
     },
 
-    "_3": "CONFIRM",
+
+    "CONFIRM (TEMPLATES)": true,
     "Ok": {
       "message": "Ok"
     },
@@ -18,7 +31,8 @@
       "message": "Cancel"
     },
 
-    "_4": "FORM-ERRORS",
+
+    "FORM-ERRORS (TEMPLATES)": true,
     "Whoops": {
       "message": "Whoops!"
     },
@@ -26,7 +40,8 @@
       "message": "It looks like there was a problem."
     },
 
-    "_5": "LOST-PASSWORD",
+
+    "LOST-PASSWORD (TEMPLATES)": true,
     "RetrievePassword": {
       "message": "Retrieve Password"
     },
@@ -37,7 +52,13 @@
       "message": "Submit"
     },
 
-    "_6": "RESET-PASSWORD",
+    "LOST-PASSWORD (TEMPLATES)": true,
+    "UnableToDispatchPasswordReset": {
+      "message": "unable to dispatch password reset"
+    },
+
+
+    "RESET-PASSWORD (TEMPLATES)": true,
     "ResetPassword": {
       "message": "Reset Password"
     },
@@ -48,7 +69,16 @@
       "message": "×"
     },
 
-    "_7": "LOGIN",
+    "RESET-PASSWORD (BUSINESS-LOGIC)": true,
+    "UnableToUpdatePassword": {
+      "message": "unable to update password"
+    },
+    "ResetPassword": {
+      "message": "Reset Password"
+    },
+
+
+    "LOGIN (TEMPLATES)": true,
     "Hello": {
       "message": "Hello!"
     },
@@ -74,7 +104,8 @@
       "message": "Create An Account"
     },
 
-    "_8": "ACCOUNT",
+
+    "ACCOUNT (TEMPLATES)": true,
     "PleaseTellAboutYourself": {
       "message": "Please tell us a little about yourself."
     },
@@ -88,7 +119,8 @@
       "message": "Location"
     },
 
-    "_9": "HOME",
+
+    "HOME (TEMPLATES)": true,
     "ControlPanel": {
       "message": "Control Panel"
     },
@@ -96,14 +128,32 @@
       "message": "Sign Out"
     },
 
-    "_10": "LAYOUT",
+    "HOME (BUSINESS LOGIC)": true,
+    "ErrorUpdatingAccount": {
+      "message": "Error Updating Account"
+    },
+
+
+    "LAYOUT (TEMPLATES)": true,
     "Login": {
       "message": "Login"
     },
 
-    "_11": "PRINT",
+
+    "PRINT (TEMPLATES)": true,
     "AccountCreated": {
       "message": "Account Created"
+    },
+
+    "PRINT (BUSINESS LOGIC)": true,
+    "AccountList": {
+      "message": "Account List"
+    },
+
+
+    "SIGNUP (BUSINESS LOGIC)": true,
+    "Signup": {
+      "message": "Signup"
     }
   }
 }

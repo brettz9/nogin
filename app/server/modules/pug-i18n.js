@@ -62,5 +62,8 @@ module.exports = function (scoped = false) {
       }
     }];
     next();
+
+    // Return so business logic can use as well
+    return _;
   };
 };
