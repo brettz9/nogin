@@ -6,3 +6,10 @@ cypress.env.json
 coverage/**
 .nyc_output
 instrumented/**
+
+mochawesome-report/**
+mochawesome.json
+db/**
+.ncurc.js
+node-login.json
+node-login.js

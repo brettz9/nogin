@@ -1,5 +1,3 @@
-/* eslint-disable node/no-unsupported-features/es-syntax */
-
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.

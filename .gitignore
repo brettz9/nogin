@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
-app/server/modules/email-settings-mine.js
 
 cypress/fixtures/example.json
+cypress/results
 cypress/screenshots
 cypress/videos
 cypress.env.json
@@ -11,3 +11,8 @@ coverage/**
 instrumented/**
 .nyc_output
 db
+
+mochawesome-report
+mochawesome.json
+node-login.json
+node-login.js

@@ -1,76 +1,141 @@
-/* global $, LoginValidator, LoginController, EmailValidator */
+/* globals $, _ */
 
 'use strict';
 
-$(() => {
-  const lv = new LoginValidator();
-  /* const lc = */ new LoginController(); // eslint-disable-line no-new
+window.LoginView = {
+  /**
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  getInputForInitialFocus () {
+    return $('input:text:visible:first');
+  },
+  /**
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  getLoginModal () {
+    return $('#login');
+  },
 
-  // main login form
-  $('#login').ajaxForm({
-    beforeSubmit (formData, jqForm, options) {
-      if (!lv.validateForm()) {
-        return false;
-      }
-      // append 'remember-me' option to formData to write local cookie
-      formData.push({
-        name: 'remember-me',
-        value: $('#btn_remember').find('span').hasClass('fa-check-square')
-      });
-      return true;
-    },
-    success (responseText, status, xhr, $form) {
-      if (status === 'success') location.href = '/home';
-    },
-    error (e) {
-      lv.showLoginError(
-        'Login Failure', 'Please check your username and/or password'
-      );
-    }
-  });
+  /**
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  retrievePasswordModal () {
+    const retrievePasswordModal = $('#retrieve-password');
+    retrievePasswordModal.modal({
+      show: false, keyboard: true, backdrop: false
+    });
+    return retrievePasswordModal;
+  },
 
-  $('input:text:visible:first').focus();
-  $('#btn_remember').click(function () {
-    const span = $(this).find('span');
-    if (span.hasClass('fa-minus-square')) {
-      span.removeClass('fa-minus-square');
-      span.addClass('fa-check-square');
+  /**
+   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {external:jQuery} `HTMLFormElement`
+   */
+  retrievePasswordForm (retrievePasswordModal) {
+    return retrievePasswordModal.find('#retrieve-password-form');
+  },
+
+  /**
+   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {external:jQuery} `HTMLButtonElement`
+   */
+  retrievePasswordSubmit (retrievePasswordModal) {
+    return retrievePasswordModal.find('[data-name=retrieve-password-submit]');
+  },
+
+  /**
+   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {external:jQuery} `HTMLButtonElement`
+   */
+  retrievePasswordCancel (retrievePasswordModal) {
+    return retrievePasswordModal.find('[data-name=retrieve-password-cancel]');
+  },
+
+  /**
+   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {external:jQuery} `HTMLInputElement`
+   */
+  retrieveLostPasswordEmail (retrievePasswordModal) {
+    return retrievePasswordModal.find('[data-name="email"]');
+  },
+
+  /**
+   * @param {external:jQuery} loginModal `HTMLDivElement`
+   * @returns {external:jQuery} `HTMLInputElement`
+   */
+  getLostPasswordUsername (loginModal) {
+    return loginModal.find('[data-name="user"]');
+  },
+
+  /**
+   * @param {external:jQuery} loginModal
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  getForgotPassword (loginModal) {
+    return loginModal.find('[data-name=forgot-password]');
+  },
+
+  /**
+  * @param {external:jQuery} loginModal
+  * @returns {external:jQuery} `HTMLButtonElement`
+  */
+  getRememberMeButton (loginModal) {
+    return loginModal.find('button.remember-me');
+  },
+
+  /**
+  * @param {external:jQuery} loginModal
+  * @returns {boolean}
+  */
+  isRememberMeChecked (loginModal) {
+    return this.getRememberMeButton(loginModal).find('span').hasClass(
+      'fa-check-square'
+    );
+  },
+
+  /**
+  * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+  * @returns {void}
+  */
+  setRetrievePasswordCancel (retrievePasswordModal) {
+    this.retrievePasswordCancel(retrievePasswordModal).text(_('Cancel'));
+  },
+
+  /**
+  * @param {external:jQuery} loginModal
+  * @returns {void}
+  */
+  toggleGlyphicon (loginModal) {
+    const span = this.getRememberMeButton(loginModal).find('span');
+    if (span.hasClass('glyphicon-unchecked')) {
+      span.addClass('glyphicon-ok')
+        .removeClass('glyphicon-unchecked');
     } else {
-      span.addClass('fa-minus-square');
-      span.removeClass('fa-check-square');
+      span.removeClass('glyphicon-ok')
+        .addClass('glyphicon-unchecked');
     }
-  });
+  },
 
-  // login retrieval form via email
-  const ev = new EmailValidator();
-
-  $('#get-credentials-form').ajaxForm({
-    url: '/lost-password',
-    beforeSubmit (formData, jqForm, options) {
-      if (ev.validateEmail($('#email-tf').val())) {
-        ev.hideEmailAlert();
-        return true;
-      }
-      ev.showEmailAlert('Please enter a valid email address');
-      return false;
-    },
-    success (responseText, status, xhr, $form) {
-      $('#cancel').html('OK');
-      $('#retrieve-password-submit').hide();
-      ev.showEmailSuccess('A link to reset your password was emailed to you.');
-    },
-    error (e) {
-      if (e.responseText === 'email-not-found') {
-        ev.showEmailAlert(
-          'Email not found. Are you sure you entered it correctly?'
-        );
-      } else {
-        $('#cancel').html('OK');
-        $('#retrieve-password-submit').hide();
-        ev.showEmailAlert(
-          'Sorry. There was a problem, please try again later.'
-        );
-      }
+  /**
+  * @param {external:jQuery} loginModal
+  * @returns {void}
+  */
+  toggleCheckSquare (loginModal) {
+    const span = this.getRememberMeButton(loginModal).find('span');
+    if (span.hasClass('fa-minus-square')) {
+      span.removeClass('fa-minus-square')
+        .addClass('fa-check-square');
+    } else {
+      span.addClass('fa-minus-square')
+        .removeClass('fa-check-square');
     }
-  });
-});
+  },
+
+  /**
+   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {void}
+   */
+  switchConfirmToAlert (retrievePasswordModal) {
+    this.retrievePasswordCancel(retrievePasswordModal).text('OK');
+  }
+};

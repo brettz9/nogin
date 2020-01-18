@@ -2,64 +2,158 @@
 
 const {join} = require('path');
 const express = require('express');
+const fileFetch = require('file-fetch');
+const {JSDOM} = require('jsdom');
+const {findLocaleStrings} = require('intl-dom');
 
 const AccountManager = require('./modules/account-manager.js');
 const EmailDispatcher = require('./modules/email-dispatcher.js');
 
-const {isNullish, hasOwn} = require('./modules/common.js');
-const setPugI18n = require('./modules/pug-i18n.js')();
+// For intl-dom
+global.fetch = fileFetch;
+global.document = (new JSDOM()).window.document;
+
+const {isNullish} = require('./modules/common.js');
+const setI18n = require('./modules/i18n.js')();
+const getLogger = require('./modules/getLogger.js');
+const layoutView = require('./views/layout.js');
+
+const emailPattern = '^(' +
+  '(' +
+    // 1+ initial chars. excluding special chars.
+    '[^<>()[\\]\\\\.,;:\\s@"]+' +
+    // (Optional) dot followed by 1+ chars., excluding
+    //   any special chars.
+    '(\\.' +
+      '[^<>()[\\]\\\\.,;:\\s@"]+' +
+    ')*' +
+  ')|' +
+  // Or quoted value
+  '(".+")' +
+')@(' +
+  '(' +
+    // IPv4 address
+    '\\[\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\]' +
+  ')|' +
+  '(' +
+    // 1+ sequences of:
+    //    1+ alphanumeric (or hyphen) followed by dot
+    // ...followed by 2+ alphabetic characters
+    '([a-zA-Z\\-\\d]+\\.)+[a-zA-Z]{2,}' +
+  ')' +
+')$';
 
 module.exports = async function (app, config) {
   const {
+    log,
+    loggerLocale = 'en-US',
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS,
     NL_EMAIL_FROM,
+    NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
     DB_URL,
-    DB_NAME,
+    dbOpts: {DB_NAME, adapter},
     SERVE_COVERAGE,
-    countries
+    favicon,
+    localScripts,
+    fromText,
+    fromURL
   } = config;
 
-  const AM = await (new AccountManager({
+  const countryCodes = config.countryCodes
+    ? JSON.parse(config.countryCodes)
+    // eslint-disable-next-line global-require
+    : require('./modules/country-codes.json');
+
+  const composePasswordEmailConfig = {
+    fromText, fromURL
+  };
+
+  const getCountries = (_) => {
+    return countryCodes.map((code) => {
+      return {
+        code,
+        name: _(`country${code}`)
+      };
+    });
+  };
+
+  const [globalI18n, errorLogger] = await Promise.all([
+    setI18n({
+      acceptsLanguages: () => loggerLocale
+    }),
+    getLogger({loggerLocale, errorLog: true})
+  ]);
+
+  const logErrorProperties = (e) => {
+    errorLogger('ServerError', null, e);
+    for (const [k, val] of Object.entries(e)) {
+      errorLogger('ERROR', null, k, val);
+    }
+  };
+
+  const am = await (new AccountManager(adapter, {
     DB_URL,
-    DB_NAME
-  })).connect();
-  const ED = new EmailDispatcher({
+    DB_NAME,
+    log,
+    _: globalI18n
+  }).connect());
+  const ed = new EmailDispatcher({
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS,
     NL_EMAIL_FROM,
+    NS_EMAIL_TIMEOUT,
     NL_SITE_URL
   });
+
+  const getLayoutAndTitle = (businessLogicArgs) => {
+    return {
+      _: businessLogicArgs._,
+      title: businessLogicArgs.title,
+      layout (templateArgs) {
+        return layoutView({
+          SERVE_COVERAGE,
+          favicon,
+          localScripts,
+          ...businessLogicArgs,
+          ...templateArgs
+        });
+      }
+    };
+  };
 
   /*
     login & logout
   */
   app.get('/', async function (req, res) {
-    const _ = await setPugI18n(req, res);
+    const _ = await setI18n(req, res);
     // check if the user has an auto login key saved in a cookie
     if (req.signedCookies.login === undefined) {
+      const title = _('PleaseLoginToAccount');
       res.render('login', {
-        // Todo: Localize these dynamic strings (on server and client)
-        title: _('PleaseLoginToAccount')
+        ...getLayoutAndTitle({_, title}),
+        emailPattern
       });
     } else {
       // attempt automatic login
       let o;
       try {
-        o = await AM.validateLoginKey(req.signedCookies.login, req.ip);
+        o = await am.validateLoginKey(req.signedCookies.login, req.ip);
       } catch (err) {
       }
 
       if (o) {
-        const _o = await AM.autoLogin(o.user, o.pass);
+        const _o = await am.autoLogin(o.user, o.pass);
         req.session.user = _o;
         res.redirect('/home');
       } else {
+        const title = _('PleaseLoginToAccount');
         res.render('login', {
-          title: _('PleaseLoginToAccount')
+          ...getLayoutAndTitle({_, title}),
+          emailPattern
         });
       }
     }
@@ -68,7 +162,7 @@ module.exports = async function (app, config) {
   app.post('/', async function (req, res) {
     let o;
     try {
-      o = await AM.manualLogin(req.body.user, req.body.pass);
+      o = await am.manualLogin(req.body.user, req.body.pass);
     } catch (err) {
       res.status(400).send(err.message);
       return;
@@ -78,7 +172,7 @@ module.exports = async function (app, config) {
     if (req.body['remember-me'] === 'false') {
       res.status(200).send(o);
     } else {
-      const key = await AM.generateLoginKey(o.user, req.ip);
+      const key = await am.generateLoginKey(o.user, req.ip);
       // `signed` requires `cookie-parser` with express
       res.cookie('login', key, {maxAge: 900000, signed: true});
       res.status(200).send(o);
@@ -87,23 +181,25 @@ module.exports = async function (app, config) {
 
   app.post('/logout', async function (req, res) {
     res.clearCookie('login');
-    const _ = await setPugI18n(req, res);
+    const _ = await setI18n(req, res);
     req.session.destroy((e) => { res.status(200).send(_('OK')); });
   });
 
-  /*
-    control panel
+  /**
+   * Control panel.
   */
   app.get('/home', async function (req, res) {
     if (isNullish(req.session.user)) {
       res.redirect('/');
     } else {
-      const _ = await setPugI18n(req, res);
+      const _ = await setI18n(req, res);
+      const {user = {}} = req.session;
+      const title = _('ControlPanel');
       res.render('home', {
-        title: _('ControlPanel'),
-        // Todo: i18nize visible values
-        countries,
-        udata: req.session.user
+        user,
+        ...getLayoutAndTitle({_, title}),
+        countries: getCountries(_),
+        emailPattern
       });
     }
   });
@@ -112,18 +208,19 @@ module.exports = async function (app, config) {
     if (isNullish(req.session.user)) {
       res.redirect('/');
     } else {
-      const {name, email, pass, country} = req.body;
+      const {name, email, pass, country, user} = req.body;
       let o, _;
       try {
         [o, _] = await Promise.all([
-          AM.updateAccount({
+          am.updateAccount({
             id: req.session.user._id,
             name,
+            user,
             email,
             pass,
             country
           }),
-          setPugI18n(req, res)
+          setI18n(req, res)
         ]);
       } catch (e) {
         res.status(400).send(_('ErrorUpdatingAccount'));
@@ -138,21 +235,29 @@ module.exports = async function (app, config) {
     new accounts
   */
   app.get('/signup', async function (req, res) {
-    const _ = await setPugI18n(req, res);
+    const _ = await setI18n(req, res);
+    const title = _('Signup');
     res.render('signup', {
-      title: _('Signup'),
-      // Todo: i18nize visible values
-      countries
+      emptyUser: {
+        _id: '',
+        name: '',
+        email: '',
+        country: '',
+        user: ''
+      },
+      ...getLayoutAndTitle({_, title}),
+      countries: getCountries(_),
+      emailPattern
     });
   });
 
   app.post('/signup', async function (req, res) {
     const {name, email, user, pass, country} = req.body;
-    let _;
+    let _, o;
     try {
-      [_] = await Promise.all([
-        setPugI18n(req, res),
-        AM.addNewAccount({
+      [_, o] = await Promise.all([
+        setI18n(req, res),
+        am.addNewAccount({
           name,
           email,
           user,
@@ -164,19 +269,53 @@ module.exports = async function (app, config) {
       res.status(400).send(e.message);
       return;
     }
+    try {
+      // TODO this promise takes a moment to return, add a loader to
+      //   give user feedback
+      await ed.dispatchActivationLink(o, composePasswordEmailConfig, _);
+    } catch (e) {
+      res.status(400).send(_('EmailServerError'));
+      logErrorProperties(e);
+      return;
+    }
     res.status(200).send(_('OK'));
   });
 
-  /*
-    password reset
+  app.get('/activation', async function (req, res) {
+    const _ = await setI18n(req, res);
+    const title = _('Activation');
+    if (req.query.c) {
+      try {
+        console.log('req.query.c', req.query.c);
+        await am.activateAccount(req.query.c);
+      } catch (e) {
+        res.render(
+          'activation-failed', {
+            ...getLayoutAndTitle({_, title})
+          }
+        );
+        return;
+      }
+      res.render(
+        'activated', {
+          ...getLayoutAndTitle({_, title})
+        }
+      );
+    } else {
+      res.status(400).send(_('ActivationCodeRequired'));
+    }
+  });
+
+  /**
+   * Password reset.
   */
   app.post('/lost-password', async function (req, res) {
     const {email} = req.body;
     let account, _;
     try {
       [account, _] = await Promise.all([
-        AM.generatePasswordKey(email, req.ip),
-        setPugI18n(req, res)
+        am.generatePasswordKey(email, req.ip),
+        setI18n(req, res)
       ]);
     } catch (e) {
       res.status(400).send(e.message);
@@ -184,16 +323,14 @@ module.exports = async function (app, config) {
     }
     try {
       /* const { status, text } = */
-      await ED.dispatchResetPasswordLink(account, _);
+      await ed.dispatchResetPasswordLink(
+        account, composePasswordEmailConfig, _
+      );
       // TODO this promise takes a moment to return, add a loader to
       //   give user feedback
       res.status(200).send(_('OK'));
     } catch (_e) {
-      for (const k in _e) {
-        if (hasOwn(_e, k)) {
-          console.log('ERROR:', k, _e[k]);
-        }
-      }
+      logErrorProperties(_e);
       res.status(400).send(_('UnableToDispatchPasswordReset'));
     }
   });
@@ -202,8 +339,8 @@ module.exports = async function (app, config) {
     let o, _, e;
     try {
       [o, _] = await Promise.all([
-        AM.validatePasswordKey(req.query.key, req.ip),
-        setPugI18n(req, res)
+        am.validatePasswordKey(req.query.key, req.ip),
+        setI18n(req, res)
       ]);
     } catch (err) {
       e = err;
@@ -212,8 +349,9 @@ module.exports = async function (app, config) {
       res.redirect('/');
     } else {
       req.session.passKey = req.query.key;
-      res.render('reset', {
-        title: _('ResetPassword')
+      const title = _('ResetPassword');
+      res.render('reset-password', {
+        ...getLayoutAndTitle({_, title})
       });
     }
   });
@@ -221,13 +359,13 @@ module.exports = async function (app, config) {
   app.post('/reset-password', async function (req, res) {
     const newPass = req.body.pass;
     const {passKey} = req.session;
-    // destory the session immediately after retrieving the stored passkey
+    // destroy the session immediately after retrieving the stored passkey
     req.session.destroy();
     let o, _;
     try {
       [o, _] = await Promise.all([
-        AM.updatePassword(passKey, newPass),
-        setPugI18n(req, res)
+        am.updatePassword(passKey, newPass),
+        setI18n(req, res)
       ]);
     } catch (err) {}
     if (o) {
@@ -237,46 +375,85 @@ module.exports = async function (app, config) {
     }
   });
 
-  /*
-    view, delete & reset accounts
+  /**
+   * View, delete & reset accounts.
+   * @todo Should require privileges!
   */
-  app.get('/print', async function (req, res) {
+  app.get('/users', async function (req, res) {
     const [accounts, _] = await Promise.all([
-      AM.getAllRecords(),
-      setPugI18n(req, res)
+      am.getAllRecords(),
+      setI18n(req, res)
     ]);
-    res.render('print', {
-      title: _('AccountList'),
-      // Todo: i18nize?
-      accts: accounts
+    const title = _('AccountList');
+    res.render('users', {
+      ...getLayoutAndTitle({_, title}),
+      accounts: accounts.map(({name, user, country, date}) => {
+        return {
+          user,
+          name: name || '',
+          country: country ? _('country' + country) : '',
+          date: new Intl.DateTimeFormat(
+            _.resolvedLocale, {dateStyle: 'full'}
+          ).format(date)
+        };
+      })
     });
   });
 
+  /**
+   * Should be safe as express-session stores session object server-side.
+   */
   app.post('/delete', async function (req, res) {
-    const _ = await setPugI18n(req, res);
+    const _ = await setI18n(req, res);
     try {
-      /* obj = */ await AM.deleteAccount(req.session.user._id);
+      /* obj = */ await am.deleteAccountById(req.session.user._id);
     } catch (err) {
-      res.clearCookie('login');
-      req.session.destroy((_e) => {
-        res.status(200).send(_('OK'));
-      });
+      res.status(400).send(_('RecordNotFound'));
       return;
     }
-    res.status(400).send(_('RecordNotFound'));
+    res.clearCookie('login');
+    req.session.destroy((_e) => {
+      res.status(200).send(_('OK'));
+    });
   });
 
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {void}
+   * @todo Should require privileges!
+   */
   app.get('/reset', async function (req, res) {
-    await AM.deleteAllAccounts();
-    res.redirect('/print');
+    await am.deleteAllAccounts();
+    res.redirect('/users');
   });
 
+  /* istanbul ignore else */
   if (SERVE_COVERAGE) {
     // SHOW COVERAGE HTML ON SERVER
     // We could add this in a separate file, but we'll leverage express here
     app.use('/coverage', express.static(join(__dirname, '../../coverage')));
   }
 
+  [
+    'bootstrap',
+    'font-awesome',
+    'github-fork-ribbon-css',
+    'hyperhtml',
+    'intl-dom',
+    'jamilih',
+    'jquery',
+    'jquery-form',
+    'popper.js'
+  ].forEach((mod) => {
+    const path = '/node_modules/' + mod;
+    app.use(
+      path,
+      express.static(join(__dirname, '../..' + path))
+    );
+  });
+
+  /* istanbul ignore next */
   if (global.__coverage__) {
     // See https://github.com/cypress-io/code-coverage
 
@@ -285,10 +462,32 @@ module.exports = async function (app, config) {
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
+  const wrapResult = (args) => {
+    return `
+      /* globals IntlDom */
+      window._ = IntlDom.i18nServer(${JSON.stringify(args)});
+`;
+  };
+
+  // To save the client extra requests
+  app.get('/lang', async function (req, res) {
+    res.type('.js');
+
+    const acceptLanguage = req.header('accept-language') || 'en-US';
+    const languages = acceptLanguage.split(';')[0].split(',');
+    const {strings, locale: resolvedLocale} = await findLocaleStrings({
+      localesBasePath: __dirname,
+      locales: languages
+    });
+    res.status(200).send(wrapResult({resolvedLocale, strings}));
+    res.end();
+  });
+
   app.get('*', async function (req, res) {
-    const _ = await setPugI18n(req, res);
-    res.render('404', {
-      title: _('PageNotFound')
+    const _ = await setI18n(req, res);
+    const title = _('PageNotFound');
+    res.status(404).render('404', {
+      ...getLayoutAndTitle({_, title})
     });
   });
 };

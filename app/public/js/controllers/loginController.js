@@ -1,33 +1,98 @@
-/* global $ */
+/* globals LoginValidator, EmailValidator, LoginView */
 'use strict';
 
-window.LoginController = function LoginController () {
-  // bind event listeners to button clicks
-  $('#retrieve-password-submit').click(() => {
-    $('#get-credentials-form').submit();
-  });
-  $('#login #forgot-password').click(() => {
-    $('#cancel').html('Cancel');
-    $('#retrieve-password-submit').show();
-    $('#get-credentials').modal('show');
-  });
-  $('#login .button-rememember-me').click(function (e) {
-    const span = $(this).find('span');
-    if (span.hasClass('glyphicon-unchecked')) {
-      span.addClass('glyphicon-ok');
-      span.removeClass('glyphicon-unchecked');
-    } else {
-      span.removeClass('glyphicon-ok');
-      span.addClass('glyphicon-unchecked');
-    }
-  });
+(() => {
+const loginModal = LoginView.getLoginModal();
+const forgotPassword = LoginView.getForgotPassword(loginModal);
+const rememberMeButton = LoginView.getRememberMeButton(loginModal);
+const lostPasswordUsername = LoginView.getLostPasswordUsername(loginModal);
 
-  // automatically toggle focus between the email modal window and
-  //   the login form
-  $('#get-credentials').on('shown.bs.modal', () => {
-    $('#email-tf').focus();
-  });
-  $('#get-credentials').on('hidden.bs.modal', () => {
-    $('#user-tf').focus();
-  });
-};
+const retrievePasswordModal = LoginView.retrievePasswordModal();
+const retrievePasswordEmail = LoginView.retrieveLostPasswordEmail(
+  retrievePasswordModal
+);
+const retrievePasswordForm = LoginView.retrievePasswordForm(
+  retrievePasswordModal
+);
+const retrievePasswordSubmit = LoginView.retrievePasswordSubmit(
+  retrievePasswordModal
+);
+
+// bind event listeners to button clicks
+retrievePasswordSubmit.click(() => {
+  retrievePasswordForm.submit();
+});
+forgotPassword.click(() => {
+  LoginView.setRetrievePasswordCancel(retrievePasswordModal);
+  retrievePasswordSubmit.show();
+  retrievePasswordModal.modal('show');
+});
+rememberMeButton.click(function () {
+  LoginView.toggleGlyphicon(loginModal);
+});
+
+// automatically toggle focus between the email modal window and
+//   the login form
+retrievePasswordModal.on('shown.bs.modal', () => {
+  retrievePasswordEmail.focus();
+});
+retrievePasswordModal.on('hidden.bs.modal', () => {
+  lostPasswordUsername.focus();
+});
+
+// main login form
+loginModal.ajaxForm({
+  beforeSubmit (formData, jqForm, options) {
+    if (!LoginValidator.validateForm()) {
+      return false;
+    }
+    // append 'remember-me' option to formData to write local cookie
+    formData.push({
+      name: 'remember-me',
+      value: LoginView.isRememberMeChecked(loginModal)
+    });
+    return true;
+  },
+  success (responseText, status, xhr, $form) {
+    if (status === 'success') {
+      location.href = '/home';
+    }
+  },
+  error (e) {
+    LoginValidator.showLoginError();
+  }
+});
+
+LoginView.getInputForInitialFocus().focus();
+rememberMeButton.click(function () {
+  LoginView.toggleCheckSquare(loginModal);
+});
+
+// login retrieval form via email
+const ev = new EmailValidator();
+
+retrievePasswordForm.ajaxForm({
+  url: '/lost-password',
+  beforeSubmit (formData, jqForm, options) {
+    if (EmailValidator.validateEmail(retrievePasswordEmail[0])) {
+      ev.hideEmailAlert();
+      return true;
+    }
+    return false;
+  },
+  success (responseText, status, xhr, $form) {
+    LoginView.switchConfirmToAlert(retrievePasswordModal);
+    retrievePasswordSubmit.hide();
+    ev.showEmailSuccess(LoginView.messages.LinkToResetPasswordMailed);
+  },
+  error (e) {
+    if (e.responseText === 'email-not-found') {
+      ev.showEmailAlert(LoginView.messages.EmailNotFound);
+    } else {
+      LoginView.switchConfirmToAlert(retrievePasswordModal);
+      retrievePasswordSubmit.hide();
+      ev.showEmailAlert(LoginView.messages.ProblemTryAgainLater);
+    }
+  }
+});
+})();

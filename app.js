@@ -1,7 +1,5 @@
 'use strict';
 
-// Todo: Support more locales!
-// Todo: Make layout title configurable instead?
 // Todo: Internationalize attributes like `aria-label`
 
 /**
@@ -11,7 +9,7 @@
 */
 
 const http = require('http');
-const {join} = require('path');
+const {join, resolve: pathResolve} = require('path');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -24,94 +22,75 @@ const stylus = require('stylus');
 const RateLimit = require('express-rate-limit');
 
 const routes = require('./app/server/routes.js');
-const _ = require('./app/server/messages/en/messages.json');
+const getLogger = require('./app/server/modules/getLogger.js');
+const DBFactory = require('./app/server/modules/db-factory.js');
+const jmlEngine = require('./app/server/modules/jmlEngine.js');
 
 /**
- *
- * @param {string} str
- * @param {PlainObject<string,string>} [data={}] Values for substitution
- * @returns {string}
- */
-const substitute = (str, data = {}) => {
-  return Object.entries(data).reduce((s, [ky, val]) => {
-    // Todo: This only allows one replacement; need escaping function; put
-    // one in RegExtras?
-    return s.replace('${' + ky + '}', val);
-  }, str) || str;
-};
-
-const getLogger = (options) => {
-  /**
-   *
-   * @param {string} key
-   * @param {PlainObject<string,string>} [data={}] Values for substitution
-   * @param {...(string|PlainObject)} other Other items to log, e.g., errors
-   * @returns {string|null}
-   */
-  return (key, data = {}, ...other) => {
-    if (options.logging === false) {
-      return null;
-    }
-    console.log(substitute(_[key], data), ...other);
-    return key;
-  };
-};
-
-// Todo: Small repo to convert `command-line-usage` into jsdoc (and
-//   use here in place of `PlainObject` `options`)
-/**
- * @param {PlainObject} options
+ * @param {MainOptionDefinitions} options
  * @returns {Promise<void>}
  */
 exports.createServer = async function (options) {
-  const log = getLogger(options);
+  const [log, errorLog] = await Promise.all([
+    getLogger(options),
+    getLogger({...options, errorLog: true})
+  ]);
   const app = express();
 
   const {
     cwd = process.cwd(),
-    config = cwd ? `${cwd}/node-login.json` : null
+    config = 'node-login.json'
   } = options;
 
   let cfg;
   try {
     cfg = config
     // eslint-disable-next-line global-require, import/no-dynamic-require
-      ? require(config)
+      ? require(pathResolve(cwd, config))
       : null;
   } catch (err) {
-    log('noConfigFileDetected', {config});
+    errorLog('noConfigFileDetected', {config});
+    return;
   }
 
+  const opts = {...cfg, ...options, config: null};
   const {
+    loggerLocale,
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS,
     NL_EMAIL_FROM,
+    NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
-    DB_NAME = 'node-login',
     secret,
-    // eslint-disable-next-line global-require
-    countries = require('./app/server/modules/country-list.js'),
+    countries,
     PORT = 3000,
-    DB_HOST = 'localhost',
-    DB_PORT = 27017,
-    DB_USER,
-    DB_PASS,
     JS_DIR = '/app/public',
-    SERVE_COVERAGE = false
-  } = {...cfg, ...options, config: null};
+    SERVE_COVERAGE = false,
+    RATE_LIMIT = 500,
+    favicon,
+    localScripts,
+    countryCodes,
+    fromText,
+    fromURL
+  } = opts;
+
+  const dbOpts = DBFactory.getDefaults(opts);
 
   // Doubles as limiting automated login attempts!
   const limiter = new RateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 100 // Todo: Make configurable
+    max: RATE_LIMIT
   });
 
   app.locals.pretty = true;
 
+  // We name it "js" instead of "jml" since more convenient for
+  //  file extension
+  app.engine('js', jmlEngine);
   app.set('port', PORT);
   app.set('views', join(__dirname, '/app/server/views'));
-  app.set('view engine', 'pug');
+  app.set('view engine', 'js');
 
   app.use(limiter);
   app.use(cookieParser(secret));
@@ -120,44 +99,75 @@ exports.createServer = async function (options) {
   app.use(
     stylus.middleware({src: join(__dirname, JS_DIR), sourcemap: true})
   );
-  app.use(express.static(join(__dirname, JS_DIR)));
+  if (JS_DIR !== '/app/public') {
+    app.use(express.static(join(__dirname, JS_DIR)));
+  }
+  app.use(express.static(join(__dirname, '/app/public')));
 
-  let DB_URL;
-  // build mongo database connection url
-  if (app.get('env') !== 'live') {
-    DB_URL = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
-  // prepend url with authentication credentials
-  } else {
-    DB_URL = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+  const isProduction = app.get('env') === 'production';
+
+  if (isProduction) {
+    if (!dbOpts.DB_USER || !dbOpts.DB_PASS) {
+      errorLog('ProductionNeedsUserAndPass');
+      return;
+    }
   }
 
-  app.use(session({
+  const DB_URL = DBFactory.getURL(
+    dbOpts.adapter, isProduction, dbOpts
+  );
+
+  // Todo: Make configurable as well as allowing `genid`, `name`,
+  //   `rolling`, `unset`?
+  const sess = {
+    cookie: {
+      // Todo: Allow configurability for `domain`, `expires`, `httpOnly`,
+      //        `maxAge`, `path`, `sameSite`; see
+      //        https://www.npmjs.com/package/express-session
+    },
     secret,
-    proxy: true,
+    // proxy: true, // `undefined` checks `trust proxy` (see below)
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({
       url: DB_URL,
-      mongoOptions: {useUnifiedTopology: true, useNewUrlParser: true}
+      mongoOptions: {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+      }
     })
-  }));
+  };
+
+  if (isProduction) {
+    app.set('trust proxy', 1); // trust first proxy
+    sess.cookie.secure = true; // serve secure cookies
+  }
+
+  app.use(session(sess));
 
   await routes(app, {
+    log,
+    loggerLocale,
     countries,
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS,
     NL_EMAIL_FROM,
+    NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
     DB_URL,
-    DB_NAME,
-    SERVE_COVERAGE
+    SERVE_COVERAGE,
+    dbOpts,
+    favicon,
+    localScripts,
+    countryCodes,
+    fromText,
+    fromURL
   });
 
   http.createServer(app).listen(app.get('port'), () => {
-    // Todo: Add more (i18nized) logging messages and on client,
-    //   making log/substitute utilities external or in own repo;
+    // Todo: Add more (i18nized) logging messages
     //   also make i18n tool for `optionDefinitions` definitions?
-    log('express_server_listening', {port: app.get('port')});
+    log('express_server_listening', {port: String(app.get('port'))});
   });
 };

@@ -1,3 +1,7 @@
 node_modules
 instrumented/**
 coverage/**
+!.eslintrc.js
+!.ncurc.js
+mochawesome-report/**
+cypress/results/**

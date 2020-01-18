@@ -1,57 +1,111 @@
-/* global $, HomeController, AccountValidator */
+/* globals $, _, populateConfirmDialog, AlertDialog, populateForm */
 'use strict';
 
-$(() => {
-  const av = new AccountValidator();
-  HomeController.init();
+window.HomeView = {
+  /**
+   * @returns {external:jQuery}
+   */
+  getLogoutButton () {
+    return $('[data-name=btn-logout]');
+  },
+  /**
+   * @returns {external:jQuery}
+   */
+  getName () {
+    return $('[data-name="name"]');
+  },
 
-  $('#account-form').ajaxForm({
-    beforeSubmit (formData, jqForm, options) {
-      if (!av.validateForm()) {
-        return false;
-      }
-      // push the disabled username field onto the form data array
-      formData.push({
-        name: 'user', value: $('#user-tf').val()
-      });
-      return true;
-    },
-    success (responseText, status, xhr, $form) {
-      if (status === 'success') {
-        HomeController.onUpdateSuccess();
-      }
-    },
-    error (e) {
-      if (e.responseText === 'email-taken') {
-        av.showInvalidEmail();
-      } else if (e.responseText === 'username-taken') {
-        av.showInvalidUserName();
-      }
-    }
-  });
-  $('#name-tf').focus();
+  /**
+   * @param {external:jQuery} deleteAccountConfirmDialog
+   * @returns {external:jQuery}
+   */
+  getDeleteAccountSubmit (deleteAccountConfirmDialog) {
+    return deleteAccountConfirmDialog.find('.submit');
+  },
 
-  // customize the account settings form
-  $('#account-form div.heading2').text('Account Settings');
-  $('#account-form #sub').text(
-    'Here are the current settings for your account.'
-  );
-  $('#user-tf').attr('disabled', 'disabled');
-  $('#account-form-btn1').html('Delete');
-  $('#account-form-btn1').removeClass('btn-outline-dark');
-  $('#account-form-btn1').addClass('btn-danger');
-  $('#account-form-btn2').html('Update');
+  /**
+   * @param {external:jQuery} accountForm
+   * @returns {external:jQuery}
+   */
+  getDeleteAccountAction (accountForm) {
+    return accountForm.find('[data-name=action1]');
+  },
 
-  // setup the confirm window that displays when the user chooses to
-  //  delete their account
-  $('.modal-confirm').modal({
-    show: false, keyboard: true, backdrop: true
-  });
-  $('.modal-confirm .modal-header h1').text('Delete Account');
-  $('.modal-confirm .modal-body p').html(
-    'Are you sure you want to delete your account?'
-  );
-  $('.modal-confirm .cancel').html('Cancel');
-  $('.modal-confirm .submit').html('Delete');
-  $('.modal-confirm .submit').addClass('btn-danger');
-});
+  /**
+   * @param {external:jQuery} lockedAlertDialog
+   * @returns {external:jQuery} `HTMLButtonElement`
+   */
+  getLockedAlertButton (lockedAlertDialog) {
+    return lockedAlertDialog.find('button');
+  },
+
+  /**
+   * @param {external:jQuery} accountUpdatedAlertDialog
+   * @returns {external:jQuery} `HTMLButtonElement`
+   */
+  getAccountUpdatedButton (accountUpdatedAlertDialog) {
+    return accountUpdatedAlertDialog.find('button');
+  },
+
+  /**
+   * @returns {external:jQuery}
+   */
+  getUser () {
+    return $('[data-name="user"]');
+  },
+  /**
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  setDeleteAccount () {
+    // setup the confirm window that displays when the user chooses to
+    //  delete their account
+    const deleteAccountConfirmDialog = populateConfirmDialog({
+      header: _('deleteAccount'),
+      body: _('sureWantDeleteAccount'),
+      cancel: _('cancel'),
+      submit: _('delete')
+    });
+    deleteAccountConfirmDialog.find('.submit').addClass('btn-danger');
+    return deleteAccountConfirmDialog;
+  },
+  /**
+   * @returns {external:jQuery} `HTMLFormElement`
+   */
+  setAccountSettings () {
+    const accountForm = populateForm('[data-name=account-form]', {
+      heading: _('accountSettings'),
+      subheading: _('hereAreCurrentSettings'),
+      action1: _('deleteText'),
+      action2: _('updateText')
+    });
+    accountForm.find('[data-name=action1]')
+      .removeClass('btn-outline-dark')
+      .addClass('btn-danger');
+    return accountForm;
+  },
+  /**
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  onAccountUpdated () {
+    return AlertDialog.populate({
+      heading: _('success'),
+      body: _('yourAccountHasBeenUpdated'),
+      keyboard: true,
+      backdrop: true
+    });
+  },
+  /**
+   * @param {"accountDeleted"|"loggedOut"} type
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  onShowLockedAlert (type) {
+    return AlertDialog.populate({
+      heading: _('success'),
+      body: _(type, {
+        lb: $('<br/>')[0]
+      }),
+      keyboard: false,
+      backdrop: 'static'
+    });
+  }
+};

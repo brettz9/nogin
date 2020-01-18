@@ -1,4 +1,0 @@
-{
-  "express_server_listening": "Express server listening on port ${port}",
-  "noConfigFileDetected": "No config file detected at ${config}; supply a `null` `config` to avoid this message."
-}

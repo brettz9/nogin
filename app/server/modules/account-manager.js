@@ -1,130 +1,50 @@
 'use strict';
 
-/* eslint-disable-next-line no-shadow  */
-const crypto = require('crypto');
-const moment = require('moment');
-const {MongoClient, ObjectID} = require('mongodb');
+const {isNullish, guid} = require('./common.js');
+const {
+  saltAndHash, validatePasswordV0, validatePasswordV1
+} = require('./crypto.js');
 
-const {isNullish} = require('./common.js');
+const DBFactory = require('./db-factory.js');
 
-const PASS_VER = 1;
+const passVer = 1;
 
-const guid = function () {
-  /* eslint-disable no-bitwise */
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, (c) => {
-    const r = Math.random() * 16 | 0,
-      v = c === 'x' ? r : r & 0x3 | 0x8;
-    return v.toString(16);
-  });
-  /* eslint-enable no-bitwise */
-};
-
-/*
-  private encryption & validation methods
-*/
-
-const md5 = function (str) {
-  return crypto.createHash('md5').update(str).digest('hex');
-};
-
-const saltAndHash = function (pass) {
-  const hasher = 'sha256';
-  const iterations = 10000;
-  const hashLength = 32;
-  const saltBytes = 16;
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    // eslint-disable-next-line promise/prefer-await-to-callbacks
-    crypto.randomBytes(saltBytes, function (err, buf) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      const salt = buf.toString('hex');
-      crypto.pbkdf2(
-        pass, salt, iterations, hashLength, hasher,
-        function (error, derivedKey) {
-          if (error) {
-            reject(error);
-            return;
-          }
-          const hash = derivedKey.toString('hex');
-          resolve([salt, hash].join('$'));
-        }
-      );
-    });
-  });
-};
-
-const validatePasswordV0 = function (plainPass, hashedPass) {
-  const salt = hashedPass.slice(0, 10);
-  const validHash = salt + md5(plainPass + salt);
-  if (hashedPass !== validHash) {
-    throw new Error('invalid-password');
-  }
-};
-
-const validatePasswordV1 = function (plainPass, hashedPass) {
-  const hasher = 'sha256';
-  const iterations = 10000;
-  const hashLength = 32;
-  const salt = hashedPass.split('$')[0];
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    crypto.pbkdf2(
-      plainPass, salt, iterations, hashLength, hasher,
-      // eslint-disable-next-line promise/prefer-await-to-callbacks
-      function (err, derivedKey) {
-        if (err) {
-          reject(new Error('invalid-password'));
-          return;
-        }
-        const plainPassHash = derivedKey.toString('hex');
-        const validHash = [salt, plainPassHash].join('$');
-        resolve(hashedPass === validHash);
-      }
-    );
-  });
-};
-
-const getObjectId = function (id) {
-  return new ObjectID(id);
-};
-
+/**
+ * Manages accounts.
+ */
 class AccountManager {
-  constructor (config) {
-    this.config = config;
+  /**
+   * @param {"mongodb"} adapter
+   * @param {DBConfigObject} config
+   */
+  constructor (adapter, config) {
+    this.adapter = DBFactory.createInstance(adapter, config);
   }
 
+  /**
+   * @returns {Promise<AccountManager>}
+   */
   async connect () {
-    const {
-      DB_URL,
-      DB_NAME
-    } = this.config;
-
     try {
-      const client = await MongoClient.connect(DB_URL, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-      });
-      this.db = client.db(DB_NAME);
-      this.accounts = this.db.collection('accounts');
+      await this.adapter.connect();
+      this.accounts = await this.adapter.getAccounts();
       // index fields 'user' & 'email' for faster new account validation
       await this.accounts.createIndex({user: 1, email: 1});
-      console.log(
-        'mongo :: connected to database :: "' + DB_NAME + '"'
-      );
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      throw err;
     }
     return this;
   }
 
-  // Not currently exposed/in use
+  /**
+   * Not currently exposed/in use.
+   * @returns {Promise<void>}
+   */
   async listIndexes () {
     const indexes = await this.accounts.indexes();
     for (const [i, index] of indexes.entries()) {
-      console.log('index:', i, index);
+      console.log(this.adapter.config._('index', {i, index}));
     }
   }
 
@@ -132,32 +52,56 @@ class AccountManager {
     login validation methods
   */
 
+  /**
+   * @param {string} user
+   * @param {string} pass
+   * @returns {Promise<AccountInfo|null>}
+   */
   async autoLogin (user, pass) {
     try {
-      const o = await this.accounts.findOne({user});
+      const o = await this.accounts.findOne({user, activated: true});
       return o.pass === pass ? o : null;
     } catch (err) {
       return null;
     }
   }
 
+  /**
+   * @param {AccountInfoFilter} acctInfo
+   * @returns {Promise<AccountInfo[]>}
+   */
+  getRecords (acctInfo) {
+    // eslint-disable-next-line unicorn/no-fn-reference-in-iterator
+    return this.accounts.find(acctInfo).toArray();
+  }
+
+  /**
+   * @param {string} user
+   * @param {string} pass
+   * @returns {Promise<AccountInfo|null>}
+   */
   async manualLogin (user, pass) {
     let o;
     try {
-      o = await this.accounts.findOne({user});
+      o = await this.accounts.findOne({user, activated: true});
     } catch (err) {}
     if (isNullish(o)) {
       throw new Error('user-not-found');
     }
     // These may throw
-    if (o.pass_ver === undefined || o.pass_ver === 0) {
+    if (o.passVer === undefined || o.passVer === 0) {
       validatePasswordV0(pass, o.pass);
-    } else if (o.pass_ver === 1) {
+    } else if (o.passVer === 1) {
       await validatePasswordV1(pass, o.pass);
     }
     return o;
   }
 
+  /**
+   * @param {string} user
+   * @param {string} ipAddress
+   * @returns {Promise<string>} The cookie GUID
+   */
   async generateLoginKey (user, ipAddress) {
     const cookie = guid();
     await this.accounts.findOneAndUpdate({user}, {$set: {
@@ -167,12 +111,23 @@ class AccountManager {
     return cookie;
   }
 
-  // eslint-disable-next-line require-await
+  /* eslint-disable require-await */
+  /**
+   * @param {string} cookie
+   * @param {string} ipAddress
+   * @returns {Promise<AccountInfo>}
+   */
   async validateLoginKey (cookie, ipAddress) {
+    /* eslint-enable require-await */
     // ensure the cookie maps to the user's last recorded ip address
     return this.accounts.findOne({cookie, ip: ipAddress});
   }
 
+  /**
+   * @param {string} email
+   * @param {string} ipAddress
+   * @returns {Promise<AccountInfo>}
+   */
   async generatePasswordKey (email, ipAddress) {
     const passKey = guid();
     let o, e;
@@ -190,8 +145,14 @@ class AccountManager {
     throw (e || new Error('account not found'));
   }
 
-  // eslint-disable-next-line require-await
+  /* eslint-disable require-await */
+  /**
+   * @param {string} passKey
+   * @param {string} ipAddress
+   * @returns {Promise<AccountInfo>}
+   */
   async validatePasswordKey (passKey, ipAddress) {
+    /* eslint-enable require-await */
     // ensure the passKey maps to the user's last recorded ip address
     return this.accounts.findOne({passKey, ip: ipAddress});
   }
@@ -199,6 +160,45 @@ class AccountManager {
   /*
     record insertion, update & deletion methods
   */
+
+  /**
+  * @typedef {PlainObject} AccountInfoFilter
+  * @property {PlainObject<"$in",string[]>} _id Auto-set
+  * @property {PlainObject<"$in",string[]>} user
+  * @property {PlainObject<"$in",string[]>} name
+  * @property {PlainObject<"$in",string[]>} email
+  * @property {PlainObject<"$in",string[]>} pass
+  * @property {PlainObject<"$in",number[]>} passVer
+  * @property {PlainObject<"$in",number[]>} date
+  * @property {PlainObject<"$in",string[]>} activationCode
+  * @property {PlainObject<"$in",boolean[]>} activated
+  * @property {PlainObject<"$in",string[]>} cookie
+  * @property {PlainObject<"$in",string[]>} ip
+  * @property {PlainObject<"$in",string[]>} passKey
+  */
+
+  /**
+  * @typedef {PlainObject} AccountInfo
+  * @property {string} _id Auto-set
+  * @property {string} user
+  * @property {string} name
+  * @property {string} email
+  * @property {string} pass Will be overwritten with hash
+  * @property {number} passVer Auto-generated version.
+  * @property {number} date Auto-generated timestamp.
+  * @property {string} activationCode Auto-set
+  * @property {boolean} activated Auto-set
+  * @property {string} cookie Auto-set
+  * @property {string} ip Auto-set
+  * @property {string} passKey Auto-set and unset
+  */
+
+  /**
+   * @param {AccountInfo} newData
+   * @returns {Promise<AccountInfo>}
+   * @todo Would ideally check for multiple erros to report back all issues
+   *   at once.
+   */
   async addNewAccount (newData) {
     let o;
     try {
@@ -215,32 +215,71 @@ class AccountManager {
       throw new Error('email-taken');
     }
 
-    const hash = await saltAndHash(newData.pass);
-    newData.pass = hash;
-    newData.pass_ver = PASS_VER;
-    // Todo: store as timestamp and use i18n to format for
-    //   date (e.g., on print page)
+    const [userHash, passHash] = await Promise.all([
+      saltAndHash(newData.pass),
+      saltAndHash(newData.user)
+    ]);
+
+    newData.activationCode = userHash;
+    newData.activated = Boolean(newData.activated);
+    newData.pass = passHash;
+    newData.passVer = passVer;
+    if (!newData.name) {
+      // Avoid business logic or templates needing to deal with nullish names
+      newData.name = '';
+    }
+
     // Append date stamp when record was created
-    newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-    return this.accounts.insertOne(newData);
+    newData.date = new Date().getTime();
+
+    await this.accounts.insertOne(newData);
+    return newData;
   }
 
-  async updateAccount (newData) {
+  /**
+   * @param {string} activationCode
+   * @returns {Promise<AccountInfo>}
+   */
+  async activateAccount (activationCode) {
+    let o;
+    try {
+      o = await this.accounts.findOne({
+        activationCode, activated: false
+      });
+    } catch (err) {}
+    if (!o) {
+      throw new Error('invalid-activation-code');
+    }
+
+    o.activated = true;
+    return this.accounts.replaceOne({activationCode, activated: false}, o);
+  }
+
+  /**
+   * @param {AccountInfo} newData
+   * @param {boolean} allowUserUpdate
+   * @todo Ensure user has privileges since could be injecting user name!
+   * @returns {Promise<FindAndModifyWriteOpResult>}
+   */
+  async updateAccount (newData, allowUserUpdate) {
     const findOneAndUpdate = ({
-      name, email, country, pass, id
+      name, email, country, pass, id, user
     }) => {
-      const o = {name, email, country};
+      const o = {name, email, country, activated: true};
       if (pass) {
         o.pass = pass;
-        o.pass_ver = PASS_VER;
+        o.passVer = passVer;
       }
+      const filter = id || !allowUserUpdate
+        ? {_id: this.adapter.constructor.getObjectId(id)}
+        : {user};
       return this.accounts.findOneAndUpdate(
-        {_id: getObjectId(id)},
+        filter,
         {$set: o},
         {upsert: true, returnOriginal: false}
       );
     };
-    if (newData.pass === '') {
+    if (!newData.pass) {
       return findOneAndUpdate(newData);
     }
     const hash = await saltAndHash(newData.pass);
@@ -248,10 +287,15 @@ class AccountManager {
     return findOneAndUpdate(newData);
   }
 
+  /**
+   * @param {string} passKey
+   * @param {string} newPass
+   * @returns {Promise<FindAndModifyWriteOpResult>}
+   */
   async updatePassword (passKey, newPass) {
     const hash = await saltAndHash(newPass);
     return this.accounts.findOneAndUpdate({passKey}, {
-      $set: {pass: hash, pass_ver: PASS_VER},
+      $set: {pass: hash, passVer},
       $unset: {passKey: ''}
     }, {upsert: true, returnOriginal: false});
   }
@@ -260,18 +304,43 @@ class AccountManager {
     account lookup methods
   */
 
-  // eslint-disable-next-line require-await
+  /* eslint-disable require-await */
+  /**
+   * @returns {Promise<AccountInfo[]>}
+   */
   async getAllRecords () {
+    /* eslint-enable require-await */
     return this.accounts.find().toArray();
   }
 
-  // eslint-disable-next-line require-await
-  async deleteAccount (id) {
-    return this.accounts.deleteOne({_id: getObjectId(id)});
+  /* eslint-disable require-await */
+  /**
+   * @param {string} id
+   * @returns {Promise<DeleteWriteOpResult>}
+   */
+  async deleteAccountById (id) {
+    /* eslint-enable require-await */
+    return this.accounts.deleteOne({
+      _id: this.adapter.constructor.getObjectId(id)
+    });
   }
 
-  // eslint-disable-next-line require-await
+  /* eslint-disable require-await */
+  /**
+   * @param {AccountInfoFilter} acctInfo
+   * @returns {Promise<DeleteWriteOpResult>}
+   */
+  async deleteAccounts (acctInfo) {
+    /* eslint-enable require-await */
+    return this.accounts.deleteMany(acctInfo);
+  }
+
+  /* eslint-disable require-await */
+  /**
+   * @returns {Promise<DeleteWriteOpResult>}
+   */
   async deleteAllAccounts () {
+    /* eslint-enable require-await */
     return this.accounts.deleteMany({});
   }
 }

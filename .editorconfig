@@ -11,10 +11,5 @@ indent_style = space
 indent_size = 2
 trim_trailing_whitespace = true
 
-[app/public/css/**.styl]
-indent_style = tab
-indent_size = 2
-
-[app/server/views/**.pug]
-indent_style = tab
-indent_size = 1
+[*.md]
+indent_size = 4
