@@ -18,22 +18,22 @@ const setI18n = require('./modules/i18n.js')();
 const getLogger = require('./modules/getLogger.js');
 const layoutView = require('./views/layout.js');
 
+const nonSpecialChars = '[^<>()[\\]\\\\.,;:\\s@"]+';
+const ipv4Address = '\\[\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\]';
+
 const emailPattern = '^(' +
   '(' +
     // 1+ initial chars. excluding special chars.
-    '[^<>()[\\]\\\\.,;:\\s@"]+' +
+    nonSpecialChars +
     // (Optional) dot followed by 1+ chars., excluding
     //   any special chars.
-    '(\\.' +
-      '[^<>()[\\]\\\\.,;:\\s@"]+' +
-    ')*' +
+    '(\\.' + nonSpecialChars + ')*' +
   ')|' +
   // Or quoted value
   '(".+")' +
 ')@(' +
   '(' +
-    // IPv4 address
-    '\\[\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\]' +
+    ipv4Address +
   ')|' +
   '(' +
     // 1+ sequences of:
@@ -80,6 +80,7 @@ module.exports = async function (app, config) {
     });
   };
 
+  log('AwaitingI18NAndLogging');
   const [globalI18n, errorLogger] = await Promise.all([
     setI18n({
       acceptsLanguages: () => loggerLocale
@@ -94,6 +95,7 @@ module.exports = async function (app, config) {
     }
   };
 
+  log('AwaitingDatabaseAccountConnection');
   const am = await (new AccountManager(adapter, {
     DB_URL,
     DB_NAME,
@@ -286,7 +288,6 @@ module.exports = async function (app, config) {
     const title = _('Activation');
     if (req.query.c) {
       try {
-        console.log('req.query.c', req.query.c);
         await am.activateAccount(req.query.c);
       } catch (e) {
         res.render(
@@ -439,7 +440,6 @@ module.exports = async function (app, config) {
     'bootstrap',
     'font-awesome',
     'github-fork-ribbon-css',
-    'hyperhtml',
     'intl-dom',
     'jamilih',
     'jquery',

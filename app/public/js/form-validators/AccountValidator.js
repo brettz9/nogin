@@ -56,7 +56,7 @@ window.AccountValidator = class AccountValidator {
     if (name.validity.tooShort) {
       name.setCustomValidity(this.errorMessages.name.PleaseEnterName);
     }
-    if (email.validityMismatch) {
+    if (email.validity.patternMismatch) {
       email.setCustomValidity(this.errorMessages.email.PleaseEnterValidEmail);
     }
     if (user.validity.tooShort) {

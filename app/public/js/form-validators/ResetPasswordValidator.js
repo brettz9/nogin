@@ -10,9 +10,12 @@ window.ResetPasswordValidator = class ResetPasswordValidator {
    * @returns {boolean}
    */
   static validatePassword (pass) {
-    pass.setCustomValidity(
-      ResetPasswordValidatorView.messages.ShouldBeMinimumLength
-    );
+    pass.setCustomValidity('');
+    if (pass.validity.tooShort) {
+      pass.setCustomValidity(
+        ResetPasswordValidatorView.messages.ShouldBeMinimumLength
+      );
+    }
     return pass[0].form.reportValidity();
   }
 

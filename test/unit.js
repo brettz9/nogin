@@ -38,10 +38,12 @@ const testPort = 1234;
  * @param {string} path
  * @param {PlainObject|string[]} opts
  * @param {string[]} args
+ * @param {Integer} [killDelay=10000]
  * @returns {Promise<SpawnResults>}
  */
-const spawnPromise = (path, opts, args) => {
+const spawnPromise = (path, opts, args, killDelay = 10000) => {
   if (Array.isArray(opts)) {
+    killDelay = args || killDelay;
     args = opts;
     opts = undefined;
   }
@@ -76,7 +78,7 @@ const spawnPromise = (path, opts, args) => {
     //  is running
     setTimeout(() => {
       cli.kill();
-    }, 10000);
+    }, killDelay);
   });
 };
 
@@ -110,14 +112,19 @@ describe('Unit testing', function () {
   });
 
   it('Null config', async function () {
-    this.timeout(20000);
+    this.timeout(30000);
     const {stdout, stderr} = await spawnPromise(cliPath, [
       '--localScripts',
       '--secret', secret,
       '--PORT', testPort,
       '--config', ''
-    ]);
-    expect(stripMongoMessages(stdout)).to.equal('');
+    ], 20000);
+    expect(stripMongoMessages(stdout)).to.equal(
+      'Beginning routes...\n' +
+      'Awaiting internationalization and logging...\n' +
+      'Awaiting database account connection...\n' +
+      'Beginning server...\n'
+    );
     expect(stripPromisesWarning(stderr)).to.equal('');
   });
 
@@ -141,7 +148,7 @@ describe('Unit testing', function () {
     );
   });
   it('With environment components', async function () {
-    this.timeout(20000);
+    this.timeout(30000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
         // eslint-disable-next-line no-process-env
@@ -155,8 +162,12 @@ describe('Unit testing', function () {
       '--config', '',
       '--DB_USER', 'brett',
       '--DB_PASS', '123456'
-    ]);
-    expect(stripMongoMessages(stdout)).to.equal('');
+    ], 20000);
+    expect(stripMongoMessages(stdout)).to.equal(
+      'Beginning routes...\n' +
+      'Awaiting internationalization and logging...\n' +
+      'Awaiting database account connection...\n'
+    );
     expect(stripPromisesWarning(stderr)).to.equal('');
   });
 
@@ -212,9 +223,7 @@ describe('Unit testing', function () {
         DB_NAME: 'node_login',
         _
       }).connect());
-      console.log('333');
     } catch (err) {
-      console.log('444');
       erred = true;
     }
     expect(erred).to.be.false;

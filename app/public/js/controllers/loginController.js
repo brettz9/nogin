@@ -1,4 +1,4 @@
-/* globals LoginValidator, EmailValidator, LoginView */
+/* globals LoginValidator, EmailValidator, LoginView, LoginValidatorView */
 'use strict';
 
 (() => {
@@ -8,6 +8,7 @@ const rememberMeButton = LoginView.getRememberMeButton(loginModal);
 const lostPasswordUsername = LoginView.getLostPasswordUsername(loginModal);
 
 const retrievePasswordModal = LoginView.retrievePasswordModal();
+
 const retrievePasswordEmail = LoginView.retrieveLostPasswordEmail(
   retrievePasswordModal
 );
@@ -74,7 +75,10 @@ const ev = new EmailValidator();
 retrievePasswordForm.ajaxForm({
   url: '/lost-password',
   beforeSubmit (formData, jqForm, options) {
-    if (EmailValidator.validateEmail(retrievePasswordEmail[0])) {
+    const emailInput = retrievePasswordEmail[0];
+    if (EmailValidator.validateEmail(emailInput)) {
+      // Reset for future attempts
+      emailInput.setCustomValidity('');
       ev.hideEmailAlert();
       return true;
     }
@@ -83,15 +87,16 @@ retrievePasswordForm.ajaxForm({
   success (responseText, status, xhr, $form) {
     LoginView.switchConfirmToAlert(retrievePasswordModal);
     retrievePasswordSubmit.hide();
-    ev.showEmailSuccess(LoginView.messages.LinkToResetPasswordMailed);
+    ev.showEmailSuccess(LoginValidatorView.messages.LinkToResetPasswordMailed);
   },
   error (e) {
     if (e.responseText === 'email-not-found') {
-      ev.showEmailAlert(LoginView.messages.EmailNotFound);
+      ev.showEmailAlert(LoginValidatorView.messages.EmailNotFound);
     } else {
+      console.log(e);
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();
-      ev.showEmailAlert(LoginView.messages.ProblemTryAgainLater);
+      ev.showEmailAlert(LoginValidatorView.messages.ProblemTryAgainLater);
     }
   }
 });

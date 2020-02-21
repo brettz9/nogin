@@ -10,9 +10,12 @@ window.EmailValidator = class EmailValidator {
    * @returns {boolean} Whether valid
    */
   static validateEmail (input) {
-    input.setCustomValidity(
-      EmailValidatorView.messages.PleaseEnterValidEmailAddress
-    );
+    input.setCustomValidity('');
+    if (input.validity.patternMismatch) {
+      input.setCustomValidity(
+        EmailValidatorView.messages.PleaseEnterValidEmailAddress
+      );
+    }
     return input.form.reportValidity();
   }
 

@@ -11,6 +11,9 @@ window.LoginValidator = class LoginValidator {
    * @returns {boolean}
    */
   static validateForm () {
+    [user, pass].forEach((field) => {
+      field.setCustomValidity('');
+    });
     if (user.validity.valueMissing) {
       user.setCustomValidity(
         LoginValidatorView.errorMessages.PleaseEnterValidUserName

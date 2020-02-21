@@ -39,13 +39,15 @@ module.exports = function ({_, emailPattern}) {
             id: 'retrieve-password-cancel',
             'data-name': 'retrieve-password-cancel',
             class: 'btn btn-outline-dark',
-            'data-dismiss': 'modal'
+            'data-dismiss': 'modal',
+            form: 'retrieve-password-form'
           }, [_('Cancel')]],
           ['button', {
             type: 'submit',
             id: 'retrieve-password-submit',
             'data-name': 'retrieve-password-submit',
-            class: 'btn btn-primary'
+            class: 'btn btn-primary',
+            form: 'retrieve-password-form'
           }, [_('Submit')]]
         ]]
       ]]

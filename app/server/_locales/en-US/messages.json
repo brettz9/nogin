@@ -373,6 +373,18 @@
     "RecordNotFound": {
       "message": "Record not found"
     },
+    "BeginningRoutes": {
+      "message": "Beginning routes..."
+    },
+    "BeginningServer": {
+      "message": "Beginning server..."
+    },
+    "AwaitingI18NAndLogging": {
+      "message": "Awaiting internationalization and logging..."
+    },
+    "AwaitingDatabaseAccountConnection": {
+      "message": "Awaiting database account connection..."
+    },
 
     "COUNTRIES (BUSINESS LOGIC)": true,
     "PleaseSelectACountry": {

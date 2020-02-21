@@ -31,6 +31,7 @@ const jmlEngine = require('./app/server/modules/jmlEngine.js');
  * @returns {Promise<void>}
  */
 exports.createServer = async function (options) {
+  // We can't add an internationaalized log that we are awaiting the loggers!
   const [log, errorLog] = await Promise.all([
     getLogger(options),
     getLogger({...options, errorLog: true})
@@ -145,6 +146,7 @@ exports.createServer = async function (options) {
 
   app.use(session(sess));
 
+  log('BeginningRoutes');
   await routes(app, {
     log,
     loggerLocale,
@@ -165,6 +167,7 @@ exports.createServer = async function (options) {
     fromURL
   });
 
+  log('BeginningServer');
   http.createServer(app).listen(app.get('port'), () => {
     // Todo: Add more (i18nized) logging messages
     //   also make i18n tool for `optionDefinitions` definitions?

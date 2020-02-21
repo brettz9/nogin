@@ -142,7 +142,11 @@ class AccountManager {
     if (o && !isNullish(o.value)) {
       return o.value;
     }
-    throw (e || new Error('account not found'));
+    // Todo: Either i18nize these in the UI or if better to avoid sniffing
+    //  existence of hidden user accounts, avoid this specific message,
+    //  or avoid throwing at all
+    throw e ||
+      new Error('account not found');
   }
 
   /* eslint-disable require-await */
