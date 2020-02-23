@@ -104,4 +104,19 @@ describe('Root (Login)', function () {
       'have.focus'
     );
   });
+
+  it('Should validate against missing user value', function () {
+    cy.get('[data-name="pass"]').type('abc123456');
+    cy.get('[data-name="btn_sign_in"]').click();
+    cy.get('[data-name="user"]').should((pass) => {
+      expect(pass[0].checkValidity()).to.equal(false);
+    });
+  });
+  it('Should validate against missing pass value', function () {
+    cy.get('[data-name="user"]').type('bretto');
+    cy.get('[data-name="btn_sign_in"]').click();
+    cy.get('[data-name="pass"]').should((pass) => {
+      expect(pass[0].checkValidity()).to.equal(false);
+    });
+  });
 });
