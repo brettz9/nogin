@@ -41,6 +41,22 @@ describe('Root (Login)', function () {
     cy.get('[data-name="user"]').type('bretto');
     cy.get('[data-name="pass"]').type('abc123456');
     cy.get('[data-name="btn_sign_in"]').click();
+    cy.getCookie('login').should('have.property', 'value');
+
+    cy.get('[data-name=account-form] .btn-danger').click();
+    cy.get('[data-name=modal-confirm] .btn-danger').click();
+
+    cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
+      'Success!'
+    );
+  });
+
+  it('Login with Remember Me button disabled', function () {
+    cy.get('[data-name=btn_remember]').click();
+    cy.get('[data-name="user"]').type('bretto');
+    cy.get('[data-name="pass"]').type('abc123456');
+    cy.get('[data-name="btn_sign_in"]').click();
+    cy.getCookie('login').should('not.exist');
 
     cy.get('[data-name=account-form] .btn-danger').click();
     cy.get('[data-name=modal-confirm] .btn-danger').click();

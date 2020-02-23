@@ -31,7 +31,8 @@ module.exports = function ({_, layout, emailPattern}) {
           ['div', {id: 'row1'}, [
             ['button', {
               type: 'button',
-              id: 'btn_remember', class: 'remember-me btn btn-light btn-left'
+              id: 'btn_remember', class: 'remember-me btn btn-light btn-left',
+              'data-name': 'btn_remember'
             }, [
               ['span', {class: 'fa fa-check-square'}, [_('RememberMe')]]
             ]],
