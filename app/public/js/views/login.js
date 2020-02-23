@@ -36,6 +36,13 @@ window.LoginView = {
   },
 
   /**
+   * @returns {external:jQuery} `HTMLFormElement`
+   */
+  getLoginForm () {
+    return $('[data-name=login] form');
+  },
+
+  /**
    * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
    * @returns {external:jQuery} `HTMLButtonElement`
    */
