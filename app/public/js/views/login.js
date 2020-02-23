@@ -98,7 +98,7 @@ window.LoginView = {
   * @returns {void}
   */
   setRetrievePasswordCancel (retrievePasswordModal) {
-    this.retrievePasswordCancel(retrievePasswordModal).text(_('Cancel'));
+    return this.retrievePasswordCancel(retrievePasswordModal).text(_('Cancel'));
   },
 
   /**

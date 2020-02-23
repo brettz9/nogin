@@ -14,6 +14,7 @@ describe('Root (Login)', function () {
     cy.task('addAccount');
     cy.visit('/');
   });
+
   it('Visit root', function () {
     /*
     cy.visit('/reset');
@@ -97,5 +98,10 @@ describe('Root (Login)', function () {
   it('Cancel retrieve password dialog', function () {
     cy.get('[data-name="forgot-password"]').click();
     cy.get('[data-name="retrieve-password-cancel"]').click();
+    cy.get('[data-name=login] [data-name="user"]', {
+      timeout: 8000
+    }).should(
+      'have.focus'
+    );
   });
 });

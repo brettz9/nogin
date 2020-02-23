@@ -3,7 +3,10 @@
 module.exports = function ({_, layout, emailPattern}) {
   return layout({
     content: [
-      ['div', {id: 'login', class: 'center-vertical', role: 'main'}, [
+      ['div', {
+        id: 'login', class: 'center-vertical', role: 'main',
+        'data-name': 'login'
+      }, [
         ['form', {class: 'card card-body bg-light', method: 'post'}, [
           ['h1', {class: 'dialog'}, [_('Hello')]],
           ['h2', {class: 'dialog'}, [_('PleaseLoginToYourAccount')]],

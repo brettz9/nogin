@@ -24,7 +24,16 @@ retrievePasswordSubmit.click(() => {
   retrievePasswordForm.submit();
 });
 forgotPassword.click(() => {
-  LoginView.setRetrievePasswordCancel(retrievePasswordModal);
+  const retrievePasswordCancel = LoginView.setRetrievePasswordCancel(
+    retrievePasswordModal
+  );
+
+  // This isn't always happening automatically
+  retrievePasswordCancel.click(() => {
+    // retrievePasswordModal.modal('hide');
+    lostPasswordUsername.focus();
+  });
+
   retrievePasswordSubmit.show();
   retrievePasswordModal.modal('show');
 });
@@ -37,9 +46,13 @@ rememberMeButton.click(function () {
 retrievePasswordModal.on('shown.bs.modal', () => {
   retrievePasswordEmail.focus();
 });
-retrievePasswordModal.on('hidden.bs.modal', () => {
+/*
+// This was not consistently triggering in Cypress, so added click
+//    listener above to do the focusing
+retrievePasswordModal.on('hide.bs.modal', () => {
   lostPasswordUsername.focus();
 });
+*/
 
 // main login form
 loginModal.ajaxForm({
