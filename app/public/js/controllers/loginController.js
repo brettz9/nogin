@@ -1,5 +1,5 @@
 /* globals LoginValidator, EmailValidator, LoginView, LoginValidatorView,
-  setupFormValidation */
+  ajaxFormClientSideValidate */
 'use strict';
 
 (() => {
@@ -56,38 +56,36 @@ retrievePasswordModal.on('hide.bs.modal', () => {
 });
 */
 
-setupFormValidation({
-  form: loginForm[0],
-  validate () {
-    LoginValidator.validateForm();
-  }
-});
-
-// main login form
-loginModal.ajaxForm({
-  beforeSubmit (formData, jqForm, options) {
-    /*
-    // Doesn't get here; see comment above on validation
-    if (!LoginValidator.validateForm()) {
-      return false;
+ajaxFormClientSideValidate(
+  loginForm,
+  {
+    validate () {
+      LoginValidator.validateForm();
+    },
+    beforeSubmit (formData, jqForm, options) {
+      /*
+      // Doesn't get here; see comment above on validation
+      if (!LoginValidator.validateForm()) {
+        return false;
+      }
+      */
+      // append 'remember-me' option to formData to write local cookie
+      formData.push({
+        name: 'remember-me',
+        value: LoginView.isRememberMeChecked(loginModal)
+      });
+      return true;
+    },
+    success (responseText, status, xhr, $form) {
+      if (status === 'success') {
+        location.href = '/home';
+      }
+    },
+    error (e) {
+      LoginValidator.showLoginError();
     }
-    */
-    // append 'remember-me' option to formData to write local cookie
-    formData.push({
-      name: 'remember-me',
-      value: LoginView.isRememberMeChecked(loginModal)
-    });
-    return true;
-  },
-  success (responseText, status, xhr, $form) {
-    if (status === 'success') {
-      location.href = '/home';
-    }
-  },
-  error (e) {
-    LoginValidator.showLoginError();
   }
-});
+);
 
 LoginView.getInputForInitialFocus().focus();
 rememberMeButton.click(function () {
@@ -97,34 +95,35 @@ rememberMeButton.click(function () {
 // login retrieval form via email
 const ev = new EmailValidator();
 
-setupFormValidation({
-  form: retrievePasswordForm[0],
-  validate () {
-    const emailInput = retrievePasswordEmail[0];
-    if (EmailValidator.validateEmail(emailInput)) {
-      ev.hideEmailAlert();
-    }
-  }
-});
-
-retrievePasswordForm.ajaxForm({
-  url: '/lost-password',
-  success (responseText, status, xhr, $form) {
-    LoginView.switchConfirmToAlert(retrievePasswordModal);
-    retrievePasswordSubmit.hide();
-    ev.showEmailSuccess(LoginValidatorView.messages.LinkToResetPasswordMailed);
-  },
-  error (e) {
-    // Can't easily simulate other errors here
-    /* istanbul ignore else */
-    if (e.responseText === 'email-not-found') {
-      ev.showEmailAlert(LoginValidatorView.messages.EmailNotFound);
-    } else {
-      console.log(e);
+ajaxFormClientSideValidate(
+  retrievePasswordForm,
+  {
+    validate () {
+      const emailInput = retrievePasswordEmail[0];
+      if (EmailValidator.validateEmail(emailInput)) {
+        ev.hideEmailAlert();
+      }
+    },
+    url: '/lost-password',
+    success (responseText, status, xhr, $form) {
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();
-      ev.showEmailAlert(LoginValidatorView.messages.ProblemTryAgainLater);
+      ev.showEmailSuccess(
+        LoginValidatorView.messages.LinkToResetPasswordMailed
+      );
+    },
+    error (e) {
+      // Can't easily simulate other errors here
+      /* istanbul ignore else */
+      if (e.responseText === 'email-not-found') {
+        ev.showEmailAlert(LoginValidatorView.messages.EmailNotFound);
+      } else {
+        console.log(e);
+        LoginView.switchConfirmToAlert(retrievePasswordModal);
+        retrievePasswordSubmit.hide();
+        ev.showEmailAlert(LoginValidatorView.messages.ProblemTryAgainLater);
+      }
     }
   }
-});
+);
 })();

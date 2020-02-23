@@ -8,7 +8,7 @@ module.exports = function ({_, layout}) {
     ],
     scripts: [
       ['script', {
-        src: '/js/utilities/setupFormValidation.js'
+        src: '/js/utilities/ajaxFormClientSideValidate.js'
       }],
       ['script', {src: '/js/views/reset-password.js', defer: 'defer'}],
       ['script', {

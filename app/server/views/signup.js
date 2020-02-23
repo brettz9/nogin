@@ -17,7 +17,7 @@ module.exports = function ({
     ],
     scripts: [
       ['script', {
-        src: '/js/utilities/setupFormValidation.js'
+        src: '/js/utilities/ajaxFormClientSideValidate.js'
       }],
       ['script', {
         src: '/js/views/utilities/AlertDialog.js'

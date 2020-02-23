@@ -1,4 +1,4 @@
-/* globals AccountValidator, setupFormValidation, SignupView */
+/* globals AccountValidator, ajaxFormClientSideValidate, SignupView */
 'use strict';
 
 (() => {
@@ -22,31 +22,31 @@ setupValidationSubmission();
 function setupValidationSubmission () {
   const av = new AccountValidator({signup: true});
 
-  setupFormValidation({
-    form: accountForm[0],
-    validate () {
-      av.validateForm();
-    }
-  });
-  accountForm.ajaxForm({
-    success (responseText, status, xhr, $form) {
-      if (status === 'success') {
-        onCreatedSuccess();
+  ajaxFormClientSideValidate(
+    accountForm,
+    {
+      validate () {
+        av.validateForm();
+      },
+      success (responseText, status, xhr, $form) {
+        if (status === 'success') {
+          onCreatedSuccess();
+        }
+      },
+      error (e) {
+        switch (e.responseText) {
+        case 'email-taken':
+          av.showInvalidEmail();
+          break;
+        case 'username-taken':
+          av.showInvalidUserName();
+          break;
+        default:
+          break;
+        }
       }
-    },
-    error (e) {
-      switch (e.responseText) {
-      case 'email-taken':
-        av.showInvalidEmail();
-        break;
-      case 'username-taken':
-        av.showInvalidUserName();
-        break;
-      default:
-        break;
-      }
     }
-  });
+  );
 }
 
 /**

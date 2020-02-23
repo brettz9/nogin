@@ -39,7 +39,7 @@ module.exports = function ({_, layout, user, countries, emailPattern, title}) {
     ],
     scripts: [
       ['script', {
-        src: '/js/utilities/setupFormValidation.js'
+        src: '/js/utilities/ajaxFormClientSideValidate.js'
       }],
       ['script', {
         src: '/js/views/utilities/AlertDialog.js'
