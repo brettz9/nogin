@@ -39,6 +39,9 @@ module.exports = function ({_, layout, user, countries, emailPattern, title}) {
     ],
     scripts: [
       ['script', {
+        src: '/js/utilities/setupFormValidation.js'
+      }],
+      ['script', {
         src: '/js/views/utilities/AlertDialog.js'
       }],
       ['script', {

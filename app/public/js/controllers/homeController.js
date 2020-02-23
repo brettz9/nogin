@@ -1,4 +1,4 @@
-/* globals _, AccountValidator, HomeView */
+/* globals _, AccountValidator, setupFormValidation, HomeView */
 'use strict';
 
 (() => {
@@ -48,11 +48,14 @@ setupValidationSubmission();
  */
 function setupValidationSubmission () {
   const av = new AccountValidator();
+  setupFormValidation({
+    form: accountForm[0],
+    validate () {
+      av.validateForm();
+    }
+  });
   accountForm.ajaxForm({
     beforeSubmit (formData, jqForm, options) {
-      if (!av.validateForm()) {
-        return false;
-      }
       // Push the disabled username field onto the form data array
       formData.push({
         name: 'user', value: user.val()

@@ -1,4 +1,4 @@
-/* globals AccountValidator, SignupView */
+/* globals AccountValidator, setupFormValidation, SignupView */
 'use strict';
 
 (() => {
@@ -22,10 +22,13 @@ setupValidationSubmission();
 function setupValidationSubmission () {
   const av = new AccountValidator({signup: true});
 
+  setupFormValidation({
+    form: accountForm[0],
+    validate () {
+      av.validateForm();
+    }
+  });
   accountForm.ajaxForm({
-    beforeSubmit (formData, jqForm, options) {
-      return av.validateForm();
-    },
     success (responseText, status, xhr, $form) {
       if (status === 'success') {
         onCreatedSuccess();

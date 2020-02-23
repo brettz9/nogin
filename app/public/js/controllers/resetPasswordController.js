@@ -1,4 +1,4 @@
-/* globals ResetPasswordValidator, ResetPasswordView */
+/* globals ResetPasswordValidator, setupFormValidation, ResetPasswordView */
 'use strict';
 
 (() => {
@@ -8,10 +8,18 @@ const pass = ResetPasswordView.getPassword();
 
 const setPasswordSubmit = ResetPasswordView.getSetPasswordSubmit();
 
-ResetPasswordView.getSetPasswordForm().ajaxForm({
+const setPasswordForm = ResetPasswordView.getSetPasswordForm();
+
+setupFormValidation({
+  form: setPasswordForm[0],
+  validate () {
+    rv.hideAlert();
+    ResetPasswordValidator.validatePassword(pass);
+  }
+});
+setPasswordForm.ajaxForm({
   beforeSubmit (formData, jqForm, options) {
     rv.hideAlert();
-    return ResetPasswordValidator.validatePassword(pass) !== false;
   },
   success (responseText, status, xhr, $form) {
     setPasswordSubmit.addClass('disabled');

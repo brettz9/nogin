@@ -7,6 +7,9 @@ module.exports = function ({_, layout}) {
       require('./modals/reset-password.js')({_})
     ],
     scripts: [
+      ['script', {
+        src: '/js/utilities/setupFormValidation.js'
+      }],
       ['script', {src: '/js/views/reset-password.js', defer: 'defer'}],
       ['script', {
         src: '/js/views/validators/ResetPasswordValidatorView.js',
