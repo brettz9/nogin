@@ -93,4 +93,9 @@ describe('Root (Login)', function () {
       );
     }
   );
+
+  it('Cancel retrieve password dialog', function () {
+    cy.get('[data-name="forgot-password"]').click();
+    cy.get('[data-name="retrieve-password-cancel"]').click();
+  });
 });

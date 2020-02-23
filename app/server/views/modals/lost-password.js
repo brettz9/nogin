@@ -1,7 +1,9 @@
 'use strict';
 
 module.exports = function ({_, emailPattern}) {
-  return ['div', {id: 'retrieve-password', class: 'modal fade'}, [
+  return ['div', {
+    id: 'retrieve-password', class: 'modal fade'
+  }, [
     ['div', {class: 'modal-dialog', role: 'dialog'}, [
       ['div', {class: 'modal-content'}, [
         ['div', {class: 'modal-header'}, [
