@@ -1,4 +1,5 @@
-/* globals LoginValidator, EmailValidator, LoginView, LoginValidatorView */
+/* globals LoginValidator, EmailValidator, LoginView, LoginValidatorView,
+  setupFormValidation */
 'use strict';
 
 (() => {
@@ -7,7 +8,6 @@ const loginForm = LoginView.getLoginForm();
 const forgotPassword = LoginView.getForgotPassword(loginModal);
 const rememberMeButton = LoginView.getRememberMeButton(loginModal);
 const lostPasswordUsername = LoginView.getLostPasswordUsername(loginModal);
-const {user, pass} = LoginValidatorView.getFormFields();
 
 const retrievePasswordModal = LoginView.retrievePasswordModal();
 
@@ -56,24 +56,12 @@ retrievePasswordModal.on('hide.bs.modal', () => {
 });
 */
 
-// As per problem #3 at https://www.html5rocks.com/en/tutorials/forms/constraintvalidation/#toc-current-implementation-issues ,
-//  we can't do the validation at submit, so we instead add a capturing
-//  change listener as well as input listeners to reset the messages;
-//  note that we can't use the `invalid` event to call `reportValidity`
-//  after our `setCustomValidity()` (to ensure we get the bubbles showing)
-//  as that fires further `invalid` events; and setting the form to
-//  `novalidate` won't show the bubbles.
-loginForm[0].addEventListener('change', (e) => {
-  // Provide custom messages of invalidity
-  LoginValidator.validateForm();
-}, true);
-
-loginForm[0].addEventListener('input', (e) => {
-  [user, pass].forEach((field) => {
-    field.setCustomValidity('');
-    field.checkValidity('');
-  });
-}, true);
+setupFormValidation({
+  form: loginForm[0],
+  validate () {
+    LoginValidator.validateForm();
+  }
+});
 
 // main login form
 loginModal.ajaxForm({
@@ -109,18 +97,18 @@ rememberMeButton.click(function () {
 // login retrieval form via email
 const ev = new EmailValidator();
 
-retrievePasswordForm.ajaxForm({
-  url: '/lost-password',
-  beforeSubmit (formData, jqForm, options) {
+setupFormValidation({
+  form: retrievePasswordForm[0],
+  validate () {
     const emailInput = retrievePasswordEmail[0];
     if (EmailValidator.validateEmail(emailInput)) {
-      // Reset for future attempts
-      emailInput.setCustomValidity('');
       ev.hideEmailAlert();
-      return true;
     }
-    return false;
-  },
+  }
+});
+
+retrievePasswordForm.ajaxForm({
+  url: '/lost-password',
   success (responseText, status, xhr, $form) {
     LoginView.switchConfirmToAlert(retrievePasswordModal);
     retrievePasswordSubmit.hide();
