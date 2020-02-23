@@ -16,7 +16,7 @@ window.EmailValidatorView = {
   getFormFields () {
     return {
       retrievePasswordModal: $('#retrieve-password'),
-      retrievePasswordAlert: $('#retrieve-password .alert'),
+      retrievePasswordAlert: $('#retrieve-password [data-name=alert]'),
       retrievePasswordForm: $('#retrieve-password #retrieve-password-form')
     };
   },

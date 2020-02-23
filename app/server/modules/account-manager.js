@@ -146,7 +146,7 @@ class AccountManager {
     //  existence of hidden user accounts, avoid this specific message,
     //  or avoid throwing at all
     throw e ||
-      new Error('account not found');
+      new Error('email-not-found');
   }
 
   /* eslint-disable require-await */

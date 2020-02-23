@@ -12,9 +12,9 @@ describe('Root (Login)', function () {
   beforeEach(() => {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
+    cy.visit('/');
   });
   it('Visit root', function () {
-    cy.visit('/');
     /*
     cy.visit('/reset');
 
@@ -51,8 +51,30 @@ describe('Root (Login)', function () {
   });
 
   it('Retrieve lost password', function () {
-    cy.get('[data-name=forgot-password]').click();
+    cy.get('[data-name="forgot-password"]').click();
     cy.get('[data-name=email]').type('brettz9@example.com');
     cy.get('[data-name=retrieve-password-submit]').click();
+    cy.get('[data-name=alert]').contains(
+      'A link to reset your password was emailed to you',
+      {
+        timeout: 20000
+      }
+    );
   });
+
+  // 'Sorry. There was a problem, please try again later.',
+  it(
+    'Err upon attempt to retrieve lost password for non-existent email',
+    function () {
+      cy.get('[data-name="forgot-password"]').click();
+      cy.get('[data-name=email]').type('bad@bad-email.com');
+      cy.get('[data-name=retrieve-password-submit]').click();
+      cy.get('[data-name=alert]').contains(
+        'Email not found. Are you sure you entered it correctly?',
+        {
+          timeout: 20000
+        }
+      );
+    }
+  );
 });

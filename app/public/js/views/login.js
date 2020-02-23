@@ -72,7 +72,7 @@ window.LoginView = {
    * @returns {external:jQuery} `HTMLDivElement`
    */
   getForgotPassword (loginModal) {
-    return loginModal.find('[data-name=forgot-password]');
+    return loginModal.find('[data-name="forgot-password"]');
   },
 
   /**

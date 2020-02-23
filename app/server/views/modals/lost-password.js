@@ -30,7 +30,7 @@ module.exports = function ({_, emailPattern}) {
                 'data-name': 'email',
                 name: 'email'
               }],
-              ['div', {class: 'alert alert-danger hide'}]
+              ['div', {class: 'alert alert-danger hide', 'data-name': 'alert'}]
             ]]
           ]]
         ]],
