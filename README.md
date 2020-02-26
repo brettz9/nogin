@@ -98,7 +98,7 @@ MongoDB may end up with a process that interferes with starting a new instance.
 On the Mac, you can follow these steps to resolve:
 
 1. Get the port `sudo lsof -i :27017`
-2. Then kill by `kill PID` with PID as the result of step 1 (or if necessary `kill -9 PID`).
+2. Then kill by `kill PID` with PID as the result of step 1 (or if necessary `kill -2 PID`).
 
 ## Contributing
 
@@ -106,10 +106,6 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. **Customization**
-    1.	Allow adding to "Set up new account" fields (based on a schema?)
-        to be saved in the database along with other fields (check they
-        don't overwrite built-ins) and shown on `home` (unless hidden?)
 1. **Testing and coverage** (get to **100%** coverage):
     1. Checking **email programmatically** ([POP](https://www.npmjs.com/package/node-pop3)
         [client](https://www.npmjs.com/package/pop3-client) for dev only)
@@ -147,6 +143,11 @@ Questions and suggestions for improvement are welcome.
 1. **Security** CSRF protection
 1. Provide **option for integration** within an existing page to avoid need
     for separate login page
+1. Allow **adding to "Set up new account" fields** (based on a schema?)
+    (to be injected into `app/server/views/account.js`) to be passed to
+    the server (`app/server/routes.js`) and saved in the database along
+    with other fields (check the user-supplied don't overwrite built-ins)
+    and shown on `home` (also built by `account.js`) (unless hidden?)
 1. See about **`passport-next`** integration
 1. **BrowserID** - Implement browser add-on (or work with existing Persona)
     to use with a server-side validation
