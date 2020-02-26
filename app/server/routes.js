@@ -57,6 +57,8 @@ module.exports = async function (app, config) {
     dbOpts: {DB_NAME, adapter},
     SERVE_COVERAGE,
     favicon,
+    stylesheet,
+    noBuiltinStylesheets,
     localScripts,
     fromText,
     fromURL
@@ -119,6 +121,8 @@ module.exports = async function (app, config) {
         return layoutView({
           SERVE_COVERAGE,
           favicon,
+          stylesheet,
+          noBuiltinStylesheets,
           localScripts,
           ...businessLogicArgs,
           ...templateArgs

@@ -22,7 +22,9 @@
 - Update: CDN for bootstrap (CSS and JS), jquery, popper
 - Enhancement: Database abstraction layer
 - Enhancement: Autocomplete hints
-- Enhancement: More configurabiity
+- Enhancement: More configurabiity, e.g.,
+    - Add `stylesheet` and `noBuiltinStylesheets` for greater
+        customizabiity
 - Enhancement: i18n (server-side, client-side, and CLI)
 - Enhancement: Make available as binary (with help/version and
   update-notifier)

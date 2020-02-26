@@ -2,7 +2,9 @@
 'use strict';
 
 module.exports = ({
-  _, content, scripts, title, localScripts, favicon, SERVE_COVERAGE
+  _, content, scripts, title, localScripts,
+  favicon, stylesheet, noBuiltinStylesheets,
+  SERVE_COVERAGE
 }) => {
   return [{$document: {
     $DOCTYPE: {name: 'html'},
@@ -20,25 +22,31 @@ module.exports = ({
         integrity: 'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN',
         crossorigin: 'anonymous'
       }],
-      ['link', {
-        rel: 'stylesheet',
-        href: localScripts
-          ? '/node_modules/bootstrap/dist/css/bootstrap.min.css'
-          : 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
-        integrity: 'sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T',
-        crossorigin: 'anonymous'
-      }],
-      ['link', {rel: 'stylesheet', href: '/css/style.css'}],
-      ['link', {
-        rel: 'stylesheet',
-        href: localScripts
-          // No minified version in distribution; filed
-          //  https://github.com/simonwhitaker/github-fork-ribbon-css/issues/70
-          ? '/node_modules/github-fork-ribbon-css/gh-fork-ribbon.css'
-          : 'https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css',
-        integrity: localScripts ? null : 'sha256-PVObJvYe7iXCSBcVkQUFvkV9TQGFh5J/ga8WHkLqHAo=',
-        crossorigin: 'anonymous'
-      }],
+      ...noBuiltinStylesheets
+        ? ['']
+        : [
+          ['link', {
+            rel: 'stylesheet',
+            href: localScripts
+              ? '/node_modules/bootstrap/dist/css/bootstrap.min.css'
+              : 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
+            integrity: 'sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T',
+            crossorigin: 'anonymous'
+          }],
+          ['link', {rel: 'stylesheet', href: '/css/style.css'}],
+          ['link', {
+            rel: 'stylesheet',
+            href: localScripts
+              // No minified version in distribution; filed
+              //  https://github.com/simonwhitaker/github-fork-ribbon-css/issues/70
+              ? '/node_modules/github-fork-ribbon-css/gh-fork-ribbon.css'
+              : 'https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css',
+            integrity: localScripts ? null : 'sha256-PVObJvYe7iXCSBcVkQUFvkV9TQGFh5J/ga8WHkLqHAo=',
+            crossorigin: 'anonymous'
+          }]
+        ],
+
+      stylesheet ? ['link', {rel: 'stylesheet', href: stylesheet}] : '',
 
       ['script', {
         src: localScripts

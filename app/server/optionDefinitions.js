@@ -102,6 +102,16 @@ const optionDefinitions = [
     typeLabel: '{underline favicon path}'
   },
   {
+    name: 'stylesheet', type: String,
+    description: 'The path to a custom CSS stylesheet; defaults to no extra ' +
+      'stylesheets being used'
+  },
+  {
+    name: 'noBuiltinStylesheets', type: Boolean,
+    description: 'Whether to suppress addition of built-in stylesheets, ' +
+      'Bootstrap, and gh-fork-ribbon.css'
+  },
+  {
     name: 'localScripts', type: Boolean,
     description: 'Whether to load framework scripts locally instead of ' +
       'via CDN. Defaults to `false`.'
