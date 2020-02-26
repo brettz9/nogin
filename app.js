@@ -69,6 +69,7 @@ exports.createServer = async function (options) {
     JS_DIR = '/app/public',
     staticDir,
     middleware,
+    router,
     SERVE_COVERAGE = false,
     RATE_LIMIT = 500,
     favicon,
@@ -184,6 +185,11 @@ exports.createServer = async function (options) {
     fromText,
     fromURL
   });
+
+  if (router) {
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    require(router)(app, opts);
+  }
 
   log('BeginningServer');
   http.createServer(app).listen(app.get('port'), () => {

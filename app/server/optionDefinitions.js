@@ -75,14 +75,21 @@ const optionDefinitions = [
   {
     name: 'staticDir', type: String,
     description: 'Point to absolute path at which to serve static files on ' +
-      'the same server.',
+      'the same server. Not required.',
     typeLabel: '{underline absolute path}'
   },
   {
     name: 'middleware', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
-      'have with a `module.exports` default function export that will be ' +
-      'passed the resolved options.',
+      'have a `module.exports` default function export that will be ' +
+      'passed the resolved options. Not required.',
+    typeLabel: '{underline path}'
+  },
+  {
+    name: 'router', type: String,
+    description: 'Path to a Node file that will be required. The file must ' +
+      'have a `module.exports` default function export that will be' +
+      'passed the Express `app` instance and resolvedoptions. Not required.',
     typeLabel: '{underline path}'
   },
   {

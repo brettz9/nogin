@@ -26,6 +26,7 @@
     - Add `stylesheet` and `noBuiltinStylesheets`
     - Add `userJS` and `userJSModule`
     - Add `staticDir` and `middleware`
+    - Add `router`
 - Enhancement: i18n (server-side, client-side, and CLI)
 - Enhancement: Make available as binary (with help/version and
   update-notifier)
