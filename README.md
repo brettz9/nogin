@@ -147,7 +147,8 @@ Questions and suggestions for improvement are welcome.
     (to be injected into `app/server/views/account.js`) to be passed to
     the server (`app/server/routes.js`) and saved in the database along
     with other fields (check the user-supplied don't overwrite built-ins)
-    and shown on `home` (also built by `account.js`) (unless hidden?)
+    and shown on `home` (also built by `account.js`) (unless hidden?);
+    not trusting the client-side values of course
 1. See about **`passport-next`** integration
 1. **BrowserID** - Implement browser add-on (or work with existing Persona)
     to use with a server-side validation
