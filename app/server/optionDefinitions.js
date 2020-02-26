@@ -93,6 +93,18 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
+    name: 'injectHTML', type: String,
+    description: 'Path to a Node file that will be required. The file must ' +
+      'have a `module.exports` default function export that will be' +
+      'passed a config object, including a `template` string indicating ' +
+      'the template being built. Must return an object with any of 4 ' +
+      'optional methods (`headPre`, `headPost`, `bodyPre`, and/or ' +
+      '`bodyPost`) which should return an array of Jamilih children to ' +
+      'be appended at the given position (or return an empty array to add ' +
+      'nothing). Not required.',
+    typeLabel: '{underline path}'
+  },
+  {
     name: 'config', alias: 'c', type: String,
     description: 'Used to set config; when `cwd` is set, defaults to ' +
       '"<cwd>/node-login.json"; of lower priority than other CLI ' +
@@ -134,14 +146,14 @@ const optionDefinitions = [
   },
   {
     name: 'userJS', type: String,
-    description: 'Regular JavaScript file to load after other scripts (none ' +
-      'by default)',
+    description: 'Regular client-side JavaScript file to load after other ' +
+      'scripts (none by default)',
     typeLabel: '{underline path or URL}'
   },
   {
     name: 'userJSModule', type: String,
-    description: 'ESM JavaScript file to load after other scripts (none by ' +
-      'default)',
+    description: 'ESM client-side JavaScript file to load after other ' +
+      'scripts (none by default)',
     typeLabel: '{underline path or URL}'
   },
   {

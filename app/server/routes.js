@@ -61,6 +61,7 @@ module.exports = async function (app, config) {
     noBuiltinStylesheets,
     userJS,
     userJSModule,
+    injectHTML,
     localScripts,
     fromText,
     fromURL
@@ -116,11 +117,12 @@ module.exports = async function (app, config) {
   });
 
   const getLayoutAndTitle = (businessLogicArgs) => {
+    const {_, title} = businessLogicArgs;
     return {
-      _: businessLogicArgs._,
-      title: businessLogicArgs.title,
+      _,
+      title,
       layout (templateArgs) {
-        return layoutView({
+        const cfg = {
           // Though should be trusted anyways, do not let template
           //   arguments override.
           ...templateArgs,
@@ -132,7 +134,12 @@ module.exports = async function (app, config) {
           userJSModule,
           localScripts,
           ...businessLogicArgs
-        });
+        };
+        return layoutView(
+          cfg,
+          // eslint-disable-next-line global-require, import/no-dynamic-require
+          injectHTML ? require(injectHTML)(cfg) : {}
+        );
       }
     };
   };
@@ -209,7 +216,7 @@ module.exports = async function (app, config) {
       const title = _('ControlPanel');
       res.render('home', {
         user,
-        ...getLayoutAndTitle({_, title}),
+        ...getLayoutAndTitle({_, title, template: 'home'}),
         countries: getCountries(_),
         emailPattern
       });
@@ -257,7 +264,7 @@ module.exports = async function (app, config) {
         country: '',
         user: ''
       },
-      ...getLayoutAndTitle({_, title}),
+      ...getLayoutAndTitle({_, title, template: 'signup'}),
       countries: getCountries(_),
       emailPattern
     });
@@ -302,14 +309,14 @@ module.exports = async function (app, config) {
       } catch (e) {
         res.render(
           'activation-failed', {
-            ...getLayoutAndTitle({_, title})
+            ...getLayoutAndTitle({_, title, template: 'activation-failed'})
           }
         );
         return;
       }
       res.render(
         'activated', {
-          ...getLayoutAndTitle({_, title})
+          ...getLayoutAndTitle({_, title, template: 'activated'})
         }
       );
     } else {
@@ -362,7 +369,7 @@ module.exports = async function (app, config) {
       req.session.passKey = req.query.key;
       const title = _('ResetPassword');
       res.render('reset-password', {
-        ...getLayoutAndTitle({_, title})
+        ...getLayoutAndTitle({_, title, template: 'reset-password'})
       });
     }
   });
@@ -397,7 +404,7 @@ module.exports = async function (app, config) {
     ]);
     const title = _('AccountList');
     res.render('users', {
-      ...getLayoutAndTitle({_, title}),
+      ...getLayoutAndTitle({_, title, template: 'users'}),
       accounts: accounts.map(({name, user, country, date}) => {
         return {
           user,
@@ -497,7 +504,7 @@ module.exports = async function (app, config) {
     const _ = await setI18n(req, res);
     const title = _('PageNotFound');
     res.status(404).render('404', {
-      ...getLayoutAndTitle({_, title})
+      ...getLayoutAndTitle({_, title, template: '404'})
     });
   });
 };

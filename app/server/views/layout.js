@@ -5,11 +5,12 @@ module.exports = ({
   _, content, scripts, title, localScripts,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   SERVE_COVERAGE
-}) => {
+}, injectedHTML) => {
   return [{$document: {
     $DOCTYPE: {name: 'html'},
     head: [
       ['title', [title || _('Login')]],
+      ...(injectedHTML.headPre || ['']),
       ['link', {
         rel: 'shortcut icon', type: 'image/x-icon',
         href: favicon || 'data:image/x-icon;,'
@@ -112,10 +113,13 @@ module.exports = ({
           type: 'module',
           src: userJSModule
         }]
-        : ''
+        : '',
+      ...(injectedHTML.headPost || [''])
     ],
     body: [
-      {'#': content || []}
+      ...(injectedHTML.bodyPre || ['']),
+      {'#': content || []},
+      ...(injectedHTML.bodyPost || [''])
     ]
   }}];
 };
