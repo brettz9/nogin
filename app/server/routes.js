@@ -121,6 +121,9 @@ module.exports = async function (app, config) {
       title: businessLogicArgs.title,
       layout (templateArgs) {
         return layoutView({
+          // Though should be trusted anyways, do not let template
+          //   arguments override.
+          ...templateArgs,
           SERVE_COVERAGE,
           favicon,
           stylesheet,
@@ -128,8 +131,7 @@ module.exports = async function (app, config) {
           userJS,
           userJSModule,
           localScripts,
-          ...businessLogicArgs,
-          ...templateArgs
+          ...businessLogicArgs
         });
       }
     };
