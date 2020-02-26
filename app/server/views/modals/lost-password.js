@@ -26,6 +26,7 @@ module.exports = function ({_, emailPattern}) {
               ['label', {for: 'email-tf'}, [_('PleaseEnterEmail')]],
               ['input', {
                 class: 'form-control required', type: 'email',
+                required: 'required',
                 autocomplete: 'email',
                 pattern: emailPattern,
                 id: 'email-tf',

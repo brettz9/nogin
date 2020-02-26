@@ -42,6 +42,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
           ['div', {class: 'col-sm-9'}, [
             ['input', {
               type: 'email',
+              required: 'required',
               autocomplete: 'email',
               // Is this more concrete than the built-in validation for
               //   `type=email`?
@@ -86,6 +87,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
           }, [_('Username')]],
           ['div', {class: 'col-sm-9'}, [
             ['input', {
+              required: 'required',
               autocomplete: user.user ? undefined : 'username',
               type: 'text',
               minlength: 3,
@@ -103,6 +105,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
           }, [_('Password')]],
           ['div', {class: 'col-sm-9'}, [
             ['input', {
+              required: 'required',
               autocomplete: user.user ? 'current-password' : 'new-password',
               type: 'password',
               minlength: 6,
@@ -121,6 +124,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
             }, [_('ConfirmPassword')]],
             ['div', {class: 'col-sm-9'}, [
               ['input', {
+                required: 'required',
                 autocomplete: 'new-password',
                 type: 'password',
                 minlength: 6,
