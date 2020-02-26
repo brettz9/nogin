@@ -109,7 +109,7 @@ Questions and suggestions for improvement are welcome.
 1. **Customization**
     1.	Allow adding to "Set up new account" fields (based on a schema?)
         to be saved in the database along with other fields (check they
-        don't overwrite built-ins)
+        don't overwrite built-ins) and shown on `home` (unless hidden?)
 1. **Testing and coverage** (get to **100%** coverage):
     1. Checking **email programmatically** ([POP](https://www.npmjs.com/package/node-pop3)
         [client](https://www.npmjs.com/package/pop3-client) for dev only)
