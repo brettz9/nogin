@@ -117,7 +117,7 @@ Questions and suggestions for improvement are welcome.
         1. Get validation to reset on change or input events
 1. Update **docs** above
 
-1. Link to **resend verification** (mention at
+1. Link to **resend activation link** (mention at
     <https://github.com/braitsch/node-login/pull/11> when may be done)
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
     1. **Multiple group membership** allowing **multiple roles per group**,
