@@ -67,11 +67,15 @@ exports.createServer = async function (options) {
     countries,
     PORT = 3000,
     JS_DIR = '/app/public',
+    staticDir,
+    middleware,
     SERVE_COVERAGE = false,
     RATE_LIMIT = 500,
     favicon,
     stylesheet,
     noBuiltinStylesheets,
+    userJS,
+    userJSModule,
     localScripts,
     countryCodes,
     fromText,
@@ -106,6 +110,14 @@ exports.createServer = async function (options) {
     app.use(express.static(join(__dirname, JS_DIR)));
   }
   app.use(express.static(join(__dirname, '/app/public')));
+
+  if (staticDir) {
+    app.use(express.static(staticDir));
+  }
+  if (middleware) {
+    // eslint-disable-next-line import/no-dynamic-require, global-require
+    app.use(require(middleware)(opts));
+  }
 
   const isProduction = app.get('env') === 'production';
 
@@ -165,6 +177,8 @@ exports.createServer = async function (options) {
     favicon,
     stylesheet,
     noBuiltinStylesheets,
+    userJS,
+    userJSModule,
     localScripts,
     countryCodes,
     fromText,

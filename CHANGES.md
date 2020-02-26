@@ -23,8 +23,9 @@
 - Enhancement: Database abstraction layer
 - Enhancement: Autocomplete hints
 - Enhancement: More configurabiity, e.g.,
-    - Add `stylesheet` and `noBuiltinStylesheets` for greater
-        customizabiity
+    - Add `stylesheet` and `noBuiltinStylesheets`
+    - Add `userJS` and `userJSModule`
+    - Add `staticDir` and `middleware`
 - Enhancement: i18n (server-side, client-side, and CLI)
 - Enhancement: Make available as binary (with help/version and
   update-notifier)

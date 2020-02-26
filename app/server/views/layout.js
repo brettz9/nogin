@@ -3,7 +3,7 @@
 
 module.exports = ({
   _, content, scripts, title, localScripts,
-  favicon, stylesheet, noBuiltinStylesheets,
+  favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   SERVE_COVERAGE
 }) => {
   return [{$document: {
@@ -101,7 +101,18 @@ module.exports = ({
           src: '/js/controllers/emptyController.js'
         }]
         : '',
-      {'#': scripts || []}
+      {'#': scripts || []},
+      userJS
+        ? ['script', {
+          src: userJS
+        }]
+        : '',
+      userJSModule
+        ? ['script', {
+          type: 'module',
+          src: userJSModule
+        }]
+        : ''
     ],
     body: [
       {'#': content || []}

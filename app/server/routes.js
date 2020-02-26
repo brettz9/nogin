@@ -59,6 +59,8 @@ module.exports = async function (app, config) {
     favicon,
     stylesheet,
     noBuiltinStylesheets,
+    userJS,
+    userJSModule,
     localScripts,
     fromText,
     fromURL
@@ -123,6 +125,8 @@ module.exports = async function (app, config) {
           favicon,
           stylesheet,
           noBuiltinStylesheets,
+          userJS,
+          userJSModule,
           localScripts,
           ...businessLogicArgs,
           ...templateArgs

@@ -73,6 +73,19 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
+    name: 'staticDir', type: String,
+    description: 'Point to absolute path at which to serve static files on ' +
+      'the same server.',
+    typeLabel: '{underline absolute path}'
+  },
+  {
+    name: 'middleware', type: String,
+    description: 'Path to a Node file that will be required. The file must ' +
+      'have with a `module.exports` default function export that will be ' +
+      'passed the resolved options.',
+    typeLabel: '{underline path}'
+  },
+  {
     name: 'config', alias: 'c', type: String,
     description: 'Used to set config; when `cwd` is set, defaults to ' +
       '"<cwd>/node-login.json"; of lower priority than other CLI ' +
@@ -104,12 +117,25 @@ const optionDefinitions = [
   {
     name: 'stylesheet', type: String,
     description: 'The path to a custom CSS stylesheet; defaults to no extra ' +
-      'stylesheets being used'
+      'stylesheets being used',
+    typeLabel: '{underline stylesheet path or URL}'
   },
   {
     name: 'noBuiltinStylesheets', type: Boolean,
     description: 'Whether to suppress addition of built-in stylesheets, ' +
       'Bootstrap, and gh-fork-ribbon.css'
+  },
+  {
+    name: 'userJS', type: String,
+    description: 'Regular JavaScript file to load after other scripts (none ' +
+      'by default)',
+    typeLabel: '{underline path or URL}'
+  },
+  {
+    name: 'userJSModule', type: String,
+    description: 'ESM JavaScript file to load after other scripts (none by ' +
+      'default)',
+    typeLabel: '{underline path or URL}'
   },
   {
     name: 'localScripts', type: Boolean,
