@@ -110,9 +110,11 @@ Questions and suggestions for improvement are welcome.
     1. **Injection**
         1.	Optional JS file to inject server-side HTML to head or body
             (in `layout.js`), being passed info on template name, and
-            allowing it to avoid injecting
+            allowing it to avoid injecting if it is not concerned with
+            a given template
     1.	Allow adding to "Set up new account" fields (based on a schema?)
-        to pass back to app
+        to be saved in the database along with other fields (check they
+        don't overwrite built-ins)
 1. **Testing and coverage** (get to **100%** coverage):
     1. Checking **email programmatically** ([POP](https://www.npmjs.com/package/node-pop3)
         [client](https://www.npmjs.com/package/pop3-client) for dev only)
