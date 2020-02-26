@@ -106,6 +106,12 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
+1. **Customization**
+    1. **Injection**
+        1.	Inject client-side JS or server-side HTML
+        1.	Allow serving own files dynamically or through static?
+    1.	Allow adding to "Set up new account" fields (based on a schema?)
+        to pass back to app
 1. **Testing and coverage** (get to **100%** coverage):
     1. Checking **email programmatically** ([POP](https://www.npmjs.com/package/node-pop3)
         [client](https://www.npmjs.com/package/pop3-client) for dev only)
@@ -117,6 +123,7 @@ Questions and suggestions for improvement are welcome.
         1. Get validation to reset on change or input events
 1. Update **docs** above
 
+1. Link to **resend verification** (mention at <https://github.com/braitsch/node-login/pull/11> when may be done)
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
     1. **Multiple group membership** allowing **multiple roles per group**,
         including **user-customizable roles** in addition to built-in ones
@@ -146,7 +153,6 @@ Questions and suggestions for improvement are welcome.
 1. **BrowserID** - Implement browser add-on (or work with existing Persona)
     to use with a server-side validation
 1. Add **passwordless** option
-1. Link to **resend verification**
 
 ## Lower priorities
 
