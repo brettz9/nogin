@@ -14,3 +14,4 @@ db/**
 .ncurc.js
 node-login.json
 node-login.js
+tools

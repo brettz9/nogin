@@ -2,6 +2,10 @@ describe('Signup', function () {
   beforeEach(() => {
     cy.visit('/reset');
   });
+  // https://www.npmjs.com/package/cypress-axe
+  it('Signup has no detectable a11y violations on load', () => {
+    cy.visitURLAndCheckAccessibility('/signup');
+  });
   it('Visit Signup', function () {
     cy.visit('/signup');
     cy.get('[data-name="name"]').type('Brett');
@@ -17,9 +21,5 @@ describe('Signup', function () {
     cy.location('pathname', {
       timeout: 10000
     }).should('eq', '/');
-  });
-  // https://www.npmjs.com/package/cypress-axe
-  it('Signup has no detectable a11y violations on load', () => {
-    cy.visitURLAndCheckAccessibility('/signup');
   });
 });

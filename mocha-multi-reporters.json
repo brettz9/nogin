@@ -3,7 +3,8 @@
     "reportDir": "cypress/results",
     "overwrite": false,
     "html": false,
-    "json": true
+    "json": true,
+    "consoleReporter": "spec"
   },
   "reporterEnabled": "mochawesome"
 }
