@@ -113,11 +113,15 @@ exports.createServer = async function (options) {
   app.use(express.static(join(__dirname, '/app/public')));
 
   if (staticDir) {
-    app.use(express.static(staticDir));
+    staticDir.forEach((sd) => {
+      app.use(express.static(sd));
+    });
   }
   if (middleware) {
-    // eslint-disable-next-line import/no-dynamic-require, global-require
-    app.use(require(middleware)(opts));
+    middleware.forEach((mw) => {
+      // eslint-disable-next-line import/no-dynamic-require, global-require
+      app.use(require(mw)(opts));
+    });
   }
 
   const isProduction = app.get('env') === 'production';
