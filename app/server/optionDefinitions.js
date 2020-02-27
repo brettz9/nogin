@@ -75,14 +75,19 @@ const optionDefinitions = [
   {
     name: 'staticDir', type: String, multiple: true,
     description: 'Point to absolute path at which to serve static files on ' +
-      'the same server. Multiple allowed. Not required.',
+      'the same server. Multiple allowed. Not required. To require serving ' +
+      'within a particular non-root path, use `router` with Express\'' +
+      '`app.use()`. See https://expressjs.com/en/api.html#app.use',
     typeLabel: '{underline absolute path}'
   },
   {
     name: 'middleware', type: String, multiple: true,
     description: 'Path to a Node file that will be required. The file must ' +
       'have a `module.exports` default function export that will be ' +
-      'passed the resolved options. Multiple allowed. Not required.',
+      'passed the resolved options. Multiple allowed. Not required. To ' +
+      'require serving within a particular non-root path, ' +
+      'use `router` with Express\' `app.use()`. See ' +
+      'https://expressjs.com/en/api.html#app.use',
     typeLabel: '{underline path}'
   },
   {
