@@ -15,7 +15,7 @@ describe('Root (Login)', function () {
     cy.visit('/');
   });
 
-  it('Visit root', function () {
+  it('Visit root and login with Remember Me', function () {
     /*
     cy.visit('/reset');
 
@@ -50,9 +50,12 @@ describe('Root (Login)', function () {
     cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
       'Success!'
     );
+    cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/home');
   });
 
-  it('Login with Remember Me button disabled', function () {
+  it('Visit root and login with Remember Me button disabled', function () {
     cy.get('[data-name=btn_remember]').click();
     cy.get('[data-name="user"]').type('bretto');
     cy.get('[data-name="pass"]').type('abc123456');
@@ -65,6 +68,9 @@ describe('Root (Login)', function () {
     cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
       'Success!'
     );
+    cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/home');
   });
 
   it('Retrieve lost password', function () {

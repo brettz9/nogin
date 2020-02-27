@@ -139,6 +139,7 @@ class AccountManager {
     } catch (err) {
       e = err;
     }
+
     if (o && !isNullish(o.value)) {
       return o.value;
     }
