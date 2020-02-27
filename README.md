@@ -138,11 +138,6 @@ Questions and suggestions for improvement are welcome.
 
 ## Medium priorities
 
-1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
-  (doesn't use easily breakable SVG text, and could convert to image))
-1. **Security** CSRF protection
-1. Provide **option for integration** within an existing page to avoid need
-    for separate login page
 1. Allow **adding to "Set up new account" fields** (based on a schema?)
     (to be injected into `app/server/views/account.js`) to be passed to
     the server (`app/server/routes.js`) and saved in the database along
@@ -150,6 +145,11 @@ Questions and suggestions for improvement are welcome.
     and shown on `home` (also built by `account.js`) (unless hidden?);
     not trusting the client-side values of course (could parse
     server-side-supplied schema for expected types); use `json-editor`?
+1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
+  (doesn't use easily breakable SVG text, and could convert to image))
+1. **Security** CSRF protection
+1. Provide **option for integration** within an existing page to avoid need
+    for separate login page
 1. See about **`passport-next`** integration
 1. **BrowserID** - Implement browser add-on (or work with existing Persona)
     to use with a server-side validation
