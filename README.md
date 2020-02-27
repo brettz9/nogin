@@ -157,7 +157,8 @@ Questions and suggestions for improvement are welcome.
 
 ## Lower priorities
 
-1. Switch from `jsdom` to **`dominum`** (once latter may be capable) and add
+1. Switch from `jsdom` to **`dominum`** (once latter may be capable), as latter
+    is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
 1. See about minor **to-dos in code** along the way
 1. Review **client-side validation** for any other opportunities (e.g., for
