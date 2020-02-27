@@ -19,7 +19,7 @@ import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
 
 import {
-  addAccounts, removeAccounts
+  addAccounts, removeAccounts, generateLoginKeys
 } from '../../app/server/modules/db-basic.js';
 
 const exprt = (on, config) => {
@@ -29,13 +29,23 @@ const exprt = (on, config) => {
   // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
   on('task', codeCoverageTask);
 
-  on('task', {
+  on('task', { // Tasks are run in *Node* (unlike commands/custom commands)
+    /**
+     * Need to use return result to set a cookie.
+     * @param {PlainObject} cfg
+     * @param {string|string[]} cfg.user
+     * @param {string|string[]} cfg.ip
+     * @returns {Promise<string[]>}
+     */
+    generateLoginKey ({user, ip}) {
+      return generateLoginKeys({
+        user,
+        ip
+      });
+    },
     deleteAllAccounts () {
       return removeAccounts({all: true});
-    }
-  });
-
-  on('task', {
+    },
     async addAccount () {
       return (await addAccounts({
         name: ['Brett'],

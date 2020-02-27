@@ -174,3 +174,30 @@ exports.readAccounts = async (options = {}) => {
   }
   return am.getAllRecords();
 };
+
+/**
+* @typedef {DbConfig} GenerateLoginOptionDefinitions
+* @property {string[]} user
+* @property {string[]} ip
+*/
+
+/**
+ * Don't see a real need now to expose this on CLI (in
+ * `manage-accounts.js`) as there seems to be little use for getting
+ * and setting a login key since that key should really only be
+ * useful in a browser.
+ * @param {GenerateLoginOptionDefinitions} options
+ * @returns {Promise<string[]>} Cookies
+ */
+exports.generateLoginKeys = async (options) => {
+  const am = await getAccountManager(options);
+  const {ip, user} = options;
+  const users = Array.isArray(user) ? user : [user];
+  const ips = Array.isArray(ip) ? ip : [ip];
+  return Promise.all(
+    users.map((usr, i) => {
+      console.log('usr, ips[i]', usr, ips[i]);
+      return am.generateLoginKey(usr, ips[i]);
+    })
+  );
+};

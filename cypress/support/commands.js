@@ -82,3 +82,21 @@ Cypress.Commands.add(
     checkAccessibility();
   }
 );
+
+Cypress.Commands.add(
+  'login',
+  ({user, ip, secure = false} = {}) => {
+    return cy.task('generateLoginKey', {
+      user, ip
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(([key]) => {
+      // eslint-disable-next-line promise/no-nesting
+      return cy.setCookie('login', key, {
+        secure
+      // eslint-disable-next-line promise/prefer-await-to-then
+      }).then(() => {
+        return key;
+      });
+    });
+  }
+);
