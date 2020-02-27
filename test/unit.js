@@ -14,6 +14,10 @@ import setI18n from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
 
+import nodeLogin from '../node-login.js';
+
+const {secret} = nodeLogin;
+
 const stripPromisesWarning = (s) => {
   return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
 };
@@ -31,7 +35,6 @@ const stripMongoMessages = (s) => {
 */
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
-const secret = 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4';
 const testPort = 1234;
 
 /**

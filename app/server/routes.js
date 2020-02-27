@@ -192,6 +192,8 @@ module.exports = async function (app, config) {
       res.status(200).send(o);
     } else {
       const key = await am.generateLoginKey(o.user, req.ip);
+      // Is there value in signing this key? The unsigned value
+      //  seems of no special value (unlike a password)
       // `signed` requires `cookie-parser` with express
       res.cookie('login', key, {maxAge: 900000, signed: true});
       res.status(200).send(o);

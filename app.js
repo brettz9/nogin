@@ -101,6 +101,7 @@ exports.createServer = async function (options) {
   app.set('view engine', 'js');
 
   app.use(limiter);
+  // Todo: Use https://github.com/ebourmalo/cookie-encrypter also?
   app.use(cookieParser(secret));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));

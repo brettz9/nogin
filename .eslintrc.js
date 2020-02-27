@@ -44,6 +44,7 @@ module.exports = {
       node: true
     },
     globals: {
+      require: true,
       __dirname: true
     }
   }, {

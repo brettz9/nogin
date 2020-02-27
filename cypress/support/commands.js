@@ -89,7 +89,7 @@ Cypress.Commands.add(
     return cy.task('generateLoginKey', {
       user, ip
       // eslint-disable-next-line promise/prefer-await-to-then
-    }).then(([key]) => {
+    }).then((key) => {
       // eslint-disable-next-line promise/no-nesting
       return cy.setCookie('login', key, {
         secure

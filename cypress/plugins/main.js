@@ -15,6 +15,8 @@ import fs from 'fs';
 import {dirname} from 'path';
 import {spawn} from 'child_process';
 
+import cookieSign from 'cookie-signature';
+
 import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
 
@@ -22,14 +24,39 @@ import {
   addAccounts, removeAccounts, generateLoginKeys
 } from '../../app/server/modules/db-basic.js';
 
+import nodeLoginConfig from '../../node-login.js';
+
 const exprt = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+
+  // We get `secret` from `node-login.js` to avoid redundancy with
+  //  `cypress.json` (as node-login server needs the secret as well)
+  // Should in theory make available to tests through `Cypress.env()`, but
+  //  as per apparent bug referred to below, it seems we need our `hackEnv`
+  //  task for now.
+  // const {env: {secret}} = config;
+  const {secret} = nodeLoginConfig;
+  config.env = config.env || {};
+  config.env.secret = secret;
+
+  // We want `process.env` for login credentials
+  // Default in the same way as `app.get('env')`
+  // eslint-disable-next-line no-process-env
+  config.env.env = process.env.NODE_ENV || 'development';
 
   // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
   on('task', codeCoverageTask);
 
   on('task', { // Tasks are run in *Node* (unlike commands/custom commands)
+    /**
+     * Possibly related to now closed <https://github.com/cypress-io/cypress/issues/2605>.
+     * @param {string} value
+     * @returns {PlainObject}
+     */
+    hackEnv (value) {
+      return value ? config.env[value] : config.env;
+    },
     /**
      * Need to use return result to set a cookie.
      * @param {PlainObject} cfg
@@ -37,11 +64,21 @@ const exprt = (on, config) => {
      * @param {string|string[]} cfg.ip
      * @returns {Promise<string[]>}
      */
-    generateLoginKey ({user, ip}) {
-      return generateLoginKeys({
+    async generateLoginKey ({user, ip}) {
+      const [cookieValue] = await generateLoginKeys({
         user,
         ip
       });
+
+      // Note that if switching to https://github.com/ebourmalo/cookie-encrypter ,
+      //  the prefix is `e:`
+      // https://github.com/expressjs/cookie-parser/blob/677ed0825057d20a0e121757e5fd8a39973d2431/index.js#L134
+      const cookieParserPrefix = 's:';
+      // Todo: Change this if switching to https://github.com/ebourmalo/cookie-encrypter
+      const key = cookieParserPrefix + cookieSign.sign(
+        cookieValue, secret
+      );
+      return key;
     },
     deleteAllAccounts () {
       return removeAccounts({all: true});
