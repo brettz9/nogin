@@ -5,9 +5,15 @@
 
 'use strict';
 
-const reporterFile = (process.argv[2] || '').trim().replace(/^--/u, '') || 'spec';
+const reporterFile = process.argv[2]
+  ? process.argv[2].replace(/^--/u, '')
+  : 'spec';
+
 // eslint-disable-next-line import/no-dynamic-require
 const MochaReporter = require(`mocha/lib/reporters/${reporterFile}.js`);
+const Suite = require('mocha/lib/suite.js');
+const Test = require('mocha/lib/test.js');
+const Runner = require('mocha/lib/runner.js');
 
 const {constants: {
   EVENT_RUN_BEGIN,
@@ -21,22 +27,10 @@ const {constants: {
 
 const {results, stats} = require('../mochawesome.json');
 
-const runner = {
-  stats,
-  // eslint-disable-next-line promise/prefer-await-to-callbacks
-  on (ev, cb) {
-    this[ev] = cb;
-  },
-  // eslint-disable-next-line promise/prefer-await-to-callbacks
-  once (ev, cb) {
-    this[ev] = cb;
-  },
-  emit (ev, ...args) {
-    if (this[ev]) { // Not all reporters add all events
-      this[ev](...args);
-    }
-  }
-};
+const runner = new Runner(
+  new Suite('', null, true)
+);
+runner.stats = stats;
 
 console.log('Mocha results:');
 
@@ -45,9 +39,19 @@ new MochaReporter(runner);
 
 runner.emit(EVENT_RUN_BEGIN);
 results.forEach(({suites}) => {
-  suites.forEach((ste) => {
+  suites.forEach((st) => {
+    const ste = Object.assign(Object.create(Suite.prototype), st);
+
+    /*
+    ste.suites.forEach((s, i) => {
+      ste.suites[i] = Object.assign(Object.create(Suite.prototype), s);
+    });
+    */
+
     runner.emit(EVENT_SUITE_BEGIN, ste);
-    ste.tests.forEach((tst) => {
+    ste.tests.forEach((ts) => {
+      const tst = Object.assign(Object.create(Test.prototype), ts);
+      tst.parent = ste; // Seems to work
       const ev = tst.pass
         ? EVENT_TEST_PASS
         : tst.fail
@@ -64,7 +68,8 @@ results.forEach(({suites}) => {
           tst.title
         );
       }
-      runner.emit(ev, tst);
+
+      runner.emit(ev, tst, tst.fail ? tst.err : undefined);
     });
   });
   runner.emit(EVENT_SUITE_END);
