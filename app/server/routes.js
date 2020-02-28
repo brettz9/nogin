@@ -439,7 +439,7 @@ module.exports = async function (app, config) {
     });
   });
 
-  // todo[>=1.7.0]: Should require privileges!
+  // todo[>=1.7.0]: Should require privileges and use POST/DELETE!
   /**
    * @param {Request} req
    * @param {Response} res

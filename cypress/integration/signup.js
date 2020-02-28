@@ -1,6 +1,6 @@
 describe('Signup', function () {
   beforeEach(() => {
-    cy.visit('/reset');
+    cy.task('deleteAllAccounts');
   });
   // https://www.npmjs.com/package/cypress-axe
   it('Signup has no detectable a11y violations on load', () => {

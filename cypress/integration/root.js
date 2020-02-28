@@ -17,8 +17,6 @@ describe('Root (Login)', function () {
 
   it('Visit root and login with Remember Me', function () {
     /*
-    cy.visit('/reset');
-
     // Signs up but no UI-only way to get and add activation code
     //   needed for login; however, keeping below for reference in
     //   the event we decide to add a more precise yet slower UI
