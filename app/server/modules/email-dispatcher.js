@@ -141,8 +141,7 @@ class EmailDispatcher {
    * @returns {EmailInfo[]}
    */
   composeActivationEmail (
-    // eslint-disable-next-line default-param-last
-    {name, user, activationCode}, {fromText, fromURL} = {}, _
+    {name, user, activationCode}, {fromText, fromURL}, _
   ) {
     const baseurl = this.NL_SITE_URL;
 
