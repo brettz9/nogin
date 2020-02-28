@@ -109,8 +109,6 @@ Questions and suggestions for improvement are welcome.
 1. **Testing and coverage** (get to **100%** coverage):
     1. Checking **email programmatically** ([POP](https://www.npmjs.com/package/node-pop3)
         [client](https://www.npmjs.com/package/pop3-client) for dev only)
-    1. Test **populating data from CLI** as unit tests
-    1. Use populating data for **UI test seeding**
     1. Specific issues
         1. Figure out why `users` page still shows an account upon
             (first) deletion
