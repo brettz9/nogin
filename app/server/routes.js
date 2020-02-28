@@ -232,8 +232,9 @@ module.exports = async function (app, config) {
       const {name, email, pass, country, user} = req.body;
       let o, _;
       try {
-        // Todo[>=1.7.0]: Ensure user has privileges since could be
-        //   injecting a different user's name here!
+        // We add `id` here to ensure only posting change for user's own
+        //   account, since could otherwise be injecting a different
+        //   user's name here
         [o, _] = await Promise.all([
           am.updateAccount({
             id: req.session.user._id,
