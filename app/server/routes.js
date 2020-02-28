@@ -72,7 +72,7 @@ module.exports = async function (app, config) {
     // eslint-disable-next-line global-require
     : require('./modules/country-codes.json');
 
-  const composePasswordEmailConfig = {
+  const composeResetPasswordEmailConfig = {
     fromText, fromURL
   };
 
@@ -293,7 +293,7 @@ module.exports = async function (app, config) {
     try {
       // TODO this promise takes a moment to return, add a loader to
       //   give user feedback
-      await ed.dispatchActivationLink(o, composePasswordEmailConfig, _);
+      await ed.dispatchActivationLink(o, composeResetPasswordEmailConfig, _);
     } catch (e) {
       res.status(400).send(_('EmailServerError'));
       logErrorProperties(e);
@@ -344,7 +344,7 @@ module.exports = async function (app, config) {
     try {
       /* const { status, text } = */
       await ed.dispatchResetPasswordLink(
-        account, composePasswordEmailConfig, _
+        account, composeResetPasswordEmailConfig, _
       );
       // TODO this promise takes a moment to return, add a loader to
       //   give user feedback

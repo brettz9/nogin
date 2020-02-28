@@ -8,7 +8,9 @@ const emailjs = require('emailjs/email');
 // const jml = require('jamilih/dist/jml-dominum.js').default;
 const jml = require('jamilih/dist/jml-jsdom.js').default;
 
-const composePasswordEmailView = require('../views/composePasswordEmail.js');
+const composeResetPasswordEmailView = require(
+  '../views/composeResetPasswordEmail.js'
+);
 const composeActivationEmailView = require(
   '../views/composeActivationEmail.js'
 );
@@ -67,7 +69,7 @@ class EmailDispatcher {
    * @returns {Promise<string>}
    */
   dispatchResetPasswordLink (account, cfg, _) {
-    const attachment = this.composePasswordResetEmail(account, cfg, _);
+    const attachment = this.composeResetPasswordEmail(account, cfg, _);
     return this.server.send({
       from: this.NL_EMAIL_FROM,
       to: account.email,
@@ -102,12 +104,12 @@ class EmailDispatcher {
    * @param {Internationalizer} _
    * @returns {EmailInfo[]}
    */
-  composePasswordResetEmail (
+  composeResetPasswordEmail (
     {name, user, passKey}, {fromText, fromURL}, _
   ) {
     const baseurl = this.NL_SITE_URL;
 
-    const jamilih = composePasswordEmailView({
+    const jamilih = composeResetPasswordEmailView({
       _, jml, baseurl, name, user, passKey,
       fromText, fromURL
     });
