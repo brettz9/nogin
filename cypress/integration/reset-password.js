@@ -31,6 +31,9 @@ describe('Reset password', function () {
       cy.get('[data-name="reset-password-submit"]').click();
 
       // Todo[>=1.7.0]: Check that password is actually reset
+
+      // Todo[>=1.7.0]: For other UI tests, ensure important server state
+      //   is checked not only resulting UI
     });
   });
 });
