@@ -232,6 +232,8 @@ module.exports = async function (app, config) {
       const {name, email, pass, country, user} = req.body;
       let o, _;
       try {
+        // Todo[>=1.7.0]: Ensure user has privileges since could be
+        //   injecting a different user's name here!
         [o, _] = await Promise.all([
           am.updateAccount({
             id: req.session.user._id,
@@ -395,9 +397,9 @@ module.exports = async function (app, config) {
     }
   });
 
+  // todo[>=1.7.0]: Should require privileges!
   /**
    * View, delete & reset accounts.
-   * @todo Should require privileges!
   */
   app.get('/users', async function (req, res) {
     const [accounts, _] = await Promise.all([
@@ -437,11 +439,11 @@ module.exports = async function (app, config) {
     });
   });
 
+  // todo[>=1.7.0]: Should require privileges!
   /**
    * @param {Request} req
    * @param {Response} res
    * @returns {void}
-   * @todo Should require privileges! Should also be POST or DELETE!
    */
   app.get('/reset', async function (req, res) {
     await am.deleteAllAccounts();

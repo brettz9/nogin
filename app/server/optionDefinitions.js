@@ -7,7 +7,8 @@ const pkg = require('../../package.json');
 
 /**
  * @typedef {PlainObject<string,PlainObject>} MainOptionDefinitions
- * @todo Indicate specific properties; small repo to convert
+ * @todo Indicate specific properties; small repo to convert; see
+ * https://github.com/jsdoc/jsdoc/issues/1750
  * `command-line-usage` into jsdoc (and use here)
  */
 

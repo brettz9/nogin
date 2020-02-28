@@ -263,7 +263,6 @@ class AccountManager {
   /**
    * @param {AccountInfo} newData
    * @param {boolean} allowUserUpdate
-   * @todo Ensure user has privileges since could be injecting user name!
    * @returns {Promise<FindAndModifyWriteOpResult>}
    */
   async updateAccount (newData, allowUserUpdate) {
