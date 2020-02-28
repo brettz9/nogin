@@ -48,6 +48,15 @@ const exprt = (on, config) => {
   // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
   on('task', codeCoverageTask);
 
+  // Force documentation; see https://github.com/gajus/eslint-plugin-jsdoc/issues/493
+  // Documentation is needed here to clarify that these tasks are not being used
+  //   to replace the need for UI tests to bring coverage to a page where the
+  //   functionality is tested (e.g., login on a login page), but rather to
+  //   enhance performance for other pages which depend on state being set
+  /* eslint 'jsdoc/require-jsdoc':
+    ['error',
+      {contexts:
+    ['ExpressionStatement > CallExpression > ObjectExpression > Property']}] */
   on('task', { // Tasks are run in *Node* (unlike commands/custom commands)
     /**
      * Possibly related to now closed <https://github.com/cypress-io/cypress/issues/2605>.
