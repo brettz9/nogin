@@ -397,9 +397,9 @@ module.exports = async function (app, config) {
     }
   });
 
-  // todo[>=1.7.0]: Should require privileges!
+  // todo[>=1.7.0]: Should require (read) privileges!
   /**
-   * View, delete & reset accounts.
+   * View, delete & reset accounts (currently view only).
   */
   app.get('/users', async function (req, res) {
     const [accounts, _] = await Promise.all([
@@ -439,7 +439,7 @@ module.exports = async function (app, config) {
     });
   });
 
-  // todo[>=1.7.0]: Should require privileges and use POST/DELETE!
+  // todo[>=1.7.0]: Should require privileges and expect POST/DELETE!
   /**
    * @param {Request} req
    * @param {Response} res
