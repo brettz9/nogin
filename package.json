@@ -89,7 +89,7 @@
     "clean-and-instrument": "run-p -r cypress:remove-nyc-output instrument",
     "coverage-badge": "coveradge readme_includes/coverage-badge.svg",
     "test-badge": "mbg --file ./mochawesome.json --badge_output readme_includes/tests-badge.svg",
-    "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
+    "test-cov": "run-s clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-open": "run-s -c clean-and-instrument test-cov-prereport",
     "test": "run-p -r start cypress:delayed-run"
   },
