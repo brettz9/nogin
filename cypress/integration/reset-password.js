@@ -29,6 +29,8 @@ describe('Reset password', function () {
       );
       cy.get('[data-name=reset-pass]').type('gggg1234');
       cy.get('[data-name="reset-password-submit"]').click();
+
+      // Todo: Check that password is actually reset
     });
   });
 });
