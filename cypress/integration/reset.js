@@ -5,5 +5,6 @@ describe('Reset', function () {
     cy.location('pathname', {
       timeout: 10000
     }).should('eq', '/users');
+    // Todo[>=1.7.0]: Check that users are indeed all gone
   });
 });

@@ -149,13 +149,20 @@ module.exports = async function (app, config) {
   */
   app.get('/', async function (req, res) {
     const _ = await setI18n(req, res);
-    // check if the user has an auto login key saved in a cookie
-    if (req.signedCookies.login === undefined) {
+
+    /**
+     * @returns {void}
+     */
+    function login () {
       const title = _('PleaseLoginToAccount');
       res.render('login', {
         ...getLayoutAndTitle({_, title}),
         emailPattern
       });
+    }
+    // check if the user has an auto login key saved in a cookie
+    if (req.signedCookies.login === undefined) {
+      login();
     } else {
       // attempt automatic login
       let o;
@@ -169,11 +176,7 @@ module.exports = async function (app, config) {
         req.session.user = _o;
         res.redirect('/home');
       } else {
-        const title = _('PleaseLoginToAccount');
-        res.render('login', {
-          ...getLayoutAndTitle({_, title}),
-          emailPattern
-        });
+        login();
       }
     }
   });

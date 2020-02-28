@@ -8,6 +8,12 @@ describe('Activation', function () {
       'activation code required'
     );
   });
+  it(
+    'Visit Activation (Missing code) has no detectable a11y violations on load',
+    () => {
+      cy.visitURLAndCheckAccessibility('/activation');
+    }
+  );
 
   it('Visit Activation (Bad code)', function () {
     cy.visit('/activation?c=00001');
@@ -19,6 +25,13 @@ describe('Activation', function () {
       timeout: 10000
     }).should('eq', '/');
   });
+
+  it(
+    'Visit Activation (Bad code) has no detectable a11y violations on load',
+    () => {
+      cy.visitURLAndCheckAccessibility('/activation?c=00001');
+    }
+  );
 
   it(
     'Visit Activation (Bad code) has no detectable a11y violations on load',
@@ -45,6 +58,7 @@ describe('Activation', function () {
       cy.location('pathname', {
         timeout: 10000
       }).should('eq', '/');
+      // Todo[>=1.7.0]: Check that activated in database
     });
   });
   it(
