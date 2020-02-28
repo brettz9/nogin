@@ -179,8 +179,8 @@ exports.readAccounts = async (options = {}) => {
 
 /**
 * @typedef {DbConfig} GenerateLoginOptionDefinitions
-* @property {string[]} user
-* @property {string[]} ip
+* @property {string|string[]} user
+* @property {string|string[]} ip
 */
 
 /**
@@ -205,8 +205,8 @@ exports.generateLoginKeys = async (options) => {
 
 /**
 * @typedef {DbConfig} GeneratePasswordOptionDefinitions
-* @property {string[]} email
-* @property {string[]} ip
+* @property {string|string[]} email
+* @property {string|string[]} ip
 */
 
 /**

@@ -58,11 +58,17 @@ const exprt = (on, config) => {
       return value ? config.env[value] : config.env;
     },
     /**
-     * Need to use return result to set a cookie.
+     * Simulates calling login command (when POSTing to route `/`
+     * (with "remember me") to set a cookie). Need to use return result
+     * to set a cookie.
+     *
+     * Used in `root.js` test to ensure that user gets auto-logged in
+     * after an initial log-in (and that the cookie is still set after
+     * the user is redirected to `/home`).
      * @param {PlainObject} cfg
      * @param {string|string[]} cfg.user
      * @param {string|string[]} cfg.ip
-     * @returns {Promise<string[]>}
+     * @returns {Promise<string[]>} They key
      */
     async generateLoginKey ({user, ip}) {
       const [cookieValue] = await generateLoginKeys({
@@ -81,13 +87,36 @@ const exprt = (on, config) => {
       return key;
     },
 
+    /**
+     * Simulates posting to `/lost-password` and getting a key associated
+     * in the database with the user's current IP in an email that can be
+     * checked upon a future visit to `/reset-password` (ensuring that the
+     * change is only made if the user has access to their email).
+     *
+     * Used in `reset-password.js` test (preceding visit to
+     * `/reset-password?key=` route).
+     * @param {GeneratePasswordOptionDefinitions} cfg
+     * @param {string} cfg.email
+     * @param {string} cfg.ip
+     * @returns {Promise<string>}
+     */
     async generatePasswordKey ({email, ip}) {
       const [passwordKey] = await generatePasswordKey({email, ip});
       return passwordKey;
     },
+
+    /**
+     * Simulates `/reset`.
+     * @returns {DeleteWriteOpResult}
+     */
     deleteAllAccounts () {
       return removeAccounts({all: true});
     },
+    /**
+     * Simulates POST to `/signup` and subsequent visit to `/activation?c=`
+     * for that account (with the `c` value obtained from the activation email).
+     * @returns {Promise<AccountInfo>}
+     */
     async addAccount () {
       return (await addAccounts({
         name: ['Brett'],
@@ -100,6 +129,11 @@ const exprt = (on, config) => {
         activated: [true]
       }))[0];
     },
+
+    /**
+     * Simulates POST to `/signup`.
+     * @returns {Promise<AccountInfo>}
+     */
     async addNonActivatedAccount () {
       return (await addAccounts({
         name: ['Brett'],

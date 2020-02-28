@@ -83,7 +83,7 @@ describe('Root (Login)', function () {
         timeout: 20000
       }
     );
-    // Todo: Check that password was received by email
+    // Todo[>=1.7.0]: Check that password was received by email
   });
 
   // 'Sorry. There was a problem, please try again later.',

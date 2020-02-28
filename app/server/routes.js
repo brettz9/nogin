@@ -441,7 +441,7 @@ module.exports = async function (app, config) {
    * @param {Request} req
    * @param {Response} res
    * @returns {void}
-   * @todo Should require privileges!
+   * @todo Should require privileges! Should also be POST or DELETE!
    */
   app.get('/reset', async function (req, res) {
     await am.deleteAllAccounts();
