@@ -71,7 +71,7 @@ const exprt = (on, config) => {
       });
 
       // Note that if switching to https://github.com/ebourmalo/cookie-encrypter ,
-      //  the prefix is `e:`
+      //  the prefix is `e:`.
       // https://github.com/expressjs/cookie-parser/blob/677ed0825057d20a0e121757e5fd8a39973d2431/index.js#L134
       const cookieParserPrefix = 's:';
       // Todo: Change this if switching to https://github.com/ebourmalo/cookie-encrypter

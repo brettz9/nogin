@@ -71,7 +71,7 @@ exports.createServer = async function (options) {
     middleware,
     router,
     SERVE_COVERAGE = false,
-    RATE_LIMIT = 500,
+    RATE_LIMIT = 700,
     favicon,
     stylesheet,
     noBuiltinStylesheets,

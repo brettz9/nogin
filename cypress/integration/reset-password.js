@@ -3,9 +3,6 @@ describe('Reset password', function () {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
   });
-  after(() => {
-    cy.task('addAccount');
-  });
 
   // https://www.npmjs.com/package/cypress-axe
   it('reset-password has no detectable a11y violations on load', () => {
