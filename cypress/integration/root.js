@@ -1,5 +1,7 @@
 // Todo: For selectors, we might directly load the view files here so that
 //   we don't tie our tests to specific selectors
+// Todo: For other UI tests, ideally ensure important server state
+//   is checked, not only by the resulting UI (which could change)
 
 describe('Root (Login) - Accessibility', function () {
   // https://www.npmjs.com/package/cypress-axe
