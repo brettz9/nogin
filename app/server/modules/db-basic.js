@@ -1,7 +1,9 @@
 'use strict';
 
 /**
- * @file Utility for running basic database CRUD commands.
+ * @file Utility for running basic database CRUD commands for accounts
+ * and setting specific kinds of account data. Wraps credentials/set-up
+ * with `AccountManager` commands.
  */
 
 // Todo[engine:node@>=12.0.0]: Remove flat/flatMap polyfill
@@ -196,8 +198,33 @@ exports.generateLoginKeys = async (options) => {
   const ips = Array.isArray(ip) ? ip : [ip];
   return Promise.all(
     users.map((usr, i) => {
-      console.log('usr, ips[i]', usr, ips[i]);
       return am.generateLoginKey(usr, ips[i]);
+    })
+  );
+};
+
+/**
+* @typedef {DbConfig} GeneratePasswordOptionDefinitions
+* @property {string[]} email
+* @property {string[]} ip
+*/
+
+/**
+ * Don't see a real need now to expose this on CLI (in
+ * `manage-accounts.js`) as there seems to be little use for getting
+ * and setting a password key since that key should really only be
+ * useful in a browser.
+ * @param {GeneratePasswordOptionDefinitions} options
+ * @returns {Promise<string[]>} Cookies
+ */
+exports.generatePasswordKey = async (options) => {
+  const am = await getAccountManager(options);
+  const {email, ip} = options;
+  const emails = Array.isArray(email) ? email : [email];
+  const ips = Array.isArray(ip) ? ip : [ip];
+  return Promise.all(
+    emails.map((eml, i) => {
+      return am.generatePasswordKey(eml, ips[i]);
     })
   );
 };

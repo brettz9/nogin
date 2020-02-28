@@ -14,8 +14,8 @@ describe('Reset password', function () {
   });
 
   it('Visit reset password (after login)', function () {
-    return cy.login({
-      user: 'bretto',
+    return cy.task('generatePasswordKey', {
+      email: 'brettz9@example.com',
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
     // Cypress won't run the tests with an `await` here

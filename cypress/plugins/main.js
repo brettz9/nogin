@@ -21,7 +21,7 @@ import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
 
 import {
-  addAccounts, removeAccounts, generateLoginKeys
+  addAccounts, removeAccounts, generateLoginKeys, generatePasswordKey
 } from '../../app/server/modules/db-basic.js';
 
 import nodeLoginConfig from '../../node-login.js';
@@ -79,6 +79,11 @@ const exprt = (on, config) => {
         cookieValue, secret
       );
       return key;
+    },
+
+    async generatePasswordKey ({email, ip}) {
+      const [passwordKey] = await generatePasswordKey({email, ip});
+      return passwordKey;
     },
     deleteAllAccounts () {
       return removeAccounts({all: true});
