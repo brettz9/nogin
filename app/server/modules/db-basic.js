@@ -223,8 +223,9 @@ exports.generatePasswordKey = async (options) => {
   const emails = Array.isArray(email) ? email : [email];
   const ips = Array.isArray(ip) ? ip : [ip];
   return Promise.all(
-    emails.map((eml, i) => {
-      return am.generatePasswordKey(eml, ips[i]);
+    emails.map(async (eml, i) => {
+      const {passKey} = await am.generatePasswordKey(eml, ips[i]);
+      return passKey;
     })
   );
 };

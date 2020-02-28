@@ -12,6 +12,9 @@ module.exports = function ({_, layout}) {
       }],
       ['script', {src: '/js/views/reset-password.js', defer: 'defer'}],
       ['script', {
+        src: '/js/views/utilities/AlertDialog.js'
+      }],
+      ['script', {
         src: '/js/views/validators/ResetPasswordValidatorView.js',
         defer: 'defer'
       }],

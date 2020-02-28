@@ -22,7 +22,13 @@ describe('Reset password', function () {
     // eslint-disable-next-line max-len
     // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
     }).then((key) => {
+      cy.log(key);
       cy.visit('/reset-password?key=' + encodeURIComponent(key));
+      cy.get('[data-name=enter-new-pass-label]').contains(
+        'Please enter your new password'
+      );
+      cy.get('[data-name=reset-pass]').type('gggg1234');
+      cy.get('[data-name="reset-password-submit"]').click();
     });
   });
 });

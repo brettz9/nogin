@@ -21,13 +21,13 @@ window.ResetPasswordView = {
    * @returns {external:jQuery} `HTMLInputElement`
    */
   getPassword () {
-    return $('[data-name="pass"]');
+    return $('[data-name="reset-pass"]');
   },
 
   /**
    * @returns {external:jQuery} `HTMLButtonElement`
    */
   getSetPasswordSubmit () {
-    return $('#set-password-submit');
+    return $('[data-name="reset-password-submit"]');
   }
 };

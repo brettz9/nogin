@@ -16,7 +16,7 @@ window.ResetPasswordValidator = class ResetPasswordValidator {
         ResetPasswordValidatorView.messages.ShouldBeMinimumLength
       );
     }
-    return pass[0].form.reportValidity();
+    return pass.form.reportValidity();
   }
 
   /**
