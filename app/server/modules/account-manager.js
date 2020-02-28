@@ -2,7 +2,7 @@
 
 const {isNullish, guid} = require('./common.js');
 const {
-  saltAndHash, validatePasswordV0, validatePasswordV1
+  saltAndHash, validatePasswordV1
 } = require('./crypto.js');
 
 const DBFactory = require('./db-factory.js');
@@ -89,9 +89,7 @@ class AccountManager {
       throw new Error('user-not-found');
     }
     // These may throw
-    if (o.passVer === undefined || o.passVer === 0) {
-      validatePasswordV0(pass, o.pass);
-    } else if (o.passVer === 1) {
+    if (o.passVer === 1) {
       await validatePasswordV1(pass, o.pass);
     }
     return o;

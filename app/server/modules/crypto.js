@@ -7,10 +7,6 @@ const crypto = require('crypto');
   private encryption & validation methods
 */
 
-const md5 = function (str) {
-  return crypto.createHash('md5').update(str).digest('hex');
-};
-
 const saltAndHash = function (data) {
   const hasher = 'sha256';
   const iterations = 10000;
@@ -40,14 +36,6 @@ const saltAndHash = function (data) {
   });
 };
 
-const validatePasswordV0 = function (plainPass, hashedPass) {
-  const salt = hashedPass.slice(0, 10);
-  const validHash = salt + md5(plainPass + salt);
-  if (hashedPass !== validHash) {
-    throw new Error('invalid-password');
-  }
-};
-
 const validatePasswordV1 = function (plainPass, hashedPass) {
   const hasher = 'sha256';
   const iterations = 10000;
@@ -72,5 +60,4 @@ const validatePasswordV1 = function (plainPass, hashedPass) {
 };
 
 exports.saltAndHash = saltAndHash;
-exports.validatePasswordV0 = validatePasswordV0;
 exports.validatePasswordV1 = validatePasswordV1;
