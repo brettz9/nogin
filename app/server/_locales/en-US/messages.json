@@ -385,6 +385,19 @@
     "AwaitingDatabaseAccountConnection": {
       "message": "Awaiting database account connection..."
     },
+    "user-not-found": {
+      "message": "User not found"
+    },
+    "unexpected-pass-version-error": {
+      "message": "Unexpected passVer error"
+    },
+    "invalid-activation-code": {
+      "message": "Invalid activation code"
+    },
+    "message": {
+      "description": "Allows for using `log` and its checks with a raw message.",
+      "message": "{message}"
+    },
 
     "COUNTRIES (BUSINESS LOGIC)": true,
     "PleaseSelectACountry": {

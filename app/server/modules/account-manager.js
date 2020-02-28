@@ -89,8 +89,11 @@ class AccountManager {
       throw new Error('user-not-found');
     }
     // These may throw
+    // istanbul ignore else
     if (o.passVer === 1) {
       await validatePasswordV1(pass, o.pass);
+    } else {
+      throw new Error('unexpected-pass-version-error');
     }
     return o;
   }

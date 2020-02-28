@@ -183,7 +183,14 @@ module.exports = async function (app, config) {
     try {
       o = await am.manualLogin(req.body.user, req.body.pass);
     } catch (err) {
-      res.status(400).send(err.message);
+      const _ = await setI18n(req, res);
+      const message = [
+        'user-not-found'
+      ].includes(err.message)
+        ? _(err.message)
+        : err.message;
+
+      res.status(400).send(message);
       return;
     }
 
@@ -312,9 +319,22 @@ module.exports = async function (app, config) {
       try {
         await am.activateAccount(req.query.c);
       } catch (e) {
+        const message = [
+          'invalid-activation-code'
+        ].includes(e.message)
+          ? _(e.message)
+          : e.message;
+
+        log('message', {message});
+
+        // Todo: We could supply the precise message to the user, at
+        //  least with a revealable cause
+
         res.render(
           'activation-failed', {
-            ...getLayoutAndTitle({_, title, template: 'activation-failed'})
+            ...getLayoutAndTitle({
+              _, title, template: 'activation-failed'
+            })
           }
         );
         return;
@@ -451,7 +471,7 @@ module.exports = async function (app, config) {
     res.redirect('/users');
   });
 
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (SERVE_COVERAGE) {
     // SHOW COVERAGE HTML ON SERVER
     // We could add this in a separate file, but we'll leverage express here
@@ -475,7 +495,7 @@ module.exports = async function (app, config) {
     );
   });
 
-  /* istanbul ignore next */
+  // istanbul ignore next
   if (global.__coverage__) {
     // See https://github.com/cypress-io/code-coverage
 
