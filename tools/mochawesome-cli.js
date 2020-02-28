@@ -1,6 +1,11 @@
+// See https://github.com/jsdoc/jsdoc/issues/1750 to create such tags
+/* eslint "jsdoc/check-tag-names": ["error", {definedTags: ["cli-arg"]}] */
 /**
- * @file A CLI reporter for after-the-fact compilation of (merged Mochawesome)
+ * @file A CLI reporter against after-the-fact compiled (merged Mochawesome)
  * Mocha results.
+ * @cli-arg {"doc"|"dot"|"json-stream"|"json"|"landing"|"list"|
+ * "markdown"|"min"|"nyan"|"progress"|"spec"|"tap"|
+ * "xunit"} [0="spec"] The Mocha reporter to use
  */
 
 'use strict';
@@ -39,18 +44,24 @@ new MochaReporter(runner);
 
 runner.emit(EVENT_RUN_BEGIN);
 results.forEach(({suites}) => {
-  suites.forEach((st) => {
-    const ste = Object.assign(Object.create(Suite.prototype), st);
+  suites.forEach(function handleSuite (st) {
+    const ste = Object.assign(new Suite(''), st);
 
-    /*
     ste.suites.forEach((s, i) => {
-      ste.suites[i] = Object.assign(Object.create(Suite.prototype), s);
+      ste.suites[i] = handleSuite(s);
     });
-    */
 
     runner.emit(EVENT_SUITE_BEGIN, ste);
     ste.tests.forEach((ts) => {
-      const tst = Object.assign(Object.create(Test.prototype), ts);
+      const tst = new Test('', () => {
+        //
+      });
+      Object.entries(ts).forEach(([k, v]) => {
+        // `fullTitle` is a string in mochawesome but a function in Mocha
+        if (k !== 'fullTitle') {
+          tst[k] = v;
+        }
+      });
       tst.parent = ste; // Seems to work
       const ev = tst.pass
         ? EVENT_TEST_PASS
@@ -71,8 +82,10 @@ results.forEach(({suites}) => {
 
       runner.emit(ev, tst, tst.fail ? tst.err : undefined);
     });
+    runner.emit(EVENT_SUITE_END, ste);
+
+    return ste;
   });
-  runner.emit(EVENT_SUITE_END);
 });
 runner.emit(EVENT_RUN_END);
 
