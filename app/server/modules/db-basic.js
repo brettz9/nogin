@@ -230,6 +230,17 @@ exports.generatePasswordKey = async (options) => {
   );
 };
 
+/**
+* @typedef {DbConfig} ValidateUserPasswordOptionDefinitions
+* @param {string} user
+* @param {string} pass
+*/
+
+/**
+ * Could be a use for this on CLI, but less likely.
+ * @param {ValidateUserPasswordOptionDefinitions} options
+ * @returns {Promise<AccountInfo>}
+ */
 exports.validUserPassword = async (options) => {
   const am = await getAccountManager(options);
   const {user, pass} = options;

@@ -12,12 +12,17 @@ const MongoDB = require('./db-adapters/MongoDB.js');
 */
 
 /**
+* @typedef {DbConfig} DbOptions
+* @property {"mongodb"} adapter
+*/
+
+/**
  * Creates a specific database type instance.
  */
 class DBFactory {
   /**
   * @param {DbConfig} options
-  * @returns {DbConfig}
+  * @returns {DbOptions}
   */
   static getDefaults (options) {
     return {
