@@ -22,7 +22,8 @@ describe('Signup', function () {
       timeout: 10000
     }).should('eq', '/');
 
-    // Todo[>=1.7.0]: Check that user exists in the database but is not activated
+    // Todo[>=1.7.0]: Check that user exists in the database but is
+    //   not activated
     // Todo[>=1.7.0]: Check that received activation email
   });
 });
