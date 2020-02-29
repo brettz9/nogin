@@ -203,7 +203,7 @@ describe('Unit testing', function () {
   });
 
   /*
-  it.only('AccountManager with authenticated user', async function () {
+  it('AccountManager with authenticated user', async function () {
     this.timeout(30000);
     const _ = await setI18n({
       acceptsLanguages: () => 'en-US'

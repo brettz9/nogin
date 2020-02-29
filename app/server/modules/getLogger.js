@@ -2,17 +2,32 @@
 
 const setI18n = require('./i18n.js')();
 
+/**
+* @typedef {PlainObject} LoggerOptions
+* @property {string} [loggerLocale="en-US"]
+* @property {boolean} [noLogging=false]
+* @property {boolean} [errorLog=false]
+*/
+
+/**
+ * @param {LoggerOptions} options
+ * @returns {Promise<Logger>}
+ */
 const getLogger = async (options) => {
   const _ = await setI18n({
     acceptsLanguages: () => options.loggerLocale || 'en-US'
   });
   /**
-   *
+   * @callback Logger
    * @param {string} key
    * @param {PlainObject<string,(string|Element)>} [substitutions={}] Values for
    *  substitution
    * @param {...(string|PlainObject)} other Other items to log, e.g., errors
    * @returns {string|null}
+   */
+
+  /**
+   * @type {Logger}
    */
   const logger = (
     key,

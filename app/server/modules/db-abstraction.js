@@ -107,7 +107,7 @@
 * @typedef {PlainObject} DBConfigObject
 * @property {string} DB_NAME
 * @property {string} DB_URL
-* @property {boolean} log Whether or not to log
+* @property {Logger} log
 * @property {Internationalizer} _
 */
 

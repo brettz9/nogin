@@ -168,10 +168,13 @@ const exprt = (on, config) => {
     },
 
     /**
-     * @param {ReadOptionDefinitions} cfg
+     * @param {?ReadOptionDefinitions} cfg
      * @returns {Promise<AccountInfo[]>}
      */
     getRecords (cfg) {
+      // Not as a default param, as `task` serializes to JSONable
+      // `null`
+      cfg = cfg || {};
       return readAccounts(cfg);
     }
   });
