@@ -22,7 +22,7 @@ import codeCoverageTask from '@cypress/code-coverage/task.js';
 
 import {
   addAccounts, removeAccounts, generateLoginKeys, generatePasswordKey,
-  validUserPassword
+  validUserPassword, readAccounts
 } from '../../app/server/modules/db-basic.js';
 
 import nodeLoginConfig from '../../node-login.js';
@@ -165,6 +165,14 @@ const exprt = (on, config) => {
       return validUserPassword({
         user, pass
       });
+    },
+
+    /**
+     * @param {ReadOptionDefinitions} cfg
+     * @returns {Promise<AccountInfo[]>}
+     */
+    getRecords (cfg) {
+      return readAccounts(cfg);
     }
   });
 

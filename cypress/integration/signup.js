@@ -23,7 +23,14 @@ describe('Signup', function () {
     }).should('eq', '/');
 
     // Todo[>=1.7.0]: Check that received activation email
-    // Todo[>=1.7.0]: Check that user exists in the database but is
-    //   not activated
+
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
+    cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      const {user, activated} = accts[0];
+      expect(user).to.equal('bretto');
+      expect(activated).to.be.false;
+      return cy.log(accts);
+    });
   });
 });

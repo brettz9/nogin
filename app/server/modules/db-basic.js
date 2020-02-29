@@ -167,7 +167,7 @@ exports.removeAccounts = async (options) => {
 
 /**
  * @param {ReadOptionDefinitions} [options]
- * @returns {Promise<AccountInfo|AccountInfo[]>}
+ * @returns {Promise<AccountInfo[]>}
  */
 exports.readAccounts = async (options = {}) => {
   const am = await getAccountManager(options);
