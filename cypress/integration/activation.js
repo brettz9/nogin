@@ -11,7 +11,9 @@ describe('Activation', function () {
   it(
     'Visit Activation (Missing code) has no detectable a11y violations on load',
     () => {
-      cy.visitURLAndCheckAccessibility('/activation');
+      cy.visitURLAndCheckAccessibility('/activation', {
+        failOnStatusCode: false
+      });
     }
   );
 
@@ -58,7 +60,15 @@ describe('Activation', function () {
       cy.location('pathname', {
         timeout: 10000
       }).should('eq', '/');
-      // Todo[>=1.7.0]: Check that activated in database
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      return cy.task('getRecords', {user: ['nicky']});
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((accts) => {
+      const {user, activated} = accts[0];
+      expect(user).to.equal('nicky');
+      expect(activated).to.be.true;
+      return cy.log(accts);
     });
   });
   it(
