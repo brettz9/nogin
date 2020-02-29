@@ -30,7 +30,10 @@ describe('Reset password', function () {
       cy.get('[data-name=reset-pass]').type('gggg1234');
       cy.get('[data-name="reset-password-submit"]').click();
 
-      // Todo[>=1.7.0]: Check that password is actually reset
+      cy.validUserPassword({
+        user: 'bretto',
+        pass: 'gggg1234'
+      });
     });
   });
 });

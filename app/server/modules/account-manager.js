@@ -54,7 +54,7 @@ class AccountManager {
 
   /**
    * @param {string} user
-   * @param {string} pass
+   * @param {string} pass The hashed password
    * @returns {Promise<AccountInfo|null>}
    */
   async autoLogin (user, pass) {
@@ -77,8 +77,8 @@ class AccountManager {
 
   /**
    * @param {string} user
-   * @param {string} pass
-   * @returns {Promise<AccountInfo|null>}
+   * @param {string} pass The raw password
+   * @returns {Promise<AccountInfo>}
    */
   async manualLogin (user, pass) {
     let o;

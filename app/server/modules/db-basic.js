@@ -229,3 +229,9 @@ exports.generatePasswordKey = async (options) => {
     })
   );
 };
+
+exports.validUserPassword = async (options) => {
+  const am = await getAccountManager(options);
+  const {user, pass} = options;
+  return am.manualLogin(user, pass);
+};

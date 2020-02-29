@@ -21,7 +21,8 @@ import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
 
 import {
-  addAccounts, removeAccounts, generateLoginKeys, generatePasswordKey
+  addAccounts, removeAccounts, generateLoginKeys, generatePasswordKey,
+  validUserPassword
 } from '../../app/server/modules/db-basic.js';
 
 import nodeLoginConfig from '../../node-login.js';
@@ -152,6 +153,18 @@ const exprt = (on, config) => {
         country: ['US'],
         activated: [false]
       }))[0];
+    },
+
+    /**
+     * @param {PlainObject} cfg
+     * @param {string} cfg.user
+     * @param {string} cfg.pass
+     * @returns {Promise<AccountInfo>}
+     */
+    validUserPassword ({user, pass}) {
+      return validUserPassword({
+        user, pass
+      });
     }
   });
 

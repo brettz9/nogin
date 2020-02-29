@@ -100,3 +100,10 @@ Cypress.Commands.add(
     });
   }
 );
+
+Cypress.Commands.add(
+  'validUserPassword',
+  (cfg) => {
+    return cy.task('validUserPassword', cfg);
+  }
+);
