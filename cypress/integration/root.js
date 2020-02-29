@@ -2,15 +2,16 @@
 //   we don't tie our tests to specific selectors
 // Todo: For other UI tests, ideally ensure important server state
 //   is checked, not only by the resulting UI (which could change)
-// Todo: Could add an environmental variable which toggled between
-//   time-saving server-side state-setting, and full pipelines of
-//   setting state by UI and then using UI to visit a page being tested;
-//   this full pipeline could be run much less frequently but besides
+// Todo[>=1.7.0]: Add an environmental variable which toggled between
+//   time-saving server-side state-setting and checking, and full pipelines
+//   of setting/checking state by UI and then using UI to visit a page being
+//   tested; this full pipeline could be run much less frequently but besides
 //   for extra sanity-checking (in case the server state-setting code
 //   itself was buggy or was misapplied in the test) to
 //   ensure the server-side state-setting wasn't falsely indicating
 //   server-side coverage passing when the UI tests weren't otherwise
-//   triggering that server-side code (i.e., only the state-setting did).
+//   triggering that server-side code (i.e., only the state-setting or
+//   getting did).
 
 describe('Root (Login) - Accessibility', function () {
   // https://www.npmjs.com/package/cypress-axe
