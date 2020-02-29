@@ -146,11 +146,11 @@ const exprt = (on, config) => {
      */
     async addNonActivatedAccount () {
       return (await addAccounts({
-        name: ['Brett'],
-        email: ['brettz9@example.com'],
-        user: ['bretto'],
-        pass: ['abc123456'],
-        country: ['US'],
+        name: ['Nicole'],
+        email: ['me@example.com'],
+        user: ['nicky'],
+        pass: ['bbb123456'],
+        country: ['JP'],
         activated: [false]
       }))[0];
     },

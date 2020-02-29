@@ -14,10 +14,10 @@ describe('Home', function () {
     cy.visit('/home');
 
     // Todo[>=1.7.0]: (and do good and bad delete)
+    // Todo[>=1.7.0]: ensure logged in
   });
   // https://www.npmjs.com/package/cypress-axe
   it('Home after login has no detectable a11y violations on load', () => {
-    // Todo[>=1.7.0]: ensure logged in
     cy.visitURLAndCheckAccessibility('/home');
   });
 });

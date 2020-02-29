@@ -1,4 +1,10 @@
 describe('Reset', function () {
+  beforeEach(() => {
+    cy.task('deleteAllAccounts');
+    cy.task('addAccount');
+    cy.task('addNonActivatedAccount');
+  });
+
   // No accessibility test as to get 302 redirect back to `/users`
   it('Visit Reset', function () {
     cy.visit('/reset');
