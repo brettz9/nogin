@@ -1,7 +1,6 @@
 describe('Activation', function () {
   it('Visit Activation (Missing code)', function () {
-    cy.request({
-      url: '/activation',
+    cy.visit('/activation', {
       failOnStatusCode: false
     }).its('body').should(
       'include',
@@ -32,15 +31,6 @@ describe('Activation', function () {
     'Visit Activation (Bad code) has no detectable a11y violations on load',
     () => {
       cy.visitURLAndCheckAccessibility('/activation?c=00001');
-    }
-  );
-
-  it(
-    'Visit Activation (Bad code) has no detectable a11y violations on load',
-    () => {
-      cy.visitURLAndCheckAccessibility('/activation?c=00001', {
-        failOnStatusCode: false
-      });
     }
   );
 

@@ -11,7 +11,7 @@ module.exports = function ({_, layout, user, countries, emailPattern, title}) {
         ['div', {
           class: 'nav-item'
         }, [
-          ['div', {class: 'navbar-brand'}, [
+          ['div', {class: 'navbar-brand', 'data-name': 'navbar-brand'}, [
             _('ControlPanel')
           ]]
         ]],

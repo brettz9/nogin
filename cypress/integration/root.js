@@ -2,7 +2,7 @@
 //   we don't tie our tests to specific selectors
 // Todo: For other UI tests, ideally ensure important server state
 //   is checked, not only by the resulting UI (which could change)
-// Todo[>=1.7.0]: Add an environmental variable which toggled between
+// Todo: Add an environmental variable which toggled between
 //   time-saving server-side state-setting and checking, and full pipelines
 //   of setting/checking state by UI and then using UI to visit a page being
 //   tested; this full pipeline could be run much less frequently but besides
