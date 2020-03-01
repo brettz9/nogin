@@ -4,6 +4,7 @@ describe('Home', function () {
     '`/home` or GET to auto-login at `/` (from previous-set cookie ' +
     'posting to `/`)).',
     function () {
+      cy.task('deleteAllAccounts');
       cy.visit('/home');
       cy.location('pathname', {
         timeout: 10000
@@ -11,30 +12,23 @@ describe('Home', function () {
     }
   );
   it('Visit Home after login', function () {
-    // See `hackEnv` on how apparently not working and why we need this hack
-    // const secure = Cypress.env('env') === 'production'
-    let secure;
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
-    cy.task('hackEnv', 'env').then((env) => {
-      cy.log(env);
-      secure = env === 'production';
-      return cy.login({
+    cy.task('deleteAllAccounts');
+    cy.task('addAccount');
+    // Not just login, but get session
+    return cy.request({
+      url: '/',
+      method: 'POST',
+      body: {
         user: 'bretto',
-        // ipv6 read by Express
-        ip: '::ffff:127.0.0.1',
-        secure
-      });
+        pass: 'abc123456'
+      }
     // Cypress won't run the tests with an `await` here
     // eslint-disable-next-line promise/prefer-await-to-then
-    }).then((key) => {
+    }).then(() => {
       cy.visit('/home');
 
       const expressSessionID = 'connect.sid';
       cy.getCookie(expressSessionID).should('exist');
-
-      cy.getCookie('login').should('have.property', 'value', key);
-      cy.getCookie('login').should('have.property', 'secure', secure);
 
       return cy.get('[data-name="navbar-brand"]', {
         timeout: 10000
