@@ -12,6 +12,7 @@
       ".eslintrc.js",
       ".ncurc.js",
       "node-login.js",
+      "node-login-sample.js",
       "tools/mochawesome-cli.js",
       "coverage/**",
       "instrumented/**",
