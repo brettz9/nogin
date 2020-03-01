@@ -254,7 +254,7 @@ class AccountManager {
       });
     } catch (err) {}
     if (!o) {
-      throw new Error('invalid-activation-code');
+      throw new Error('activationCodeProvidedInvalid');
     }
 
     o.activated = true;

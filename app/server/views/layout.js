@@ -4,6 +4,7 @@
 module.exports = ({
   _, content, scripts, title, localScripts,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
+  error,
   SERVE_COVERAGE
 }, injectedHTML) => {
   return [{$document: {
@@ -48,6 +49,12 @@ module.exports = ({
         ],
 
       stylesheet ? ['link', {rel: 'stylesheet', href: stylesheet}] : '',
+
+      error
+        ? ['script', [
+          'window.NodeLoginInitialErrorGlobal = ' + JSON.stringify(error)
+        ]]
+        : '',
 
       ['script', {
         src: localScripts

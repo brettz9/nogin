@@ -116,6 +116,32 @@ module.exports = async function (app, config) {
     NL_SITE_URL
   });
 
+  /**
+  * @callback LayoutCallback
+  * @param {PlainObject} templateArgs
+  * @returns {JamilihArray}
+  */
+
+  /**
+  * @typedef {PlainObject} TitleWithLayoutCallback
+  * @property {Internationalizer} _
+  * @property {string} title
+  * @property {LayoutCallback} layout
+  */
+
+  /**
+  * @typedef {PlainObject} LayoutAndTitleArgs
+  * @property {Internationalizer} _
+  * @property {string} title
+  * @property {string} template The template name (made available to
+  * `injectHTML` so it can vary the generated HTML per template).
+  * @property {string} error
+  */
+
+  /**
+   * @param {LayoutAndTitleArgs} businessLogicArgs
+   * @returns {TitleWithLayoutCallback}
+   */
   const getLayoutAndTitle = (businessLogicArgs) => {
     const {_, title} = businessLogicArgs;
     return {
@@ -156,7 +182,7 @@ module.exports = async function (app, config) {
     function login () {
       const title = _('PleaseLoginToAccount');
       res.render('login', {
-        ...getLayoutAndTitle({_, title}),
+        ...getLayoutAndTitle({_, title, template: 'login'}),
         emailPattern
       });
     }
@@ -323,9 +349,9 @@ module.exports = async function (app, config) {
         await am.activateAccount(req.query.c);
       } catch (e) {
         const message = [
-          'invalid-activation-code'
+          'activationCodeProvidedInvalid'
         ].includes(e.message)
-          ? _(e.message)
+          ? _(e.message, {lb: '\n'})
           : e.message;
 
         log('message', {message});
@@ -336,7 +362,9 @@ module.exports = async function (app, config) {
         res.render(
           'activation-failed', {
             ...getLayoutAndTitle({
-              _, title, template: 'activation-failed'
+              _, title,
+              template: 'activation-failed',
+              error: 'activationCodeProvidedInvalid'
             })
           }
         );
@@ -348,7 +376,15 @@ module.exports = async function (app, config) {
         }
       );
     } else {
-      res.status(400).send(_('ActivationCodeRequired'));
+      res.status(400).render(
+        'activation-failed', {
+          ...getLayoutAndTitle({
+            _, title,
+            template: 'activation-failed',
+            error: 'ActivationCodeRequired'
+          })
+        }
+      );
     }
   });
 

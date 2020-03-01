@@ -1,4 +1,4 @@
-/* globals $, _, AlertDialog */
+/* globals $, _, AlertDialog, NodeLoginInitialErrorGlobal */
 'use strict';
 window.ActivationFailedView = {
   /**
@@ -8,9 +8,13 @@ window.ActivationFailedView = {
     // Set up the alert that displays when an account has not been activated.
     return AlertDialog.populate({
       heading: _('ActivationFailed'),
-      body: _('activationCodeProvidedInvalid', {
-        lb: $('<br/>')[0]
-      }),
+      body: _(
+        // Passed from server so we can set in JS
+        NodeLoginInitialErrorGlobal,
+        {
+          lb: $('<br/>')[0]
+        }
+      ),
       keyboard: false,
       backdrop: 'static'
     });

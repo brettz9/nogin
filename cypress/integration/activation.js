@@ -2,10 +2,14 @@ describe('Activation', function () {
   it('Visit Activation (Missing code)', function () {
     cy.visit('/activation', {
       failOnStatusCode: false
-    }).its('body').should(
-      'include',
-      'activation code required'
+    });
+    cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+      'Activation code required'
     );
+    cy.get('[data-name=ok]').click();
+    cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/');
   });
   it(
     'Visit Activation (Missing code) has no detectable a11y violations on load',

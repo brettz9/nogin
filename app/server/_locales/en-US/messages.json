@@ -299,7 +299,7 @@
 
     "ACTIVATION (BUSINESS LOGIC)": true,
     "ActivationCodeRequired": {
-      "message": "activation code required"
+      "message": "Activation code required.{lb}Click OK to return to the login page."
     },
     "Activation": {
       "message": "Activation"
@@ -390,9 +390,6 @@
     },
     "unexpected-pass-version-error": {
       "message": "Unexpected passVer error"
-    },
-    "invalid-activation-code": {
-      "message": "Invalid activation code"
     },
     "message": {
       "description": "Allows for using `log` and its checks with a raw message.",
