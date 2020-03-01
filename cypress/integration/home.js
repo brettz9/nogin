@@ -14,7 +14,8 @@ describe('Home', function () {
   it('Visit Home after login', function () {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
-    // Not just login, but get session
+    // Not just login, but get session, so will be shown `/home`
+    //   without redirect upon visit
     return cy.request({
       url: '/',
       method: 'POST',
