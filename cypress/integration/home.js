@@ -36,7 +36,9 @@ describe('Home', function () {
       cy.getCookie('login').should('have.property', 'value', key);
       cy.getCookie('login').should('have.property', 'secure', secure);
 
-      return cy.get('[data-name="navbar-brand"]').contains('Control Panel');
+      return cy.get('[data-name="navbar-brand"]', {
+        timeout: 10000
+      }).contains('Control Panel');
 
       // Todo[>=1.7.0]: Check good and bad delete
 

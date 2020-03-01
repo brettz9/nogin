@@ -3,7 +3,9 @@ describe('Activation', function () {
     cy.visit('/activation', {
       failOnStatusCode: false
     });
-    cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+    cy.get('[data-name=modal-alert] [data-name=modal-body] p', {
+      timeout: 10000
+    }).contains(
       'Activation code required'
     );
     cy.get('[data-name=ok]').click();
