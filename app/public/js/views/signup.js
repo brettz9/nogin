@@ -29,7 +29,7 @@ window.SignupView = {
    * @returns {external:jQuery} `HTMLFormElement`
    */
   setAccountSettings () {
-    // customize the account signup form
+    // Customize the account signup form
     const accountForm = populateForm('[data-name=account-form]', {
       heading: _('Signup'),
       subheading: _('PleaseTellUsAboutYourself'),
@@ -43,7 +43,7 @@ window.SignupView = {
    * @returns {external:jQuery} `HTMLDivElement`
    */
   accountCreated () {
-    // setup the alert that displays when an account is successfully created
+    // Setup the alert that displays when an account is successfully created
     return AlertDialog.populate({
       heading: _('AccountCreatedSignup'),
       body: _('PleaseCheckEmailForVerificationLink', {

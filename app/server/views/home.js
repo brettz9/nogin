@@ -27,14 +27,18 @@ module.exports = function ({_, layout, user, countries, emailPattern, title}) {
               class: 'btn navbar-btn btn-outline-dark'
             }, [
               _('SignOut')
-            ]],
-            ...require('./account.js')({
-              _, user, countries, emailPattern, title
-            }),
-            require('./modals/alert.js')({_}),
-            require('./modals/confirm.js')({_})
+            ]]
           ]]
         ]]
+      ]],
+      ['div', {
+        role: 'main'
+      }, [
+        ...require('./account.js')({
+          _, user, countries, emailPattern, title
+        }),
+        require('./modals/alert.js')({_}),
+        require('./modals/confirm.js')({_})
       ]]
     ],
     scripts: [

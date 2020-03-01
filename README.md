@@ -113,6 +113,7 @@ Questions and suggestions for improvement are welcome.
         1. Figure out why `users` page still shows an account upon
             (first) deletion
         1. Get validation to reset on change or input events
+1. **Watch** for server changes to auto-reload
 1. Update **docs** above
 
 1. Allow convenience for easier **customization of route after login**
