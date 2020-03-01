@@ -35,7 +35,7 @@ describe('Home', function () {
         timeout: 10000
       }).contains('Control Panel');
 
-      // Todo[>=1.7.0]: Check good and bad delete
+      // Todo[>=1.7.0]: Check good and bad delete and update
 
     // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
