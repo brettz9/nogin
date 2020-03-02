@@ -27,6 +27,21 @@ import {
 
 import nodeLoginConfig from '../../node-login.js';
 
+/**
+* @external CypressOn
+* @see https://docs.cypress.io/api/plugins/writing-a-plugin.html#on
+*/
+
+/**
+* @external CypressConfig
+* @see https://docs.cypress.io/api/plugins/writing-a-plugin.html#config
+*/
+
+/**
+ * @param {external:CypressOn} on See {@link https://docs.cypress.io/api/plugins/writing-a-plugin.html#on}
+ * @param {Plainobject} config See {@link https://docs.cypress.io/guides/references/configuration.html#Command-Line}
+ * @returns {void}
+ */
 const exprt = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
@@ -38,6 +53,9 @@ const exprt = (on, config) => {
   //  task for now.
   // const {env: {secret}} = config;
   const {secret} = nodeLoginConfig;
+
+  // Todo: Document these `env` vars in our README/docs (secret, env, coverage)
+  // See https://docs.cypress.io/guides/guides/environment-variables.html#Setting
   config.env = config.env || {};
   config.env.secret = secret;
 
@@ -46,8 +64,14 @@ const exprt = (on, config) => {
   // eslint-disable-next-line no-process-env
   config.env.env = process.env.NODE_ENV || 'development';
 
-  // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
-  on('task', codeCoverageTask);
+  // Ability to disable coverage as we don't want the good last coverage to
+  //  be overwritten by testing of single files (e.g., with `open`) or to
+  //  require re-running and re-merging, nor to spend extra time when not
+  //  needed.
+  if (config.env.coverage !== false) {
+    // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
+    on('task', codeCoverageTask);
+  }
 
   // Force documentation; see https://github.com/gajus/eslint-plugin-jsdoc/issues/493
   // Documentation is needed here to clarify that these tasks are not being used

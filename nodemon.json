@@ -3,5 +3,8 @@
     "app/server",
     "app.js",
     "node-login.js"
-  ]
+  ],
+  "events": {
+    "restart": "echo 'Forcing Cypress to re-run after short-delay' && delay 9 && touch cypress/support/index.js"
+  }
 }
