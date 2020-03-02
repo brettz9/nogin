@@ -27,19 +27,19 @@ try {
   console.log('1111');
   const [
     [statInfo],
-    [retrInfo, stream]
+    [retrInfo, retrStream]
   ] = await Promise.all([
     // Get number of messages and size
     pop3.command('STAT'), // no args
 
     // Retrieval of message
-    pop3.command('RETR', 2) // requires msg number
+    pop3.command('RETR', 2) // requires msg number (and returns stream)
   ]);
 
   console.log(statInfo); // 100 102400
   console.log(retrInfo); // 1024 octets
 
-  console.log('getStream', await getStream(stream));
+  console.log('getStream', await getStream(retrStream));
 
   // Mark message as deleted
   // const [deleInfo] = await pop3.command('DELE', 1); // requires msg number
@@ -54,25 +54,33 @@ try {
   // console.log('noopInfo', noopInfo);
 
   // List info on message
-  const [listInfo] = await pop3.command('LIST'); // Takes optional msg number
+  const [
+    listInfo, listStream
+  // Takes optional msg number (and returns stream)
+  ] = await pop3.command('LIST');
   console.log('listInfo', listInfo);
+  console.log('listStream', await getStream(listStream));
 
   // 1. TOP (required msg number and required non-negative number of line)
-  //    - i.e., get specific message
-  const [topInfo] = await pop3.command(
+  //    - i.e., get specific message; returns stream
+  const [topInfo, topStream] = await pop3.command(
     'TOP', 2, 10000
   ); // Takes optional msg number
   console.log('topInfo', topInfo);
+  console.log('topStream', await getStream(topStream));
 
   // 2. UIDL (optional msg number)
   //    - i.e., unique-id listing
-  const [uidlInfo] = await pop3.command('UIDL'); // Takes optional msg number
+  // Takes optional msg number and returns stream
+  const [uidlInfo, uidlStream] = await pop3.command('UIDL');
   console.log('uidlInfo', uidlInfo);
+  console.log('uidlStream', await getStream(uidlStream));
 
-  const [uidlInfo2] = await pop3.command(
+  const [uidlInfo2, uidlStream2] = await pop3.command(
     'UIDL', 2
   ); // Takes optional msg number
   console.log('uidlInfo2', uidlInfo2);
+  console.log('uidlStream2', await getStream(uidlStream2));
 
   // Errors out for this non-command
   // const [badInfo] = await pop3.command('ABCD');
