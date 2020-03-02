@@ -5,6 +5,6 @@
     "node-login.js"
   ],
   "events": {
-    "restart": "echo \"Forcing Cypress to re-run after short-delay due to server file changes (note that Cypress won't restart, however, if its plugin files are changed)\" && delay 9 && touch cypress/support/index.js"
+    "restart": "echo \"Forcing Cypress to re-run after short-delay due to server file changes (note that Cypress won't restart, however, if its plugin files are changed: https://github.com/cypress-io/cypress/issues/6606 )\" && delay 9 && touch cypress/support/index.js"
   }
 }
