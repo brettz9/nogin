@@ -23,6 +23,7 @@ const pop3 = new Pop3Command({
 try {
   await pop3.connect();
 
+  console.log('1111');
   const [
     [statInfo],
     [retrInfo]
@@ -36,8 +37,6 @@ try {
 
   console.log(statInfo); // 100 102400
   console.log(retrInfo); // 1024 octets
-
-  console.log('1111');
 
   // Mark message as deleted
   // const [deleInfo] = await pop3.command('DELE', 1); // requires msg number
