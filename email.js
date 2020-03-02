@@ -11,7 +11,11 @@ const {
 const pop3 = new Pop3Command({
   host: NL_EMAIL_HOST,
   user: NL_EMAIL_USER,
-  password: NL_EMAIL_PASS
+  password: NL_EMAIL_PASS,
+
+  // Tried for SSL/TLS, but after apparent login, got errors
+  port: 995,
+  tls: true
 });
 
 (async () => {
@@ -23,14 +27,80 @@ try {
     [statInfo],
     [retrInfo]
   ] = await Promise.all([
-    pop3.command('STAT'),
-    pop3.command('RETR', 1)
+    // Get number of messages and size
+    pop3.command('STAT'), // no args
+
+    // Retrieval of message
+    pop3.command('RETR', 2) // requires msg number
   ]);
 
   console.log(statInfo); // 100 102400
   console.log(retrInfo); // 1024 octets
 
-  const [quitInfo] = await pop3.command('QUIT');
+  console.log('1111');
+
+  // Mark message as deleted
+  // const [deleInfo] = await pop3.command('DELE', 1); // requires msg number
+  // console.log('deleInfo', deleInfo);
+
+  // Unmark deleted as such
+  // const [rsetInfo] = await pop3.command('RSET'); // No args
+  // console.log('rsetInfo', rsetInfo);
+
+  // Just gets a positive success message from server
+  // const [noopInfo] = await pop3.command('NOOP'); // No args
+  // console.log('noopInfo', noopInfo);
+
+  // List info on message
+  const [listInfo] = await pop3.command('LIST'); // Takes optional msg number
+  console.log('listInfo', listInfo);
+
+  // 1. TOP (required msg number and required non-negative number of line)
+  //    - i.e., get specific message
+  const [topInfo] = await pop3.command(
+    'TOP', 2, 10000
+  ); // Takes optional msg number
+  console.log('topInfo', topInfo);
+
+  // 2. UIDL (optional msg number)
+  //    - i.e., unique-id listing
+  const [uidlInfo] = await pop3.command('UIDL'); // Takes optional msg number
+  console.log('uidlInfo', uidlInfo);
+
+  const [uidlInfo2] = await pop3.command(
+    'UIDL', 2
+  ); // Takes optional msg number
+  console.log('uidlInfo2', uidlInfo2);
+
+  // Errors out for this non-command
+  // const [badInfo] = await pop3.command('ABCD');
+  // console.log('badInfo', badInfo);
+
+  // Other commands (all optional):
+  // 1. TOP (required msg number and required non-negative number of line)
+  //    - i.e., get specific message
+  // 2. UIDL (optional msg number)
+  //    - i.e., unique-id listing
+  // 3. USER (required name)
+  // 4. PASS (required server/mailbox-specific string)
+  // 5. APOP (required mailbox string and MD5 digest string)
+  //    - i.e., alternate authentication to USER/PASS exchange
+
+  // Commands from https://tools.ietf.org/html/rfc5034
+  // 1. AUTH (required mechanism and optional initial-response)
+
+  // Commands from https://tools.ietf.org/html/rfc2595
+  // 1. STLS (no args)
+  // 1. STARTTLS (no args)
+
+  // Commands from https://tools.ietf.org/html/rfc2449
+  // 1. CAPA (no args)
+  // 2. SASL, RESP-CODES, LOGIN-DELAY, PIPELINING, EXPIRE
+  //    and IMPLEMENTATION
+
+  // Removes all messages marked as deleted; removes any lock
+  //   and closes connection
+  const [quitInfo] = await pop3.command('QUIT'); // No args
   console.log(quitInfo);
 } catch (err) {
   console.log('Error', err);
