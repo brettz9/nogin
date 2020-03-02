@@ -1,0 +1,7 @@
+{
+  "watch": [
+    "app/server",
+    "app.js",
+    "node-login.js"
+  ]
+}
