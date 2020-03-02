@@ -22,11 +22,20 @@ describe('Signup', function () {
       timeout: 10000
     }).should('eq', '/');
 
-    // Todo[>=1.7.0]: Check that received activation email
-
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
-    cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+    // Check that received activation email
+    return cy.task('getEmail', {
+      subject: '',
+      html: []
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      // Todo:
+      // Todo: In full UI version, we could look for the link and visit it.
+      return true;
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      return cy.task('getRecords', {user: ['bretto']});
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((accts) => {
       const {user, activated} = accts[0];
       expect(user).to.equal('bretto');
       expect(activated).to.be.false;

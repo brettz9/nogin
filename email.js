@@ -26,6 +26,7 @@ try {
   await pop3.connect();
 
   console.log('1111');
+  /*
   const [
     [statInfo],
     [retrInfo, retrStream]
@@ -49,7 +50,7 @@ try {
     'parsedRetrStream.[1].header.contentType',
     parsedRetrStream[1].header.contentType
   );
-
+  */
   // Mark message as deleted
   // const [deleInfo] = await pop3.command('DELE', 1); // requires msg number
   // console.log('deleInfo', deleInfo);
@@ -64,15 +65,54 @@ try {
 
   // List info on message
   const [
-    listInfo, listStream
+    /* listInfo */ , listStream
   // Takes optional msg number (and returns stream)
-  ] = await pop3.command('LIST', 4);
-  console.log('listInfo', listInfo);
+  ] = await pop3.command('LIST');
+  // console.log('listInfo', listInfo);
   const listStreamString = await getStream(listStream);
-  console.log('listStream', listStreamString);
+  // console.log('listStream', listStreamString);
 
-  console.log('listStream parsed', await new Envelope(listStreamString));
+  const messageNums = [
+    ...new Map(Pop3Command.listify(listStreamString)).keys()
+  ];
+  /*
+  console.log(
+    'message keys (can we just get the number of messages?)',
+    messageNums
+  );
+  */
 
+  const messages = await Promise.all(
+    messageNums.map(async () => {
+      const [/* retrInfo */, retrStream] = await pop3.command('RETR', 4);
+      const retrStreamString = await getStream(retrStream);
+      // console.log('retrStream', retrStreamString);
+      const parsedRetrStream = new Envelope(retrStreamString);
+      // console.log('retrStream parsed', parsedRetrStream);
+      /*
+      console.log(
+        'parsedRetrStream[0].header.contentType',
+        parsedRetrStream[0] && parsedRetrStream[0].header &&
+          parsedRetrStream[0].header.contentType
+      );
+      console.log(
+        'parsedRetrStream[1].header.contentType',
+        parsedRetrStream[1] && parsedRetrStream[1].header &&
+          parsedRetrStream[1].header.contentType
+      );
+      */
+      return parsedRetrStream;
+    })
+  );
+  // Each has numbers as strings for each content-type ("0", "1"), and `header`)
+  console.log('messages', messages);
+  /*
+  console.log('headers', messages.map((msg) => {
+    return msg.header;
+  }));
+  */
+
+  /*
   // 1. TOP (required msg number and required non-negative number of line)
   //    - i.e., get specific message; returns stream
   const [topInfo, topStream] = await pop3.command(
@@ -93,7 +133,7 @@ try {
   ); // Takes optional msg number
   console.log('uidlInfo2', uidlInfo2);
   console.log('uidlStream2', await getStream(uidlStream2));
-
+  */
   // Errors out for this non-command
   // const [badInfo] = await pop3.command('ABCD');
   // console.log('badInfo', badInfo);

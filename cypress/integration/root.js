@@ -93,7 +93,16 @@ describe('Root (Login)', function () {
         timeout: 20000
       }
     );
-    // Todo[>=1.7.0]: Check that password was received by email
+    // Check that password was received by email
+    return cy.task('getEmail', {
+      subject: '',
+      html: []
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      // Todo:
+      // Todo: In full UI version, we could look for the link and visit it.
+      return true;
+    });
   });
 
   // 'Sorry. There was a problem, please try again later.',
@@ -138,9 +147,8 @@ describe('Root (Login)', function () {
   });
 
   it('Visit auto-logging-in root after initial login', function () {
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
-    cy.task('hackEnv', 'env').then((env) => {
+    // eslint-disable-next-line promise/prefer-await-to-then
+    return cy.task('hackEnv', 'env').then((env) => {
       cy.log(env);
       // See `hackEnv` on how apparently not working and why we need this hack
       // const secure = Cypress.env('env') === 'production'
@@ -152,8 +160,7 @@ describe('Root (Login)', function () {
         ip: '::ffff:127.0.0.1',
         secure
       // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line max-len
-      // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
+      // eslint-disable-next-line promise/prefer-await-to-then
       }).then((key) => {
         cy.visit('/');
         cy.location('pathname', {
@@ -165,7 +172,7 @@ describe('Root (Login)', function () {
         cy.getCookie('login').should('have.property', 'secure', secure);
 
         const expressSessionID = 'connect.sid';
-        cy.getCookie(expressSessionID).should('exist');
+        return cy.getCookie(expressSessionID).should('exist');
       });
     });
   });

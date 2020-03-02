@@ -17,6 +17,10 @@ import {spawn} from 'child_process';
 
 import cookieSign from 'cookie-signature';
 
+import Pop3Command from 'node-pop3';
+import getStream from 'get-stream';
+import Envelope from 'envelope';
+
 import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
 
@@ -52,7 +56,12 @@ const exprt = (on, config) => {
   //  as per apparent bug referred to below, it seems we need our `hackEnv`
   //  task for now.
   // const {env: {secret}} = config;
-  const {secret} = nodeLoginConfig;
+  const {
+    secret,
+    NL_EMAIL_HOST,
+    NL_EMAIL_USER,
+    NL_EMAIL_PASS
+  } = nodeLoginConfig;
 
   // Todo: Document these `env` vars in our README/docs (secret, env, coverage)
   // See https://docs.cypress.io/guides/guides/environment-variables.html#Setting
@@ -71,6 +80,52 @@ const exprt = (on, config) => {
   if (config.env.coverage !== false) {
     // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
     on('task', codeCoverageTask);
+  }
+
+  const pop3 = new Pop3Command({
+    host: NL_EMAIL_HOST,
+    user: NL_EMAIL_USER,
+    password: NL_EMAIL_PASS,
+
+    // Tried for SSL/TLS, but after apparent login, got errors
+    port: 995,
+    tls: true
+  });
+
+  /**
+   * Probably only needed in testing, not from command line.
+   * @returns {EnvelopeMessage[]}
+   */
+  async function getEmails () {
+    await pop3.connect();
+    const [/* listInfo */, listStream] = await pop3.command('LIST');
+    const listStreamString = await getStream(listStream);
+
+    const messageNums = [
+      ...new Map(Pop3Command.listify(listStreamString)).keys()
+    ];
+
+    const parsedMessages = await Promise.all(
+      messageNums.map(async () => {
+        const [/* retrInfo */, retrStream] = await pop3.command('RETR', 4);
+        const retrStreamString = await getStream(retrStream);
+        return new Envelope(retrStreamString);
+      })
+    );
+    // Each has numbers as strings for each content-type ("0", "1"),
+    //   and `header`)
+    console.log('parsedMessages', parsedMessages);
+    /*
+    console.log(
+      'parsedMessages[0].header.contentType',
+      parsedMessages[0] && parsedMessages[0].header &&
+        parsedMessages[0].header.contentType
+    );
+    */
+
+    /* const [quitInfo] = */ await pop3.command('QUIT'); // No args
+    // console.log(quitInfo);
+    return parsedMessages;
   }
 
   // Force documentation; see https://github.com/gajus/eslint-plugin-jsdoc/issues/493
@@ -200,6 +255,38 @@ const exprt = (on, config) => {
       // `null`
       cfg = cfg || {};
       return readAccounts(cfg);
+    },
+
+    /**
+    * @external EnvelopeMessage
+    * @see https://github.com/jhermsmeier/node-envelope#user-content-parsing-an-email
+    */
+
+    /**
+     * Probably only needed in testing, not from command line.
+     * @returns {EnvelopeMessage[]}
+     */
+    getEmails,
+
+    /**
+     * Shouldn't be needed on command line.
+     * @param {PlainObject} cfg
+     * @param {string} cfg.subject
+     * @param {string[]} cfg.html
+     * @returns {Promise<EnvelopeMessage>}
+     */
+    async getEmail (cfg) {
+      const parsedMessages = await getEmails();
+      return parsedMessages.find((msg) => {
+        return (
+          (typeof cfg.subject !== 'string' ||
+            cfg.subject === msg.header.subject) &&
+          (!Array.isArray(cfg.html) || cfg.html.every((requiredHTMLString) => {
+            const html = msg[1][0];
+            return html.includes(requiredHTMLString);
+          }))
+        );
+      });
     }
   });
 
