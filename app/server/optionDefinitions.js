@@ -33,6 +33,12 @@ const optionDefinitions = [
     typeLabel: '{underline host}'
   },
   {
+    name: 'NL_EMAIL_HOST_INCOMING', type: String,
+    description: 'Email host for receiving mail; defaults to pop.gmail.com. ' +
+      'Needed only if running tests (which check for receipt of emails).',
+    typeLabel: '{underline host}'
+  },
+  {
     name: 'NL_EMAIL_FROM', alias: 'f', type: String,
     description: 'Email "from"; defaults to ' +
       '`Node Login <do-not-reply@gmail.com>`',

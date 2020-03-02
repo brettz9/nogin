@@ -58,7 +58,7 @@ const exprt = (on, config) => {
   // const {env: {secret}} = config;
   const {
     secret,
-    NL_EMAIL_HOST,
+    NL_EMAIL_HOST_INCOMING,
     NL_EMAIL_USER,
     NL_EMAIL_PASS
   } = nodeLoginConfig;
@@ -83,12 +83,13 @@ const exprt = (on, config) => {
   }
 
   const pop3 = new Pop3Command({
-    host: NL_EMAIL_HOST,
+    host: NL_EMAIL_HOST_INCOMING,
     user: NL_EMAIL_USER,
     password: NL_EMAIL_PASS,
 
+    // Todo: Make configurable
     // Tried for SSL/TLS, but after apparent login, got errors
-    port: 995,
+    port: 995, // 110 is insecure default for POP
     tls: true
   });
 

@@ -52,6 +52,7 @@ class EmailDispatcher {
       user: NL_EMAIL_USER,
       password: NL_EMAIL_PASS,
       timeout: NS_EMAIL_TIMEOUT,
+      // Todo: Make configurable
       ssl: true
     });
     this.server.send = promisify(this.server.send);
