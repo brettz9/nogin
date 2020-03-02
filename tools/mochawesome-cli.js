@@ -1,7 +1,7 @@
 // Filed the following to support this file's functionality:
 //    https://github.com/cypress-io/cypress/issues/6585
 
-// Todo: Get /test (i.e., `unit.js`) test results at beginning?
+// Todo: Show /test (i.e., `unit.js`) test results at beginning?
 
 // See https://github.com/jsdoc/jsdoc/issues/1750 to create such tags
 /* eslint "jsdoc/check-tag-names": ["error", {definedTags: ["cli-arg"]}] */
