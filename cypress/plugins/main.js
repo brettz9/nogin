@@ -277,12 +277,25 @@ const exprt = (on, config) => {
      */
     async hasEmail (cfg) {
       const parsedMessages = await getEmails();
+      const subjectIsNotString = typeof cfg.subject !== 'string';
+      const htmlIsNotArray = !Array.isArray(cfg.html);
       return parsedMessages.some((msg) => {
+        const html = msg[1][0];
+        console.log(
+          'cfg.subject', cfg.subject, '::', msg.header && msg.header.subject,
+          cfg.subject === msg.header.subject
+        );
+        console.log(
+          'html',
+          html,
+          'cfg.html',
+          cfg.html
+        );
         return (
-          (typeof cfg.subject !== 'string' ||
+          (subjectIsNotString ||
             cfg.subject === msg.header.subject) &&
-          (!Array.isArray(cfg.html) || cfg.html.every((requiredHTMLString) => {
-            const html = msg[1][0];
+          (htmlIsNotArray || cfg.html.every((requiredHTMLString) => {
+            console.log('html', html, 'requiredHTMLString', requiredHTMLString);
             return html.includes(requiredHTMLString);
           }))
         );

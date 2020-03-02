@@ -103,8 +103,8 @@ describe('Root (Login)', function () {
         '<a href=',
         'reset-password?key='
       ]
-    // eslint-disable-next-line promise/prefer-await-to-then
-    }).then((hasEmail) => {
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }, {timeout: 30000}).then((hasEmail) => {
       // Todo: In full UI version, we could look for the link and visit it.
       return expect(hasEmail).to.be.true;
     });
