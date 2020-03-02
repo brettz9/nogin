@@ -12,6 +12,8 @@
 //   server-side coverage passing when the UI tests weren't otherwise
 //   triggering that server-side code (i.e., only the state-setting or
 //   getting did).
+// Todo[>=1.7.0]: Add accessibility tests for small error response messages
+//   not yet covered.
 
 describe('Root (Login) - Accessibility', function () {
   // https://www.npmjs.com/package/cypress-axe
@@ -94,14 +96,17 @@ describe('Root (Login)', function () {
       }
     );
     // Check that password was received by email
-    return cy.task('getEmail', {
-      subject: '',
-      html: []
+    return cy.task('hasEmail', {
+      subject: 'Password Reset',
+      html: [
+        'Click here to reset your password',
+        '<a href=',
+        'reset-password?key='
+      ]
     // eslint-disable-next-line promise/prefer-await-to-then
-    }).then(() => {
-      // Todo:
+    }).then((hasEmail) => {
       // Todo: In full UI version, we could look for the link and visit it.
-      return true;
+      return expect(hasEmail).to.be.true;
     });
   });
 

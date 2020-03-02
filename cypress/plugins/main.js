@@ -273,11 +273,11 @@ const exprt = (on, config) => {
      * @param {PlainObject} cfg
      * @param {string} cfg.subject
      * @param {string[]} cfg.html
-     * @returns {Promise<EnvelopeMessage>}
+     * @returns {Promise<boolean>}
      */
-    async getEmail (cfg) {
+    async hasEmail (cfg) {
       const parsedMessages = await getEmails();
-      return parsedMessages.find((msg) => {
+      return parsedMessages.some((msg) => {
         return (
           (typeof cfg.subject !== 'string' ||
             cfg.subject === msg.header.subject) &&

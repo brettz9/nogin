@@ -23,14 +23,17 @@ describe('Signup', function () {
     }).should('eq', '/');
 
     // Check that received activation email
-    return cy.task('getEmail', {
-      subject: '',
-      html: []
-    // eslint-disable-next-line promise/prefer-await-to-then
-    }).then(() => {
-      // Todo:
+    return cy.task('hasEmail', {
+      subject: 'Account Activation',
+      html: [
+        'Please click here to activate your account',
+        '<a href=',
+        'activation?c='
+      ]
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((hasEmail) => {
       // Todo: In full UI version, we could look for the link and visit it.
-      return true;
+      return expect(hasEmail).to.be.true;
     // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       return cy.task('getRecords', {user: ['bretto']});
