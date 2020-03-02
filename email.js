@@ -1,6 +1,7 @@
 'use strict';
 
 const Pop3Command = require('node-pop3');
+const getStream = require('get-stream');
 
 const {
   NL_EMAIL_HOST,
@@ -26,7 +27,7 @@ try {
   console.log('1111');
   const [
     [statInfo],
-    [retrInfo]
+    [retrInfo, stream]
   ] = await Promise.all([
     // Get number of messages and size
     pop3.command('STAT'), // no args
@@ -37,6 +38,8 @@ try {
 
   console.log(statInfo); // 100 102400
   console.log(retrInfo); // 1024 octets
+
+  console.log('getStream', await getStream(stream));
 
   // Mark message as deleted
   // const [deleInfo] = await pop3.command('DELE', 1); // requires msg number

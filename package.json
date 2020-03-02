@@ -195,6 +195,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-unicorn": "^16.1.1",
     "esm": "^3.2.25",
+    "get-stream": "^5.1.0",
     "husky": "^4.2.3",
     "license-badger": "^0.11.1",
     "lint-staged": "^10.0.8",
