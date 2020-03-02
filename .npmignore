@@ -10,8 +10,11 @@ instrumented/**
 
 mochawesome-report/**
 mochawesome.json
+mocha-multi-reporters.json
 db/**
 .ncurc.js
 node-login.json
 node-login.js
+nodemon.json
 tools
+.idea
