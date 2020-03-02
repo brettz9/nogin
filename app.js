@@ -40,8 +40,7 @@ exports.createServer = async function (options) {
 
   const {
     cwd = process.cwd(),
-    // Switched from `config` due to https://github.com/remy/nodemon/issues/1686
-    cfg: config = 'node-login.json'
+    config = 'node-login.json'
   } = options;
 
   let cfg;
@@ -55,7 +54,7 @@ exports.createServer = async function (options) {
     return;
   }
 
-  const opts = {...cfg, ...options, cfg: null};
+  const opts = {...cfg, ...options, config: null};
   const {
     loggerLocale,
     NL_EMAIL_HOST,

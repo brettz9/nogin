@@ -63,7 +63,7 @@ const optionDefinitions = [
   },
   {
     name: 'cwd', type: String,
-    description: 'Current working directory; used with `--cfg`; ' +
+    description: 'Current working directory; used with `--config`; ' +
       'defaults to `process.cwd()`',
     typeLabel: '{underline cwd path}'
   },
@@ -111,7 +111,7 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
-    name: 'cfg', alias: 'c', type: String,
+    name: 'config', alias: 'c', type: String,
     description: 'Used to set config; when `cwd` is set, defaults to ' +
       '"<cwd>/node-login.json"; of lower priority than other CLI ' +
       'arguments; may also be a JavaScript file (node-login.js).',

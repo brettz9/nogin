@@ -92,7 +92,7 @@ describe('Unit testing', function () {
       '--localScripts',
       '--secret', secret,
       '--noLogging',
-      '--cfg',
+      '--config',
       'badFile',
       '--PORT', testPort
     ]);
@@ -110,7 +110,7 @@ describe('Unit testing', function () {
     expect(stripMongoMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
       'No config file detected at node-login.json; supply a ' +
-        '`null` `cfg` to avoid this message.\n'
+        '`null` `config` to avoid this message.\n'
     );
   });
 
@@ -120,7 +120,7 @@ describe('Unit testing', function () {
       '--localScripts',
       '--secret', secret,
       '--PORT', testPort,
-      '--cfg', ''
+      '--config', ''
     ], 20000);
     expect(stripMongoMessages(stdout)).to.equal(
       'Beginning routes...\n' +
@@ -143,7 +143,7 @@ describe('Unit testing', function () {
       '--localScripts',
       '--secret', secret,
       '--PORT', testPort,
-      '--cfg', ''
+      '--config', ''
     ]);
     expect(stripMongoMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
@@ -162,7 +162,7 @@ describe('Unit testing', function () {
       '--localScripts',
       '--secret', secret,
       '--PORT', testPort,
-      '--cfg', '',
+      '--config', '',
       '--DB_USER', 'brett',
       '--DB_PASS', '123456'
     ], 20000);

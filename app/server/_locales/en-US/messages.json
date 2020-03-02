@@ -349,7 +349,7 @@
       "message": "Express server listening on port {port}"
     },
     "noConfigFileDetected": {
-      "message": "No config file detected at {config}; supply a `null` `cfg` to avoid this message."
+      "message": "No config file detected at {config}; supply a `null` `config` to avoid this message."
     },
     "ProductionNeedsUserAndPass": {
       "message": "A production environment requires setting `DB_USER` and `DB_PASS`."
