@@ -88,7 +88,6 @@ const exprt = (on, config) => {
     password: NL_EMAIL_PASS,
 
     // Todo: Make configurable
-    // Tried for SSL/TLS, but after apparent login, got errors
     port: 995, // 110 is insecure default for POP
     tls: true
   });
