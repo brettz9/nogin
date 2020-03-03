@@ -32,7 +32,7 @@ describe('Users', function () {
       'nicky'
     );
     cy.get('[data-name=users] tr:nth-child(2) td:nth-child(4)').contains(
-      'Japan'
+      'Iran'
     );
     cy.get('[data-name=users] tr:nth-child(2) td:nth-child(5)').contains(
       /\d{1,2}\/\d{1,2}\/\d{1,2}/u

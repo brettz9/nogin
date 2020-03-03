@@ -24,18 +24,12 @@ const optionDefinitions = [
   },
   {
     name: 'NL_EMAIL_PASS', type: String,
-    description: 'Email password',
+    description: 'Email password (for `NL_EMAIL_USER`)',
     typeLabel: '{underline pass}'
   },
   {
     name: 'NL_EMAIL_HOST', type: String,
     description: 'Email host; defaults to smtp.gmail.com',
-    typeLabel: '{underline host}'
-  },
-  {
-    name: 'NL_EMAIL_HOST_INCOMING', type: String,
-    description: 'Email host for receiving mail; defaults to pop.gmail.com. ' +
-      'Needed only if running tests (which check for receipt of emails).',
     typeLabel: '{underline host}'
   },
   {

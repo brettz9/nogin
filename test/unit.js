@@ -313,7 +313,7 @@ describe('Unit testing', function () {
         '--pass',
         '123456',
         '--email',
-        'test@example.com',
+        'test@example.name',
         '--passVer',
         '1',
         '--date',
@@ -405,6 +405,8 @@ describe('Unit testing', function () {
   describe('Read, update, delete existing', function () {
     beforeEach(async () => {
       await removeAccounts({all: true});
+      // Todo: Note that this JSON file wouldn't work if we needed to
+      //  test against a working (and private) email as we do for login tests
       await addAccounts({userFile: ['test/fixtures/addUsers.json']});
     });
 
@@ -428,7 +430,7 @@ describe('Unit testing', function () {
         ));
         expect(beginning).to.equal(expectedBeginning);
         expect(end.user).to.equal('brett');
-        expect(end.email).to.equal('brettz9@example.com');
+        expect(end.email).to.equal('brettz9@example.name');
       });
     });
 
@@ -460,7 +462,7 @@ describe('Unit testing', function () {
         '--user',
         'brett',
         '--email',
-        'bretto@example.com'
+        'bretto@example.name'
       ]);
       expect(stripPromisesWarning(stderr)).to.equal('');
 
@@ -473,11 +475,11 @@ describe('Unit testing', function () {
       expect(accts.length).to.equal(2);
       try {
         expect(accts[0].user).to.equal('brett');
-        expect(accts[0].email).to.equal('bretto@example.com');
+        expect(accts[0].email).to.equal('bretto@example.name');
         expect(accts[1].user).to.equal('coco');
       } catch (err) {
         expect(accts[1].user).to.equal('brett');
-        expect(accts[1].email).to.equal('bretto@example.com');
+        expect(accts[1].email).to.equal('bretto@example.name');
         expect(accts[0].user).to.equal('coco');
       }
     });

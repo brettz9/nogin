@@ -1,12 +1,12 @@
 [
   {
     "user": "brett",
-    "email": "brettz9@example.com",
+    "email": "brettz9@example.name",
     "pass": "123456"
   },
   {
     "user": "coco",
-    "email": "coco@example.com",
+    "email": "coco@example.name",
     "pass": "654321"
   }
 ]

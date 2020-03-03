@@ -561,7 +561,6 @@ module.exports = async function (app, config) {
       locales: languages
     });
     res.status(200).send(wrapResult({resolvedLocale, strings}));
-    res.end();
   });
 
   app.get('*', async function (req, res) {

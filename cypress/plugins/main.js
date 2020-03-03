@@ -58,7 +58,7 @@ const exprt = (on, config) => {
   // const {env: {secret}} = config;
   const {
     secret,
-    NL_EMAIL_HOST_INCOMING,
+    NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS
   } = nodeLoginConfig;
@@ -66,7 +66,10 @@ const exprt = (on, config) => {
   // Todo: Document these `env` vars in our README/docs (secret, env, coverage)
   // See https://docs.cypress.io/guides/guides/environment-variables.html#Setting
   config.env = config.env || {};
+
   config.env.secret = secret;
+  config.env.NL_EMAIL_USER = NL_EMAIL_USER;
+  config.env.NL_EMAIL_PASS = NL_EMAIL_PASS;
 
   // We want `process.env` for login credentials
   // Default in the same way as `app.get('env')`
@@ -82,8 +85,8 @@ const exprt = (on, config) => {
     on('task', codeCoverageTask);
   }
 
-  const pop3 = new Pop3Command({
-    host: NL_EMAIL_HOST_INCOMING,
+  const popActivatedAccount = new Pop3Command({
+    host: NL_EMAIL_HOST,
     user: NL_EMAIL_USER,
     password: NL_EMAIL_PASS,
 
@@ -93,28 +96,41 @@ const exprt = (on, config) => {
   });
 
   /**
+   * @returns {Promise<string[]>} Message numbers
+  */
+  async function connectAndGetMessages () {
+    await popActivatedAccount.connect();
+    // Does not get deleted messages, so safe to use results in
+    //  queries like RETR which won't work against deleted
+    const [
+      /* listInfo */, listStream
+    ] = await popActivatedAccount.command('LIST');
+    const listStreamString = await getStream(listStream);
+
+    return [
+      ...new Map(Pop3Command.listify(listStreamString)).keys()
+    ];
+  }
+
+  /**
    * Probably only needed in testing, not from command line.
    * @returns {EnvelopeMessage[]}
    */
   async function getEmails () {
-    await pop3.connect();
-    const [/* listInfo */, listStream] = await pop3.command('LIST');
-    const listStreamString = await getStream(listStream);
-
-    const messageNums = [
-      ...new Map(Pop3Command.listify(listStreamString)).keys()
-    ];
+    const messageNums = await connectAndGetMessages();
 
     const parsedMessages = await Promise.all(
-      messageNums.map(async () => {
-        const [/* retrInfo */, retrStream] = await pop3.command('RETR', 4);
+      messageNums.map(async (messageNum) => {
+        const [
+          /* retrInfo */, retrStream
+        ] = await popActivatedAccount.command('RETR', messageNum);
         const retrStreamString = await getStream(retrStream);
         return new Envelope(retrStreamString);
       })
     );
     // Each has numbers as strings for each content-type ("0", "1"),
     //   and `header`)
-    console.log('parsedMessages', parsedMessages);
+    // console.log('parsedMessages', parsedMessages);
     /*
     console.log(
       'parsedMessages[0].header.contentType',
@@ -123,7 +139,14 @@ const exprt = (on, config) => {
     );
     */
 
-    /* const [quitInfo] = */ await pop3.command('QUIT'); // No args
+    // We might not even want to wait here, but we do for now to get the error.
+    try {
+    /* const [quitInfo] = */ await popActivatedAccount.command(
+        'QUIT'
+      ); // No args
+    } catch (err) {
+      console.log(err);
+    }
     // console.log(quitInfo);
     return parsedMessages;
   }
@@ -209,9 +232,9 @@ const exprt = (on, config) => {
     async addAccount () {
       return (await addAccounts({
         name: ['Brett'],
-        email: ['brettz9@example.com'],
+        email: [NL_EMAIL_USER],
         user: ['bretto'],
-        pass: ['abc123456'],
+        pass: [NL_EMAIL_PASS],
         country: ['US'],
         // eslint-disable-next-line max-len
         activationCode: ['0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'],
@@ -226,10 +249,10 @@ const exprt = (on, config) => {
     async addNonActivatedAccount () {
       return (await addAccounts({
         name: ['Nicole'],
-        email: ['me@example.com'],
+        email: ['me@example.name'],
         user: ['nicky'],
         pass: ['bbb123456'],
-        country: ['JP'],
+        country: ['IR'],
         activated: [false]
       }))[0];
     },
@@ -269,6 +292,34 @@ const exprt = (on, config) => {
     getEmails,
 
     /**
+     * @returns {Promise<null>} Cypress does not work with `undefined`-resolving
+     * tasks; see {@link https://github.com/cypress-io/cypress/issues/6241}.
+     */
+    async deleteEmails () {
+      const messageNums = await connectAndGetMessages();
+
+      console.log('messageNums', messageNums);
+
+      try {
+        await Promise.all(
+          messageNums.map((messageNum) => {
+            /* const [retrInfo] = */
+            return popActivatedAccount.command('DELE', messageNum);
+          })
+        );
+
+        // We might not even want to wait here, but we do for now to
+        //  get the error.
+        /* const [quitInfo] = */ await popActivatedAccount.command(
+          'QUIT'
+        ); // No args
+      } catch (err) {
+        console.log(err);
+      }
+      return null;
+    },
+
+    /**
      * Shouldn't be needed on command line.
      * @param {PlainObject} cfg
      * @param {string} cfg.subject
@@ -279,8 +330,9 @@ const exprt = (on, config) => {
       const parsedMessages = await getEmails();
       const subjectIsNotString = typeof cfg.subject !== 'string';
       const htmlIsNotArray = !Array.isArray(cfg.html);
+      console.log('parsedMessages', parsedMessages.length, parsedMessages);
       return parsedMessages.some((msg) => {
-        const html = msg[1][0];
+        const html = msg[0][1] && msg[0][1][0];
         console.log(
           'cfg.subject', cfg.subject, '::', msg.header && msg.header.subject,
           cfg.subject === msg.header.subject
