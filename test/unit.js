@@ -456,7 +456,13 @@ describe('Unit tests', function () {
         await removeAccounts({all: true});
         // Todo: Note that this JSON file wouldn't work if we needed to
         //  test against a working (and private) email as we do for login tests
-        await addAccounts({userFile: ['test/fixtures/addUsers.json']});
+        await addAccounts({
+          user: ['brett'],
+          email: ['brettz9@example.name'],
+          pass: ['123456'],
+          activated: [true]
+        });
+        console.log('done before');
       });
       it('throws with bad password', function () {
         return expect(
