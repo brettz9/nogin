@@ -4,8 +4,11 @@
 import {join, resolve as pathResolve} from 'path';
 import {spawn} from 'child_process';
 
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
 import {
-  removeAccounts, addAccounts, readAccounts
+  removeAccounts, addAccounts, readAccounts, validUserPassword
 } from '../app/server/modules/db-basic.js';
 
 import AccountManager from '../app/server/modules/account-manager.js';
@@ -17,6 +20,9 @@ import setI18n from '../app/server/modules/i18n.js';
 import jmlEngine from '../app/server/modules/jmlEngine.js';
 
 import nodeLogin from '../node-login.js';
+
+// Add `rejectedWith`, etc.
+chai.use(chaiAsPromised);
 
 const {secret} = nodeLogin;
 
@@ -421,34 +427,45 @@ describe('Unit tests', function () {
 
   describe('Programmatic', function () {
     describe('addAccounts', function () {
-      it('add (erring due to missing pass)', async function () {
+      it('add (erring due to missing pass)', function () {
         this.timeout(40000);
-        try {
-          await addAccounts({user: ['testUser']});
-          throw new Error("Didn't err");
-        } catch (err) {
-          expect(err.message).to.equal(
-            'A `pass` argument must be provided with `user`; ' +
-                'for user "testUser" index 0'
-          );
-        }
+        return expect(
+          addAccounts({user: ['testUser']})
+        ).to.be.rejectedWith(
+          Error,
+          'A `pass` argument must be provided with `user`; ' +
+              'for user "testUser" index 0'
+        );
       });
 
       it('add (erring due to missing email)', async function () {
         this.timeout(40000);
-        try {
+        return expect(
           await addAccounts({
             user: ['testUser'],
             pass: ['123456'],
             email: []
-          });
-          throw new Error("Didn't err");
-        } catch (err) {
-          expect(err.message).to.equal(
-            'An `email` argument must be provided with `user`; ' +
-                'for user "testUser" index 0'
-          );
-        }
+          })
+        ).to.be.rejectedWith(
+          Error,
+          'An `email` argument must be provided with `user`; ' +
+              'for user "testUser" index 0'
+        );
+      });
+    });
+    describe('validUserPassword', function () {
+      it('throws with bad password', function () {
+        return expect(
+          validUserPassword({
+            user: 'bretto',
+            pass: null
+          })
+        ).to.be.rejectedWith(
+          Error,
+          // From Node
+          'The "password" argument must be one of type string, ' +
+            'Buffer, TypedArray, or DataView. Received type object'
+        );
       });
     });
     describe('AccountManager', function () {
@@ -456,15 +473,13 @@ describe('Unit tests', function () {
         'AccountManager with bad `adapter` (passed to ' +
           '`DBFactory.createInstance`)',
         function () {
-          try {
+          expect(() => {
             // eslint-disable-next-line no-new
             new AccountManager('badAdapter');
-            throw new Error("Didn't err");
-          } catch (err) {
-            expect(err.message).to.equal(
-              'Unrecognized database adapter "badAdapter"!'
-            );
-          }
+          }).to.throw(
+            Error,
+            'Unrecognized database adapter "badAdapter"!'
+          );
         }
       );
       it('AccountManager with no log', async function () {

@@ -4,8 +4,7 @@ module.exports = {
   parser: 'babel-eslint',
   extends: [
     'ash-nazg/sauron',
-    'plugin:node/recommended-script',
-    'plugin:cypress/recommended'
+    'plugin:node/recommended-script'
   ],
   env: {
     es6: true
@@ -19,6 +18,24 @@ module.exports = {
     SharedArrayBuffer: 'readonly'
   },
   overrides: [{
+    files: ['test/**'],
+    extends: [
+      'plugin:@fintechstudios/chai-as-promised/recommended'
+    ],
+    env: {
+      mocha: true
+    },
+    globals: {
+      expect: true
+    }
+  }, {
+    files: [
+      'cypress/**'
+    ],
+    extends: [
+      'plugin:cypress/recommended'
+    ]
+  }, {
     files: [
       'cypress/integration/**/*.js',
       'cypress/plugins/main.js',
