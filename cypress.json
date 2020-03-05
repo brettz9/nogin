@@ -8,5 +8,8 @@
   "reporterOptions": {
     "configFile": "mocha-multi-reporters.json"
   },
+  "env": {
+    "disableEmailChecking": false
+  },
   "video": false
 }

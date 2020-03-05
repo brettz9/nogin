@@ -5,6 +5,6 @@
     "node-login.js"
   ],
   "events": {
-    "restart": "echo \"Forcing Cypress to re-run after short-delay due to server file changes (note that we aren't monitoring `node_modules` currently; also note that Cypress won't restart, if its plugin or fixture files are changed: https://github.com/cypress-io/cypress/issues/6606 )\" && delay 9 && touch cypress/support/index.js"
+    "restart": "echo \"Get Cypress to re-run any open tests (after a short-delay) due to server file changes that may impact the test behavior (note that we aren't monitoring `node_modules` currently; also note that Cypress won't restart, if its plugin or fixture files are changed: https://github.com/cypress-io/cypress/issues/6606 )\" && delay 9 && echo \"DISABLING FOR NOW (email login seems to force reset?): touch cypress/support/index.js\""
   }
 }

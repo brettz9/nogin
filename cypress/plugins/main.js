@@ -50,8 +50,12 @@ const exprt = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 
-  // We get `secret` from `node-login.js` to avoid redundancy with
-  //  `cypress.json` (as node-login server needs the secret as well)
+  // We get `secret` and email config from `node-login.js` to avoid
+  //   redundancy with cypress.json` (as node-login server needs the
+  //   secret and login details as well). Users should not set these
+  //   as Cypress environmental variables, as they would not be used
+  //   here.
+
   // Should in theory make available to tests through `Cypress.env()`, but
   //  as per apparent bug referred to below, it seems we need our `hackEnv`
   //  task for now.
@@ -63,7 +67,9 @@ const exprt = (on, config) => {
     NL_EMAIL_PASS
   } = nodeLoginConfig;
 
-  // Todo: Document these `env` vars in our README/docs (secret, env, coverage)
+  // Todo: Document these `env` vars in our README/docs (env,
+  //          coverage, disableEmailChecking; and distinguish from `secret`
+  //          and NL_EMAIL_HOST, NL_EMAIL_USER, and NL_EMAIL_PASS)
   // See https://docs.cypress.io/guides/guides/environment-variables.html#Setting
   config.env = config.env || {};
 
@@ -114,17 +120,23 @@ const exprt = (on, config) => {
 
   /**
    * Probably only needed in testing, not from command line.
-   * @returns {EnvelopeMessage[]}
+   * @returns {Promise<EnvelopeMessage[]>}
    */
   async function getEmails () {
     const messageNums = await connectAndGetMessages();
 
     const parsedMessages = await Promise.all(
       messageNums.map(async (messageNum) => {
+        // Todo: Seems to be a problem with messages not getting deleted,
+        //  so remove that status.
+        await popActivatedAccount.command('RSET', messageNum);
         const [
           /* retrInfo */, retrStream
         ] = await popActivatedAccount.command('RETR', messageNum);
         const retrStreamString = await getStream(retrStream);
+
+        // Tried deleting even here and it is not enough
+        // await popActivatedAccount.command('DELE', messageNum);
         return new Envelope(retrStreamString);
       })
     );
@@ -285,34 +297,50 @@ const exprt = (on, config) => {
     * @see https://github.com/jhermsmeier/node-envelope#user-content-parsing-an-email
     */
 
+    // Todo: These email methods should be movable into a Cypress plugin.
+
     /**
      * Probably only needed in testing, not from command line.
-     * @returns {EnvelopeMessage[]}
+     * @returns {Promise<EnvelopeMessage[]|null>}
      */
-    getEmails,
+    getEmails () {
+      if (config.env.disableEmailChecking) {
+        return Promise.resolve(null);
+      }
+      return getEmails();
+    },
 
     /**
      * @returns {Promise<null>} Cypress does not work with `undefined`-resolving
      * tasks; see {@link https://github.com/cypress-io/cypress/issues/6241}.
      */
     async deleteEmails () {
+      if (config.env.disableEmailChecking) {
+        return null;
+      }
       const messageNums = await connectAndGetMessages();
 
       console.log('messageNums', messageNums);
 
       try {
         await Promise.all(
-          messageNums.map((messageNum) => {
-            /* const [retrInfo] = */
+          messageNums.map(async (messageNum) => {
+            // Seems to keep thinking messages are deleted, so reset
+            //  first.
+            await popActivatedAccount.command('RSET', messageNum);
             return popActivatedAccount.command('DELE', messageNum);
           })
         );
+        console.log('Finished delete commands...');
 
-        // We might not even want to wait here, but we do for now to
-        //  get the error.
+        // Todo: Can't seem to get this without getting a message about
+
+        // We should probably wait here as we do since the messages
+        //  are only to be deleted after exiting.
         /* const [quitInfo] = */ await popActivatedAccount.command(
           'QUIT'
         ); // No args
+        console.log('Successfully quit after deletion.');
       } catch (err) {
         console.log(err);
       }
@@ -327,6 +355,11 @@ const exprt = (on, config) => {
      * @returns {Promise<boolean>}
      */
     async hasEmail (cfg) {
+      if (config.env.disableEmailChecking) {
+        // Easier to do this than require the client code to check an
+        //  env. variable
+        return true;
+      }
       const parsedMessages = await getEmails();
       const subjectIsNotString = typeof cfg.subject !== 'string';
       const htmlIsNotArray = !Array.isArray(cfg.html);
