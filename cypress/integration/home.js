@@ -74,8 +74,7 @@ describe('Home', function () {
         timeout: 10000
       }).contains('Control Panel');
 
-      // Todo[>=1.7.0]: Check good and bad update and logout (latter
-      //  needs server stub)
+      // Todo[>=1.7.0]: Check good and bad update
 
       // Home after login has no detectable a11y violations on load
       // https://www.npmjs.com/package/cypress-axe

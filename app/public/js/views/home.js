@@ -112,13 +112,16 @@ window.HomeView = {
 
   /**
    * @param {PlainObject} cfg
-   * @param {string} cfg.message
+   * @param {string} [cfg.message]
+   * @param {"ErrorLoggingOut"} [cfg.type]
    * @returns {external:jQuery} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type, message}) {
     return AlertDialog.populate({
       heading: _('error'),
-      body: message,
+      body: message || _(type, {
+        lb: $('<br/>')[0]
+      }),
       keyboard: false,
       backdrop: 'static'
     });

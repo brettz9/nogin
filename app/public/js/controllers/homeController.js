@@ -43,7 +43,7 @@ logoutButton.click(async () => {
         err.statusText ||
         ''
     }));
-    showLockedErrorAlert({type: 'ErrorLoggingOut', redirect: false});
+    showLockedErrorAlert({type: 'ErrorLoggingOut'});
   }
 });
 
@@ -177,19 +177,17 @@ function showLockedAlert ({type}) {
 
 /**
  * @param {PlainObject} cfg
+ * @param {"ErrorLoggingOut"} cfg.type
  * @param {string} cfg.message
- * @param {boolean} [cfg.redirect=true]
  * @returns {void}
 */
-function showLockedErrorAlert ({message, redirect = true}) {
-  const lockedAlertDialog = HomeView.onShowLockedErrorAlert({message});
+function showLockedErrorAlert ({type, message}) {
+  const lockedAlertDialog = HomeView.onShowLockedErrorAlert({type, message});
   lockedAlertDialog.modal('show');
-  if (redirect) {
-    const redirectToRoot = () => {
-      location.href = '/';
-    };
-    HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
-    setTimeout(redirectToRoot, 3000);
-  }
+  const redirectToRoot = () => {
+    location.href = '/';
+  };
+  HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
+  setTimeout(redirectToRoot, 3000);
 }
 })();
