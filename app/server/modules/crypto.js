@@ -7,57 +7,61 @@ const crypto = require('crypto');
   private encryption & validation methods
 */
 
-const saltAndHash = function (data) {
+/**
+ * @param {string} data
+ * @param {string} salt
+ * @returns {Promise<string>}
+ */
+function pbkdf2Prom (data, salt) {
   const hasher = 'sha256';
   const iterations = 10000;
   const hashLength = 32;
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    crypto.pbkdf2(
+      data, salt, iterations, hashLength, hasher,
+      function (error, derivedKey) {
+        if (error) {
+          reject(error);
+          return;
+        }
+        const hash = derivedKey.toString('hex');
+        resolve([salt, hash].join('$'));
+      }
+    );
+  });
+}
+
+const saltAndHash = function (data) {
   const saltBytes = 16;
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line promise/prefer-await-to-callbacks
-    crypto.randomBytes(saltBytes, function (err, buf) {
+    crypto.randomBytes(saltBytes, async function (err, buf) {
       // istanbul ignore if
       if (err) {
         reject(err);
         return;
       }
       const salt = buf.toString('hex');
-      crypto.pbkdf2(
-        data, salt, iterations, hashLength, hasher,
-        function (error, derivedKey) {
-          if (error) {
-            reject(error);
-            return;
-          }
-          const hash = derivedKey.toString('hex');
-          resolve([salt, hash].join('$'));
-        }
-      );
+      try {
+        resolve(await pbkdf2Prom(data, salt));
+      } catch (error) {
+        reject(error);
+      }
     });
   });
 };
 
-const validatePasswordV1 = function (plainPass, hashedPass) {
-  const hasher = 'sha256';
-  const iterations = 10000;
-  const hashLength = 32;
+/**
+ * @param {string} plainPass
+ * @param {string} hashedPass
+ * @returns {Promise<boolean>}
+ */
+const validatePasswordV1 = async function (plainPass, hashedPass) {
   const salt = hashedPass.split('$')[0];
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    crypto.pbkdf2(
-      plainPass, salt, iterations, hashLength, hasher,
-      // eslint-disable-next-line promise/prefer-await-to-callbacks
-      function (err, derivedKey) {
-        if (err) {
-          reject(new Error('invalid-password'));
-          return;
-        }
-        const plainPassHash = derivedKey.toString('hex');
-        const validHash = [salt, plainPassHash].join('$');
-        resolve(hashedPass === validHash);
-      }
-    );
-  });
+  const validHash = await pbkdf2Prom(plainPass, salt);
+  return hashedPass === validHash;
 };
 
 exports.saltAndHash = saltAndHash;
