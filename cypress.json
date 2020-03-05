@@ -9,7 +9,7 @@
     "configFile": "mocha-multi-reporters.json"
   },
   "env": {
-    "disableEmailChecking": false
+    "disableEmailChecking": true
   },
   "video": false
 }
