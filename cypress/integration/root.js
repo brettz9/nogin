@@ -110,7 +110,7 @@ describe('Root (Login)', function () {
       cy.get('[data-name=alert]').contains(
         'A link to reset your password was emailed to you',
         {
-          timeout: 20000
+          timeout: 30000
         }
       );
       // We don't know exactly how long until the email will be delivered
