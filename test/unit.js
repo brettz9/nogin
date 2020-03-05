@@ -134,6 +134,25 @@ describe('Unit tests', function () {
       expect(stripPromisesWarning(stderr)).to.equal('');
     });
 
+    it(
+      'null config but with a bad `adapter` ' +
+        '(passed on to `DBFactory.getURL`)',
+      async function () {
+        this.timeout(20000);
+        const {stdout, stderr} = await spawnPromise(cliPath, [
+          '--adapter', 'badAdapter',
+          '--localScripts',
+          '--secret', secret,
+          '--PORT', testPort,
+          '--config', ''
+        ], 10000);
+        expect(stripPromisesWarning(stderr)).to.contain(
+          'Unrecognized database adapter "badAdapter"!'
+        );
+        expect(stripMongoMessages(stdout)).to.equal('');
+      }
+    );
+
     it('Missing environment components', async function () {
       this.timeout(20000);
       const {stdout, stderr} = await spawnPromise(cliPath, {
@@ -314,24 +333,6 @@ describe('Unit tests', function () {
         );
         expect(stripMongoMessages(stdout)).to.equal('');
       });
-
-      it(
-        'add (erring due to bad `adapter` passed to `DBFactory.getURL`)',
-        async function () {
-          this.timeout(40000);
-          const {stdout, stderr} = await spawnPromise(cliPath, [
-            'add',
-            '--userFile',
-            'test/fixtures/addUsers.json',
-            '--adapter',
-            'badAdapter'
-          ]);
-          expect(stripPromisesWarning(stderr)).to.contain(
-            'Unrecognized database adapter "badAdapter"!'
-          );
-          expect(stripMongoMessages(stdout)).to.equal('');
-        }
-      );
     });
 
     describe('Read, update, delete existing', function () {
@@ -454,27 +455,10 @@ describe('Unit tests', function () {
       it(
         'AccountManager with bad `adapter` (passed to ' +
           '`DBFactory.createInstance`)',
-        async function () {
-          this.timeout(40000);
-
+        function () {
           try {
-            const _ = await setI18n({
-              acceptsLanguages: () => 'en-US'
-            });
             // eslint-disable-next-line no-new
-            new AccountManager('mongodb', {
-              DB_URL: DBFactory.getURL(
-                'mongodb',
-                false,
-                {
-                  DB_HOST: 'localhost',
-                  DB_PORT: 27017,
-                  DB_NAME: 'node-login'
-                }
-              ),
-              DB_NAME: 'node_login',
-              _
-            });
+            new AccountManager('badAdapter');
             throw new Error("Didn't err");
           } catch (err) {
             expect(err.message).to.equal(
