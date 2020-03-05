@@ -11,44 +11,25 @@ describe('Home', function () {
       }).should('eq', '/');
     }
   );
-  it('Visit Home after login', function () {
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      // NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      cy.task('deleteAllAccounts');
-      cy.task('addAccount');
-      // Not just login, but get session, so will be shown `/home`
-      //   without redirect upon visit
-      // eslint-disable-next-line promise/no-nesting
-      return cy.request({
-        url: '/',
-        method: 'POST',
-        body: {
-          user: 'bretto',
-          pass: NL_EMAIL_PASS
-        }
-      // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line promise/prefer-await-to-then
-      }).then(() => {
-        cy.visit('/home');
+  describe('Pre-logging in with session', function () {
+    beforeEach(() => {
+      cy.loginWithSession();
+    });
+    it('Visit Home after login', function () {
+      cy.visit('/home');
 
-        const expressSessionID = 'connect.sid';
-        cy.getCookie(expressSessionID).should('exist');
+      const expressSessionID = 'connect.sid';
+      cy.getCookie(expressSessionID).should('exist');
 
-        return cy.get('[data-name="navbar-brand"]', {
-          timeout: 10000
-        }).contains('Control Panel');
+      cy.get('[data-name="navbar-brand"]', {
+        timeout: 10000
+      }).contains('Control Panel');
 
-        // Todo[>=1.7.0]: Check good and bad delete and update
+      // Todo[>=1.7.0]: Check good and bad delete and update
 
-      // eslint-disable-next-line promise/prefer-await-to-then
-      }).then(() => {
-        // Home after login has no detectable a11y violations on load
-        return cy.visitURLAndCheckAccessibility('/home');
-      });
+      // Home after login has no detectable a11y violations on load
+      // https://www.npmjs.com/package/cypress-axe
+      return cy.visitURLAndCheckAccessibility('/home');
     });
   });
-  // https://www.npmjs.com/package/cypress-axe
 });
