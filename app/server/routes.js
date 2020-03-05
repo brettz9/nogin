@@ -64,7 +64,8 @@ module.exports = async function (app, config) {
     injectHTML,
     localScripts,
     fromText,
-    fromURL
+    fromURL,
+    triggerCoverage
   } = config;
 
   const countryCodes = config.countryCodes
@@ -152,7 +153,7 @@ module.exports = async function (app, config) {
           // Though should be trusted anyways, do not let template
           //   arguments override.
           ...templateArgs,
-          SERVE_COVERAGE,
+          triggerCoverage,
           favicon,
           stylesheet,
           noBuiltinStylesheets,

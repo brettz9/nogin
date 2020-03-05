@@ -1,5 +1,5 @@
 // Add an empty file here to get added to `instrumented` directory and
-//  so that found in `layout.js` when `SERVE_COVERAGE` is set and
+//  so that found in `layout.js` when `JS_DIR` is set to `instrumented` and
 //  `__coverage__` gets set for those pages which
 //  otherwise wouldn't get an instrumented script file,
 //  e.g., 404 and users

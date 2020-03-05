@@ -188,7 +188,9 @@ exports.createServer = async function (options) {
     localScripts,
     countryCodes,
     fromText,
-    fromURL
+    fromURL,
+    // User is using instrumenting
+    triggerCoverage: JS_DIR !== '/app/public'
   });
 
   if (router) {

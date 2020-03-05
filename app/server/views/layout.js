@@ -5,7 +5,7 @@ module.exports = ({
   _, content, scripts, title, localScripts,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   error,
-  SERVE_COVERAGE
+  triggerCoverage
 }, injectedHTML) => {
   return [{$document: {
     $DOCTYPE: {name: 'html'},
@@ -100,7 +100,7 @@ module.exports = ({
       ['script', {
         src: '/lang'
       }],
-      SERVE_COVERAGE && !scripts
+      triggerCoverage && !scripts
         // Need this to set `__coverage__` for those pages which
         //  otherwise wouldn't get an instrumented script file,
         //  e.g., 404 and users
