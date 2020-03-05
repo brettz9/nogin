@@ -1,4 +1,4 @@
-/* globals _, AccountValidator, ajaxFormClientSideValidate, HomeView */
+/* globals $, _, AccountValidator, ajaxFormClientSideValidate, HomeView */
 'use strict';
 
 (() => {
@@ -100,39 +100,63 @@ function onUpdateSuccess () {
 }
 
 /**
- * @param {Response} resp
- * @throws {Error}
+ * @param {string} url
  * @returns {Promise<void>}
  */
-async function checkErrors (resp) {
-  if (!resp.ok) {
-    const err = new Error();
-    err.text = await resp.text();
-    err.responseText = resp.statusText;
-    throw err;
+function post (url) {
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    $.ajax(url, {type: 'post'}).done(resolve).fail(
+      (jqXHR /* , textStatus, errorThrown */) => {
+        const err = new Error();
+        err.text = jqXHR.responseText;
+        err.responseText = jqXHR.statusText;
+        reject(err);
+      }
+    );
+  });
+  // Reenable after these related issues are fixed:
+  // https://github.com/cypress-io/cypress/issues/95
+  // https://github.com/cypress-io/cypress/issues/687
+  /*
+  const resp = await fetch(url, {
+    method: 'POST'
+  });
+  await checkErrors(resp);
+  */
+  /**
+   * @param {Response} resp
+   * @throws {Error}
+   * @returns {Promise<void>}
+   */
+  /*
+  async function checkErrors (resp) {
+    if (!resp.ok) {
+      const err = new Error();
+      err.text = await resp.text();
+      err.responseText = resp.statusText;
+      throw err;
+    }
   }
+  */
 }
 
 /**
+ * @throws {Error}
  * @returns {Promise<void>}
  */
 async function deleteAccount () {
   deleteAccountConfirmDialog.modal('hide');
-  const resp = await fetch('/delete', {
-    method: 'POST'
-  });
-  await checkErrors(resp);
+  await post('/delete');
   showLockedAlert({type: 'accountDeleted'});
 }
 
 /**
+ * @throws {Error}
  * @returns {Promise<void>}
  */
 async function attemptLogout () {
-  const resp = await fetch('/logout', {
-    method: 'POST'
-  });
-  await checkErrors(resp);
+  await post('/logout');
   showLockedAlert({type: 'loggedOut'});
 }
 
