@@ -54,6 +54,10 @@ describe('Home', function () {
         '[data-name=modal-alert] [data-name=modal-body] p'
       ).contains('Record not found');
 
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/');
+
       // User not deleted here, just not able to delete account when
       //  session was destroyed
       // eslint-disable-next-line promise/prefer-await-to-then
@@ -90,13 +94,41 @@ describe('Home', function () {
 
       cy.getCookie('login').should('not.exist');
 
-      /*
-      // Could check this in full UI mode to ensure session is dropped;
-      //  will be a session ID.
-      cy.visit('/home');
+      //  Can't check that session is dropped by checking `expressSessionID`
+      //  (`"connect.sid"`) as it does not get seem to get reset. However,
+      //  it does seem to get dropped after server visit and can check this
+      //  (where we're expected to be redirected).
       cy.location('pathname', {
         timeout: 10000
       }).should('eq', '/');
+    });
+
+    it('Should show error upon bad log out', function () {
+      cy.getCookie('login').should('exist');
+      cy.getCookie(expressSessionID).should('exist');
+
+      cy.server();
+      cy.route({
+        status: 500,
+        url: '/logout',
+        method: 'POST',
+        response: 'oops'
+      });
+
+      cy.get('[data-name="btn-logout"]').click();
+
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).contains('There was a problem logging out');
+
+      cy.getCookie('login').should('exist');
+
+      /*
+      // Could check this in full UI mode to ensure session is not dropped.
+      cy.visit('/home');
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/home');
       */
     });
   });

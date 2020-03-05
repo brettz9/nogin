@@ -200,11 +200,17 @@
     "success": {
       "message": "Success!"
     },
+    "error": {
+      "message": "Error"
+    },
     "loggedOut": {
-      "message": "You are now logged out.{lb}Redirecting you back to the homepage."
+      "message": "You are now logged out.{lb}Redirecting you to the site root."
+    },
+    "ErrorLoggingOut": {
+      "message": "There was a problem logging out.{lb}Redirecting you to the site root."
     },
     "accountDeleted": {
-      "message": "Your account has been deleted.{lb}Redirecting you back to the homepage."
+      "message": "Your account has been deleted.{lb}Redirecting you to the site root."
     },
     "deleteAccount": {
       "message": "Delete Account"

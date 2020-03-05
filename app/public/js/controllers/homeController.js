@@ -16,8 +16,16 @@ HomeView.getDeleteAccountSubmit(deleteAccountConfirmDialog).click(async () => {
   try {
     await deleteAccount();
   } catch (err) {
-    // Already internationalized by server
-    showLockedAlert({message: err.text});
+    // Log just in case not internationalized
+    console.error(_('ErrorFormat', {
+      text: err.text,
+      statusText:
+        // istanbul ignore next
+        err.statusText ||
+        ''
+    }));
+    // However, should already be internationalized by server
+    showLockedErrorAlert({message: err.text});
   }
 });
 
@@ -27,13 +35,15 @@ logoutButton.click(async () => {
   try {
     await attemptLogout();
   } catch (err) {
-    console.log('err.text', err.text);
-    console.log('err.statusText', err.statusText);
-
-    showLockedAlert({message: _('ErrorFormat', {
-      text: err.text || '',
-      statusText: err.statusText || ''
-    })});
+    // Log in case actual error not internationalized
+    console.error(_('ErrorFormat', {
+      text: err.text,
+      statusText:
+        // istanbul ignore next
+        err.statusText ||
+        ''
+    }));
+    showLockedErrorAlert({type: 'ErrorLoggingOut', redirect: false});
   }
 });
 
@@ -129,16 +139,33 @@ async function attemptLogout () {
 /**
  * @param {PlainObject} cfg
  * @param {"accountDeleted"|"loggedOut"} cfg.type
- * @param {string} cfg.message
  * @returns {void}
  */
-function showLockedAlert ({type, message}) {
-  const lockedAlertDialog = HomeView.onShowLockedAlert({type, message});
+function showLockedAlert ({type}) {
+  const lockedAlertDialog = HomeView.onShowLockedAlert({type});
   lockedAlertDialog.modal('show');
   const redirectToRoot = () => {
     location.href = '/';
   };
   HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
   setTimeout(redirectToRoot, 3000);
+}
+
+/**
+ * @param {PlainObject} cfg
+ * @param {string} cfg.message
+ * @param {boolean} [cfg.redirect=true]
+ * @returns {void}
+*/
+function showLockedErrorAlert ({message, redirect = true}) {
+  const lockedAlertDialog = HomeView.onShowLockedErrorAlert({message});
+  lockedAlertDialog.modal('show');
+  if (redirect) {
+    const redirectToRoot = () => {
+      location.href = '/';
+    };
+    HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
+    setTimeout(redirectToRoot, 3000);
+  }
 }
 })();

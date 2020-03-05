@@ -97,15 +97,28 @@ window.HomeView = {
   /**
    * @param {PlainObject} cfg
    * @param {"accountDeleted"|"loggedOut"} cfg.type
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  onShowLockedAlert ({type}) {
+    return AlertDialog.populate({
+      heading: _('success'),
+      body: _(type, {
+        lb: $('<br/>')[0]
+      }),
+      keyboard: false,
+      backdrop: 'static'
+    });
+  },
+
+  /**
+   * @param {PlainObject} cfg
    * @param {string} cfg.message
    * @returns {external:jQuery} `HTMLDivElement`
    */
-  onShowLockedAlert ({type, message}) {
+  onShowLockedErrorAlert ({type, message}) {
     return AlertDialog.populate({
-      heading: _('success'),
-      body: message || _(type, {
-        lb: $('<br/>')[0]
-      }),
+      heading: _('error'),
+      body: message,
       keyboard: false,
       backdrop: 'static'
     });
