@@ -85,7 +85,7 @@ const spawnPromise = (path, opts, args, killDelay = 10000) => {
         stderr
       });
     });
-    // Todo: We should really only signal this when we know the server
+    // Todo: We should really just signal this when we know the server
     //  is running
     setTimeout(() => {
       cli.kill();
@@ -428,36 +428,40 @@ describe('Unit tests', function () {
   describe('Programmatic', function () {
     describe('addAccounts', function () {
       it('add (erring due to missing pass)', function () {
-        this.timeout(40000);
         return expect(
           addAccounts({user: ['testUser']})
         ).to.be.rejectedWith(
-          Error,
+          TypeError,
           'A `pass` argument must be provided with `user`; ' +
               'for user "testUser" index 0'
         );
       });
 
-      it('add (erring due to missing email)', async function () {
-        this.timeout(40000);
+      it('add (erring due to missing email)', function () {
         return expect(
-          await addAccounts({
+          addAccounts({
             user: ['testUser'],
             pass: ['123456'],
             email: []
           })
         ).to.be.rejectedWith(
-          Error,
+          TypeError,
           'An `email` argument must be provided with `user`; ' +
               'for user "testUser" index 0'
         );
       });
     });
     describe('validUserPassword', function () {
+      beforeEach(async () => {
+        await removeAccounts({all: true});
+        // Todo: Note that this JSON file wouldn't work if we needed to
+        //  test against a working (and private) email as we do for login tests
+        await addAccounts({userFile: ['test/fixtures/addUsers.json']});
+      });
       it('throws with bad password', function () {
         return expect(
           validUserPassword({
-            user: 'bretto',
+            user: 'brett',
             pass: null
           })
         ).to.be.rejectedWith(
