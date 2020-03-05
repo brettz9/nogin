@@ -102,7 +102,7 @@ function onUpdateSuccess () {
 /**
  * @param {Response} resp
  * @throws {Error}
- * @returns {void}
+ * @returns {Promise<void>}
  */
 async function checkErrors (resp) {
   if (!resp.ok) {
@@ -114,7 +114,7 @@ async function checkErrors (resp) {
 }
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
 async function deleteAccount () {
   deleteAccountConfirmDialog.modal('hide');
@@ -126,7 +126,7 @@ async function deleteAccount () {
 }
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
 async function attemptLogout () {
   const resp = await fetch('/logout', {

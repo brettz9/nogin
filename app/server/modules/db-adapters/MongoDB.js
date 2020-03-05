@@ -37,7 +37,7 @@ class MongoDB extends DBAbstraction {
   }
 
   /**
-   * @returns {ConnectionObject} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html}.
+   * @returns {Promise<ConnectionObject>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html}.
    */
   async connect () {
     const {DB_NAME, DB_URL} = this.config;
@@ -55,7 +55,7 @@ class MongoDB extends DBAbstraction {
   }
 
   /**
-   * @returns {CollectionObject} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+   * @returns {Promise<CollectionObject>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
    */
   async getAccounts () {
     const {DB_NAME, log} = this.config;
