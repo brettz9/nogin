@@ -16,10 +16,11 @@ HomeView.getDeleteAccountSubmit(deleteAccountConfirmDialog).click(async () => {
   try {
     await deleteAccount();
   } catch (err) {
-    console.error(_('ErrorFormat', {
-      text: err.text,
-      statusText: err.statusText
-    }));
+    console.log('err.text', err.text);
+    console.log('err.statusText', err.statusText);
+
+    // Already internationalized by server
+    showLockedAlert({message: err.text});
   }
 });
 
@@ -29,10 +30,10 @@ logoutButton.click(async () => {
   try {
     await attemptLogout();
   } catch (err) {
-    console.error(_('ErrorFormat', {
-      text: err.text,
-      statusText: err.statusText
-    }));
+    showLockedAlert({message: _('ErrorFormat', {
+      text: err.text || '',
+      statusText: err.statusText || ''
+    })});
   }
 });
 
@@ -111,7 +112,7 @@ async function deleteAccount () {
     method: 'POST'
   });
   await checkErrors(resp);
-  showLockedAlert('accountDeleted');
+  showLockedAlert({type: 'accountDeleted'});
 }
 
 /**
@@ -122,15 +123,17 @@ async function attemptLogout () {
     method: 'POST'
   });
   await checkErrors(resp);
-  showLockedAlert('loggedOut');
+  showLockedAlert({type: 'loggedOut'});
 }
 
 /**
- * @param {"accountDeleted"|"loggedOut"} type
+ * @param {PlainObject} cfg
+ * @param {"accountDeleted"|"loggedOut"} cfg.type
+ * @param {string} cfg.message
  * @returns {void}
  */
-function showLockedAlert (type) {
-  const lockedAlertDialog = HomeView.onShowLockedAlert(type);
+function showLockedAlert ({type, message}) {
+  const lockedAlertDialog = HomeView.onShowLockedAlert({type, message});
   lockedAlertDialog.modal('show');
   const redirectToRoot = () => {
     location.href = '/';

@@ -95,13 +95,15 @@ window.HomeView = {
     });
   },
   /**
-   * @param {"accountDeleted"|"loggedOut"} type
+   * @param {PlainObject} cfg
+   * @param {"accountDeleted"|"loggedOut"} cfg.type
+   * @param {string} cfg.message
    * @returns {external:jQuery} `HTMLDivElement`
    */
-  onShowLockedAlert (type) {
+  onShowLockedAlert ({type, message}) {
     return AlertDialog.populate({
       heading: _('success'),
-      body: _(type, {
+      body: message || _(type, {
         lb: $('<br/>')[0]
       }),
       keyboard: false,
