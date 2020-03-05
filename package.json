@@ -83,7 +83,9 @@
     "cypress:run-args": "npm run cypress:run-remove && cypress run",
     "cypress:run-remove": "run-p -r cypress:remove-mochaawesome cypress:remove-nyc-output",
     "cypress:run": "run-s -c cypress:run-remove unit-and-cypress-run cypress:merge",
+    "cypress:run-no-unit": "run-s -c cypress:run-remove cypress:run-only cypress:merge",
     "delay": "delay 9",
+    "cypress:delayed-run-no-unit": "run-s -c delay cypress:run-no-unit",
     "cypress:delayed-run": "run-s -c delay cypress:run",
     "start-open": "run-p -r start cypress:delayed-open",
     "start-open-cov": "run-p -r start-cov cypress:delayed-open-cov",
@@ -99,11 +101,12 @@
     "report-summary-mocha-full": "run-s report-text-summary mochawesome-cli",
     "report-summary": "run-s report-text-summary mochawesome-cli-dot",
     "test-cov-prereport": "run-p -r start-cov cypress:delayed-run",
+    "test-cov-prereport-no-unit": "run-p -r start-cov cypress:delayed-run-no-unit",
     "clean-and-instrument": "run-p -r cypress:remove-nyc-output instrument",
     "coverage-badge": "coveradge readme_includes/coverage-badge.svg",
     "test-badge": "mbg --file ./mochawesome.json --badge_output readme_includes/tests-badge.svg",
     "test-cov": "run-s clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
-    "test-cov-open": "run-s -c clean-and-instrument test-cov-prereport",
+    "test-cov-no-unit": "run-s clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full coverage-badge test-badge",
     "test": "run-p -r start cypress:delayed-run"
   },
   "engines": {
