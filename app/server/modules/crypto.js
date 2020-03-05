@@ -16,6 +16,7 @@ const saltAndHash = function (data) {
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line promise/prefer-await-to-callbacks
     crypto.randomBytes(saltBytes, function (err, buf) {
+      // istanbul ignore if
       if (err) {
         reject(err);
         return;

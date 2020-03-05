@@ -44,7 +44,7 @@ class DBFactory {
     case 'mongodb':
       return MongoDB.getURL(prod, dbConfig);
     default:
-      throw new Error(`Unrecognized database adapter ${adapter}!`);
+      throw new Error(`Unrecognized database adapter "${adapter}"!`);
     }
   }
   /**
@@ -57,7 +57,7 @@ class DBFactory {
     case 'mongodb':
       return new MongoDB(config);
     default:
-      throw new Error('Unrecognized database adapter!');
+      throw new Error(`Unrecognized database adapter "${adapter}"!`);
     }
   }
 }
