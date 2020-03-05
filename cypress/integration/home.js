@@ -16,9 +16,9 @@ describe('Home', function () {
   describe('Pre-logging in with session', function () {
     beforeEach(() => {
       cy.loginWithSession();
+      cy.visit('/home');
     });
     it('Delete account', function () {
-      cy.visit('/home');
       cy.get('[data-name="account-form"] .btn-danger').click();
       cy.get('[data-name="modal-body"]').contains(
         'Are you sure you want to delete your account?'
@@ -40,8 +40,6 @@ describe('Home', function () {
       });
     });
     it('Problem with deleting (already-logged out) account', function () {
-      cy.visit('/home');
-
       // E.g., if user cleared their cookies
       cy.clearCookie('login');
       cy.clearCookie(expressSessionID);
@@ -66,8 +64,6 @@ describe('Home', function () {
       });
     });
     it('Visit Home again', function () {
-      cy.visit('/home');
-
       cy.getCookie(expressSessionID).should('exist');
 
       cy.get('[data-name="navbar-brand"]', {
@@ -80,6 +76,28 @@ describe('Home', function () {
       // Home after login has no detectable a11y violations on load
       // https://www.npmjs.com/package/cypress-axe
       return cy.visitURLAndCheckAccessibility('/home');
+    });
+
+    it('Should log out', function () {
+      cy.getCookie('login').should('exist');
+      cy.getCookie(expressSessionID).should('exist');
+
+      cy.get('[data-name="btn-logout"]').click();
+
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).contains('You are now logged out.');
+
+      cy.getCookie('login').should('not.exist');
+
+      /*
+      // Could check this in full UI mode to ensure session is dropped;
+      //  will be a session ID.
+      cy.visit('/home');
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/');
+      */
     });
   });
 });

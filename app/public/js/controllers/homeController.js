@@ -16,9 +16,6 @@ HomeView.getDeleteAccountSubmit(deleteAccountConfirmDialog).click(async () => {
   try {
     await deleteAccount();
   } catch (err) {
-    console.log('err.text', err.text);
-    console.log('err.statusText', err.statusText);
-
     // Already internationalized by server
     showLockedAlert({message: err.text});
   }
@@ -30,6 +27,9 @@ logoutButton.click(async () => {
   try {
     await attemptLogout();
   } catch (err) {
+    console.log('err.text', err.text);
+    console.log('err.statusText', err.statusText);
+
     showLockedAlert({message: _('ErrorFormat', {
       text: err.text || '',
       statusText: err.statusText || ''
