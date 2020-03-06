@@ -157,6 +157,10 @@ Questions and suggestions for improvement are welcome.
 
 ## Lower priorities
 
+1. Figure out why opt-in email tests (`'cypress.env.disableEmailChecking': false`)
+    has problems with POP3 `DELE` (with `QUIT`). Is it the library, my
+    server or something else? (Email tests are all passing, just not properly
+    deleting). See <https://tools.ietf.org/html/rfc1939>
 1. Switch from `jsdom` to **`dominum`** (once latter may be capable), as latter
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
