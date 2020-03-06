@@ -51,7 +51,9 @@ window.AccountValidator = class AccountValidator {
   validateForm () {
     const {name, email, user, pass, passConfirm} = this.formFields;
     Object.values(this.formFields).forEach((field) => {
-      field.setCustomValidity('');
+      if (field) {
+        field.setCustomValidity('');
+      }
     });
     if (name.validity.tooShort) {
       name.setCustomValidity(this.errorMessages.name.PleaseEnterName);
