@@ -207,7 +207,7 @@
     "license-badger": "^0.11.1",
     "lint-staged": "^10.0.8",
     "mocha": "^7.1.0",
-    "mocha-badge-generator": "git+https://github.com/brettz9/mocha-badge-generator.git#makeBadge",
+    "mocha-badge-generator": "^0.5.0",
     "mochawesome": "^5.0.0",
     "mochawesome-merge": "^4.0.2",
     "mochawesome-report-generator": "^4.1.0",
