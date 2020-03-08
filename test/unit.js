@@ -2,7 +2,6 @@
 //   reachable via UI; have server-side do too?;
 
 import {join, resolve as pathResolve} from 'path';
-import {spawn} from 'child_process';
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -20,6 +19,8 @@ import setI18n from '../app/server/modules/i18n.js';
 import jmlEngine from '../app/server/modules/jmlEngine.js';
 
 import nodeLogin from '../node-login.js';
+
+import spawnPromise from './spawnPromise.js';
 
 // Add `rejectedWith`, etc.
 chai.use(chaiAsPromised);
@@ -44,54 +45,6 @@ const stripMongoMessages = (s) => {
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = 1234;
-
-/**
- * @param {string} path
- * @param {PlainObject|string[]} opts
- * @param {string[]} args
- * @param {Integer} [killDelay=10000]
- * @returns {Promise<SpawnResults>}
- */
-const spawnPromise = (path, opts, args, killDelay = 10000) => {
-  if (Array.isArray(opts)) {
-    killDelay = args || killDelay;
-    args = opts;
-    opts = undefined;
-  }
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    let stderr = '', stdout = '';
-    const cli = spawn(
-      cliPath,
-      args,
-      opts
-    );
-    cli.stdout.on('data', (data) => {
-      stdout += data;
-    });
-
-    cli.stderr.on('data', (data) => {
-      stderr += data;
-    });
-
-    cli.on('error', (data) => {
-      const err = new Error(data);
-      reject(err);
-    });
-
-    cli.on('close', (code) => {
-      resolve({
-        stdout,
-        stderr
-      });
-    });
-    // Todo: We should really just signal this when we know the server
-    //  is running
-    setTimeout(() => {
-      cli.kill();
-    }, killDelay);
-  });
-};
 
 describe('Unit tests', function () {
   describe('CLI', function () {
