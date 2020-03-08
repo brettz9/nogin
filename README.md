@@ -114,6 +114,7 @@ Questions and suggestions for improvement are welcome.
             (first) deletion
         1. Get validation to reset on change or input events
         1. Spot check that all dialogs are fully visible
+    1. Make distinct badges for local results of each of testable browsers
 1. Update **docs** above
 
 1. Allow convenience for easier **customization of route after login**
