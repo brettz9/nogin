@@ -142,7 +142,7 @@
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "chai-as-promised": "^7.1.1",
-    "command-line-basics": "^0.7.0",
+    "command-line-basics": "^0.8.0",
     "connect-mongo": "^3.2.0",
     "cookie-parser": "^1.4.4",
     "emailjs": "^2.2.0",
