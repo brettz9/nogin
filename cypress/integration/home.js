@@ -137,6 +137,46 @@ describe('Home', function () {
       });
     });
 
+    it('should reject client-side forgery of another user', function () {
+      cy.get('[data-name="email"]').type('brett@example.com');
+      cy.get('[data-name="pass"]').type('boo123456');
+      cy.get('[data-name="name"]').type('MyNewName');
+
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
+      cy.get('[data-name="user"]').then(($user) => {
+        $user[0].disabled = false;
+        $user[0].value = 'nicky';
+        // Ensure got set
+        return expect($user[0].value).to.equal('nicky');
+      });
+      cy.get('[data-name="action2"]').click();
+
+      // Todo: Could alert that user was not valid for session (if so,
+      //   check the message here and update expectation below (i.e., that user
+      //   name should not have been successfully changed)).
+
+      cy.get(
+        '[data-name="modal-alert"] [data-name="ok"]'
+      ).click();
+
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/home');
+
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords').then((accts) => {
+        expect(accts).to.have.lengthOf(2);
+        expect(accts.some(({user, name}) => {
+          // We could change to prevent successful edit of use's *own* name
+          return user === 'bretto' && name === 'MyNewName';
+        })).to.be.true;
+        return expect(accts.some(({user, name}) => {
+          return user === 'nicky' && name === 'Nicole';
+        })).to.be.true;
+      });
+    });
+
     it('Make good update', function () {
       cy.get('[data-name="email"]').type('brett@example.com');
       cy.get('[data-name="pass"]').type('boo123456');

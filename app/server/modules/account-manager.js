@@ -88,12 +88,16 @@ class AccountManager {
     if (isNullish(o)) {
       throw new Error('user-not-found');
     }
+    let valid = false;
     // These may throw
     // istanbul ignore else
     if (o.passVer === 1) {
-      await validatePasswordV1(pass, o.pass);
+      valid = await validatePasswordV1(pass, o.pass);
     } else {
       throw new Error('unexpected-pass-version-error');
+    }
+    if (!valid) {
+      throw new Error('bad-password');
     }
     return o;
   }

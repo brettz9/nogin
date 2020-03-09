@@ -24,6 +24,7 @@ import Envelope from 'envelope';
 import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
 
+import {guid} from '../../app/server/modules/common.js';
 import {
   addAccounts, removeAccounts, generateLoginKeys, generatePasswordKey,
   validUserPassword, readAccounts
@@ -66,6 +67,26 @@ const exprt = (on, config) => {
     NL_EMAIL_USER,
     NL_EMAIL_PASS
   } = nodeLoginConfig;
+
+  /**
+   * @param {PlainObject} cfg
+   * @param {string} cfg.cookieValue
+   * @param {string} [cfg.badSecret]
+   * @returns {string}
+   */
+  function generateLoginKey ({
+    cookieValue, badSecret
+  }) {
+    // Note that if switching to https://github.com/ebourmalo/cookie-encrypter ,
+    //  the prefix is `e:`.
+    // https://github.com/expressjs/cookie-parser/blob/677ed0825057d20a0e121757e5fd8a39973d2431/index.js#L134
+    const cookieParserPrefix = 's:';
+    // Todo: Change this if switching to https://github.com/ebourmalo/cookie-encrypter
+    const key = cookieParserPrefix + cookieSign.sign(
+      cookieValue, badSecret || secret
+    );
+    return key;
+  }
 
   // Todo: Document these `env` vars in our README/docs (env,
   //          coverage, disableEmailChecking; and distinguish from `secret`
@@ -192,23 +213,18 @@ const exprt = (on, config) => {
      * @param {PlainObject} cfg
      * @param {string|string[]} cfg.user
      * @param {string|string[]} cfg.ip
+     * @param {string} [cfg.badSecret] For testing a forgery attempt
+     * (without the actual secret)
      * @returns {Promise<string[]>} They key
      */
-    async generateLoginKey ({user, ip}) {
-      const [cookieValue] = await generateLoginKeys({
-        user,
-        ip
-      });
-
-      // Note that if switching to https://github.com/ebourmalo/cookie-encrypter ,
-      //  the prefix is `e:`.
-      // https://github.com/expressjs/cookie-parser/blob/677ed0825057d20a0e121757e5fd8a39973d2431/index.js#L134
-      const cookieParserPrefix = 's:';
-      // Todo: Change this if switching to https://github.com/ebourmalo/cookie-encrypter
-      const key = cookieParserPrefix + cookieSign.sign(
-        cookieValue, secret
-      );
-      return key;
+    async generateLoginKey ({user, ip, badSecret}) {
+      const [cookieValue] = badSecret
+        ? [guid()]
+        : await generateLoginKeys({
+          user,
+          ip
+        });
+      return generateLoginKey({cookieValue, badSecret});
     },
 
     /**

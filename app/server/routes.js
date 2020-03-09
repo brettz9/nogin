@@ -215,7 +215,9 @@ module.exports = async function (app, config) {
     } catch (err) {
       const _ = await setI18n(req, res);
       const message = [
-        'user-not-found'
+        'user-not-found',
+        'bad-password',
+        'unexpected-pass-version-error'
       ].includes(err.message)
         ? _(err.message)
         : err.message;

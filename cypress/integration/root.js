@@ -12,8 +12,10 @@
 //   server-side coverage passing when the UI tests weren't otherwise
 //   triggering that server-side code (i.e., only the state-setting or
 //   getting did).
-// Todo[>=1.7.0]: Add accessibility tests for small error response messages
+// Todo: Add accessibility tests for small error response messages
 //   not yet covered.
+
+const expressSessionID = 'connect.sid';
 
 describe('Root (Login) - Accessibility', function () {
   // https://www.npmjs.com/package/cypress-axe
@@ -205,9 +207,33 @@ describe('Root (Login)', function () {
         cy.getCookie('login').should('have.property', 'value', key);
         cy.getCookie('login').should('have.property', 'secure', secure);
 
-        const expressSessionID = 'connect.sid';
         return cy.getCookie(expressSessionID).should('exist');
       });
+    });
+  });
+
+  it.only('should reject bad login even in proper cookie format', function () {
+    const secure = Cypress.env('env') === 'production';
+    return cy.login({
+      user: 'bretto',
+      // ipv6 read by Express
+      ip: '::ffff:127.0.0.1',
+      // Won't have server secret, so try our own
+      badSecret: 'abcdabcdabcd',
+      secure
+    // Cypress won't run the tests with an `await` here
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((key) => {
+      cy.getCookie('login').should('have.property', 'value', key);
+      cy.getCookie('login').should('have.property', 'secure', secure);
+
+      return cy.getCookie(expressSessionID).should('exist');
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      cy.visit('/');
+      return cy.location('pathname', {
+        timeout: 10000
+      }).should('not.equal', '/home');
     });
   });
 });

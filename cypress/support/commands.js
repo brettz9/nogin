@@ -85,9 +85,13 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'login',
-  ({user, ip, secure = false} = {}) => {
+  ({
+    user, ip,
+    secure = false,
+    badSecret = null // For testing forging attempts
+  } = {}) => {
     return cy.task('generateLoginKey', {
-      user, ip
+      user, ip, badSecret
       // eslint-disable-next-line promise/prefer-await-to-then
     }).then((key) => {
       // eslint-disable-next-line promise/no-nesting

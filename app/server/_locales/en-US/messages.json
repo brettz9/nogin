@@ -397,6 +397,9 @@
     "unexpected-pass-version-error": {
       "message": "Unexpected passVer error"
     },
+    "bad-password": {
+      "message": "Bad password"
+    },
     "message": {
       "description": "Allows for using `log` and its checks with a raw message.",
       "message": "{message}"
