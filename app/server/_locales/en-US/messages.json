@@ -245,7 +245,7 @@
       "message": "That username is already in use."
     },
     "PleaseEnterName": {
-      "message": "Please Enter Your Name"
+      "message": "Please enter a sufficiently long name"
     },
     "PleaseEnterValidEmail": {
       "message": "Please Enter A Valid Email"
