@@ -450,6 +450,8 @@ const exprt = (on, config) => {
   // E.g.:
   // on('file:preprocessor', require('@cypress/code-coverage/use-babelrc.js'));
   // From https://github.com/cypress-io/code-coverage
+
+  return config;
 };
 
 export default exprt;
