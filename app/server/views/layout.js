@@ -51,6 +51,7 @@ module.exports = ({
       stylesheet ? ['link', {rel: 'stylesheet', href: stylesheet}] : '',
 
       error
+        // Use this so that client-side code can add the error to a dialog, etc.
         ? ['script', [
           'window.NodeLoginInitialErrorGlobal = ' + JSON.stringify(error)
         ]]
@@ -64,6 +65,7 @@ module.exports = ({
         crossorigin: 'anonymous',
         defer: 'defer'
       }],
+      // Popper is a boostrap dep.; see https://github.com/twbs/bootstrap/blob/master/config.yml#L75
       // Get src/integrity at https://github.com/twbs/bootstrap/blob/master/config.yml
       ['script', {
         src: localScripts
