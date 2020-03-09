@@ -16,6 +16,7 @@ describe('Home', function () {
   describe('Pre-logging in with session', function () {
     beforeEach(() => {
       cy.loginWithSession();
+      cy.task('addNonActivatedAccount');
       cy.visit('/home');
     });
     it('Delete account', function () {
@@ -79,17 +80,36 @@ describe('Home', function () {
       return cy.visitURLAndCheckAccessibility('/home');
     });
 
-    // Todo[>=1.7.0]: Confirm update didn't alter the values on the server.
-    it.only('Attempt bad input to server', function () {
-      cy.get('[data-name="email"]').type('brett@example.com');
+    it('Attempt bad input to server', function () {
+      cy.get('[data-name="email"]').type('me@example.name');
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
-      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).should('be.empty');
+
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
+      cy.get('[data-name="email"]').then(($email) => {
+        return expect(
+          $email[0].validationMessage
+        ).to.equal(
+          'That email address is already in use'
+        );
+      });
+
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        const {user, name} = accts[0];
+        expect(user).to.equal('bretto');
+        return expect(name).to.equal('Brett');
+      });
     });
 
-    it.only('should not update when the session is lost', function () {
+    it('should not update when the session is lost', function () {
       cy.clearCookie('login');
       cy.clearCookie(expressSessionID);
 
@@ -98,9 +118,8 @@ describe('Home', function () {
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="action2"]').click();
 
-      cy.get(
-        '[data-name="modal-alert"] [data-name="modal-body"] p'
-      ).contains('Your account has been updated');
+      // Todo[>=1.7.0]: Don't alert it was updated; alert that session
+      //   is no longer valid
 
       cy.get(
         '[data-name="modal-alert"] [data-name="ok"]'
@@ -114,18 +133,29 @@ describe('Home', function () {
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user, name} = accts[0];
         expect(user).to.equal('bretto');
-        return expect(name).to.equal('MyNewName');
+        return expect(name).to.equal('Brett');
       });
     });
 
-    // Todo[>=1.7.0]: Check that good update reflected on server
-    it.only('Make good update', function () {
+    it('Make good update', function () {
       cy.get('[data-name="email"]').type('brett@example.com');
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).contains('Your account has been updated.');
+      cy.get(
+        '[data-name="modal-alert"] [data-name="ok"]'
+      ).click();
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        const {user, name} = accts[0];
+        expect(user).to.equal('bretto');
+        return expect(name).to.equal('MyNewName');
+      });
     });
 
     it('Attempt bad client-side input', function () {
@@ -137,18 +167,15 @@ describe('Home', function () {
       cy.get('[data-name="action2"]').click();
 
       // Todo[>=1.7.0]: https://github.com/cypress-io/cypress/issues/6678
-      /*
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len
-      // eslint-disable-next-line promise/catch-or-return,
-        promise/prefer-await-to-then
+      // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
       cy.get('[data-name="name"]').then(($input) => {
         return expect($input[0].validity.tooShort).to.be.true;
         // return expect($input[0].validationMessage).to.eq(
         //  'Please enter a sufficiently long name'
         // );
       });
-      */
     });
 
     it('Should log out', function () {
@@ -163,6 +190,7 @@ describe('Home', function () {
 
       cy.getCookie('login').should('not.exist');
 
+      // Todo[>=1.7.0]: Investigate error here now
       //  Can't check that session is dropped by checking `expressSessionID`
       //  (`"connect.sid"`) as it does not get seem to get reset. However,
       //  it does seem to get dropped after server visit and can check this

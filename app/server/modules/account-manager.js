@@ -267,6 +267,13 @@ class AccountManager {
    * @returns {Promise<FindAndModifyWriteOpResult>}
    */
   async updateAccount (newData, allowUserUpdate) {
+    let _o;
+    try {
+      _o = await this.accounts.findOne({email: newData.email});
+    } catch (err) {}
+    if (_o) {
+      throw new Error('email-taken');
+    }
     const findOneAndUpdate = ({
       name, email, country, pass, id, user
     }) => {

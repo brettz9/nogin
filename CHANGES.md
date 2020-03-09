@@ -17,6 +17,7 @@
 - Security: Pass secret to cookie parser as otherwise potentially problematic
 - Security: Rate-limiting (for DoS)
 - Security: Minimize XSS vectors by using safer jQuery methods
+- Security/Fix: Avoid ability for user to update account to an existing email.
 - Fix: Add proper plain text for plain text email
 - Update: Use now required Mongodb APIs
 - Update: CDN for bootstrap (CSS and JS), jquery, popper
