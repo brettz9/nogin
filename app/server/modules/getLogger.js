@@ -31,7 +31,6 @@ const getLogger = async (options) => {
    */
   const logger = (
     key,
-    // istanbul ignore next
     substitutions = {},
     ...other
   ) => {

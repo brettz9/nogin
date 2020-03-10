@@ -513,7 +513,6 @@ module.exports = async function (app, config) {
     res.redirect('/users');
   });
 
-  // istanbul ignore else
   if (SERVE_COVERAGE) {
     // SHOW COVERAGE HTML ON SERVER
     // We could add this in a separate file, but we'll leverage express here
@@ -537,7 +536,6 @@ module.exports = async function (app, config) {
     );
   });
 
-  // istanbul ignore next
   if (global.__coverage__) {
     // See https://github.com/cypress-io/code-coverage
 

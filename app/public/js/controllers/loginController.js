@@ -113,8 +113,6 @@ ajaxFormClientSideValidate(
       );
     },
     error (e) {
-      // Can't easily simulate other errors here
-      // istanbul ignore else
       if (e.responseText === 'email-not-found') {
         ev.showEmailAlert(LoginValidatorView.messages.EmailNotFound);
       } else {

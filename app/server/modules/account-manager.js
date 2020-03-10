@@ -95,7 +95,6 @@ class AccountManager {
       valid = await validatePasswordV1(pass, o.pass);
       break;
     default:
-      // istanbul ignore next
       throw new Error('unexpected-pass-version-error');
     }
     if (!valid) {

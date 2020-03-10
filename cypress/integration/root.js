@@ -14,8 +14,6 @@
 //   getting did).
 // Todo: Add accessibility tests for small error response messages
 //   not yet covered.
-// Todo: Review whether some `istanbul ignore` statements can be covered
-//   after all.
 
 const expressSessionID = 'connect.sid';
 
@@ -141,6 +139,15 @@ describe('Root (Login)', function () {
       );
     }
   );
+
+  // Todo[>=1.7.0]: `dispatchResetPasswordLink` could throw with a
+  //   bad `NL_EMAIL_FROM`, causing `UnableToDispatchPasswordReset` error;
+  //   but need to temporarily change JSON file
+  /*
+  it('', function () {
+
+  });
+  */
 
   it('Cancel retrieve password dialog', function () {
     cy.get('[data-name="forgot-password"]').click();
