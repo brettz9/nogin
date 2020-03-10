@@ -11,13 +11,6 @@ window.ResetPasswordView = {
   },
 
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
-   */
-  getSetPasswordDialog () {
-    return $('#set-password');
-  },
-
-  /**
    * @returns {external:jQuery} `HTMLInputElement`
    */
   getPassword () {
