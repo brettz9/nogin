@@ -24,23 +24,5 @@ window.AlertDialog = {
     );
     $('[data-name=modal-alert] [data-name=modal-body] p').empty().append(body);
     return $('[data-name=modal-alert]');
-  },
-
-  /**
-   * @param {string} msg
-   */
-  addSuccess (msg) {
-    const alrt = $('[data-name=modal-alert]');
-    alrt.attr('class', 'alert alert-success');
-    alrt.text(msg);
-  },
-
-  /**
-   * @param {string} msg
-   */
-  showDanger (msg) {
-    const alrt = $('[data-name=modal-alert]');
-    alrt.attr('class', 'alert alert-danger');
-    alrt.text(msg);
   }
 };
