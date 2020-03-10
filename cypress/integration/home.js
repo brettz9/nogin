@@ -19,6 +19,29 @@ describe('Home', function () {
       cy.task('addNonActivatedAccount');
       cy.visit('/home');
     });
+
+    // Moved this to top as was apparently conflicting with another test
+    it('Should log out', function () {
+      cy.getCookie('login').should('exist');
+      cy.getCookie(expressSessionID).should('exist');
+
+      cy.get('[data-name="btn-logout"]').click();
+
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).contains('You are now logged out.');
+
+      cy.getCookie('login').should('not.exist');
+
+      //  Can't check that session is dropped by checking `expressSessionID`
+      //  (`"connect.sid"`) as it does not get seem to get reset. However,
+      //  it does seem to get dropped after server visit and can check this
+      //  (where we're expected to be redirected).
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/');
+    });
+
     it('Delete account', function () {
       cy.get('[data-name="account-form"] .btn-danger').click();
       cy.get('[data-name="modal-body"]').contains(
@@ -216,28 +239,6 @@ describe('Home', function () {
         //  'Please enter a sufficiently long name'
         // );
       });
-    });
-
-    it('Should log out', function () {
-      cy.getCookie('login').should('exist');
-      cy.getCookie(expressSessionID).should('exist');
-
-      cy.get('[data-name="btn-logout"]').click();
-
-      cy.get(
-        '[data-name=modal-alert] [data-name=modal-body] p'
-      ).contains('You are now logged out.');
-
-      cy.getCookie('login').should('not.exist');
-
-      // Todo[>=1.7.0]: Investigate error here now
-      //  Can't check that session is dropped by checking `expressSessionID`
-      //  (`"connect.sid"`) as it does not get seem to get reset. However,
-      //  it does seem to get dropped after server visit and can check this
-      //  (where we're expected to be redirected).
-      cy.location('pathname', {
-        timeout: 10000
-      }).should('eq', '/');
     });
 
     it('Should show error upon bad log out', function () {
