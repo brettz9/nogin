@@ -112,21 +112,6 @@ window.LoginView = {
   * @param {external:jQuery} loginModal
   * @returns {void}
   */
-  toggleGlyphicon (loginModal) {
-    const span = this.getRememberMeButton(loginModal).find('span');
-    if (span.hasClass('glyphicon-unchecked')) {
-      span.addClass('glyphicon-ok')
-        .removeClass('glyphicon-unchecked');
-    } else {
-      span.removeClass('glyphicon-ok')
-        .addClass('glyphicon-unchecked');
-    }
-  },
-
-  /**
-  * @param {external:jQuery} loginModal
-  * @returns {void}
-  */
   toggleCheckSquare (loginModal) {
     const span = this.getRememberMeButton(loginModal).find('span');
     if (span.hasClass('fa-minus-square')) {

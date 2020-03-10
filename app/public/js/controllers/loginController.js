@@ -39,9 +39,6 @@ forgotPassword.click(() => {
   retrievePasswordSubmit.show();
   retrievePasswordModal.modal('show');
 });
-rememberMeButton.click(function () {
-  LoginView.toggleGlyphicon(loginModal);
-});
 
 // automatically toggle focus between the email modal window and
 //   the login form
