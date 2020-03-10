@@ -104,6 +104,13 @@ describe('Home', function () {
     });
 
     it('Attempt bad input to server', function () {
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+
+      cy.get('[data-name="email"]').type('me');
+
+      // Todo[>=1.7.0]: Uncomment when this may be fixed: https://github.com/cypress-io/cypress/issues/6678
+      // cy.get('[data-name="name"]:invalid').should('have.length', 1);
+
       cy.get('[data-name="email"]').type('me@example.name');
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
@@ -112,7 +119,7 @@ describe('Home', function () {
 
       cy.get(
         '[data-name=modal-alert] [data-name=modal-body] p'
-      ).should('be.empty');
+      ).should('be.hidden');
 
       // eslint-disable-next-line max-len
       // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
