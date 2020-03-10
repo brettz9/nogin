@@ -90,10 +90,12 @@ class AccountManager {
     }
     let valid = false;
     // These may throw
-    // istanbul ignore else
-    if (o.passVer === 1) {
+    switch (o.passVer) {
+    case 1:
       valid = await validatePasswordV1(pass, o.pass);
-    } else {
+      break;
+    default:
+      // istanbul ignore next
       throw new Error('unexpected-pass-version-error');
     }
     if (!valid) {
@@ -226,8 +228,8 @@ class AccountManager {
     }
 
     const [userHash, passHash] = await Promise.all([
-      saltAndHash(newData.pass),
-      saltAndHash(newData.user)
+      saltAndHash(newData.user),
+      saltAndHash(newData.pass)
     ]);
 
     newData.activationCode = userHash;

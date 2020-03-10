@@ -253,8 +253,10 @@ const exprt = (on, config) => {
         user: ['bretto'],
         pass: [NL_EMAIL_PASS],
         country: ['US'],
-        // eslint-disable-next-line max-len
-        activationCode: ['0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'],
+        activationCode: [
+          // eslint-disable-next-line max-len
+          '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
+        ],
         activated: [true]
       }))[0];
     },

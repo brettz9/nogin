@@ -59,7 +59,7 @@ const saltAndHash = function (data) {
  * @returns {Promise<boolean>}
  */
 const validatePasswordV1 = async function (plainPass, hashedPass) {
-  const salt = hashedPass.split('$')[0];
+  const [salt] = hashedPass.split('$');
   const validHash = await pbkdf2Prom(plainPass, salt);
   return hashedPass === validHash;
 };
