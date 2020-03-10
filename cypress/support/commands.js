@@ -115,23 +115,18 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'loginWithSession',
   () => {
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      // NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      cy.task('deleteAllAccounts');
-      cy.task('addAccount');
-      // Not just login, but get session, so will be shown `/home`
-      //   without redirect upon visit
-      return cy.request({
-        url: '/',
-        method: 'POST',
-        body: {
-          user: 'bretto',
-          pass: NL_EMAIL_PASS
-        }
-      });
+    const NL_EMAIL_PASS = Cypress.env('NL_EMAIL_PASS');
+    cy.task('deleteAllAccounts');
+    cy.task('addAccount');
+    // Not just login, but get session, so will be shown `/home`
+    //   without redirect upon visit
+    return cy.request({
+      url: '/',
+      method: 'POST',
+      body: {
+        user: 'bretto',
+        pass: NL_EMAIL_PASS
+      }
     });
   }
 );

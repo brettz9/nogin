@@ -25,6 +25,14 @@ describe('Root (Login) - Accessibility', function () {
 });
 
 describe('Root (Login)', function () {
+  let env, NL_EMAIL_USER, NL_EMAIL_PASS;
+  before(() => {
+    ({
+      env,
+      NL_EMAIL_USER,
+      NL_EMAIL_PASS
+    } = Cypress.env());
+  });
   beforeEach(() => {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
@@ -32,106 +40,87 @@ describe('Root (Login)', function () {
   });
 
   it('Visit root and login with Remember Me', function () {
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      // NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      /*
-      // Signs up but no UI-only way to get and add activation code
-      //   needed for login; however, keeping below for reference in
-      //   the event we decide to add a more precise yet slower UI
-      //   test from end-to-end
-      cy.visit('/signup');
-      cy.get('[data-name="name"]').type('Brett');
-      cy.get('[data-name="email"]').type(NL_EMAIL_USER);
-      cy.get('[data-name="country"]').select('US');
-      cy.get('[data-name="user"]').type('bretto');
-      cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
-      cy.get('[data-name="pass-confirm"]').type(NL_EMAIL_PASS);
-      cy.get('[data-name=account-form] [data-name=action2]').click();
-      cy.get('[data-name=modal-alert] [data-name=ok]').click({
-        timeout: 20000
-      });
-      cy.location('pathname', {
-        timeout: 10000
-      }).should('eq', '/');
-      */
-
-      cy.get('[data-name="user"]').type('bretto');
-      cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
-      cy.get('[data-name="btn_sign_in"]').click();
-      cy.getCookie('login').should('have.property', 'value');
-
-      cy.get('[data-name=account-form] .btn-danger').click();
-      cy.get('[data-name=modal-confirm] .btn-danger').click();
-
-      cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
-        'Success!'
-      );
-      return cy.location('pathname', {
-        timeout: 10000
-      }).should('eq', '/home');
+    /*
+    // Signs up but no UI-only way to get and add activation code
+    //   needed for login; however, keeping below for reference in
+    //   the event we decide to add a more precise yet slower UI
+    //   test from end-to-end
+    cy.visit('/signup');
+    cy.get('[data-name="name"]').type('Brett');
+    cy.get('[data-name="email"]').type(NL_EMAIL_USER);
+    cy.get('[data-name="country"]').select('US');
+    cy.get('[data-name="user"]').type('bretto');
+    cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
+    cy.get('[data-name="pass-confirm"]').type(NL_EMAIL_PASS);
+    cy.get('[data-name=account-form] [data-name=action2]').click();
+    cy.get('[data-name=modal-alert] [data-name=ok]').click({
+      timeout: 20000
     });
+    cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/');
+    */
+
+    cy.get('[data-name="user"]').type('bretto');
+    cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
+    cy.get('[data-name="btn_sign_in"]').click();
+    cy.getCookie('login').should('have.property', 'value');
+
+    cy.get('[data-name=account-form] .btn-danger').click();
+    cy.get('[data-name=modal-confirm] .btn-danger').click();
+
+    cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
+      'Success!'
+    );
+    return cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/home');
   });
 
   it('Visit root and login with Remember Me button disabled', function () {
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      // NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      cy.get('[data-name=btn_remember]').click();
-      cy.get('[data-name="user"]').type('bretto');
-      cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
-      cy.get('[data-name="btn_sign_in"]').click();
-      cy.getCookie('login').should('not.exist');
+    cy.get('[data-name=btn_remember]').click();
+    cy.get('[data-name="user"]').type('bretto');
+    cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
+    cy.get('[data-name="btn_sign_in"]').click();
+    cy.getCookie('login').should('not.exist');
 
-      cy.get('[data-name=account-form] .btn-danger').click();
-      cy.get('[data-name=modal-confirm] .btn-danger').click();
+    cy.get('[data-name=account-form] .btn-danger').click();
+    cy.get('[data-name=modal-confirm] .btn-danger').click();
 
-      cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
-        'Success!'
-      );
-      return cy.location('pathname', {
-        timeout: 10000
-      }).should('eq', '/home');
-    });
+    cy.get('[data-name=modal-alert] [data-name=modal-title]').contains(
+      'Success!'
+    );
+    return cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/home');
   });
 
   it('Retrieve lost password', function () {
     cy.task('deleteEmails');
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      cy.get('[data-name="forgot-password"]').click();
-      cy.get('[data-name=email]').type(NL_EMAIL_USER);
-      cy.get('[data-name=retrieve-password-submit]').click();
-      cy.get('[data-name=alert]').contains(
-        'A link to reset your password was emailed to you',
-        {
-          timeout: 30000
-        }
-      );
-      // We don't know exactly how long until the email will be delivered
-      // // eslint-disable-next-line cypress/no-unnecessary-waiting
-      // cy.wait(15000);
-      // Check that password was received by email
-      // eslint-disable-next-line promise/no-nesting
-      return cy.task('hasEmail', {
-        subject: 'Password Reset',
-        html: [
-          'Click here to reset your password',
-          '<a href=',
-          'reset-password?key='
-        ]
-        // eslint-disable-next-line promise/prefer-await-to-then
-      }, {timeout: 50000}).then((hasEmail) => {
-        // Todo: In full UI version, we could look for the link and visit it.
-        return expect(hasEmail).to.be.true;
-      });
+    cy.get('[data-name="forgot-password"]').click();
+    cy.get('[data-name=email]').type(NL_EMAIL_USER);
+    cy.get('[data-name=retrieve-password-submit]').click();
+    cy.get('[data-name=alert]').contains(
+      'A link to reset your password was emailed to you',
+      {
+        timeout: 30000
+      }
+    );
+    // We don't know exactly how long until the email will be delivered
+    // // eslint-disable-next-line cypress/no-unnecessary-waiting
+    // cy.wait(15000);
+    // Check that password was received by email
+    return cy.task('hasEmail', {
+      subject: 'Password Reset',
+      html: [
+        'Click here to reset your password',
+        '<a href=',
+        'reset-password?key='
+      ]
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }, {timeout: 50000}).then((hasEmail) => {
+      // Todo: In full UI version, we could look for the link and visit it.
+      return expect(hasEmail).to.be.true;
     });
   });
 
@@ -162,16 +151,10 @@ describe('Root (Login)', function () {
   });
 
   it('Should validate against missing user value', function () {
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      // NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
-      cy.get('[data-name="btn_sign_in"]').click();
-      return cy.get('[data-name="user"]').should((pass) => {
-        return expect(pass[0].checkValidity()).to.equal(false);
-      });
+    cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
+    cy.get('[data-name="btn_sign_in"]').click();
+    return cy.get('[data-name="user"]').should((pass) => {
+      return expect(pass[0].checkValidity()).to.equal(false);
     });
   });
   it('Should validate against missing pass value', function () {
@@ -183,36 +166,32 @@ describe('Root (Login)', function () {
   });
 
   it('Visit auto-logging-in root after initial login', function () {
+    cy.log(env);
+    // See `hackEnv` on how apparently not working and why we need this hack
+    // const secure = Cypress.env('env') === 'production'
+    const secure = env === 'production';
+    return cy.login({
+      user: 'bretto',
+      // ipv6 read by Express
+      ip: '::ffff:127.0.0.1',
+      secure
+    // Cypress won't run the tests with an `await` here
     // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv', 'env').then((env) => {
-      cy.log(env);
-      // See `hackEnv` on how apparently not working and why we need this hack
-      // const secure = Cypress.env('env') === 'production'
-      const secure = env === 'production';
-      // eslint-disable-next-line promise/no-nesting
-      return cy.login({
-        user: 'bretto',
-        // ipv6 read by Express
-        ip: '::ffff:127.0.0.1',
-        secure
-      // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line promise/prefer-await-to-then
-      }).then((key) => {
-        cy.visit('/');
-        cy.location('pathname', {
-          timeout: 10000
-        }).should('eq', '/home');
+    }).then((key) => {
+      cy.visit('/');
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/home');
 
-        cy.log(key);
-        cy.getCookie('login').should('have.property', 'value', key);
-        cy.getCookie('login').should('have.property', 'secure', secure);
+      cy.log(key);
+      cy.getCookie('login').should('have.property', 'value', key);
+      cy.getCookie('login').should('have.property', 'secure', secure);
 
-        return cy.getCookie(expressSessionID).should('exist');
-      });
+      return cy.getCookie(expressSessionID).should('exist');
     });
   });
 
-  it.only('should reject bad login even in proper cookie format', function () {
+  it('should reject bad login even in proper cookie format', function () {
     const secure = Cypress.env('env') === 'production';
     return cy.login({
       user: 'bretto',

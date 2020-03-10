@@ -1,4 +1,11 @@
 describe('Reset password', function () {
+  let NL_EMAIL_USER, NL_EMAIL_PASS;
+  before(() => {
+    ({
+      NL_EMAIL_USER,
+      NL_EMAIL_PASS
+    } = Cypress.env());
+  });
   beforeEach(() => {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
@@ -14,32 +21,25 @@ describe('Reset password', function () {
   });
 
   it('Visit reset password (after login)', function () {
-    // eslint-disable-next-line promise/prefer-await-to-then
-    return cy.task('hackEnv').then(({
-      NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    }) => {
-      // eslint-disable-next-line promise/no-nesting
-      return cy.task('generatePasswordKey', {
-        email: NL_EMAIL_USER,
-        // ipv6 read by Express
-        ip: '::ffff:127.0.0.1'
-      // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line max-len
-      // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
-      }).then((key) => {
-        cy.log(key);
-        cy.visit('/reset-password?key=' + encodeURIComponent(key));
-        cy.get('[data-name=enter-new-pass-label]').contains(
-          'Please enter your new password'
-        );
-        cy.get('[data-name=reset-pass]').type(NL_EMAIL_PASS);
-        cy.get('[data-name="reset-password-submit"]').click();
+    return cy.task('generatePasswordKey', {
+      email: NL_EMAIL_USER,
+      // ipv6 read by Express
+      ip: '::ffff:127.0.0.1'
+    // Cypress won't run the tests with an `await` here
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
+    }).then((key) => {
+      cy.log(key);
+      cy.visit('/reset-password?key=' + encodeURIComponent(key));
+      cy.get('[data-name=enter-new-pass-label]').contains(
+        'Please enter your new password'
+      );
+      cy.get('[data-name=reset-pass]').type(NL_EMAIL_PASS);
+      cy.get('[data-name="reset-password-submit"]').click();
 
-        cy.validUserPassword({
-          user: 'bretto',
-          pass: NL_EMAIL_PASS
-        });
+      cy.validUserPassword({
+        user: 'bretto',
+        pass: NL_EMAIL_PASS
       });
     });
   });

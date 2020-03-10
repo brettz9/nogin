@@ -57,9 +57,6 @@ const exprt = (on, config) => {
   //   as Cypress environmental variables, as they would not be used
   //   here.
 
-  // Should in theory make available to tests through `Cypress.env()`, but
-  //  as per apparent bug referred to below, it seems we need our `hackEnv`
-  //  task for now.
   // const {env: {secret}} = config;
   const {
     secret,
@@ -194,14 +191,6 @@ const exprt = (on, config) => {
       {contexts:
     ['ExpressionStatement > CallExpression > ObjectExpression > Property']}] */
   on('task', { // Tasks are run in *Node* (unlike commands/custom commands)
-    /**
-     * Possibly related to now closed <https://github.com/cypress-io/cypress/issues/2605>.
-     * @param {string} value
-     * @returns {PlainObject}
-     */
-    hackEnv (value) {
-      return value ? config.env[value] : config.env;
-    },
     /**
      * Simulates calling login command (when POSTing to route `/`
      * (with "remember me") to set a cookie). Need to use return result
