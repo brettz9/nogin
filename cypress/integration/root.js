@@ -98,6 +98,23 @@ describe('Root (Login)', function () {
     }).should('eq', '/home');
   });
 
+  it('Visit root and login and make bad login attempt', function () {
+    cy.get('[data-name="user"]').type('bretto');
+    const mismatchedPass = 'mismatchedPass';
+    cy.get('[data-name="pass"]').type(mismatchedPass);
+    cy.get('[data-name="btn_sign_in"]').click();
+
+    cy.get('[data-name=modal-alert] [data-name="modal-title"]').contains(
+      'Login Failure'
+    );
+    cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+      'Please check your username and/or password'
+    );
+    return cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/');
+  });
+
   it('Retrieve lost password', function () {
     cy.task('deleteEmails');
     cy.get('[data-name="forgot-password"]').click();
