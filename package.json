@@ -40,7 +40,7 @@
     "eslint": "eslint --ext=js,md,html .",
     "lint": "npm run eslint",
     "start-open-report": "open http://localhost:3000/coverage/lcov-report/",
-    "open-report": "run-p start-cov start-open-report",
+    "open-report": "run-p start start-open-report",
     "instrument-add": "nyc instrument app/public instrumented",
     "instrument-remove-cache": "rimraf node_modules/.cache",
     "instrument-remove-instrumented": "rimraf instrumented",
