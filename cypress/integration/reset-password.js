@@ -20,6 +20,37 @@ describe('Reset password', function () {
     cy.visit('/reset-password');
   });
 
+  it('Report errors of insufficiently long passwords', function () {
+    return cy.task('generatePasswordKey', {
+      email: NL_EMAIL_USER,
+      // ipv6 read by Express
+      ip: '::ffff:127.0.0.1'
+    // Cypress won't run the tests with an `await` here
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((key) => {
+      cy.log(key);
+      cy.visit('/reset-password?key=' + encodeURIComponent(key));
+      cy.get('[data-name=enter-new-pass-label]').contains(
+        'Please enter your new password'
+      );
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+
+      const tooShortPassword = 'a';
+      cy.get('[data-name="reset-pass"]').type(tooShortPassword);
+      // cy.get('[data-name="reset-password-submit"]').click();
+
+      // Todo[>=1.7.0]: https://github.com/cypress-io/cypress/issues/6678
+      cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
+      return cy.get('[data-name="reset-pass"]');
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(($input) => {
+      return expect($input[0].validity.tooShort).to.be.true;
+      // return expect($input[0].validationMessage).to.eq(
+      //  'Please enter a sufficiently long name'
+      // );
+    });
+  });
+
   it('Visit reset password (after login)', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,
@@ -34,7 +65,8 @@ describe('Reset password', function () {
       cy.get('[data-name=enter-new-pass-label]').contains(
         'Please enter your new password'
       );
-      cy.get('[data-name=reset-pass]').type('new' + NL_EMAIL_PASS);
+      cy.get('[data-name="reset-pass"]').should('have.focus');
+      cy.get('[data-name="reset-pass"]').type('new' + NL_EMAIL_PASS);
       cy.get('[data-name="reset-password-submit"]').click();
 
       cy.get('[data-name=modal-dialog] .alert').contains(
@@ -94,7 +126,7 @@ describe('Reset password', function () {
         response: 'Unable to update password'
       });
 
-      cy.get('[data-name=reset-pass]').type('new' + NL_EMAIL_PASS);
+      cy.get('[data-name="reset-pass"]').type('new' + NL_EMAIL_PASS);
       cy.get('[data-name="reset-password-submit"]').click();
 
       cy.get('[data-name=modal-dialog] .alert').contains(

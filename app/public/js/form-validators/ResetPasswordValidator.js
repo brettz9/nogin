@@ -23,9 +23,16 @@ window.ResetPasswordValidator = class ResetPasswordValidator {
    * Sets up properties.
    */
   constructor () {
-    ResetPasswordValidatorView.setPasswordDialog();
+    this.modal = ResetPasswordValidatorView.setPasswordDialog();
     this.alert = ResetPasswordValidatorView.getSetPasswordAlert();
     this.alert.hide();
+  }
+
+  /**
+   * @returns {external:jQuery}
+   */
+  getPasswordDialog () {
+    return this.modal;
   }
 
   /**

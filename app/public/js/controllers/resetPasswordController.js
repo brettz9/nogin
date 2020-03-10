@@ -35,9 +35,9 @@ ajaxFormClientSideValidate(
   }
 );
 
-const setPasswordDialog = ResetPasswordView.getSetPasswordDialog();
-setPasswordDialog.modal('show');
-setPasswordDialog.on('shown', () => {
-  pass.focus();
+const setPasswordDialog = rv.getPasswordDialog();
+setPasswordDialog.on('shown.bs.modal', () => {
+  pass[0].focus();
 });
+setPasswordDialog.modal('show');
 })();
