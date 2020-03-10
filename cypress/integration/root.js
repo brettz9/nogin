@@ -14,6 +14,8 @@
 //   getting did).
 // Todo: Add accessibility tests for small error response messages
 //   not yet covered.
+// Todo: Review whether some `istanbul ignore` statements can be covered
+//   after all.
 
 const expressSessionID = 'connect.sid';
 
