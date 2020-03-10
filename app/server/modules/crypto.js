@@ -21,6 +21,7 @@ function pbkdf2Prom (data, salt) {
     crypto.pbkdf2(
       data, salt, iterations, hashLength, hasher,
       function (error, derivedKey) {
+        // istanbul ignore if
         if (error) {
           reject(error);
           return;

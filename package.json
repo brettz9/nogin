@@ -59,7 +59,7 @@
     "css-stylus": "stylus --sourcemap-inline app/public/css/style.styl",
     "css-copy": "cp -R ./app/public/css instrumented",
     "css": "run-p css-*",
-    "unit-only": "nyc --all --require=esm --require=chai/register-expect mocha --reporter mochawesome --reporter-options reportDir=cypress/results,html=false,overwrite=true test/unit.js --exit",
+    "unit-only": "nyc --all --require=esm --require=chai/register-expect mocha --reporter mochawesome --reporter-options reportDir=cypress/results,html=false,overwrite=true test/*.js --exit",
     "delayed-unit-only": "run-s delay unit-only",
     "unit": "run-p -r start-cov delayed-unit-only",
     "server:start-cov-only": "nyc --all node ./bin/cli.js --localScripts --config node-login.js --fromURL=https://braitsh.io --fromText=braitsch --SERVE_COVERAGE -d instrumented",
