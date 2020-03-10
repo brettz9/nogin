@@ -1,4 +1,4 @@
-/* globals $, _, AlertDialog */
+/* globals $, _ */
 'use strict';
 
 const modal = $('#set-password');
@@ -22,14 +22,18 @@ window.ResetPasswordValidatorView = {
    * @returns {void}
    */
   showSuccess () {
-    AlertDialog.addSuccess(_('YourPasswordHasBeenReset'));
+    this.addAlert(_('YourPasswordHasBeenReset'));
+  },
+
+  addAlert (msg) {
+    this.getSetPasswordAlert().text(msg);
   },
 
   /**
    * @returns {void}
    */
   showDanger () {
-    AlertDialog.showDanger(_('SomethingWentWrongPleaseTryAgain'));
+    this.addAlert(_('SomethingWentWrongPleaseTryAgain'));
   },
 
   messages: {

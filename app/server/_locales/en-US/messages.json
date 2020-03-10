@@ -71,7 +71,7 @@
 
     "RESET-PASSWORD (BUSINESS-LOGIC)": true,
     "UnableToUpdatePassword": {
-      "message": "unable to update password"
+      "message": "Unable to update password"
     },
     "ResetPassword": {
       "message": "Reset Password"

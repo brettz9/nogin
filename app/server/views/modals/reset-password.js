@@ -2,7 +2,10 @@
 
 module.exports = function ({_}) {
   return ['div', {id: 'set-password', class: 'modal', role: 'main'}, [
-    ['div', {class: 'modal-dialog', role: 'dialog'}, [
+    ['div', {
+      class: 'modal-dialog', role: 'dialog',
+      'data-name': 'modal-dialog'
+    }, [
       ['div', {class: 'modal-content'}, [
         ['div', {class: 'modal-header'}, [
           ['h1', {

@@ -448,10 +448,9 @@ module.exports = async function (app, config) {
     req.session.destroy();
     let o, _;
     try {
-      [o, _] = await Promise.all([
-        am.updatePassword(passKey, newPass),
-        setI18n(req, res)
-      ]);
+      // We perform this in sequence so we can be sure to i18nize our error
+      _ = await setI18n(req, res);
+      o = await am.updatePassword(passKey, newPass);
     } catch (err) {}
     if (o) {
       res.status(200).send(_('OK'));
