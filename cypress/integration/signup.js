@@ -24,7 +24,7 @@ describe('Signup', function () {
     cy.get('[data-name="pass-confirm"]').type(NL_EMAIL_PASS);
     cy.get('[data-name=account-form] [data-name=action2]').click();
     cy.get('[data-name=modal-alert] [data-name=ok]').click({
-      timeout: 30000
+      timeout: 50000
     });
     cy.location('pathname', {
       timeout: 10000
