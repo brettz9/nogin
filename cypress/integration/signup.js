@@ -57,4 +57,12 @@ describe('Signup', function () {
       return cy.log(accts);
     });
   });
+
+  it('Visit Signup but cancel to be redirected', function () {
+    cy.visit('/signup');
+    cy.get('[data-name=action1]').click();
+    cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/');
+  });
 });
