@@ -118,7 +118,7 @@ Questions and suggestions for improvement are welcome.
 1. Update **docs** above
 
 1. Upon **update of email address**, send email to confirm it
-1. Allow convenience for easier **customization of route after login**
+1. Allow convenience for easier **customization of where route redirects after login**
 1. Link to **resend activation link** (mention at
     <https://github.com/braitsch/node-login/pull/11> when may be done)
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
