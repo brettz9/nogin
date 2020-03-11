@@ -10,7 +10,7 @@ module.exports = ({
   return [{$document: {
     $DOCTYPE: {name: 'html'},
     head: [
-      ['title', [title || _('Login')]],
+      ['title', [title]],
       ...(injectedHTML.headPre || ['']),
       ['link', {
         rel: 'shortcut icon', type: 'image/x-icon',
@@ -24,7 +24,7 @@ module.exports = ({
         integrity: 'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN',
         crossorigin: 'anonymous'
       }],
-      ...noBuiltinStylesheets
+      ...(noBuiltinStylesheets
         ? ['']
         : [
           ['link', {
@@ -46,7 +46,7 @@ module.exports = ({
             integrity: localScripts ? null : 'sha256-PVObJvYe7iXCSBcVkQUFvkV9TQGFh5J/ga8WHkLqHAo=',
             crossorigin: 'anonymous'
           }]
-        ],
+        ]),
 
       stylesheet ? ['link', {rel: 'stylesheet', href: stylesheet}] : '',
 
@@ -127,7 +127,7 @@ module.exports = ({
     ],
     body: [
       ...(injectedHTML.bodyPre || ['']),
-      {'#': content || []},
+      {'#': content},
       ...(injectedHTML.bodyPost || [''])
     ]
   }}];

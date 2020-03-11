@@ -42,7 +42,7 @@ module.exports = {
       'cypress/integration/**/*.js',
       'cypress/plugins/main.js',
       'cypress/support/**/*.js',
-      'test/**'
+      'test/*.js'
     ],
     extends: [
       'plugin:chai-expect/recommended',
@@ -55,7 +55,11 @@ module.exports = {
       'cypress/no-force': ['error']
     }
   }, {
-    files: ['test/**'],
+    files: [
+      'test/*.js',
+      'test/fixtures/bad-template.js',
+      'test/utilities/**'
+    ],
     extends: [
       'plugin:node/recommended-module'
     ],

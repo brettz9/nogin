@@ -13,6 +13,11 @@ const EmailDispatcher = require('./modules/email-dispatcher.js');
 global.fetch = fileFetch;
 global.document = (new JSDOM()).window.document;
 
+// Todo[engine:node@>12.9.0]: Remove polyfill (or forego this and don't
+//  i18nize server responses (do on client))
+// eslint-disable-next-line node/no-unsupported-features/es-builtins
+Promise.allSettled = require('promise.allsettled/polyfill')();
+
 const {isNullish} = require('./modules/common.js');
 const setI18n = require('./modules/i18n.js')();
 const getLogger = require('./modules/getLogger.js');
@@ -271,19 +276,21 @@ module.exports = async function (app, config) {
       const {name, email, pass, country, user} = req.body;
       let o, _;
       try {
-        // Get this first in case following errs
-        _ = await setI18n(req, res);
         // We add `id` here to ensure only posting change for user's own
         //   account, since could otherwise be injecting a different
         //   user's name here
-        o = await am.updateAccount({
-          id: req.session.user._id,
-          name,
-          user,
-          email,
-          pass,
-          country
-        });
+        // eslint-disable-next-line node/no-unsupported-features/es-builtins
+        [o, _] = await Promise.allSettled([
+          am.updateAccount({
+            id: req.session.user._id,
+            name,
+            user,
+            email,
+            pass,
+            country
+          }),
+          setI18n(req, res)
+        ]);
       } catch (err) {
         // We send a code and let the client i18nize
         // We should probably follow this pattern
@@ -455,9 +462,11 @@ module.exports = async function (app, config) {
     req.session.destroy();
     let o, _;
     try {
-      // We perform this in sequence so we can be sure to i18nize our error
-      _ = await setI18n(req, res);
-      o = await am.updatePassword(passKey, newPass);
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      [o, _] = await Promise.allSettled([
+        am.updatePassword(passKey, newPass),
+        setI18n(req, res)
+      ]);
     } catch (err) {}
     if (o) {
       res.status(200).send(_('OK'));
@@ -495,9 +504,13 @@ module.exports = async function (app, config) {
    * Should be safe as express-session stores session object server-side.
    */
   app.post('/delete', async function (req, res) {
-    const _ = await setI18n(req, res);
+    let _;
     try {
-      /* obj = */ await am.deleteAccountById(req.session.user._id);
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      [_] = await Promise.allSettled([
+        setI18n(req, res),
+        am.deleteAccountById(req.session.user._id)
+      ]);
     } catch (err) {
       res.status(400).send(_('RecordNotFound'));
       return;

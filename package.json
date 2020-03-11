@@ -159,6 +159,7 @@
     "jsdom": "^16.2.1",
     "mongodb": "^3.5.4",
     "popper.js": "^1.16.1",
+    "promise.allsettled": "^1.0.2",
     "stylus": "^0.54.7"
   },
   "devDependencies": {

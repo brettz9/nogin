@@ -272,12 +272,6 @@
     },
 
 
-    "LAYOUT (TEMPLATES)": true,
-    "Login": {
-      "message": "Login"
-    },
-
-
     "USERS (TEMPLATES)": true,
     "AccountCreated": {
       "message": "Account Created"

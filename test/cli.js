@@ -97,6 +97,37 @@ describe('CLI', function () {
     }
   );
 
+  it('Null config with non-local scripts and misc. config', async function () {
+    this.timeout(30000);
+    const {stdout, stderr} = await spawnPromise(cliPath, [
+      '--noBuiltinStylesheets',
+      '--staticDir', pathResolve(__dirname, './fixtures/'),
+      '--userJS', 'userJS.js',
+      '--userJSModule', 'userJSModule.js',
+      '--stylesheet', 'stylesheet.css',
+      '--favicon', 'favicon.ico',
+      '--router', pathResolve(__dirname, './fixtures/router.js'),
+      '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
+      '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
+      '--secret', secret,
+      '--PORT', testPort,
+      '--config', ''
+    ], 20000);
+    // Todo:
+    // 1. Check content for `injectHTML`, `stylesheet`, `userJS`,
+    //   `userJSModule`, `noBuiltinStylesheets`, `favicon`
+    // 2. Confirm `staticDir` can be visited
+    // 3. Confirm `middleware` is run
+    // 4. Confirm `router` can be run by visiting `/dynamic-route`
+    expect(stripMongoMessages(stdout)).to.equal(
+      'Beginning routes...\n' +
+      'Awaiting internationalization and logging...\n' +
+      'Awaiting database account connection...\n' +
+      'Beginning server...\n'
+    );
+    expect(stripPromisesWarning(stderr)).to.equal('');
+  });
+
   it('Missing environment components', async function () {
     this.timeout(20000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
