@@ -107,7 +107,7 @@
     "test-badge": "mbg --file ./mochawesome.json --badge_output readme_includes/tests-badge.svg",
     "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-no-unit": "run-s -c clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full",
-    "test": "run-p -r start cypress:delayed-run"
+    "test": "snyk test && run-p -r start cypress:delayed-run"
   },
   "engines": {
     "node": ">=10.4.0"
@@ -217,6 +217,7 @@
     "npm-run-all": "^4.1.5",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
+    "snyk": "^1.298.1",
     "stop-only": "^3.1.0",
     "typescript": "^3.8.3"
   }
