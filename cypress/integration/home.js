@@ -15,6 +15,7 @@ describe('Home', function () {
   );
   describe('Pre-logging in with session', function () {
     beforeEach(() => {
+      cy.task('deleteAllAccounts');
       cy.loginWithSession();
       cy.task('addNonActivatedAccount');
       cy.visit('/home');
@@ -106,12 +107,11 @@ describe('Home', function () {
     it('Attempt bad input to server', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
 
-      cy.get('[data-name="email"]').type('me');
+      const nonEmail = 'nonEmail';
+      cy.get('[data-name="email"]').type(nonEmail);
+      cy.get('[data-name="email"]:invalid').should('have.length', 1);
 
-      // Todo[>=1.7.0]: Uncomment when this may be fixed: https://github.com/cypress-io/cypress/issues/6678
-      // cy.get('[data-name="name"]:invalid').should('have.length', 1);
-
-      cy.get('[data-name="email"]').type('me@example.name');
+      cy.get('[data-name="email"]').clear().type('me@example.name');
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
@@ -121,12 +121,12 @@ describe('Home', function () {
         '[data-name=modal-alert] [data-name=modal-body] p'
       ).should('be.hidden');
 
-      // eslint-disable-next-line max-len
-      // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
-      cy.get('[data-name="email"]').then(($email) => {
+      cy.get('[data-name="email"]', {
+        timeout: 50000
+      }).should(($email) => {
         return expect(
           $email[0].validationMessage
-        ).to.equal(
+        ).to.contain(
           'That email address is already in use'
         );
       });

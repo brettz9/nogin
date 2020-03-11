@@ -13,6 +13,47 @@ describe('Signup', function () {
   it('Signup has no detectable a11y violations on load', () => {
     cy.visitURLAndCheckAccessibility('/signup');
   });
+
+  it('Visit Signup and submit with bad data', function () {
+    cy.task('deleteEmails');
+    cy.task('addNonActivatedAccount');
+    cy.visit('/signup');
+
+    cy.get('[data-name="name"]:invalid').should('have.length', 0);
+
+    const nonEmail = 'nonEmail';
+    cy.get('[data-name="email"]').type(nonEmail);
+    cy.get('[data-name="email"]:invalid').should('have.length', 1);
+
+    cy.get('[data-name="email"]').clear().type('me@example.name');
+    cy.get('[data-name="pass"]').type('boo123456');
+    cy.get('[data-name="pass-confirm"]').type('boo123456');
+    cy.get('[data-name="name"]').type('MyName');
+    cy.get('[data-name="name"]:invalid').should('have.length', 0);
+    cy.get('[data-name="user"]').type('AUser');
+    cy.get('[data-name="action2"]').click();
+
+    cy.get(
+      '[data-name=modal-alert] [data-name=modal-body] p'
+    ).should('be.hidden');
+
+    cy.get('[data-name="email"]', {
+      timeout: 50000
+    }).should(($email) => {
+      return expect(
+        $email[0].validationMessage
+      ).to.contain(
+        'That email address is already in use'
+      );
+    });
+
+    // eslint-disable-next-line promise/prefer-await-to-then
+    return cy.task('getRecords').then((accts) => {
+      expect(accts).to.have.lengthOf(1);
+      return expect(accts[0].name).to.equal('Nicole');
+    });
+  });
+
   it('Visit Signup and submit', function () {
     cy.task('deleteEmails');
     cy.visit('/signup');

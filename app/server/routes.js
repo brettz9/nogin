@@ -271,22 +271,29 @@ module.exports = async function (app, config) {
       const {name, email, pass, country, user} = req.body;
       let o, _;
       try {
+        // Get this first in case following errs
+        _ = await setI18n(req, res);
         // We add `id` here to ensure only posting change for user's own
         //   account, since could otherwise be injecting a different
         //   user's name here
-        [o, _] = await Promise.all([
-          am.updateAccount({
-            id: req.session.user._id,
-            name,
-            user,
-            email,
-            pass,
-            country
-          }),
-          setI18n(req, res)
-        ]);
-      } catch (e) {
-        res.status(400).send(_('ErrorUpdatingAccount'));
+        o = await am.updateAccount({
+          id: req.session.user._id,
+          name,
+          user,
+          email,
+          pass,
+          country
+        });
+      } catch (err) {
+        // We send a code and let the client i18nize
+        // We should probably follow this pattern
+        log('message', {message: err.message});
+        const message = [
+          'email-taken'
+        ].includes(err.message)
+          ? err.message
+          : _('ErrorUpdatingAccount');
+        res.status(400).send(message);
         return;
       }
       req.session.user = o.value;
