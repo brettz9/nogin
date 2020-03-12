@@ -259,6 +259,9 @@
     "PasswordsDontMatch": {
       "message": "Passwords don't match"
     },
+    "FailureSubmittingUserInfo": {
+      "message": "There was a failure submitting your info.{lb}Please check your information and submit again."
+    },
 
     "SIGNUP (CLIENT)": true,
     "PleaseTellUsAboutYourself": {

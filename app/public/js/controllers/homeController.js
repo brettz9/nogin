@@ -80,10 +80,8 @@ function setupValidationSubmission () {
       case 'email-taken':
         av.showInvalidEmail();
         break;
-      case 'username-taken':
-        av.showInvalidUserName();
-        break;
       default:
+        HomeView.onShowLockedErrorAlert({type: 'FailureSubmittingUserInfo'});
         break;
       }
     }

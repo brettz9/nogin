@@ -1,6 +1,12 @@
 const expressSessionID = 'connect.sid';
 
 describe('Home', function () {
+  let NL_EMAIL_PASS;
+  before(() => {
+    ({
+      NL_EMAIL_PASS
+    } = Cypress.env());
+  });
   it(
     'Visit Home and be redirected when no session (no post to `/`, ' +
     '`/home` or GET to auto-login at `/` (from previous-set cookie ' +
@@ -141,6 +147,56 @@ describe('Home', function () {
         const {user, name} = accts[0];
         expect(user).to.equal('bretto');
         return expect(name).to.equal('Brett');
+      });
+    });
+
+    it('Attempt bad input to server (generic error)', function () {
+      // We first trigger coverage on the server, checking that it
+      //  indeed would give the response expected (as HTML doesn't
+      //  seem to support a JSON enctype per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
+      //  then we simulate it here).
+      return cy.request({
+        method: 'POST',
+        url: '/home',
+        // Don't URL-encode; we want JSON to trigger the error
+        // with a (truthy) non-string value and get an error
+        form: false,
+        failOnStatusCode: false,
+        body: {
+          pass: {}
+        }
+      // eslint-disable-next-line promise/prefer-await-to-then
+      }).then((response) => {
+        expect(response.status).to.eq(400);
+        expect(response.body).to.contain(
+          'Error Updating Account'
+        );
+
+        // But since the above was not triggered through our HTML form,
+        //  we have to stub the server response and retry against it,
+        //  in order to see the effect on our client app.
+        cy.server();
+        cy.route({
+          method: 'POST',
+          url: '/home',
+          status: 400,
+          response: 'Error Updating Account'
+        });
+
+        cy.get('[data-name="email"]').clear().type('me@example.name');
+        cy.get('[data-name="pass"]').type('boo123456');
+        cy.get('[data-name="name"]').type('MyNewName');
+        cy.get('[data-name="action2"]').click();
+
+        cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+          'There was a failure submitting your info'
+        );
+
+        // Still the same old pass
+        return cy.validUserPassword({
+          user: 'bretto',
+          pass: NL_EMAIL_PASS
+        });
       });
     });
 

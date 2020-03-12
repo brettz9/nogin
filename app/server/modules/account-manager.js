@@ -277,6 +277,7 @@ class AccountManager {
       _o = await this.accounts.findOne({email: newData.email});
     } catch (err) {}
     if (_o) {
+      // Todo: Should let user resubmit their old email without erring
       throw new Error('email-taken');
     }
     const findOneAndUpdate = ({
