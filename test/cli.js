@@ -104,10 +104,10 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(30000);
+      this.timeout(50000);
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const body = await new Promise((resolve, reject) => {
+      const {body, headers} = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
           '--staticDir', pathResolve(__dirname, './fixtures/'),
           '--userJS', 'userJS.js',
@@ -124,7 +124,8 @@ describe('CLI', function () {
           // if (stdout.includes('Express server listening on port 1234')) {
           if (stdout.includes('Beginning server...')) {
             try {
-              resolve(await (await fetch(`http://localhost:${testPort}`)).text());
+              const res = await fetch(`http://localhost:${testPort}`);
+              resolve({headers: res.headers, body: await res.text()});
             } catch (err) {
               reject(err);
             }
@@ -133,6 +134,8 @@ describe('CLI', function () {
       });
       const {stdout, stderr} = await cliProm;
       console.log('body', body);
+      expect(headers.get('x-middleware-gets-options')).to.equal('favicon.ico');
+      expect(headers.get('x-middleware-gets-req')).to.equal('/');
       const doc = (new JSDOM(body)).window.document;
       const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
         return link.outerHTML;
@@ -169,15 +172,12 @@ describe('CLI', function () {
       // 2. Confirm `staticDir` can be visited
       // 3. Confirm `router` can be run by visiting `/dynamic-route`
       // 4. Test again but with `noBuiltinStylesheets`
+      // 5. Check headers to verify middleware set them
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
         'Awaiting database account connection...\n' +
-        'Beginning server...\n' +
-        // Middleware output
-        'gets options, e.g., favicon.ico\n' +
-        'req.url /\n' +
-        'middleware done\n'
+        'Beginning server...\n'
       );
       expect(stripPromisesWarning(stderr)).to.equal('');
     }
