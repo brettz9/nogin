@@ -2,6 +2,7 @@ import {spawn} from 'child_process';
 
 /**
 * @callback EventWatcher
+* @param {string} stdout Aggregate stdout
 * @param {string} data
 * @returns {void|Promise<void>}
 */
@@ -35,10 +36,10 @@ const spawnPromise = (
       opts
     );
     cli.stdout.on('data', (data) => {
-      if (watchEvents) {
-        watchEvents(data);
-      }
       stdout += data;
+      if (watchEvents) {
+        watchEvents(stdout, data);
+      }
     });
 
     cli.stderr.on('data', (data) => {

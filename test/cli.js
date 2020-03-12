@@ -21,7 +21,7 @@ const stripPromisesWarning = (s) => {
   return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
 };
 
-const stripMongoMessages = (s) => {
+const stripMongoAndServerListeningMessages = (s) => {
   // Todo: Replace this with suppressing db output?
   return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '')
     .replace(/Express server listening on port 1234\n/u, '');
@@ -47,7 +47,7 @@ describe('CLI', function () {
       'badFile',
       '--PORT', testPort
     ]);
-    expect(stripMongoMessages(stdout)).to.equal('');
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal('');
   });
 
@@ -58,7 +58,7 @@ describe('CLI', function () {
       '--secret', secret,
       '--PORT', testPort
     ]);
-    expect(stripMongoMessages(stdout)).to.equal('');
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
       'No config file detected at nogin.json; supply a ' +
         '`null` `config` to avoid this message.\n'
@@ -73,7 +73,7 @@ describe('CLI', function () {
       '--PORT', testPort,
       '--config', ''
     ], 20000);
-    expect(stripMongoMessages(stdout)).to.equal(
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
       'Beginning routes...\n' +
       'Awaiting internationalization and logging...\n' +
       'Awaiting database account connection...\n' +
@@ -97,7 +97,7 @@ describe('CLI', function () {
       expect(stripPromisesWarning(stderr)).to.contain(
         'Unrecognized database adapter "badAdapter"!'
       );
-      expect(stripMongoMessages(stdout)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     }
   );
 
@@ -105,25 +105,34 @@ describe('CLI', function () {
     'Null config with non-local scripts and misc. config',
     async function () {
       this.timeout(30000);
-      let body;
-      const cliProm = spawnPromise(cliPath, [
-        '--staticDir', pathResolve(__dirname, './fixtures/'),
-        '--userJS', 'userJS.js',
-        '--userJSModule', 'userJSModule.js',
-        '--stylesheet', 'stylesheet.css',
-        '--favicon', 'favicon.ico',
-        '--router', pathResolve(__dirname, './fixtures/router.js'),
-        '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
-        '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
-        '--secret', secret,
-        '--PORT', testPort,
-        '--config', ''
-      ], 20000, async (data) => {
-        if (data.includes('Beginning server')) {
-          body = await (await fetch(`http://localhost:${testPort}`)).text();
-        }
+      let cliProm;
+      // eslint-disable-next-line promise/avoid-new
+      const body = await new Promise((resolve, reject) => {
+        cliProm = spawnPromise(cliPath, [
+          '--staticDir', pathResolve(__dirname, './fixtures/'),
+          '--userJS', 'userJS.js',
+          '--userJSModule', 'userJSModule.js',
+          '--stylesheet', 'stylesheet.css',
+          '--favicon', 'favicon.ico',
+          '--router', pathResolve(__dirname, './fixtures/router.js'),
+          '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
+          '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
+          '--secret', secret,
+          '--PORT', testPort,
+          '--config', ''
+        ], 40000, async (stdout) => {
+          // if (stdout.includes('Express server listening on port 1234')) {
+          if (stdout.includes('Beginning server...')) {
+            try {
+              resolve(await (await fetch(`http://localhost:${testPort}`)).text());
+            } catch (err) {
+              reject(err);
+            }
+          }
+        });
       });
       const {stdout, stderr} = await cliProm;
+      console.log('body', body);
       const doc = (new JSDOM(body)).window.document;
       const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
         return link.outerHTML;
@@ -160,14 +169,15 @@ describe('CLI', function () {
       // 2. Confirm `staticDir` can be visited
       // 3. Confirm `router` can be run by visiting `/dynamic-route`
       // 4. Test again but with `noBuiltinStylesheets`
-      expect(stripMongoMessages(stdout)).to.equal(
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
         'Awaiting database account connection...\n' +
         'Beginning server...\n' +
         // Middleware output
         'gets options, e.g., favicon.ico\n' +
-        'req.url /\n'
+        'req.url /\n' +
+        'middleware done\n'
       );
       expect(stripPromisesWarning(stderr)).to.equal('');
     }
@@ -187,7 +197,7 @@ describe('CLI', function () {
       '--PORT', testPort,
       '--config', ''
     ]);
-    expect(stripMongoMessages(stdout)).to.equal('');
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
       'A production environment requires setting `DB_USER` and `DB_PASS`.\n'
     );
@@ -208,7 +218,7 @@ describe('CLI', function () {
       '--DB_USER', 'brett',
       '--DB_PASS', '123456'
     ], 20000);
-    expect(stripMongoMessages(stdout)).to.equal(
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
       'Beginning routes...\n' +
       'Awaiting internationalization and logging...\n' +
       'Awaiting database account connection...\n'
@@ -221,7 +231,7 @@ describe('CLI', function () {
     const {stdout, stderr} = await spawnPromise(cliPath, [
       'help'
     ]);
-    expect(stripMongoMessages(stdout)).to.contain(
+    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
       'nogin [help|(add|create'
     );
     expect(stripPromisesWarning(stderr)).to.equal('');
@@ -234,7 +244,7 @@ describe('CLI', function () {
       'add'
     ]);
     expect(stripPromisesWarning(stderr)).to.equal('');
-    expect(stripMongoMessages(stdout)).to.contain(
+    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
       '--userFile path'
     );
   });
@@ -247,7 +257,7 @@ describe('CLI', function () {
       '--loggerLocale'
     ]);
     expect(stripPromisesWarning(stderr)).to.equal('');
-    expect(stripMongoMessages(stdout)).to.contain(
+    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
       '--userFile path'
     );
   });
@@ -258,7 +268,7 @@ describe('CLI', function () {
       'help',
       'noSuchVerb'
     ]);
-    expect(stripMongoMessages(stdout)).to.equal('');
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.contain(
       'Erred TypeError: Unknown verb noSuchVerb'
     );
@@ -277,11 +287,11 @@ describe('CLI', function () {
       ]);
       expect(stripPromisesWarning(stderr)).to.equal('');
       try {
-        expect(stripMongoMessages(stdout)).to.equal(
+        expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
           'Added 2 accounts: brett, coco!\n'
         );
       } catch (err) {
-        expect(stripMongoMessages(stdout)).to.equal(
+        expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
           'Added 2 accounts: coco, brett!\n'
         );
       }
@@ -306,7 +316,7 @@ describe('CLI', function () {
         '--activated'
       ]);
       expect(stripPromisesWarning(stderr)).to.equal('');
-      expect(stripMongoMessages(stdout)).to.equal(
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Added 1 accounts: testUser!\n'
       );
     });
@@ -321,7 +331,7 @@ describe('CLI', function () {
       expect(stripPromisesWarning(stderr)).to.contain(
         'no such file or directory'
       );
-      expect(stripMongoMessages(stdout)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     });
 
     it('add (erring due to missing pass)', async function () {
@@ -335,7 +345,7 @@ describe('CLI', function () {
         'A `pass` argument must be provided with `user`; ' +
             'for user "testUser" index 0'
       );
-      expect(stripMongoMessages(stdout)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     });
 
     it('add (erring due to missing email)', async function () {
@@ -351,7 +361,7 @@ describe('CLI', function () {
         'An `email` argument must be provided with `user`; ' +
             'for user "testUser" index 0'
       );
-      expect(stripMongoMessages(stdout)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     });
   });
 
@@ -373,7 +383,7 @@ describe('CLI', function () {
         ]);
         expect(stripPromisesWarning(stderr)).to.equal('');
 
-        const strippedStdout = stripMongoMessages(stdout);
+        const strippedStdout = stripMongoAndServerListeningMessages(stdout);
         const expectedBeginning = 'Account ';
         const beginning = strippedStdout.slice(
           0, expectedBeginning.length
@@ -397,7 +407,7 @@ describe('CLI', function () {
         ]);
         expect(stripPromisesWarning(stderr)).to.equal('');
 
-        const strippedStdout = stripMongoMessages(stdout);
+        const strippedStdout = stripMongoAndServerListeningMessages(stdout);
         const expected = 'Removed 1 accounts!\n';
 
         expect(strippedStdout).to.equal(expected);
@@ -419,7 +429,7 @@ describe('CLI', function () {
       ]);
       expect(stripPromisesWarning(stderr)).to.equal('');
 
-      const strippedStdout = stripMongoMessages(stdout);
+      const strippedStdout = stripMongoAndServerListeningMessages(stdout);
       const expected = 'Updated 1 accounts: brett!\n';
 
       expect(strippedStdout).to.equal(expected);
