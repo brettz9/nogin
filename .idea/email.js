@@ -8,7 +8,7 @@ const {
   NL_EMAIL_HOST,
   NL_EMAIL_USER,
   NL_EMAIL_PASS
-} = require('./node-login.js');
+} = require('./nogin.js');
 
 const pop3 = new Pop3Command({
   host: NL_EMAIL_HOST,

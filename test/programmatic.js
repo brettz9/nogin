@@ -100,7 +100,7 @@ describe('Programmatic', function () {
             {
               DB_HOST: 'localhost',
               DB_PORT: 27017,
-              DB_NAME: 'node-login'
+              DB_NAME: 'nogin'
             }
           ),
           DB_NAME: 'node_login',
@@ -131,7 +131,7 @@ describe('Programmatic', function () {
               DB_PASS: '123456',
               DB_HOST: 'localhost',
               DB_PORT: 27018,
-              DB_NAME: 'node-login'
+              DB_NAME: 'nogin'
             }
           ),
           DB_NAME: 'node_login',
@@ -176,7 +176,7 @@ describe('Programmatic', function () {
     }).to.throw(Error, 'Abstract method');
   });
 
-  it('crypto (node-login)', function () {
+  it('crypto (nogin)', function () {
     return expect(
       cryptoNL.saltAndHash(null)
     ).to.be.rejectedWith(Error);

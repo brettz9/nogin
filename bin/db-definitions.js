@@ -3,7 +3,7 @@
 module.exports = [
   {
     name: 'DB_NAME', alias: 'n', type: String,
-    description: 'Database name; defaults to "node-login"',
+    description: 'Database name; defaults to "nogin"',
     typeLabel: '{underline name}'
   },
   {

@@ -113,8 +113,8 @@ const optionDefinitions = [
   {
     name: 'config', alias: 'c', type: String,
     description: 'Used to set config; when `cwd` is set, defaults to ' +
-      '"<cwd>/node-login.json"; of lower priority than other CLI ' +
-      'arguments; may also be a JavaScript file (node-login.js).',
+      '"<cwd>/nogin.json"; of lower priority than other CLI ' +
+      'arguments; may also be a JavaScript file (nogin.js).',
     typeLabel: '{underline config path}'
   },
   {
@@ -195,9 +195,9 @@ const cliSections = [
   {
     // Add italics: `{italic textToItalicize}`
     content: pkg.description +
-      '\n\n{italic node-login [help|' +
+      '\n\n{italic nogin [help|' +
       '(add|create|remove|delete|update|view|read)' +
-      '] [options]}\n\nRun {italic node-login help <verb>} for the ' +
+      '] [options]}\n\nRun {italic nogin help <verb>} for the ' +
       'allowable options of the verbs.'
   },
   {

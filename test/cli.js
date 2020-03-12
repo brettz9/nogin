@@ -7,7 +7,7 @@ import {
   removeAccounts, addAccounts, readAccounts
 } from '../app/server/modules/db-basic.js';
 
-import nodeLogin from '../node-login.js';
+import nodeLogin from '../nogin.js';
 
 import spawnPromise from './utilities/spawnPromise.js';
 
@@ -19,7 +19,7 @@ const stripPromisesWarning = (s) => {
 
 const stripMongoMessages = (s) => {
   // Todo: Replace this with suppressing db output?
-  return s.replace(/mongodb :: connected to database :: "node-login"\n/u, '')
+  return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '')
     .replace(/Express server listening on port 1234\n/u, '');
 };
 
@@ -56,7 +56,7 @@ describe('CLI', function () {
     ]);
     expect(stripMongoMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
-      'No config file detected at node-login.json; supply a ' +
+      'No config file detected at nogin.json; supply a ' +
         '`null` `config` to avoid this message.\n'
     );
   });
@@ -177,7 +177,7 @@ describe('CLI', function () {
       'help'
     ]);
     expect(stripMongoMessages(stdout)).to.contain(
-      'node-login [help|(add|create'
+      'nogin [help|(add|create'
     );
     expect(stripPromisesWarning(stderr)).to.equal('');
   });

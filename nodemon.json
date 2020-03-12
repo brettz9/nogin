@@ -2,7 +2,7 @@
   "watch": [
     "app/server",
     "app.js",
-    "node-login.js",
+    "nogin.js",
     "cypress.json",
     "cypress.env.json"
   ],

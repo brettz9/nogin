@@ -1,18 +1,16 @@
 {
-  "name": "node-login",
-  "version": "1.7.0",
+  "name": "nogin",
+  "version": "1.0.0-beta.1",
   "description": "A template for quickly building login systems on top of Node.js",
-  "author": "Stephen Braitsch <stephen@braitsch.io>",
-  "contributors": [
-    "Brett Zamir"
-  ],
+  "author": "Brett Zamir",
+  "contributors": [],
   "nyc": {
     "cache": false,
     "exclude": [
       ".eslintrc.js",
       ".ncurc.js",
-      "node-login.js",
-      "node-login-sample.js",
+      "nogin.js",
+      "nogin-sample.js",
       "tools/mochawesome-cli.js",
       ".idea/**",
       "coverage/**",
@@ -52,8 +50,8 @@
     "kill": "npm run stop-mongo",
     "stop-mongo": "kill -2 `pgrep mongo`",
     "mongo:start": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
-    "watch:server-start": "nodemon ./bin/cli.js -- --localScripts --config node-login.js --fromURL=https://braitsh.io --fromText=braitsch --SERVE_COVERAGE",
-    "server:start": "node ./bin/cli.js --localScripts --config node-login.js --fromURL=https://braitsh.io --fromText=braitsch --SERVE_COVERAGE",
+    "watch:server-start": "nodemon ./bin/cli.js -- --localScripts --config nogin.js --fromURL=https://braitsh.io --fromText=brettz9 --SERVE_COVERAGE",
+    "server:start": "node ./bin/cli.js --localScripts --config nogin.js --fromURL=https://braitsh.io --fromText=brettz9 --SERVE_COVERAGE",
     "watch:server:start-production": "NODE_ENV=production npm run watch:server:start",
     "server:start-production": "NODE_ENV=production npm run server:start",
     "css-stylus": "stylus --sourcemap-inline app/public/css/style.styl",
@@ -62,7 +60,7 @@
     "unit-only": "nyc --all --require=esm --require=chai/register-expect mocha --reporter mochawesome --reporter-options reportDir=cypress/results,html=false,overwrite=true test/*.js --exit",
     "delayed-unit-only": "run-s delay unit-only",
     "unit": "run-p -r start-cov delayed-unit-only",
-    "server:start-cov-only": "nyc --all node ./bin/cli.js --localScripts --config node-login.js --fromURL=https://braitsh.io --fromText=braitsch --SERVE_COVERAGE -d instrumented",
+    "server:start-cov-only": "nyc --all node ./bin/cli.js --localScripts --config nogin.js --fromURL=https://braitsh.io --fromText=brettz9 --SERVE_COVERAGE -d instrumented",
     "server:start-cov": "run-s css server:start-cov-only",
     "server:delayed-start-cov": "run-s delay server:start-cov",
     "start-cov": "run-p -r mongo:start server:delayed-start-cov",
@@ -112,12 +110,9 @@
   "engines": {
     "node": ">=10.4.0"
   },
-  "website": {
-    "url": "https://nodejs-login.herokuapp.com"
-  },
   "repository": {
     "type": "git",
-    "url": "git@github.com:braitsch/node-login.git"
+    "url": "https://github.com/brettz9/nogin"
   },
   "license": "MIT",
   "keywords": [
@@ -125,10 +120,10 @@
   ],
   "main": "./app.js",
   "bin": {
-    "node-login": "./bin/cli.js"
+    "nogin": "./bin/cli.js"
   },
-  "homepage": "https://github.com/braitsch/node-login",
-  "bugs": "https://github.com/braitsch/node-login/issues",
+  "homepage": "https://github.com/brettz9/nogin",
+  "bugs": "https://github.com/brettz9/nogin/issues",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

@@ -30,7 +30,7 @@ import {
   validUserPassword, readAccounts
 } from '../../app/server/modules/db-basic.js';
 
-import nodeLoginConfig from '../../node-login.js';
+import nodeLoginConfig from '../../nogin.js';
 
 /**
 * @external CypressOn
@@ -51,8 +51,8 @@ const exprt = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 
-  // We get `secret` and email config from `node-login.js` to avoid
-  //   redundancy with cypress.json` (as node-login server needs the
+  // We get `secret` and email config from `nogin.js` to avoid
+  //   redundancy with cypress.json` (as nogin server needs the
   //   secret and login details as well). Users should not set these
   //   as Cypress environmental variables, as they would not be used
   //   here.

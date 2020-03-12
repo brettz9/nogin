@@ -26,7 +26,7 @@ class DBFactory {
   */
   static getDefaults (options) {
     return {
-      DB_NAME: 'node-login',
+      DB_NAME: 'nogin',
       DB_HOST: 'localhost',
       DB_PORT: 27017,
       adapter: 'mongodb',

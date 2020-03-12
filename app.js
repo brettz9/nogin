@@ -3,8 +3,7 @@
 // Todo: Internationalize attributes like `aria-label`
 
 /**
- * Node.js Login Boilerplate.
- * More Info: https://github.com/braitsch/node-login.
+ * Original project: https://github.com/braitsch/node-login.
  * @copyright (c) 2013-2018 Stephen Braitsch
 */
 
@@ -40,7 +39,7 @@ exports.createServer = async function (options) {
 
   const {
     cwd = process.cwd(),
-    config = 'node-login.json'
+    config = 'nogin.json'
   } = options;
 
   let cfg;

@@ -1,27 +1,37 @@
 <!--
-[![npm](https://img.shields.io/npm/v/node-login.svg)](https://www.npmjs.com/package/node-login)
+[![npm](https://img.shields.io/npm/v/nogin.svg)](https://www.npmjs.com/package/nogin)
 -->
-[![Dependencies](https://img.shields.io/david/brettz9/node-login.svg)](https://david-dm.org/brettz9/node-login)
-[![devDependencies](https://img.shields.io/david/dev/brettz9/node-login.svg)](https://david-dm.org/brettz9/node-login?type=dev)
-[![Tests badge](https://raw.githubusercontent.com/brettz9/node-login/master/readme_includes/tests-badge.svg?sanitize=true)](readme_includes/tests-badge.svg)
-[![Coverage badge](https://raw.githubusercontent.com/brettz9/node-login/master/readme_includes/coverage-badge.svg?sanitize=true)](readme_includes/coverage-badge.svg)
+[![Dependencies](https://img.shields.io/david/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin)
+[![devDependencies](https://img.shields.io/david/dev/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin?type=dev)
+[![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/tests-badge.svg?sanitize=true)](readme_includes/tests-badge.svg)
+[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/coverage-badge.svg?sanitize=true)](readme_includes/coverage-badge.svg)
 
-[![Known Vulnerabilities](https://snyk.io/test/github/brettz9/node-login/badge.svg)](https://snyk.io/test/github/brettz9/node-login)
+[![Known Vulnerabilities](https://snyk.io/test/github/brettz9/nogin/badge.svg)](https://snyk.io/test/github/brettz9/nogin)
 <!--
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/brettz9/node-login.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/node-login/alerts)
-[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/brettz9/node-login.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/node-login/context:javascript)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/brettz9/nogin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/nogin/alerts)
+[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/brettz9/nogin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/nogin/context:javascript)
 -->
 
-[![Licenses badge](https://raw.githubusercontent.com/brettz9/node-login/master/readme_includes/licenses-badge.svg?sanitize=true)](readme_includes/licenses-badge.svg)
-[![Licenses dev badge](https://raw.githubusercontent.com/brettz9/node-login/master/readme_includes/licenses-badge-dev.svg?sanitize=true)](readme_includes/licenses-badge-dev.svg)
+[![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/licenses-badge.svg?sanitize=true)](readme_includes/licenses-badge.svg)
+[![Licenses dev badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/licenses-badge-dev.svg?sanitize=true)](readme_includes/licenses-badge-dev.svg)
 
 <!--
-[![issuehunt-to-marktext](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/r/brettz9/node-login)
+[![issuehunt-to-marktext](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/r/brettz9/nogin)
 -->
 
-# Node Login
+# Nogin
 
-[![node-login](./readme_includes/node-login.jpg?raw=true)](https://nodejs-login.herokuapp.com)
+![nogin](./readme_includes/nogin.jpg?raw=true)
+
+A maintained and expanded fork of <https://github.com/braitsch/node-login>.
+
+The name is a portmanteau of "Node" and "login" and is pronounced "noggin"
+(a colloquial word for "head").
+
+So if you want Node login, use your "nogin"!
+
+**Note: This revised version of node-login is not yet ready for production use,
+nor is the documentation below fully up-to-date.**
 
 ### A basic account management system built in Node.js with the following features:
 
@@ -32,22 +42,14 @@
 - Local Cookie Storage for Returning Users
 - Blowfish-based Scheme Password Encryption
 
-## Live Demo
-
-[https://nodejs-login.herokuapp.com](https://nodejs-login.herokuapp.com)
-
-For testing purposes you can view a [database dump of all accounts here](https://nodejs-login.herokuapp.com/print).<br>Note: This database automatically resets every 24 hours.
-
 ## Installation & Setup
 
 1. Install [Node.js](https://nodejs.org/) & [MongoDB](https://www.mongodb.org/) if you haven't already.
 
-2. Clone this repository and install its dependencies.
+2. Install the package.
 
 ```sh
-git clone git://github.com/braitsch/node-login.git node-login
-cd node-login
-npm install
+npm install -P nogin
 ```
 
 3. In a separate shell start MongoDB.
@@ -56,7 +58,7 @@ npm install
 mongod
 ```
 
-4. From within the node-login directory start the server.
+4. From within the nogin directory start the server.
 
 ```sh
 node app
@@ -66,7 +68,9 @@ node app
 
 ## Password Retrieval
 
-To enable the password retrieval feature it is recommended that you create environment variables for your credentials instead of hard coding them into the [email dispatcher module](https://github.com/braitsch/node-login/blob/master/app/server/modules/email-dispatcher.js).
+To enable the password retrieval feature, it is recommended that you create
+environment variables for your credentials instead of hard coding them into
+the [email dispatcher module](https://github.com/braitsch/node-login/blob/master/app/server/modules/email-dispatcher.js).
 
 To do this on OSX you can simply add them to your `.profile` or `.bashrc` file.
 
@@ -76,16 +80,16 @@ export NL_EMAIL_USER='your.email@gmail.com'
 export NL_EMAIL_PASS='1234'
 ```
 
-[![node-login](./readme_includes/retrieve-password.jpg?raw=true)](https://nodejs-login.herokuapp.com)
+[![nogin](./readme_includes/retrieve-password.jpg?raw=true)](https://nodejs-login.herokuapp.com)
 
 ## Command line usage
 
-[![cli.svg](https://brettz9.github.io/node-login/readme_includes/cli.svg)](cli.svg)
+[![cli.svg](https://brettz9.github.io/nogin/readme_includes/cli.svg)](cli.svg)
 
 To view as non-embedded HTML or SVG files (for copy-pasteable commands):
 
-- [cli.html](https://brettz9.github.io/node-login/readme_includes/cli.html)
-- [cli.svg](https://brettz9.github.io/node-login/readme_includes/cli.svg)
+- [cli.html](https://brettz9.github.io/nogin/readme_includes/cli.html)
+- [cli.svg](https://brettz9.github.io/nogin/readme_includes/cli.svg)
 
 ## Programmatic usage
 

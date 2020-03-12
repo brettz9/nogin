@@ -13,8 +13,8 @@ mochawesome.json
 mocha-multi-reporters.json
 db/**
 .ncurc.js
-node-login.json
-node-login.js
+nogin.json
+nogin.js
 nodemon.json
 tools
 .idea
