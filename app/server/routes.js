@@ -425,12 +425,12 @@ module.exports = async function (app, config) {
       return;
     }
     try {
+      // TODO this promise takes a moment to return, add a loader to
+      //   give user feedback
       /* const { status, text } = */
       await ed.dispatchResetPasswordLink(
         account, composeResetPasswordEmailConfig, _
       );
-      // TODO this promise takes a moment to return, add a loader to
-      //   give user feedback
       res.status(200).send(_('OK'));
     } catch (_e) {
       logErrorProperties(_e);

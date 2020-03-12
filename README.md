@@ -129,9 +129,9 @@ Questions and suggestions for improvement are welcome.
     1. **Multiple group membership** allowing **multiple roles per group**,
         including **user-customizable roles** in addition to built-in ones
         such as the "login" privilege
-        1. Make a simple version of groups where groups are auto-created that
-            map to privileges (e.g., a login group), so can easily add a user
-            to a login group rather than needing to first create the group
+        1. Make a simple version of groups where **groups are auto-created**
+            that map to privileges (e.g., a login group), so can easily add a
+            user to a login group rather than needing to first create the group
             and add the privilege to that group (these could be the built-in
             groups, along with a few combined ones like
             visitor/user/admin/superadmin)
@@ -163,10 +163,15 @@ Questions and suggestions for improvement are welcome.
 
 ## Lower priorities
 
-1. Figure out why opt-in email tests (`'cypress.env.disableEmailChecking': false`)
-    has problems with POP3 `DELE` (with `QUIT`). Is it the library, my
-    server or something else? (Email tests are all passing, just not properly
-    deleting). See <https://tools.ietf.org/html/rfc1939>
+1. We should already be checking the important items like avoiding existing
+    names, but we should be **rejecting bad values of lesser importance on
+    the server-side** as we do on the client-side (e.g., non-emails, too
+    short of passwords, etc.)
+1. Figure out why **opt-in email tests are problematic**
+    (`'cypress.env.disableEmailChecking': false`) in POP3 `DELE` (with `QUIT`)
+    not deleting. Is it the library, my server or something else? (Email tests
+    are all passing, just not properly deleting within the test). See
+    <https://tools.ietf.org/html/rfc1939>
 1. Switch from `jsdom` to **`dominum`** (once latter may be capable), as latter
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
