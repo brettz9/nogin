@@ -276,31 +276,31 @@ module.exports = async function (app, config) {
       res.redirect('/');
     } else {
       const {name, email, pass, country, user} = req.body;
-      let _, o;
-      try {
-        // We add `id` here to ensure only posting change for user's own
-        //   account, since could otherwise be injecting a different
-        //   user's name here
+      // We add `id` here to ensure only posting change for user's own
+      //   account, since could otherwise be injecting a different
+      //   user's name here
+      const [
+        {value: _}, {status, reason: error, value: o}
         // eslint-disable-next-line node/no-unsupported-features/es-builtins
-        [_, o] = await Promise.allSettled([
-          setI18n(req, res),
-          am.updateAccount({
-            id: req.session.user._id,
-            name,
-            user,
-            email,
-            pass,
-            country
-          })
-        ]);
-      } catch (err) {
+      ] = await Promise.allSettled([
+        setI18n(req, res),
+        am.updateAccount({
+          id: req.session.user._id,
+          name,
+          user,
+          email,
+          pass,
+          country
+        })
+      ]);
+      if (status === 'rejected') {
         // We send a code and let the client i18nize
         // We should probably follow this pattern
-        log('message', {message: err.message});
+        log('message', {message: error.message});
         const message = [
           'email-taken'
-        ].includes(err.message)
-          ? err.message
+        ].includes(error.message)
+          ? error.message
           : _('ErrorUpdatingAccount');
         res.status(400).send(message);
         return;
@@ -332,21 +332,21 @@ module.exports = async function (app, config) {
 
   app.post('/signup', async function (req, res) {
     const {name, email, user, pass, country} = req.body;
-    let _, o;
-    try {
+    const [
+      {value: _}, {status, reason: error, value: o}
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      [_, o] = await Promise.allSettled([
-        setI18n(req, res),
-        am.addNewAccount({
-          name,
-          email,
-          user,
-          pass,
-          country
-        })
-      ]);
-    } catch (e) {
-      res.status(400).send(e.message);
+    ] = await Promise.allSettled([
+      setI18n(req, res),
+      am.addNewAccount({
+        name,
+        email,
+        user,
+        pass,
+        country
+      })
+    ]);
+    if (status === 'rejected') {
+      res.status(400).send(error.message);
       return;
     }
     try {
@@ -413,15 +413,15 @@ module.exports = async function (app, config) {
   */
   app.post('/lost-password', async function (req, res) {
     const {email} = req.body;
-    let _, account;
-    try {
+    const [
+      {value: _}, {status, reason: error, value: account}
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      [_, account] = await Promise.allSettled([
-        setI18n(req, res),
-        am.generatePasswordKey(email, req.ip)
-      ]);
-    } catch (e) {
-      res.status(400).send(e.message);
+    ] = await Promise.allSettled([
+      setI18n(req, res),
+      am.generatePasswordKey(email, req.ip)
+    ]);
+    if (status === 'rejected') {
+      res.status(400).send(error.message);
       return;
     }
     try {
@@ -439,15 +439,16 @@ module.exports = async function (app, config) {
   });
 
   app.get('/reset-password', async function (req, res) {
-    let _, o, e;
-    try {
+    let e;
+    const [
+      {value: _}, {status, reason: error, value: o}
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      [_, o] = await Promise.allSettled([
-        setI18n(req, res),
-        am.validatePasswordKey(req.query.key, req.ip)
-      ]);
-    } catch (err) {
-      e = err;
+    ] = await Promise.allSettled([
+      setI18n(req, res),
+      am.validatePasswordKey(req.query.key, req.ip)
+    ]);
+    if (status === 'rejected') {
+      e = error;
     }
     if (e || isNullish(o)) {
       res.redirect('/');
@@ -465,14 +466,13 @@ module.exports = async function (app, config) {
     const {passKey} = req.session;
     // destroy the session immediately after retrieving the stored passkey
     req.session.destroy();
-    let _, o;
-    try {
+    const [
+      {value: _}, {value: o}
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      [_, o] = await Promise.allSettled([
-        setI18n(req, res),
-        am.updatePassword(passKey, newPass)
-      ]);
-    } catch (err) {}
+    ] = await Promise.allSettled([
+      setI18n(req, res),
+      am.updatePassword(passKey, newPass)
+    ]);
     if (o) {
       res.status(200).send(_('OK'));
     } else {
@@ -486,9 +486,11 @@ module.exports = async function (app, config) {
   */
   app.get('/users', async function (req, res) {
     const [
-      _,
-      // istanbul ignore next
-      accounts = []
+      {value: _},
+      {
+        // istanbul ignore next
+        value: accounts = []
+      }
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
     ] = await Promise.allSettled([
       setI18n(req, res),
@@ -514,14 +516,14 @@ module.exports = async function (app, config) {
    * Should be safe as express-session stores session object server-side.
    */
   app.post('/delete', async function (req, res) {
-    let _;
-    try {
+    const [
+      {value: _}, {status}
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      [_] = await Promise.allSettled([
-        setI18n(req, res),
-        am.deleteAccountById(req.session.user._id)
-      ]);
-    } catch (err) {
+    ] = await Promise.allSettled([
+      setI18n(req, res),
+      am.deleteAccountById(req.session.user._id)
+    ]);
+    if (status === 'rejected') {
       res.status(400).send(_('RecordNotFound'));
       return;
     }
