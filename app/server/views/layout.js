@@ -16,17 +16,17 @@ module.exports = ({
         rel: 'shortcut icon', type: 'image/x-icon',
         href: favicon || 'data:image/x-icon;,'
       }],
-      ['link', {
-        href: localScripts
-          ? '/node_modules/font-awesome/css/font-awesome.min.css'
-          : 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
-        rel: 'stylesheet',
-        integrity: 'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN',
-        crossorigin: 'anonymous'
-      }],
       ...(noBuiltinStylesheets
         ? ['']
         : [
+          ['link', {
+            href: localScripts
+              ? '/node_modules/font-awesome/css/font-awesome.min.css'
+              : 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
+            rel: 'stylesheet',
+            integrity: 'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN',
+            crossorigin: 'anonymous'
+          }],
           ['link', {
             rel: 'stylesheet',
             href: localScripts

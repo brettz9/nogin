@@ -118,7 +118,7 @@ describe('CLI', function () {
   //  or before another instance of Cypress runs, both of which seem
   //  like unnecessary overhead since we are not testing post-load
   //  behavior/JavaScript.
-  it.only(
+  it(
     'Null config with non-local scripts and misc. config',
     async function () {
       this.timeout(50000);
@@ -198,8 +198,8 @@ describe('CLI', function () {
       ));
 
       const headScripts = [...doc.querySelectorAll('head script')].map(
-        (link) => {
-          return link.outerHTML;
+        (script) => {
+          return script.outerHTML;
         }
       );
 
@@ -246,8 +246,51 @@ describe('CLI', function () {
       expect(dynamicText).to.equal(
         'got a dynamic route with options, e.g., userJS.js'
       );
-      // Todo:
-      // 1. Test again but with `noBuiltinStylesheets`
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n' +
+        'Awaiting database account connection...\n' +
+        'Beginning server...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.equal('');
+    }
+  );
+  it(
+    'Null config with non-local scripts and `noBuiltinStylesheets`',
+    async function () {
+      this.timeout(50000);
+      let cliProm;
+      // eslint-disable-next-line promise/avoid-new
+      const {text} = await new Promise((resolve, reject) => {
+        cliProm = spawnPromise(cliPath, [
+          '--noBuiltinStylesheets',
+          '--secret', secret,
+          '--PORT', testPort,
+          '--config', ''
+        ], 40000, async (stdout) => {
+          // if (stdout.includes('Express server listening on port 1234')) {
+          if (stdout.includes('Beginning server...')) {
+            try {
+              const res = await fetch(`http://localhost:${testPort}`);
+              resolve(
+                {text: await res.text()}
+              );
+            } catch (err) {
+              reject(err);
+            }
+          }
+        });
+      });
+      const {stdout, stderr} = await cliProm;
+      console.log('text', text);
+      const doc = (new JSDOM(text)).window.document;
+      const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
+        return link.outerHTML;
+      }).join('');
+      expect(headLinks).to.equal(
+        '<link rel="shortcut icon" type="image/x-icon" ' +
+          'href="data:image/x-icon;,">'
+      );
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
