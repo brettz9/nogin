@@ -144,7 +144,9 @@ describe('CLI', function () {
           '--PORT', testPort,
           '--config', ''
         ], 40000, async (stdout) => {
-          // if (stdout.includes('Express server listening on port 1234')) {
+          // if (stdout.includes(
+          //  `Express server listening on port ${testPort}`)
+          // ) {
           if (stdout.includes('Beginning server...')) {
             try {
               const [res, staticRes, dynamicRes] = await Promise.all([
@@ -262,7 +264,7 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and `noBuiltinStylesheets`',
     async function () {
-      this.timeout(50000);
+      this.timeout(60000);
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
       const {text} = await new Promise((resolve, reject) => {
@@ -272,7 +274,9 @@ describe('CLI', function () {
           '--PORT', testPort2,
           '--config', ''
         ], 40000, async (stdout) => {
-          // if (stdout.includes('Express server listening on port 1234')) {
+          // if (stdout.includes(
+          //   `Express server listening on port ${testPort2}`)
+          // ) {
           if (stdout.includes('Beginning server...')) {
             try {
               const res = await fetch(`http://localhost:${testPort2}`);
