@@ -70,7 +70,9 @@ module.exports = async function (app, config) {
     localScripts,
     fromText,
     fromURL,
-    triggerCoverage
+    triggerCoverage,
+    router,
+    opts
   } = config;
 
   const countryCodes = config.countryCodes
@@ -582,6 +584,11 @@ module.exports = async function (app, config) {
     });
     res.status(200).send(wrapResult({resolvedLocale, strings}));
   });
+
+  if (router) {
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    require(router)(app, opts);
+  }
 
   app.get('*', async function (req, res) {
     const _ = await setI18n(req, res);

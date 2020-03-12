@@ -124,7 +124,7 @@ describe('CLI', function () {
       this.timeout(50000);
       let cliProm;
       const [
-        {text, headers}, {json}
+        {text, headers}, {json}, {dynamicText}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -143,14 +143,17 @@ describe('CLI', function () {
           // if (stdout.includes('Express server listening on port 1234')) {
           if (stdout.includes('Beginning server...')) {
             try {
-              const [res, staticRes] = await Promise.all([
+              const [res, staticRes, dynamicRes] = await Promise.all([
                 fetch(`http://localhost:${testPort}`),
-                // Within `fixtures`
-                fetch(`http://localhost:${testPort}/addUsers.json`)
+                // Within `/test/fixtures`
+                fetch(`http://localhost:${testPort}/addUsers.json`),
+                // Based on `router`
+                fetch(`http://localhost:${testPort}/dynamic-route`)
               ]);
               resolve([
                 {headers: res.headers, text: await res.text()},
-                {json: await staticRes.json()}
+                {json: await staticRes.json()},
+                {dynamicText: await dynamicRes.text()}
               ]);
             } catch (err) {
               reject(err);
@@ -239,9 +242,12 @@ describe('CLI', function () {
       );
 
       expect(json).to.deep.equal(addUsersJSON);
+
+      expect(dynamicText).to.equal(
+        'got a dynamic route with options, e.g., userJS.js'
+      );
       // Todo:
-      // 1. Confirm `router` can be run by visiting `/dynamic-route`
-      // 2. Test again but with `noBuiltinStylesheets`
+      // 1. Test again but with `noBuiltinStylesheets`
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +

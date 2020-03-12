@@ -190,14 +190,11 @@ exports.createServer = async function (options) {
     countryCodes,
     fromText,
     fromURL,
+    router,
+    opts,
     // User is using instrumenting
     triggerCoverage: JS_DIR !== '/app/public'
   });
-
-  if (router) {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
-    require(router)(app, opts);
-  }
 
   log('BeginningServer');
   http.createServer(app).listen(app.get('port'), () => {
