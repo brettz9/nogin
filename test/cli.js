@@ -16,6 +16,8 @@ import nodeLogin from '../nogin.js';
 
 import spawnPromise from './utilities/spawnPromise.js';
 
+import addUsersJSON from './fixtures/addUsers.json';
+
 const {secret} = nodeLogin;
 
 const stripPromisesWarning = (s) => {
@@ -121,8 +123,10 @@ describe('CLI', function () {
     async function () {
       this.timeout(50000);
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
-      const {text, headers} = await new Promise((resolve, reject) => {
+      const [
+        {text, headers}, {json}
+        // eslint-disable-next-line promise/avoid-new
+      ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
           '--staticDir', pathResolve(__dirname, './fixtures/'),
           '--userJS', 'userJS.js',
@@ -139,8 +143,15 @@ describe('CLI', function () {
           // if (stdout.includes('Express server listening on port 1234')) {
           if (stdout.includes('Beginning server...')) {
             try {
-              const res = await fetch(`http://localhost:${testPort}`);
-              resolve({headers: res.headers, text: await res.text()});
+              const [res, staticRes] = await Promise.all([
+                fetch(`http://localhost:${testPort}`),
+                // Within `fixtures`
+                fetch(`http://localhost:${testPort}/addUsers.json`)
+              ]);
+              resolve([
+                {headers: res.headers, text: await res.text()},
+                {json: await staticRes.json()}
+              ]);
             } catch (err) {
               reject(err);
             }
@@ -226,10 +237,11 @@ describe('CLI', function () {
       expect(doc.body.lastElementChild.outerHTML).to.equal(
         '<script src="bodyPostContent.js"></script>'
       );
+
+      expect(json).to.deep.equal(addUsersJSON);
       // Todo:
-      // 1. Confirm `staticDir` can be visited
-      // 2. Confirm `router` can be run by visiting `/dynamic-route`
-      // 3. Test again but with `noBuiltinStylesheets`
+      // 1. Confirm `router` can be run by visiting `/dynamic-route`
+      // 2. Test again but with `noBuiltinStylesheets`
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
