@@ -15,7 +15,6 @@ describe('Home', function () {
   );
   describe('Pre-logging in with session', function () {
     beforeEach(() => {
-      cy.task('deleteAllAccounts');
       cy.loginWithSession();
       cy.task('addNonActivatedAccount');
       cy.visit('/home');
@@ -51,7 +50,10 @@ describe('Home', function () {
       cy.get('[data-name="modal-confirm"] .btn-danger').click();
 
       cy.get(
-        '[data-name=modal-alert] [data-name=modal-body] p'
+        '[data-name=modal-alert] [data-name=modal-body] p',
+        {
+          timeout: 20000
+        }
       ).contains('Your account has been deleted.');
 
       cy.location('pathname', {
@@ -76,7 +78,10 @@ describe('Home', function () {
       cy.get('[data-name="modal-confirm"] .btn-danger').click();
 
       cy.get(
-        '[data-name=modal-alert] [data-name=modal-body] p'
+        '[data-name=modal-alert] [data-name=modal-body] p',
+        {
+          timeout: 20000
+        }
       ).contains('Record not found');
 
       cy.location('pathname', {

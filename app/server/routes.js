@@ -285,7 +285,7 @@ module.exports = async function (app, config) {
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.updateAccount({
-          id: req.session.user._id,
+          id: req.session.user && req.session.user._id,
           name,
           user,
           email,
@@ -521,7 +521,9 @@ module.exports = async function (app, config) {
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
     ] = await Promise.allSettled([
       setI18n(req, res),
-      am.deleteAccountById(req.session.user._id)
+      req.session.user
+        ? am.deleteAccountById(req.session.user._id)
+        : Promise.reject(new Error('Missing session user'))
     ]);
     if (status === 'rejected') {
       res.status(400).send(_('RecordNotFound'));
