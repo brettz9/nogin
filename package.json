@@ -1,7 +1,7 @@
 {
   "name": "nogin",
   "version": "1.0.0-beta.1",
-  "description": "A template for quickly building login systems on top of Node.js",
+  "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "author": "Brett Zamir",
   "contributors": [],
   "nyc": {
