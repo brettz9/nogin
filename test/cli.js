@@ -32,7 +32,7 @@ const stripPromisesWarning = (s) => {
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = 1234;
-const testPort2 = 1235;
+const testPort2 = 1234;
 
 const stripMongoAndServerListeningMessages = (s, port = testPort) => {
   // Todo: Replace this with suppressing db output?
@@ -53,6 +53,57 @@ const escRegex = (str) => {
 };
 
 describe('CLI', function () {
+  // Was causing errors next to the other `fetch` testing script
+  it(
+    'Null config with non-local scripts and `noBuiltinStylesheets`',
+    async function () {
+      this.timeout(60000);
+      let cliProm;
+      // eslint-disable-next-line promise/avoid-new
+      const {text} = await new Promise((resolve, reject) => {
+        cliProm = spawnPromise(cliPath, [
+          '--noBuiltinStylesheets',
+          '--secret', secret,
+          '--PORT', testPort2,
+          '--config', ''
+        ], 40000, async (stdout) => {
+          // if (stdout.includes(
+          //   `Express server listening on port ${testPort2}`)
+          // ) {
+          if (stdout.includes('Beginning server...')) {
+            try {
+              const res = await fetch(`http://localhost:${testPort2}`);
+              resolve(
+                {text: await res.text()}
+              );
+            } catch (err) {
+              reject(err);
+            }
+          }
+        });
+      });
+      const {stdout, stderr} = await cliProm;
+      console.log('text', text);
+      const doc = (new JSDOM(text)).window.document;
+      const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
+        return link.outerHTML;
+      }).join('');
+      expect(headLinks).to.equal(
+        '<link rel="shortcut icon" type="image/x-icon" ' +
+          'href="data:image/x-icon;,">'
+      );
+      expect(stripMongoAndServerListeningMessages(
+        stdout, testPort
+      )).to.equal(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n' +
+        'Awaiting database account connection...\n' +
+        'Beginning server...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.equal('');
+    }
+  );
+
   it('--noLogging option and bad config', async function () {
     this.timeout(20000);
     const {stdout, stderr} = await spawnPromise(cliPath, [
@@ -253,55 +304,6 @@ describe('CLI', function () {
         'got a dynamic route with options, e.g., userJS.js'
       );
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
-        'Beginning routes...\n' +
-        'Awaiting internationalization and logging...\n' +
-        'Awaiting database account connection...\n' +
-        'Beginning server...\n'
-      );
-      expect(stripPromisesWarning(stderr)).to.equal('');
-    }
-  );
-  it(
-    'Null config with non-local scripts and `noBuiltinStylesheets`',
-    async function () {
-      this.timeout(60000);
-      let cliProm;
-      // eslint-disable-next-line promise/avoid-new
-      const {text} = await new Promise((resolve, reject) => {
-        cliProm = spawnPromise(cliPath, [
-          '--noBuiltinStylesheets',
-          '--secret', secret,
-          '--PORT', testPort2,
-          '--config', ''
-        ], 40000, async (stdout) => {
-          // if (stdout.includes(
-          //   `Express server listening on port ${testPort2}`)
-          // ) {
-          if (stdout.includes('Beginning server...')) {
-            try {
-              const res = await fetch(`http://localhost:${testPort2}`);
-              resolve(
-                {text: await res.text()}
-              );
-            } catch (err) {
-              reject(err);
-            }
-          }
-        });
-      });
-      const {stdout, stderr} = await cliProm;
-      console.log('text', text);
-      const doc = (new JSDOM(text)).window.document;
-      const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
-        return link.outerHTML;
-      }).join('');
-      expect(headLinks).to.equal(
-        '<link rel="shortcut icon" type="image/x-icon" ' +
-          'href="data:image/x-icon;,">'
-      );
-      expect(stripMongoAndServerListeningMessages(
-        stdout, testPort2
-      )).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
         'Awaiting database account connection...\n' +
