@@ -43,11 +43,6 @@ describe('Root (Login)', function () {
     // Click twice to check toggling behavior
     cy.get('[data-name=btn_remember]').click();
     cy.get('[data-name=btn_remember]').click();
-
-    // Do it two extra times in case it helps with Cypress not
-    //  picking up coverage
-    cy.get('[data-name=btn_remember]').click();
-    cy.get('[data-name=btn_remember]').click();
     /*
     // Signs up but no UI-only way to get and add activation code
     //   needed for login; however, keeping below for reference in
