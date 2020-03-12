@@ -111,13 +111,18 @@ describe('CLI', function () {
     }
   );
 
+  // While we could make a full-blown UI test out of this, it would
+  //  require setting up another server either before Cypress runs,
+  //  or before another instance of Cypress runs, both of which seem
+  //  like unnecessary overhead since we are not testing post-load
+  //  behavior/JavaScript.
   it.only(
     'Null config with non-local scripts and misc. config',
     async function () {
       this.timeout(50000);
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const {body, headers} = await new Promise((resolve, reject) => {
+      const {text, headers} = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
           '--staticDir', pathResolve(__dirname, './fixtures/'),
           '--userJS', 'userJS.js',
@@ -135,7 +140,7 @@ describe('CLI', function () {
           if (stdout.includes('Beginning server...')) {
             try {
               const res = await fetch(`http://localhost:${testPort}`);
-              resolve({headers: res.headers, body: await res.text()});
+              resolve({headers: res.headers, text: await res.text()});
             } catch (err) {
               reject(err);
             }
@@ -143,10 +148,10 @@ describe('CLI', function () {
         });
       });
       const {stdout, stderr} = await cliProm;
-      console.log('body', body);
+      console.log('text', text);
       expect(headers.get('x-middleware-gets-options')).to.equal('favicon.ico');
       expect(headers.get('x-middleware-gets-req')).to.equal('/');
-      const doc = (new JSDOM(body)).window.document;
+      const doc = (new JSDOM(text)).window.document;
       const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
         return link.outerHTML;
       }).join('');
@@ -171,7 +176,10 @@ describe('CLI', function () {
         ) + semverNumPattern + escRegex(
           '/gh-fork-ribbon.min.css" crossorigin="anonymous">'
         ) +
-        escRegex('<link rel="stylesheet" href="stylesheet.css">'),
+        escRegex(
+          '<link rel="stylesheet" href="stylesheet.css">' +
+          '<link rel="stylesheet" href="headPostContent.css">'
+        ),
         'u'
       ));
 
@@ -181,9 +189,10 @@ describe('CLI', function () {
         }
       );
 
-      const headPreScripts = headScripts.slice(0, 4).join('');
+      const headPreScripts = headScripts.slice(0, 5).join('');
       expect(headPreScripts).to.match(new RegExp(
         escRegex(
+          '<script src="headPreContent.js"></script>' +
           '<script src="https://code.jquery.com/jquery-'
         ) + semverNumPattern + escRegex(
           '.min.js" crossorigin="anonymous" defer=""></script>'
@@ -210,11 +219,17 @@ describe('CLI', function () {
         '<script src="userJS.js"></script>' +
         '<script type="module" src="userJSModule.js"></script>'
       );
+
+      expect(doc.body.firstElementChild.outerHTML).to.equal(
+        '<link rel="stylesheet" href="bodyPreContent.css">'
+      );
+      expect(doc.body.lastElementChild.outerHTML).to.equal(
+        '<script src="bodyPostContent.js"></script>'
+      );
       // Todo:
-      // 1. Check content for `injectHTML`
-      // 2. Confirm `staticDir` can be visited
-      // 3. Confirm `router` can be run by visiting `/dynamic-route`
-      // 4. Test again but with `noBuiltinStylesheets`
+      // 1. Confirm `staticDir` can be visited
+      // 2. Confirm `router` can be run by visiting `/dynamic-route`
+      // 3. Test again but with `noBuiltinStylesheets`
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
