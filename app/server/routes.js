@@ -285,7 +285,7 @@ module.exports = async function (app, config) {
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.updateAccount({
-          id: req.session.user && req.session.user._id,
+          id: req.session.user._id,
           name,
           user,
           email,
