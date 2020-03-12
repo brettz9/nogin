@@ -71,6 +71,8 @@ function setupValidationSubmission () {
       return true;
     },
     success (responseText, status, xhr, $form) {
+      // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
+      // istanbul ignore else
       if (status === 'success') {
         onUpdateSuccess();
       }
