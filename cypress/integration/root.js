@@ -160,7 +160,7 @@ describe('Root (Login)', function () {
     }
   );
 
-  // Todo[>=1.7.0]: `dispatchResetPasswordLink` could throw with a
+  // Todo[>=1.0.0-beta.1]: `dispatchResetPasswordLink` could throw with a
   //   bad `NL_EMAIL_FROM`, causing `UnableToDispatchPasswordReset` error;
   //   but need to temporarily change JSON file
   /*

@@ -475,7 +475,7 @@ module.exports = async function (app, config) {
     }
   });
 
-  // todo[>=1.7.0]: Should require (read) privileges!
+  // Todo[>=1.0.0-beta.1]: Should require (read) privileges!
   /**
    * View, delete & reset accounts (currently view only).
   */
@@ -521,7 +521,7 @@ module.exports = async function (app, config) {
     });
   });
 
-  // todo[>=1.7.0]: Should require privileges and expect POST/DELETE!
+  // Todo[>=1.0.0-beta.1]: Should require privileges and expect POST/DELETE!
   /**
    * @param {Request} req
    * @param {Response} res

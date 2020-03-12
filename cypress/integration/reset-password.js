@@ -39,7 +39,7 @@ describe('Reset password', function () {
       cy.get('[data-name="reset-pass"]').type(tooShortPassword);
       // cy.get('[data-name="reset-password-submit"]').click();
 
-      // Todo[>=1.7.0]: https://github.com/cypress-io/cypress/issues/6678
+      // Todo[>=1.0.0-beta.1]: https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
       return cy.get('[data-name="reset-pass"]');
       // eslint-disable-next-line promise/prefer-await-to-then
