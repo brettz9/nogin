@@ -276,13 +276,14 @@ module.exports = async function (app, config) {
       res.redirect('/');
     } else {
       const {name, email, pass, country, user} = req.body;
-      let o, _;
+      let _, o;
       try {
         // We add `id` here to ensure only posting change for user's own
         //   account, since could otherwise be injecting a different
         //   user's name here
         // eslint-disable-next-line node/no-unsupported-features/es-builtins
-        [o, _] = await Promise.allSettled([
+        [_, o] = await Promise.allSettled([
+          setI18n(req, res),
           am.updateAccount({
             id: req.session.user._id,
             name,
@@ -290,8 +291,7 @@ module.exports = async function (app, config) {
             email,
             pass,
             country
-          }),
-          setI18n(req, res)
+          })
         ]);
       } catch (err) {
         // We send a code and let the client i18nize
@@ -334,7 +334,8 @@ module.exports = async function (app, config) {
     const {name, email, user, pass, country} = req.body;
     let _, o;
     try {
-      [_, o] = await Promise.all([
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      [_, o] = await Promise.allSettled([
         setI18n(req, res),
         am.addNewAccount({
           name,
@@ -412,11 +413,12 @@ module.exports = async function (app, config) {
   */
   app.post('/lost-password', async function (req, res) {
     const {email} = req.body;
-    let account, _;
+    let _, account;
     try {
-      [account, _] = await Promise.all([
-        am.generatePasswordKey(email, req.ip),
-        setI18n(req, res)
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      [_, account] = await Promise.allSettled([
+        setI18n(req, res),
+        am.generatePasswordKey(email, req.ip)
       ]);
     } catch (e) {
       res.status(400).send(e.message);
@@ -437,11 +439,12 @@ module.exports = async function (app, config) {
   });
 
   app.get('/reset-password', async function (req, res) {
-    let o, _, e;
+    let _, o, e;
     try {
-      [o, _] = await Promise.all([
-        am.validatePasswordKey(req.query.key, req.ip),
-        setI18n(req, res)
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      [_, o] = await Promise.allSettled([
+        setI18n(req, res),
+        am.validatePasswordKey(req.query.key, req.ip)
       ]);
     } catch (err) {
       e = err;
@@ -462,12 +465,12 @@ module.exports = async function (app, config) {
     const {passKey} = req.session;
     // destroy the session immediately after retrieving the stored passkey
     req.session.destroy();
-    let o, _;
+    let _, o;
     try {
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      [o, _] = await Promise.allSettled([
-        am.updatePassword(passKey, newPass),
-        setI18n(req, res)
+      [_, o] = await Promise.allSettled([
+        setI18n(req, res),
+        am.updatePassword(passKey, newPass)
       ]);
     } catch (err) {}
     if (o) {
@@ -482,9 +485,14 @@ module.exports = async function (app, config) {
    * View, delete & reset accounts (currently view only).
   */
   app.get('/users', async function (req, res) {
-    const [accounts, _] = await Promise.all([
-      am.getAllRecords(),
-      setI18n(req, res)
+    const [
+      _,
+      // istanbul ignore next
+      accounts = []
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+    ] = await Promise.allSettled([
+      setI18n(req, res),
+      am.getAllRecords()
     ]);
     const title = _('AccountList');
     res.render('users', {
