@@ -3,6 +3,10 @@
 
 import {resolve as pathResolve} from 'path';
 
+import {JSDOM} from 'jsdom';
+// eslint-disable-next-line no-shadow
+import fetch from 'node-fetch';
+
 import {
   removeAccounts, addAccounts, readAccounts
 } from '../app/server/modules/db-basic.js';
@@ -97,36 +101,77 @@ describe('CLI', function () {
     }
   );
 
-  it('Null config with non-local scripts and misc. config', async function () {
-    this.timeout(30000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      '--noBuiltinStylesheets',
-      '--staticDir', pathResolve(__dirname, './fixtures/'),
-      '--userJS', 'userJS.js',
-      '--userJSModule', 'userJSModule.js',
-      '--stylesheet', 'stylesheet.css',
-      '--favicon', 'favicon.ico',
-      '--router', pathResolve(__dirname, './fixtures/router.js'),
-      '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
-      '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
-      '--secret', secret,
-      '--PORT', testPort,
-      '--config', ''
-    ], 20000);
-    // Todo:
-    // 1. Check content for `injectHTML`, `stylesheet`, `userJS`,
-    //   `userJSModule`, `noBuiltinStylesheets`, `favicon`
-    // 2. Confirm `staticDir` can be visited
-    // 3. Confirm `middleware` is run
-    // 4. Confirm `router` can be run by visiting `/dynamic-route`
-    expect(stripMongoMessages(stdout)).to.equal(
-      'Beginning routes...\n' +
-      'Awaiting internationalization and logging...\n' +
-      'Awaiting database account connection...\n' +
-      'Beginning server...\n'
-    );
-    expect(stripPromisesWarning(stderr)).to.equal('');
-  });
+  it(
+    'Null config with non-local scripts and misc. config',
+    async function () {
+      this.timeout(30000);
+      let body;
+      const cliProm = spawnPromise(cliPath, [
+        '--staticDir', pathResolve(__dirname, './fixtures/'),
+        '--userJS', 'userJS.js',
+        '--userJSModule', 'userJSModule.js',
+        '--stylesheet', 'stylesheet.css',
+        '--favicon', 'favicon.ico',
+        '--router', pathResolve(__dirname, './fixtures/router.js'),
+        '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
+        '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 20000, async (data) => {
+        if (data.includes('Beginning server')) {
+          body = await (await fetch(`http://localhost:${testPort}`)).text();
+        }
+      });
+      const {stdout, stderr} = await cliProm;
+      const doc = (new JSDOM(body)).window.document;
+      const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
+        return link.outerHTML;
+      }).join('');
+      expect(headLinks).to.equal(
+        '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">' +
+        '<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">' +
+        '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">' +
+        '<link rel="stylesheet" href="/css/style.css">' +
+        '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" crossorigin="anonymous">' +
+        '<link rel="stylesheet" href="stylesheet.css">'
+      );
+
+      const headScripts = [...doc.querySelectorAll('head script')].map(
+        (link) => {
+          return link.outerHTML;
+        }
+      );
+
+      const headPreScripts = headScripts.slice(0, 4).join('');
+      expect(headPreScripts).to.equal(
+        '<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous" defer=""></script>' +
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" crossorigin="anonymous" defer=""></script>' +
+        '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous" defer=""></script>' +
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" crossorigin="anonymous" defer=""></script>'
+      );
+      const headPostScripts = headScripts.slice(-2).join('');
+      expect(headPostScripts).to.equal(
+        '<script src="userJS.js"></script>' +
+        '<script type="module" src="userJSModule.js"></script>'
+      );
+      // Todo:
+      // 1. Check content for `injectHTML`
+      // 2. Confirm `staticDir` can be visited
+      // 3. Confirm `router` can be run by visiting `/dynamic-route`
+      // 4. Test again but with `noBuiltinStylesheets`
+      expect(stripMongoMessages(stdout)).to.equal(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n' +
+        'Awaiting database account connection...\n' +
+        'Beginning server...\n' +
+        // Middleware output
+        'gets options, e.g., favicon.ico\n' +
+        'req.url /\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.equal('');
+    }
+  );
 
   it('Missing environment components', async function () {
     this.timeout(20000);

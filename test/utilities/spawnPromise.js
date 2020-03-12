@@ -1,17 +1,30 @@
 import {spawn} from 'child_process';
 
 /**
+* @callback EventWatcher
+* @param {string} data
+* @returns {void|Promise<void>}
+*/
+
+/**
  * @param {string} path
  * @param {PlainObject|string[]} opts
  * @param {string[]} args
  * @param {Integer} [killDelay=10000]
+ * @param {EventWatcher} watchEvents
  * @returns {Promise<SpawnResults>}
  */
-const spawnPromise = (path, opts, args, killDelay = 10000) => {
+const spawnPromise = (
+  path, opts, args, killDelay, watchEvents = null
+) => {
   if (Array.isArray(opts)) {
-    killDelay = args || killDelay;
+    watchEvents = killDelay;
+    killDelay = args;
     args = opts;
     opts = undefined;
+  }
+  if (!killDelay) {
+    killDelay = 10000;
   }
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
@@ -22,6 +35,9 @@ const spawnPromise = (path, opts, args, killDelay = 10000) => {
       opts
     );
     cli.stdout.on('data', (data) => {
+      if (watchEvents) {
+        watchEvents(data);
+      }
       stdout += data;
     });
 
