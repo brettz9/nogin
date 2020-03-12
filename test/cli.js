@@ -6,6 +6,7 @@ import {resolve as pathResolve} from 'path';
 import {JSDOM} from 'jsdom';
 // eslint-disable-next-line no-shadow
 import fetch from 'node-fetch';
+import escStringRegex from 'escape-string-regexp';
 
 import {
   removeAccounts, addAccounts, readAccounts
@@ -35,6 +36,15 @@ const stripMongoAndServerListeningMessages = (s) => {
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = 1234;
+
+const escRegex = (str) => {
+  // Unicode regexp can't have escaped hyphens outside of character classes:
+  //  https://github.com/sindresorhus/escape-string-regexp/issues/20
+  // The following is not a good solution as it could be unescaping items that
+  //  had a sequence of backslashes and it doesn't work for hyphens in
+  //  character classes, but it should be fine for our purposes.
+  return escStringRegex(str).replace(/\\-/gu, '-');
+};
 
 describe('CLI', function () {
   it('--noLogging option and bad config', async function () {
@@ -101,7 +111,7 @@ describe('CLI', function () {
     }
   );
 
-  it(
+  it.only(
     'Null config with non-local scripts and misc. config',
     async function () {
       this.timeout(50000);
@@ -140,14 +150,30 @@ describe('CLI', function () {
       const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
         return link.outerHTML;
       }).join('');
-      expect(headLinks).to.equal(
-        '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">' +
-        '<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">' +
-        '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">' +
-        '<link rel="stylesheet" href="/css/style.css">' +
-        '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" crossorigin="anonymous">' +
-        '<link rel="stylesheet" href="stylesheet.css">'
-      );
+      const semverNumPattern = '\\d+\\.\\d+\\.\\d+';
+      expect(headLinks).to.match(new RegExp(
+        escRegex(
+          '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">'
+        ) +
+        escRegex(
+          '<link href="https://stackpath.bootstrapcdn.com/font-awesome/'
+        ) + semverNumPattern + escRegex(
+          '/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">'
+        ) +
+        escRegex(
+          '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/'
+        ) + semverNumPattern + escRegex(
+          '/css/bootstrap.min.css" crossorigin="anonymous">'
+        ) +
+        escRegex('<link rel="stylesheet" href="/css/style.css">') +
+        escRegex(
+          '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/'
+        ) + semverNumPattern + escRegex(
+          '/gh-fork-ribbon.min.css" crossorigin="anonymous">'
+        ) +
+        escRegex('<link rel="stylesheet" href="stylesheet.css">'),
+        'u'
+      ));
 
       const headScripts = [...doc.querySelectorAll('head script')].map(
         (link) => {
@@ -156,12 +182,29 @@ describe('CLI', function () {
       );
 
       const headPreScripts = headScripts.slice(0, 4).join('');
-      expect(headPreScripts).to.equal(
-        '<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous" defer=""></script>' +
-        '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" crossorigin="anonymous" defer=""></script>' +
-        '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous" defer=""></script>' +
-        '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" crossorigin="anonymous" defer=""></script>'
-      );
+      expect(headPreScripts).to.match(new RegExp(
+        escRegex(
+          '<script src="https://code.jquery.com/jquery-'
+        ) + semverNumPattern + escRegex(
+          '.min.js" crossorigin="anonymous" defer=""></script>'
+        ) +
+        escRegex(
+          '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/'
+        ) + semverNumPattern + escRegex(
+          '/umd/popper.min.js" crossorigin="anonymous" defer=""></script>'
+        ) +
+        escRegex(
+          '<script src="https://stackpath.bootstrapcdn.com/bootstrap/'
+        ) + semverNumPattern + escRegex(
+          '/js/bootstrap.min.js" crossorigin="anonymous" defer=""></script>'
+        ) +
+        escRegex(
+          '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/'
+        ) + semverNumPattern + escRegex(
+          '/jquery.form.min.js" crossorigin="anonymous" defer=""></script>'
+        ),
+        'u'
+      ));
       const headPostScripts = headScripts.slice(-2).join('');
       expect(headPostScripts).to.equal(
         '<script src="userJS.js"></script>' +
@@ -172,7 +215,6 @@ describe('CLI', function () {
       // 2. Confirm `staticDir` can be visited
       // 3. Confirm `router` can be run by visiting `/dynamic-route`
       // 4. Test again but with `noBuiltinStylesheets`
-      // 5. Check headers to verify middleware set them
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
