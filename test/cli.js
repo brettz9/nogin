@@ -24,12 +24,6 @@ const stripPromisesWarning = (s) => {
   return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
 };
 
-const stripMongoAndServerListeningMessages = (s) => {
-  // Todo: Replace this with suppressing db output?
-  return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '')
-    .replace(/Express server listening on port 1234\n/u, '');
-};
-
 /**
 * @typedef {PlainObject} SpawnResults
 * @property {string} stdout
@@ -38,6 +32,16 @@ const stripMongoAndServerListeningMessages = (s) => {
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = 1234;
+const testPort2 = 1235;
+
+const stripMongoAndServerListeningMessages = (s, port = testPort) => {
+  // Todo: Replace this with suppressing db output?
+  return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '')
+    .replace(
+      new RegExp(`Express server listening on port ${port}\n`, 'u'),
+      ''
+    );
+};
 
 const escRegex = (str) => {
   // Unicode regexp can't have escaped hyphens outside of character classes:
@@ -265,13 +269,13 @@ describe('CLI', function () {
         cliProm = spawnPromise(cliPath, [
           '--noBuiltinStylesheets',
           '--secret', secret,
-          '--PORT', testPort,
+          '--PORT', testPort2,
           '--config', ''
         ], 40000, async (stdout) => {
           // if (stdout.includes('Express server listening on port 1234')) {
           if (stdout.includes('Beginning server...')) {
             try {
-              const res = await fetch(`http://localhost:${testPort}`);
+              const res = await fetch(`http://localhost:${testPort2}`);
               resolve(
                 {text: await res.text()}
               );
@@ -291,7 +295,9 @@ describe('CLI', function () {
         '<link rel="shortcut icon" type="image/x-icon" ' +
           'href="data:image/x-icon;,">'
       );
-      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
+      expect(stripMongoAndServerListeningMessages(
+        stdout, testPort2
+      )).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
         'Awaiting database account connection...\n' +
