@@ -126,6 +126,7 @@ Questions and suggestions for improvement are welcome.
 1. Link to **resend activation link** (mention at
     <https://github.com/braitsch/node-login/pull/11> when may be done)
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
+    1. **Remove `reset` GET page** to a POST on the user (admin) page.
     1. **Multiple group membership** allowing **multiple roles per group**,
         including **user-customizable roles** in addition to built-in ones
         such as the "login" privilege
