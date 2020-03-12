@@ -151,38 +151,14 @@ describe('Home', function () {
     });
 
     it('Attempt bad input to server (generic error)', function () {
-      // We first trigger coverage on the server, checking that it
-      //  indeed would give the response expected (as HTML doesn't
-      //  seem to support a JSON enctype per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
-      //  then we simulate it here).
-      return cy.request({
-        method: 'POST',
+      return cy.simulateServerError({
         url: '/home',
-        // Don't URL-encode; we want JSON to trigger the error
-        // with a (truthy) non-string value and get an error
-        form: false,
-        failOnStatusCode: false,
         body: {
           pass: {}
-        }
+        },
+        error: 'Error Updating Account'
       // eslint-disable-next-line promise/prefer-await-to-then
-      }).then((response) => {
-        expect(response.status).to.eq(400);
-        expect(response.body).to.contain(
-          'Error Updating Account'
-        );
-
-        // But since the above was not triggered through our HTML form,
-        //  we have to stub the server response and retry against it,
-        //  in order to see the effect on our client app.
-        cy.server();
-        cy.route({
-          method: 'POST',
-          url: '/home',
-          status: 400,
-          response: 'Error Updating Account'
-        });
-
+      }).then(() => {
         cy.get('[data-name="email"]').clear().type('me@example.name');
         cy.get('[data-name="pass"]').type('boo123456');
         cy.get('[data-name="name"]').type('MyNewName');

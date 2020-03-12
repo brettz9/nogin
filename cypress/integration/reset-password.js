@@ -93,39 +93,16 @@ describe('Reset password', function () {
       cy.log(key);
       cy.visit('/reset-password?key=' + encodeURIComponent(key));
 
-      // We first trigger coverage on the server, checking that it
-      //  indeed would give the response expected (as HTML doesn't
-      //  seem to support a JSON enctype per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
-      //  then we simulate it here).
-      return cy.request({
-        method: 'POST',
+      return cy.simulateServerError({
         url: '/reset-password',
-        // Don't URL-encode; we want JSON to trigger the error
-        // with a `null` value and get an error
-        form: false,
-        failOnStatusCode: false,
+        routeURL: '/reset-password**',
         body: {
           pass: null
-        }
+        },
+        error: 'Unable to update password'
       });
       // eslint-disable-next-line promise/prefer-await-to-then
-    }).then((response) => {
-      expect(response.status).to.eq(400);
-      expect(response.body).to.contain(
-        'Unable to update password'
-      );
-
-      // But since the above was not triggered through our HTML form,
-      //  we have to stub the server response and retry against it,
-      //  in order to see the effect on our client app.
-      cy.server();
-      cy.route({
-        method: 'POST',
-        url: '/reset-password**',
-        status: 400,
-        response: 'Unable to update password'
-      });
-
+    }).then(() => {
       cy.get('[data-name="reset-pass"]').type('new' + NL_EMAIL_PASS);
       cy.get('[data-name="reset-password-submit"]').click();
 

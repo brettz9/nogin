@@ -130,3 +130,38 @@ Cypress.Commands.add(
     });
   }
 );
+
+Cypress.Commands.add(
+  'simulateServerError',
+  (cfg) => {
+    // We first trigger coverage on the server, checking that it
+    //  indeed would give the response expected (as HTML doesn't
+    //  seem to support a JSON enctype per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
+    //  then we simulate it here).
+    return cy.request({
+      method: 'POST',
+      url: cfg.url,
+      // Don't URL-encode; we want non-string JSON to trigger the error
+      form: false,
+      failOnStatusCode: false,
+      body: cfg.body
+    // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.body).to.contain(
+        cfg.error
+      );
+
+      // But since the above was not triggered through our HTML form,
+      //  we have to stub the server response and retry against it,
+      //  in order to see the effect on our client app.
+      cy.server();
+      return cy.route({
+        method: 'POST',
+        url: cfg.routeURL || cfg.url,
+        status: 400,
+        response: cfg.error
+      });
+    });
+  }
+);
