@@ -82,7 +82,7 @@ export NL_EMAIL_USER='your.email@gmail.com'
 export NL_EMAIL_PASS='1234'
 ```
 
-[![nogin](./readme_includes/retrieve-password.jpg?raw=true)](https://nodejs-login.herokuapp.com)
+![nogin](./readme_includes/retrieve-password.jpg?raw=true)
 
 ## Command line usage
 
