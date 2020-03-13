@@ -54,6 +54,47 @@ describe('Signup', function () {
     });
   });
 
+  it('Visit Signup and submit with bad data', function () {
+    cy.task('deleteEmails');
+    cy.task('addNonActivatedAccount');
+    cy.visit('/signup');
+
+    cy.get('[data-name="name"]:invalid').should('have.length', 0);
+
+    const nonEmail = 'nonEmail';
+    cy.get('[data-name="email"]').type(nonEmail);
+    cy.get('[data-name="email"]:invalid').should('have.length', 1);
+
+    cy.get('[data-name="email"]').clear().type('me@example.name');
+    cy.get('[data-name="pass"]').type('boo123456');
+    cy.get('[data-name="pass-confirm"]').type('boo123456');
+    cy.get('[data-name="name"]').type('MyName');
+    cy.get('[data-name="name"]:invalid').should('have.length', 0);
+    const alreadyExistingUser = 'nicky';
+    cy.get('[data-name="user"]').type(alreadyExistingUser);
+    cy.get('[data-name="action2"]').click();
+
+    cy.get(
+      '[data-name=modal-alert] [data-name=modal-body] p'
+    ).should('be.hidden');
+
+    cy.get('[data-name="user"]', {
+      timeout: 50000
+    }).should(($user) => {
+      return expect(
+        $user[0].validationMessage
+      ).to.contain(
+        'That username is already in use'
+      );
+    });
+
+    // eslint-disable-next-line promise/prefer-await-to-then
+    return cy.task('getRecords').then((accts) => {
+      expect(accts).to.have.lengthOf(1);
+      return expect(accts[0].name).to.equal('Nicole');
+    });
+  });
+
   it('Bad email to server', function () {
     // The client won't allow bad values, so we pass without
     //   client-side validation
