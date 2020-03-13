@@ -44,6 +44,7 @@ describe('Reset password', function () {
       return cy.get('[data-name="reset-pass"]');
       // eslint-disable-next-line promise/prefer-await-to-then
     }).then(($input) => {
+      expect($input[0].checkValidity()).to.equal(false);
       return expect($input[0].validity.tooShort).to.be.true;
       // return expect($input[0].validationMessage).to.eq(
       //  'Please enter a sufficiently long name'
