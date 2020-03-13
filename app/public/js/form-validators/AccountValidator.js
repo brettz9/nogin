@@ -56,21 +56,25 @@ window.AccountValidator = class AccountValidator {
       }
     });
     // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
+    //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (name.validity.tooShort) {
       name.setCustomValidity(this.errorMessages.name.PleaseEnterName);
     }
     // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
+    //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (email.validity.patternMismatch) {
       email.setCustomValidity(this.errorMessages.email.PleaseEnterValidEmail);
     }
     // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
+    //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (user.validity.tooShort) {
       user.setCustomValidity(this.errorMessages.user.PleaseChooseUserName);
     }
     // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
+    //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (!this.userIsLoggedIn() && pass.validity.tooShort) {
       pass.setCustomValidity(this.errorMessages.pass.PasswordMinimumLength);
