@@ -75,6 +75,8 @@ class AccountManager {
       const o = await this.accounts.findOne({user, activated: true});
       return o.pass === pass
         ? o
+        // Todo: Could try to provide a coverage case for this,
+        //  but it seems very obscure
         // See discussion under `app.get('/')` for the obscure
         //  internal states that could exist to cause this
         // istanbul ignore next

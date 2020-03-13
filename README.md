@@ -117,9 +117,10 @@ Questions and suggestions for improvement are welcome.
     1. Make distinct badges for local results of each of testable browsers,
         or at least report if all are passing
 
-1. Allow convenience for easier **customization of where route redirects after login**
-    1. Allow redirect to be based on URL (e.g., if user coming to the login
-        from another page, let them redirect to that).
+1. Allow convenience for easier **customization of where route
+    redirects after login**
+    1. Allow redirect to be based on URL (e.g., if user coming to the
+        login from another page, let them redirect to that).
 1. Upon **update of email address**, send email to confirm it
 1. Link to **resend activation link** (mention at
     <https://github.com/braitsch/node-login/pull/11> when may be done)
