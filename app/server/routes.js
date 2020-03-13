@@ -207,6 +207,18 @@ module.exports = async function (app, config) {
     }
 
     if (o) {
+      // By the time we get here, we should have
+      //  1. A signed login cookie (from posting to `/`, with
+      //    "remember-me" set and a successful `manualLogin`, i.e.,
+      //    finding the `activated` user with right `passVer` and
+      //    successful submission of a password to match that
+      //    in the account).
+      //  2. Passing `validateLoginKey` (i.e., confirming that
+      //     same secue cookie came with the current IP address)
+      //  So we could only fail in `autoLogin` with a DB
+      //   `findOne` error or finding to find that the user is
+      //   still `activated` or that the `user` on the account
+      //   has since changed.
       const _o = await am.autoLogin(o.user, o.pass);
       if (_o) {
         req.session.user = _o;
