@@ -38,7 +38,22 @@ describe('Users', function () {
     cy.get('[data-name=users] tr:nth-child(2) td:nth-child(5)').contains(
       /\d{1,2}\/\d{1,2}\/\d{1,2}/u
     );
-    cy.get('[data-name=users] tbody tr:nth-child(3)').should('not.exist');
+
+    cy.get('[data-name=users] tr:nth-child(3) td:nth-child(1)').contains('3');
+    cy.get(
+      '[data-name=users] tr:nth-child(3) td:nth-child(2)'
+    ).should('be.empty');
+    cy.get('[data-name=users] tr:nth-child(3) td:nth-child(3)').contains(
+      'Joe'
+    );
+    cy.get(
+      '[data-name=users] tr:nth-child(3) td:nth-child(4)'
+    ).should('be.empty');
+    cy.get('[data-name=users] tr:nth-child(3) td:nth-child(5)').contains(
+      /\d{1,2}\/\d{1,2}\/\d{1,2}/u
+    );
+
+    cy.get('[data-name=users] tbody tr:nth-child(4)').should('not.exist');
   });
 
   // https://www.npmjs.com/package/cypress-axe

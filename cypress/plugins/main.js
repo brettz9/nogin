@@ -296,6 +296,11 @@ const exprt = (on, config) => {
       }))[0];
     },
 
+    /**
+     * Ensure we get coverage of empty string default for name
+     * and country.
+     * @returns {Promise<AccountInfo>}
+     */
     async addAccountWithMissingNameAndCountry () {
       return (await addAccounts({
         name: [''],
@@ -305,7 +310,7 @@ const exprt = (on, config) => {
         country: [''],
         activated: [false]
       }))[0];
-    }
+    },
 
     /**
      * @param {PlainObject} cfg
