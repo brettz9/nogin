@@ -372,6 +372,8 @@ module.exports = async function (app, config) {
           'activationCodeProvidedInvalid'
         ].includes(e.message)
           ? _(e.message, {lb: '\n'})
+          // Shouldn't normally throw any other errors
+          // istanbul ignore next
           : e.message;
 
         log('message', {message});
