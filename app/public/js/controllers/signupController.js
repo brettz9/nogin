@@ -43,8 +43,13 @@ function setupValidationSubmission () {
         case 'username-taken':
           av.showInvalidUserName();
           break;
-        default:
+        default: {
+          const lockedAlertDialog = SignupView.onShowLockedErrorAlert({
+            type: 'EmailServerError'
+          });
+          lockedAlertDialog.modal('show');
           break;
+        }
         }
       }
     }

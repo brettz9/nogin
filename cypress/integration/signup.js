@@ -54,6 +54,47 @@ describe('Signup', function () {
     });
   });
 
+  it('Bad email to server', function () {
+    // The client won't allow bad values, so we pass without
+    //   client-side validation
+    const badEmail = null;
+    const error = 'Email Server Error';
+    cy.visit('/signup');
+    return cy.simulateServerError({
+      url: '/signup',
+      body: {
+        name: 'MyName',
+        email: badEmail,
+        user: 'OkUserName',
+        pass: 'okPassword1234',
+        country: 'GB'
+      },
+      error
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      const goodEmailButStubbingToGetAsThoughBad = 'bad@example.com';
+      cy.get('[data-name="name"]').type('MyName');
+      cy.get('[data-name="email"]').type(goodEmailButStubbingToGetAsThoughBad);
+      cy.get('[data-name="country"]').select('GB');
+      cy.get('[data-name="user"]').type('OkUserName');
+      cy.get('[data-name="pass"]').type('okPassword1234');
+      cy.get('[data-name="pass-confirm"]').type('okPassword1234');
+      cy.get('[data-name=account-form] [data-name=action2]').click();
+      cy.get('[data-name=modal-alert] [data-name=ok]').click({
+        timeout: 50000
+      });
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+        error
+      );
+      // Still gets added as just had trouble sending email out
+      return cy.task('getRecords');
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then((accts) => {
+      expect(accts).to.have.lengthOf(1);
+      return expect(accts[0].user).to.equal('OkUserName');
+    });
+  });
+
   it('Visit Signup and submit', function () {
     cy.task('deleteEmails');
     cy.visit('/signup');

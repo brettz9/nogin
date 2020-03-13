@@ -52,5 +52,19 @@ window.SignupView = {
       keyboard: false,
       backdrop: 'static'
     });
+  },
+
+  /**
+   * @param {PlainObject} cfg
+   * @param {"EmailServerError"} [cfg.type]
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  onShowLockedErrorAlert ({type}) {
+    return AlertDialog.populate({
+      heading: _('error'),
+      body: _(type),
+      keyboard: false,
+      backdrop: 'static'
+    });
   }
 };
