@@ -197,22 +197,24 @@ module.exports = async function (app, config) {
     // check if the user has an auto login key saved in a cookie
     if (req.signedCookies.login === undefined) {
       login();
-    } else {
-      // attempt automatic login
-      let o;
-      try {
-        o = await am.validateLoginKey(req.signedCookies.login, req.ip);
-      } catch (err) {
-      }
+      return;
+    }
+    // attempt automatic login
+    let o;
+    try {
+      o = await am.validateLoginKey(req.signedCookies.login, req.ip);
+    } catch (err) {
+    }
 
-      if (o) {
-        const _o = await am.autoLogin(o.user, o.pass);
+    if (o) {
+      const _o = await am.autoLogin(o.user, o.pass);
+      if (_o) {
         req.session.user = _o;
         res.redirect('/home');
-      } else {
-        login();
+        return;
       }
     }
+    login();
   });
 
   app.post('/', async function (req, res) {
