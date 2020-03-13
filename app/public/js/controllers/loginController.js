@@ -81,7 +81,14 @@ ajaxFormClientSideValidate(
       }
     },
     error (e) {
-      LoginValidator.showLoginError();
+      switch (e.responseText) {
+      case 'unexpected-pass-version-error':
+        LoginValidator.showLoginError('MismatchUserDataFormat');
+        break;
+      default:
+        LoginValidator.showLoginError();
+        break;
+      }
     }
   }
 );

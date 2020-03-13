@@ -297,6 +297,22 @@ const exprt = (on, config) => {
     },
 
     /**
+     * Simulates POST to `/signup`.
+     * @returns {Promise<AccountInfo>}
+     */
+    async addAccountWithBadPassVersion () {
+      return (await addAccounts({
+        name: ['Frank'],
+        email: ['frank@example.name'],
+        user: ['Frankee'],
+        pass: ['ooo123456'],
+        passVer: ['0'],
+        country: ['CN'],
+        activated: [true]
+      }))[0];
+    },
+
+    /**
      * Ensure we get coverage of empty string default for name
      * and country.
      * @returns {Promise<AccountInfo>}

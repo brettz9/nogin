@@ -22,7 +22,8 @@ window.LoginValidatorView = {
     PleaseEnterValidUserName: _('PleaseEnterValidUserName'),
     PleaseEnterValidPassword: _('PleaseEnterValidPassword'),
     LoginFailure: _('LoginFailure'),
-    PleaseCheckYourUserNameOrPassword: _('PleaseCheckYourUserNameOrPassword')
+    PleaseCheckYourUserNameOrPassword: _('PleaseCheckYourUserNameOrPassword'),
+    MismatchUserDataFormat: _('MismatchUserDataFormat')
   },
 
   messages: {

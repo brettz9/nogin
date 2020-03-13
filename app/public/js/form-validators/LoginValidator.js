@@ -30,12 +30,15 @@ window.LoginValidator = class LoginValidator {
 
   /**
   * Bind a simple alert window to this controller to display any errors.
+  * @param {string} msg
   * @returns {void}
   */
-  static showLoginError () {
+  static showLoginError (msg) {
     const loginErrors = AlertDialog.populate({
       heading: LoginValidatorView.errorMessages.LoginFailure,
-      body: LoginValidatorView.errorMessages.PleaseCheckYourUserNameOrPassword,
+      body: msg
+        ? LoginValidatorView.errorMessages[msg]
+        : LoginValidatorView.errorMessages.PleaseCheckYourUserNameOrPassword,
       keyboard: true,
       backdrop: true
     });

@@ -124,6 +124,9 @@
     "LoginFailure": {
       "message": "Login Failure"
     },
+    "MismatchUserDataFormat": {
+      "message": "There is a mismatch in the user data format. Please contact the site administrator with this message."
+    },
     "PleaseCheckYourUserNameOrPassword": {
       "message": "Please check your username and/or password"
     },

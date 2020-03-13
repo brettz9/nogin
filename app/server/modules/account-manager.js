@@ -223,11 +223,12 @@ class AccountManager {
 
   /**
    * @param {AccountInfo} newData
+   * @param {boolean} [allowCustomPassVer=false]
    * @returns {Promise<AccountInfo>}
    * @todo Would ideally check for multiple erros to report back all issues
    *   at once.
    */
-  async addNewAccount (newData) {
+  async addNewAccount (newData, {allowCustomPassVer = false} = {}) {
     let o;
     try {
       o = await this.accounts.findOne({user: newData.user});
@@ -251,7 +252,7 @@ class AccountManager {
     newData.activationCode = userHash;
     newData.activated = Boolean(newData.activated);
     newData.pass = passHash;
-    newData.passVer = passVer;
+    newData.passVer = (allowCustomPassVer && newData.passVer) || passVer;
     if (!newData.name) {
       // Avoid business logic or templates needing to deal with nullish names
       newData.name = '';

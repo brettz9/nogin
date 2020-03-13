@@ -114,7 +114,7 @@ exports.addAccounts = async (options) => {
   const am = await getAccountManager(options);
   return Promise.all(
     accounts.map((acct) => {
-      return am.addNewAccount(acct);
+      return am.addNewAccount(acct, {allowCustomPassVer: true});
     })
   );
 };

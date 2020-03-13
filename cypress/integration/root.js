@@ -137,6 +137,28 @@ describe('Root (Login)', function () {
     }
   );
 
+  it(
+    'Visit root and login and make login attempt with user added ' +
+      'with bad password version',
+    function () {
+      cy.task('addAccountWithBadPassVersion');
+      cy.get('[data-name="user"]').type('Frankee');
+      cy.get('[data-name="pass"]').type('ooo123456');
+      cy.get('[data-name="btn_sign_in"]').click();
+
+      cy.get('[data-name=modal-alert] [data-name="modal-title"]').contains(
+        'Login Failure'
+      );
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+        'There is a mismatch in the user data format. Please contact ' +
+          'the site administrator with this message.'
+      );
+      return cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/');
+    }
+  );
+
   // Though similar to the above, this trigger server coverage
   //  of a generic error.
   it('Handle generic server error upon login attempt', function () {
