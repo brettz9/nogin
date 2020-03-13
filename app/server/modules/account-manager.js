@@ -31,6 +31,9 @@ class AccountManager {
       // index fields 'user' & 'email' for faster new account validation
       await this.accounts.createIndex({user: 1, email: 1});
     } catch (err) {
+      // Not clear on how to check; we're just rethrowing here for
+      //   now anyways
+      // istanbul ignore next
       console.error(err);
       throw err;
     }
@@ -70,6 +73,8 @@ class AccountManager {
       const o = await this.accounts.findOne({user, activated: true});
       return o.pass === pass ? o : null;
     } catch (err) {
+      // No special reason to expect it throwing
+      // istanbul ignore next
       return null;
     }
   }
