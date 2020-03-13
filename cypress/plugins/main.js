@@ -26,9 +26,13 @@ import codeCoverageTask from '@cypress/code-coverage/task.js';
 
 import {guid} from '../../app/server/modules/common.js';
 import {
-  addAccounts, removeAccounts, generateLoginKeys, generatePasswordKey,
+  addAccounts, removeAccounts,
   validUserPassword, readAccounts
 } from '../../app/server/modules/db-basic.js';
+
+import {
+  generateLoginKeys, generatePasswordKey
+} from './db-basic-testing-extensions.js';
 
 import nodeLoginConfig from '../../nogin.js';
 

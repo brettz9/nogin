@@ -42,6 +42,7 @@ module.exports = {
     files: [
       'cypress/integration/**/*.js',
       'cypress/plugins/main.js',
+      'cypress/plugins/db-basic-testing-extensions.js',
       'cypress/support/**/*.js',
       'test/*.js'
     ],
