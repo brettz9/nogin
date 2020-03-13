@@ -34,7 +34,7 @@ const optionDefinitions = [
   {
     name: 'country', multiple: true, type: String,
     description: 'Two digit recognized country code',
-    typeLabel: '{undelrine country code}'
+    typeLabel: '{underline country code}'
   },
   {
     name: 'pass', multiple: true, type: String,
