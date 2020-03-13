@@ -204,7 +204,7 @@ const exprt = (on, config) => {
      * @param {string|string[]} cfg.ip
      * @param {string} [cfg.badSecret] For testing a forgery attempt
      * (without the actual secret)
-     * @returns {Promise<string[]>} They key
+     * @returns {Promise<string[]>} The key
      */
     async generateLoginKey ({user, ip, badSecret}) {
       const [cookieValue] = badSecret
