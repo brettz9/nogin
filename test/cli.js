@@ -192,7 +192,7 @@ describe('CLI', function () {
       this.timeout(50000);
       let cliProm;
       const [
-        {text, headers}, {json}, {dynamicText}
+        {text, headers}, {json}, {dynamicText}, {signupText}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -201,6 +201,7 @@ describe('CLI', function () {
           '--userJSModule', 'userJSModule.js',
           '--stylesheet', 'stylesheet.css',
           '--favicon', 'favicon.ico',
+          '--countryCodes', '["CA", "MX", "US"]',
           '--router', pathResolve(__dirname, './fixtures/router.js'),
           '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
           '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
@@ -215,17 +216,22 @@ describe('CLI', function () {
             return;
           }
           try {
-            const [res, staticRes, dynamicRes] = await Promise.all([
+            const [
+              res, staticRes, dynamicRes, signupRes
+            ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
               // Within `/test/fixtures`
               fetch(`http://localhost:${testPort}/addUsers.json`),
               // Based on `router`
-              fetch(`http://localhost:${testPort}/dynamic-route`)
+              fetch(`http://localhost:${testPort}/dynamic-route`),
+              // Check countryCodes
+              fetch(`http://localhost:${testPort}/signup`)
             ]);
             resolve([
               {headers: res.headers, text: await res.text()},
               {json: await staticRes.json()},
-              {dynamicText: await dynamicRes.text()}
+              {dynamicText: await dynamicRes.text()},
+              {signupText: await signupRes.text()}
             ]);
           } catch (err) {
             reject(err);
@@ -316,6 +322,19 @@ describe('CLI', function () {
 
       expect(dynamicText).to.equal(
         'got a dynamic route with options, e.g., userJS.js'
+      );
+
+      const signupDoc = (new JSDOM(signupText)).window.document;
+      const countries = [
+        ...signupDoc.querySelectorAll('[data-name="country"] option')
+      ].map((country) => {
+        return country.outerHTML;
+      }).join('');
+      expect(countries).to.equal(
+        '<option value="">Please select a country</option>' +
+        '<option value="CA">Canada</option>' +
+        '<option value="MX">Mexico</option>' +
+        '<option value="US">United States</option>'
       );
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
