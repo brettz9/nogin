@@ -2,7 +2,8 @@
 
 module.exports = function ({_, emailPattern}) {
   return ['div', {
-    id: 'retrieve-password', class: 'modal fade'
+    id: 'retrieve-password',
+    'data-name': 'retrieve-password', class: 'modal fade'
   }, [
     ['div', {class: 'modal-dialog', role: 'dialog'}, [
       ['div', {class: 'modal-content'}, [

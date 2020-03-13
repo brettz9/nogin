@@ -144,6 +144,33 @@ describe('Root (Login)', function () {
     });
   });
 
+  it('Displays error with failure on dispatching lost password', function () {
+    cy.task('addAccountWithBadEmail');
+    const badButExistingEmail = 'badEmail';
+    return cy.simulateServerError({
+      url: '/lost-password',
+      body: {
+        email: badButExistingEmail
+      },
+      error: 'Unable to dispatch password reset'
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      const okEmailToBypassValidationAndGetToStub = 'example@example.name';
+      cy.get('[data-name="forgot-password"]').click();
+      cy.get('[data-name=email]').type(okEmailToBypassValidationAndGetToStub);
+      cy.get('[data-name=retrieve-password-submit]').click();
+
+      // Could check that email is not present, but with problems in deleting
+      //  emails currently, this would not be true, and whether it was sent
+      //  or not is not too important here.
+      return cy.get(
+        '[data-name="retrieve-password"] [data-name=alert]'
+      ).contains(
+        'Sorry. There was a problem, please try again later'
+      );
+    });
+  });
+
   // 'Sorry. There was a problem, please try again later.',
   it(
     'Err upon attempt to retrieve lost password for non-existent email',

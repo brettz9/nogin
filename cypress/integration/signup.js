@@ -113,7 +113,7 @@ describe('Signup', function () {
       error
       // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
-      const goodEmailButStubbingToGetAsThoughBad = 'bad@example.com';
+      const goodEmailButStubbingToGetAsThoughBad = 'bad@example.name';
       cy.get('[data-name="name"]').type('MyName');
       cy.get('[data-name="email"]').type(goodEmailButStubbingToGetAsThoughBad);
       cy.get('[data-name="country"]').select('GB');

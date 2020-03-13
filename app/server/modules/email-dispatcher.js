@@ -35,9 +35,9 @@ class EmailDispatcher {
   constructor (config) {
     const {
       NL_EMAIL_HOST = 'smtp.gmail.com',
-      NL_EMAIL_USER, // = 'your-email-address@example.com',
+      NL_EMAIL_USER, // = 'your-email-address@example.name',
       NL_EMAIL_PASS, // = '1234',
-      NL_EMAIL_FROM, // = 'Node Login <do-not-reply@example.com>',
+      NL_EMAIL_FROM, // = 'Node Login <do-not-reply@example.name>',
       NS_EMAIL_TIMEOUT,
       NL_SITE_URL = 'http://localhost:3000'
     } = config;

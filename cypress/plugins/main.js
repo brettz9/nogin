@@ -262,6 +262,22 @@ const exprt = (on, config) => {
     },
 
     /**
+     * Used so we can get coverage of failed `dispatchResetPasswordLink` on call
+     * to `/lost-password`.
+     * @returns {Promise<AccountInfo>}
+     */
+    async addAccountWithBadEmail () {
+      return (await addAccounts({
+        name: ['Jeff'],
+        email: ['badEmail'],
+        user: ['jeff'],
+        pass: ['ccc123456'],
+        country: ['FR'],
+        activated: [false]
+      }))[0];
+    },
+
+    /**
      * Simulates POST to `/signup`.
      * @returns {Promise<AccountInfo>}
      */
