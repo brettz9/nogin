@@ -112,8 +112,7 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. **Testing and coverage** (get to **100%** coverage):
-    1. Spot check that all dialogs are fully visible
+1. **Testing:** Spot check that all dialogs are fully visible
 1. Update **docs** above
     1. Make distinct badges for local results of each of testable browsers,
         or at least report if all are passing
