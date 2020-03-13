@@ -115,6 +115,36 @@ describe('Root (Login)', function () {
     }).should('eq', '/');
   });
 
+  // Though similar to the above, this trigger server coverage
+  //  of a generic error.
+  it('Handle generic server error upon login attempt', function () {
+    return cy.simulateServerError({
+      url: '/',
+      body: {
+        user: 'bretto',
+        pass: null
+      },
+      error: 'The "password" argument must be one of type string, ' +
+        'Buffer, TypedArray, or DataView. Received type object'
+      // eslint-disable-next-line promise/prefer-await-to-then
+    }).then(() => {
+      const passwordToPassClientValidation = 'abc123456';
+      cy.get('[data-name="user"]').type('bretto');
+      cy.get('[data-name="pass"]').type(passwordToPassClientValidation);
+      cy.get('[data-name="btn_sign_in"]').click();
+
+      cy.get('[data-name=modal-alert] [data-name="modal-title"]').contains(
+        'Login Failure'
+      );
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+        'Please check your username and/or password'
+      );
+      return cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/');
+    });
+  });
+
   it('Retrieve lost password', function () {
     cy.task('deleteEmails');
     cy.get('[data-name="forgot-password"]').click();

@@ -166,14 +166,14 @@ describe('CLI', function () {
     'null config but with a bad `adapter` ' +
       '(passed on to `DBFactory.getURL`)',
     async function () {
-      this.timeout(20000);
+      this.timeout(30000);
       const {stdout, stderr} = await spawnPromise(cliPath, [
         '--adapter', 'badAdapter',
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort,
         '--config', ''
-      ], 10000);
+      ], 20000);
       expect(stripPromisesWarning(stderr)).to.contain(
         'Unrecognized database adapter "badAdapter"!'
       );
