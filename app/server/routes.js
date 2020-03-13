@@ -575,6 +575,9 @@ module.exports = async function (app, config) {
     );
   });
 
+  // Following to exclude as will always be present when
+  //   instrumented; see https://github.com/cypress-io/code-coverage#instrument-backend-code
+  // istanbul ignore else
   if (global.__coverage__) {
     // See https://github.com/cypress-io/code-coverage
 
