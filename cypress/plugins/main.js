@@ -297,7 +297,7 @@ const exprt = (on, config) => {
     },
 
     /**
-     * Simulates POST to `/signup`.
+     * Allows checking `passVer` validity.
      * @returns {Promise<AccountInfo>}
      */
     async addAccountWithBadPassVersion () {
