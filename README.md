@@ -113,17 +113,16 @@ Questions and suggestions for improvement are welcome.
 ## To-dos
 
 1. **Testing and coverage** (get to **100%** coverage):
-    1. Specific issues (if still occurring)
-        1. Spot check that all dialogs are fully visible
+    1. Spot check that all dialogs are fully visible
+1. Update **docs** above
     1. Make distinct badges for local results of each of testable browsers,
         or at least report if all are passing
-1. Update **docs** above
 
 1. Allow convenience for easier **customization of where route redirects after login**
-
 1. Upon **update of email address**, send email to confirm it
 1. Link to **resend activation link** (mention at
     <https://github.com/braitsch/node-login/pull/11> when may be done)
+
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
     1. **Remove `reset` GET page** to a POST on the user (admin) page.
     1. **Multiple group membership** allowing **multiple roles per group**,
