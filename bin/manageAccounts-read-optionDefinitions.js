@@ -80,7 +80,8 @@ const optionDefinitions = [
 const cliSections = [
   {
     // Add italics: `{italic textToItalicize}`
-    // content: '' // We get this automatically from `package.json` by default
+    // We get this automatically from `package.json` by default
+    content: 'Read the specified user account from the database.'
   },
   {
     optionList: optionDefinitions

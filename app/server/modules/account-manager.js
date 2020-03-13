@@ -38,13 +38,21 @@ class AccountManager {
   }
 
   /**
-   * Not currently exposed/in use.
+   * Currently only in use by the CLI.
    * @returns {Promise<void>}
    */
   async listIndexes () {
     const indexes = await this.accounts.indexes();
     for (const [i, index] of indexes.entries()) {
-      console.log(this.adapter.config._('index', {i, index}));
+      console.log(
+        this.adapter.config._(
+          'index',
+          {
+            i,
+            index: JSON.stringify(index, null, 2)
+          }
+        )
+      );
     }
   }
 

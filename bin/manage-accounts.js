@@ -5,7 +5,7 @@ const {cliBasics} = require('command-line-basics');
 const getLogger = require('../app/server/modules/getLogger.js');
 
 const {
-  addAccounts, removeAccounts, readAccounts, updateAccounts
+  addAccounts, removeAccounts, readAccounts, updateAccounts, listIndexes
 } = require('../app/server/modules/db-basic.js');
 
 const manageAccounts = async (verb, {loggerLocale}) => {
@@ -44,6 +44,11 @@ const manageAccounts = async (verb, {loggerLocale}) => {
           return acct.user;
         }).join(log._('AccountJoiner'))
       });
+    };
+    break;
+  case 'listIndexes':
+    method = async (options) => {
+      await listIndexes(options);
     };
     break;
   case 'create':

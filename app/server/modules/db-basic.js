@@ -246,3 +246,13 @@ exports.validUserPassword = async (options) => {
   const {user, pass} = options;
   return am.manualLogin(user, pass);
 };
+
+/**
+ * Logs indexes.
+ * @param {DbConfig} options
+ * @returns {Promise<void>}
+ */
+exports.listIndexes = async (options) => {
+  const am = await getAccountManager(options);
+  return am.listIndexes();
+};

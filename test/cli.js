@@ -528,7 +528,7 @@ describe('CLI', function () {
     });
   });
 
-  describe('Read, update, delete existing', function () {
+  describe('Read, listIndexes, update, delete existing', function () {
     beforeEach(async () => {
       await removeAccounts({all: true});
       // Todo: Note that this JSON file wouldn't work if we needed to
@@ -579,6 +579,21 @@ describe('CLI', function () {
         expect(accts.length).to.equal(1);
         expect(accts[0].user).to.equal('coco');
       });
+    });
+
+    it('listIndexes', async function () {
+      this.timeout(20000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        'listIndexes'
+      ]);
+
+      expect(stripPromisesWarning(stderr)).to.equal('');
+
+      const strippedStdout = stripMongoAndServerListeningMessages(stdout);
+
+      expect(strippedStdout).to.contain(
+        'index: 0 {'
+      );
     });
 
     it('update', async function () {

@@ -46,6 +46,7 @@ case 'update':
 case 'delete':
 case 'remove':
 case 'create':
+case 'listIndexes':
 case 'add':
   (async () => {
     // Avoid reprocessing verb (e.g., treating it as first default value)

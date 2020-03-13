@@ -41,6 +41,7 @@
   <https://github.com/braitsch/node-login/pull/11>)
 - Enhancement: CLI for adding accounts
 - Enhancement: Add `NS_EMAIL_TIMEOUT` option
+- Enhancement: Expose `listIndexes` to CLI
 - Fix: Requiring of `account.js`
 - Fix: Pass on CLI args properly
 - Accessibility: Use h1+ headings; labels; roles (passing all
