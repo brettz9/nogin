@@ -120,6 +120,11 @@ exports.addAccounts = async (options) => {
 };
 
 /**
+ * Thismethod differs in that it only searches by `user`
+ * and the other params are used to update. This might be
+ * refactored to allow searching by multiple values for an
+ * update as well as setting multiple other values (whether
+ * for the same fields or not).
  * @param {UpdateOptionDefinitions} options
  * @returns {Promise<AccountInfo[]>}
  */
