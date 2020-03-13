@@ -179,7 +179,7 @@ module.exports = async function (app, config) {
   };
 
   /*
-    login & logout
+    Login and Logout
   */
   app.get('/', async function (req, res) {
     const _ = await setI18n(req, res);
