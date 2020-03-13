@@ -106,13 +106,6 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'validUserPassword',
-  (cfg) => {
-    return cy.task('validUserPassword', cfg);
-  }
-);
-
-Cypress.Commands.add(
   'loginWithSession',
   () => {
     const NL_EMAIL_PASS = Cypress.env('NL_EMAIL_PASS');
@@ -128,6 +121,13 @@ Cypress.Commands.add(
         pass: NL_EMAIL_PASS
       }
     });
+  }
+);
+
+Cypress.Commands.add(
+  'validUserPassword',
+  (cfg) => {
+    return cy.task('validUserPassword', cfg);
   }
 );
 
