@@ -117,6 +117,20 @@ describe('CLI', function () {
     expect(stripPromisesWarning(stderr)).to.equal('');
   });
 
+  // Above with bad config didn't seem to give coverage for some reason
+  it('--noLogging option and null config', async function () {
+    this.timeout(20000);
+    const {stdout, stderr} = await spawnPromise(cliPath, [
+      '--localScripts',
+      '--secret', secret,
+      '--noLogging',
+      '--config', '',
+      '--PORT', testPort
+    ]);
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
+    expect(stripPromisesWarning(stderr)).to.equal('');
+  });
+
   it('Default config', async function () {
     this.timeout(20000);
     const {stdout, stderr} = await spawnPromise(cliPath, [
