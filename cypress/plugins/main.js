@@ -296,6 +296,17 @@ const exprt = (on, config) => {
       }))[0];
     },
 
+    async addAccountWithMissingNameAndCountry () {
+      return (await addAccounts({
+        name: [''],
+        email: ['joe@example.name'],
+        user: ['Joe'],
+        pass: ['ccc123456'],
+        country: [''],
+        activated: [false]
+      }))[0];
+    }
+
     /**
      * @param {PlainObject} cfg
      * @param {string} cfg.user

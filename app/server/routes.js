@@ -256,11 +256,12 @@ module.exports = async function (app, config) {
    * Control panel.
   */
   app.get('/home', async function (req, res) {
-    if (isNullish(req.session.user)) {
+    // Disallow empty string also
+    if (!req.session.user) {
       res.redirect('/');
     } else {
       const _ = await setI18n(req, res);
-      const {user = {}} = req.session;
+      const {user} = req.session;
       const title = _('ControlPanel');
       res.render('home', {
         user,

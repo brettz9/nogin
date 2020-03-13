@@ -32,6 +32,11 @@ const optionDefinitions = [
     typeLabel: '{underline email}'
   },
   {
+    name: 'country', multiple: true, type: String,
+    description: 'Two digit recognized country code',
+    typeLabel: '{undelrine country code}'
+  },
+  {
     name: 'pass', multiple: true, type: String,
     description: 'Password to remove; will be overwritten with hash',
     typeLabel: '{underline password`}'

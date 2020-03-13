@@ -8,6 +8,7 @@ describe('Users', function () {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
     cy.task('addNonActivatedAccount');
+    cy.task('addAccountWithMissingNameAndCountry');
     cy.visit('/users');
 
     cy.get('[data-name=users] tr:nth-child(1) td:nth-child(1)').contains('1');
