@@ -11,6 +11,8 @@ window.ResetPasswordValidator = class ResetPasswordValidator {
    */
   static validatePassword (pass) {
     pass.setCustomValidity('');
+    // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
+    // istanbul ignore if
     if (pass.validity.tooShort) {
       pass.setCustomValidity(
         ResetPasswordValidatorView.messages.ShouldBeMinimumLength

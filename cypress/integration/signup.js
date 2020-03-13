@@ -14,7 +14,22 @@ describe('Signup', function () {
     cy.visitURLAndCheckAccessibility('/signup');
   });
 
-  it('Visit Signup and submit with bad data', function () {
+  it('Visit Signup and try entering bad data client-side', function () {
+    cy.visit('/signup');
+    const tooShortUser = 'a';
+    cy.get('[data-name="user"]').type(tooShortUser);
+    cy.get('[data-name="action2"]').click();
+    cy.get('[data-name="user"]:invalid').should('have.length', 1);
+    const tooShortName = 'b';
+    cy.get('[data-name="name"]').type(tooShortName);
+    cy.get('[data-name="name"]:invalid').should('have.length', 1);
+
+    const tooShortPass = 'c';
+    cy.get('[data-name="pass"]').type(tooShortPass);
+    cy.get('[data-name="pass"]:invalid').should('have.length', 1);
+  });
+
+  it('Visit Signup and submit with bad data (email in use)', function () {
     cy.task('deleteEmails');
     cy.task('addNonActivatedAccount');
     cy.visit('/signup');
@@ -54,7 +69,7 @@ describe('Signup', function () {
     });
   });
 
-  it('Visit Signup and submit with bad data', function () {
+  it('Visit Signup and submit with bad data (user in use)', function () {
     cy.task('deleteEmails');
     cy.task('addNonActivatedAccount');
     cy.visit('/signup');
