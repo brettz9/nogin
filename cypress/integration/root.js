@@ -118,7 +118,7 @@ describe('Root (Login)', function () {
   it('Retrieve lost password', function () {
     cy.task('deleteEmails');
     cy.get('[data-name="forgot-password"]').click();
-    cy.get('[data-name=email]').type(NL_EMAIL_USER);
+    cy.get('[data-name="email"]').type(NL_EMAIL_USER);
     cy.get('[data-name=retrieve-password-submit]').click();
     cy.get('[data-name=alert]').contains(
       'A link to reset your password was emailed to you',
@@ -144,6 +144,21 @@ describe('Root (Login)', function () {
     });
   });
 
+  it(
+    'Shows failures on attempted retrieval of lost password with bad email',
+    function () {
+      cy.get('[data-name="forgot-password"]').click();
+      cy.get('[data-name="email"]').type('not-an-email');
+      cy.get('[data-name=retrieve-password-submit]').click();
+      return cy.get('[data-name="email"]').should((user) => {
+        expect(user[0].checkValidity()).to.equal(false);
+        return expect(user[0].validationMessage).to.contain(
+          'Please enter a valid email address'
+        );
+      });
+    }
+  );
+
   it('Displays error with failure on dispatching lost password', function () {
     cy.task('addAccountWithBadEmail');
     const badButExistingEmail = 'badEmail';
@@ -157,7 +172,7 @@ describe('Root (Login)', function () {
     }).then(() => {
       const okEmailToBypassValidationAndGetToStub = 'example@example.name';
       cy.get('[data-name="forgot-password"]').click();
-      cy.get('[data-name=email]').type(okEmailToBypassValidationAndGetToStub);
+      cy.get('[data-name="email"]').type(okEmailToBypassValidationAndGetToStub);
       cy.get('[data-name=retrieve-password-submit]').click();
 
       // Could check that email is not present, but with problems in deleting
@@ -176,7 +191,7 @@ describe('Root (Login)', function () {
     'Err upon attempt to retrieve lost password for non-existent email',
     function () {
       cy.get('[data-name="forgot-password"]').click();
-      cy.get('[data-name=email]').type('bad@bad-email.com');
+      cy.get('[data-name="email"]').type('bad@bad-email.com');
       cy.get('[data-name=retrieve-password-submit]').click();
       cy.get('[data-name=alert]').contains(
         'Email not found. Are you sure you entered it correctly?',
@@ -186,15 +201,6 @@ describe('Root (Login)', function () {
       );
     }
   );
-
-  // Todo[>=1.0.0-beta.1]: `dispatchResetPasswordLink` could throw with a
-  //   bad `NL_EMAIL_FROM`, causing `UnableToDispatchPasswordReset` error;
-  //   but need to temporarily change JSON file
-  /*
-  it('', function () {
-
-  });
-  */
 
   it('Cancel retrieve password dialog', function () {
     cy.get('[data-name="forgot-password"]').click();
@@ -209,8 +215,8 @@ describe('Root (Login)', function () {
   it('Should validate against missing user value', function () {
     cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
     cy.get('[data-name="btn_sign_in"]').click();
-    return cy.get('[data-name="user"]').should((pass) => {
-      return expect(pass[0].checkValidity()).to.equal(false);
+    return cy.get('[data-name="user"]').should((user) => {
+      return expect(user[0].checkValidity()).to.equal(false);
     });
   });
   it('Should validate against missing pass value', function () {
