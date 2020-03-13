@@ -118,7 +118,7 @@ Questions and suggestions for improvement are welcome.
         or at least report if all are passing
 
 1. Upon **update of email address**, send email to confirm it,
-    resetting to inactive state until activated.
+    resetting to inactive state until activated (?).
 1. Link to **resend activation link** (mention at
     <https://github.com/braitsch/node-login/pull/11> when may be done)
 1. Allow convenience for easier **customization of where route
