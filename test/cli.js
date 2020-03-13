@@ -197,23 +197,24 @@ describe('CLI', function () {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
-          if (stdout.includes('Beginning server...')) {
-            try {
-              const [res, staticRes, dynamicRes] = await Promise.all([
-                fetch(`http://localhost:${testPort}`),
-                // Within `/test/fixtures`
-                fetch(`http://localhost:${testPort}/addUsers.json`),
-                // Based on `router`
-                fetch(`http://localhost:${testPort}/dynamic-route`)
-              ]);
-              resolve([
-                {headers: res.headers, text: await res.text()},
-                {json: await staticRes.json()},
-                {dynamicText: await dynamicRes.text()}
-              ]);
-            } catch (err) {
-              reject(err);
-            }
+          if (!stdout.includes('Beginning server...')) {
+            return;
+          }
+          try {
+            const [res, staticRes, dynamicRes] = await Promise.all([
+              fetch(`http://localhost:${testPort}`),
+              // Within `/test/fixtures`
+              fetch(`http://localhost:${testPort}/addUsers.json`),
+              // Based on `router`
+              fetch(`http://localhost:${testPort}/dynamic-route`)
+            ]);
+            resolve([
+              {headers: res.headers, text: await res.text()},
+              {json: await staticRes.json()},
+              {dynamicText: await dynamicRes.text()}
+            ]);
+          } catch (err) {
+            reject(err);
           }
         });
       });

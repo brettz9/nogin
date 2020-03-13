@@ -54,7 +54,7 @@
 
     "LOST-PASSWORD (TEMPLATES)": true,
     "UnableToDispatchPasswordReset": {
-      "message": "unable to dispatch password reset"
+      "message": "Unable to dispatch password reset"
     },
 
 
