@@ -202,6 +202,7 @@ module.exports = async function (app, config) {
     // attempt automatic login
     let o;
     try {
+      // Checks by `cookie` and `ip`
       o = await am.validateLoginKey(req.signedCookies.login, req.ip);
     } catch (err) {
     }
@@ -214,11 +215,25 @@ module.exports = async function (app, config) {
       //    successful submission of a password to match that
       //    in the account).
       //  2. Passing `validateLoginKey` (i.e., confirming that
-      //     same secue cookie came with the current IP address)
-      //  So we could only fail in `autoLogin` with a DB
-      //   `findOne` error or finding to find that the user is
-      //   still `activated` or that the `user` on the account
-      //   has since changed.
+      //     same secure cookie came with the current IP address)
+      //  So we could only fail in `autoLogin` with one of these:
+      //     1. A DB `findOne` error (returning `null`)
+      //     2. Finding that the user is now no longer `activated`,
+      //         resulting in the account not being found and `null`
+      //         being returned.
+      //     3. The `user` on the account has since changed
+      //         in the database (without the `cookie`/`ip` changing),
+      //         resulting in the account not being found and `null`
+      //         being returned.
+      //     4. Another user exists with the same `cookie`/`ip` combo
+      //         (as the next command might find that user instead).
+      //         In such a case, if the passwords match, that
+      //         object would be given instead and if not, then it
+      //         would fail.
+      //     5. The account of this user changed since the Promise
+      //         just above (e.g., the password or user has since
+      //         changed), causing the potential for the passwords
+      //         to no longer match.
       const _o = await am.autoLogin(o.user, o.pass);
       if (_o) {
         req.session.user = _o;
