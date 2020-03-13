@@ -209,6 +209,9 @@
     "ErrorLoggingOut": {
       "message": "There was a problem logging out.{lb}Redirecting you to the site root."
     },
+    "SessionLost": {
+      "message": "Your session has been lost.{lb}Please log in and try again. You will now be redirected."
+    },
     "accountDeleted": {
       "message": "Your account has been deleted.{lb}Redirecting you to the site root."
     },

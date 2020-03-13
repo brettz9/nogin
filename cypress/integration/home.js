@@ -177,6 +177,7 @@ describe('Home', function () {
     });
 
     it('should not update when the session is lost', function () {
+      this.timeout(30000);
       cy.clearCookie('login');
       cy.clearCookie(expressSessionID);
 
@@ -185,8 +186,11 @@ describe('Home', function () {
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="action2"]').click();
 
-      // Todo[>=1.0.0-beta.1]: Don't alert it was updated; alert that session
-      //   is no longer valid
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p', {
+        timeout: 20000
+      }).contains(
+        'Your session has been lost'
+      );
 
       cy.get(
         '[data-name="modal-alert"] [data-name="ok"]'
@@ -194,7 +198,7 @@ describe('Home', function () {
 
       cy.location('pathname', {
         timeout: 10000
-      }).should('eq', '/home');
+      }).should('eq', '/');
 
       // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {

@@ -273,7 +273,7 @@ module.exports = async function (app, config) {
 
   app.post('/home', async function (req, res) {
     if (isNullish(req.session.user)) {
-      res.redirect('/');
+      res.status(400).send('session-lost');
     } else {
       const {name, email, pass, country, user} = req.body;
       // We add `id` here to ensure only posting change for user's own

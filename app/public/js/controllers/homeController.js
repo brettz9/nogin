@@ -82,7 +82,10 @@ function setupValidationSubmission () {
       case 'email-taken':
         av.showInvalidEmail();
         break;
-      default:
+      case 'session-lost': {
+        showLockedErrorAlert({type: 'SessionLost'});
+        break;
+      } default:
         HomeView.onShowLockedErrorAlert({type: 'FailureSubmittingUserInfo'});
         break;
       }
