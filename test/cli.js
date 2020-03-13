@@ -347,7 +347,7 @@ describe('CLI', function () {
   );
 
   it('Missing environment components', async function () {
-    this.timeout(20000);
+    this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
         // eslint-disable-next-line no-process-env
@@ -359,14 +359,14 @@ describe('CLI', function () {
       '--secret', secret,
       '--PORT', testPort,
       '--config', ''
-    ]);
+    ], 20000);
     expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
       'A production environment requires setting `DB_USER` and `DB_PASS`.\n'
     );
   });
   it('With environment components', async function () {
-    this.timeout(30000);
+    this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
         // eslint-disable-next-line no-process-env
