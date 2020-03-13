@@ -27,7 +27,7 @@ import codeCoverageTask from '@cypress/code-coverage/task.js';
 import {guid} from '../../app/server/modules/common.js';
 import {
   addAccounts, removeAccounts,
-  validUserPassword, readAccounts
+  validUserPassword, readAccounts, updateAccounts
 } from '../../app/server/modules/db-basic.js';
 
 import {
@@ -309,6 +309,19 @@ const exprt = (on, config) => {
         passVer: ['0'],
         country: ['CN'],
         activated: [true]
+      }))[0];
+    },
+
+    /**
+     * Like a POST to `/home`, but with the ability to unset
+     *   the `activated` status. (Used for causing an
+     *   `autoLogin` fail).
+     * @returns {Promise<AccountInfo>}
+     */
+    async updateAccountToInactive () {
+      return (await updateAccounts({
+        user: ['bretto'],
+        activated: [false]
       }))[0];
     },
 

@@ -327,6 +327,20 @@ describe('Root (Login)', function () {
     });
   });
 
+  it(
+    'Successful `validateLoginKey` but mismatched `autoLogin`',
+    function () {
+      cy.loginWithSession();
+      cy.task('updateAccountToInactive');
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords').then((accts) => {
+        expect(accts).to.have.lengthOf(1);
+        expect(accts[0].activated).to.be.false;
+        return cy.visit('/');
+      });
+    }
+  );
+
   it('should reject bad login even in proper cookie format', function () {
     const secure = Cypress.env('env') === 'production';
     return cy.login({

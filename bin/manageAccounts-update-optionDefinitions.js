@@ -87,7 +87,8 @@ const cliSections = [
   {
     // Add italics: `{italic textToItalicize}`
     // We get this automatically from `package.json` by default
-    content: 'Update the specified user account in the database.'
+    content: 'Update the specified user account (indicated by `user`) ' +
+      'in the database.'
   },
   {
     optionList: optionDefinitions

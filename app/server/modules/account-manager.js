@@ -73,7 +73,12 @@ class AccountManager {
   async autoLogin (user, pass) {
     try {
       const o = await this.accounts.findOne({user, activated: true});
-      return o.pass === pass ? o : null;
+      return o.pass === pass
+        ? o
+        // See discussion under `app.get('/')` for the obscure
+        //  internal states that could exist to cause this
+        // istanbul ignore next
+        : null;
     } catch (err) {
       // No special reason to expect it throwing
       // istanbul ignore next
@@ -299,9 +304,13 @@ class AccountManager {
       throw new Error('email-taken');
     }
     const findOneAndUpdate = ({
-      name, email, country, pass, id, user
+      name, email, country, pass, id, user, activated
     }) => {
-      const o = {name, email, country, activated: true};
+      const o = {
+        name, email, country,
+        // Will be `true` unless setting to `false` from non-web API
+        activated: !allowUserUpdate || activated !== false
+      };
       if (pass) {
         o.pass = pass;
         o.passVer = passVer;
@@ -309,6 +318,7 @@ class AccountManager {
       const filter = id || !allowUserUpdate
         ? {_id: this.adapter.constructor.getObjectId(id)}
         : {user};
+
       return this.accounts.findOneAndUpdate(
         filter,
         {$set: o},

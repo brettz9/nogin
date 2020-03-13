@@ -225,12 +225,12 @@ module.exports = async function (app, config) {
       //         in the database (without the `cookie`/`ip` changing),
       //         resulting in the account not being found and `null`
       //         being returned.
-      //     4. Another user exists with the same `cookie`/`ip` combo
-      //         (as the next command might find that user instead).
+      //     4. Another account exists with the same `cookie`/`ip` combo
+      //         (as the next command might find that record instead).
       //         In such a case, if the passwords match, that
-      //         object would be given instead and if not, then it
-      //         would fail.
-      //     5. The account of this user changed since the Promise
+      //         object would be given instead and if not, then `autoLogin`
+      //         would fail and neither object be set.
+      //     5. The account of this user changed since the `Promise`
       //         just above (e.g., the password or user has since
       //         changed), causing the potential for the passwords
       //         to no longer match.
