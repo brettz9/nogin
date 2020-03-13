@@ -7,6 +7,7 @@ module.exports = {
     'plugin:node/recommended-script'
   ],
   env: {
+    browser: false,
     es6: true
   },
   settings: {
@@ -53,6 +54,14 @@ module.exports = {
       'cypress/assertion-before-screenshot': ['error'],
       'cypress/require-data-selectors': ['error'],
       'cypress/no-force': ['error']
+    }
+  }, {
+    files: [
+      'app/public/**'
+    ],
+    env: {
+      node: false,
+      browser: true
     }
   }, {
     files: [

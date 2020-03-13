@@ -4,7 +4,6 @@
 import {resolve as pathResolve} from 'path';
 
 import {JSDOM} from 'jsdom';
-// eslint-disable-next-line no-shadow
 import fetch from 'node-fetch';
 import escStringRegex from 'escape-string-regexp';
 
