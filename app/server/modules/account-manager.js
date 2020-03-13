@@ -35,6 +35,8 @@ class AccountManager {
       //   now anyways
       // istanbul ignore next
       console.error(err);
+      // Ignore for reasons as stated above previous line
+      // istanbul ignore next
       throw err;
     }
     return this;
@@ -156,6 +158,8 @@ class AccountManager {
         passKey
       }, $unset: {cookie: ''}}, {returnOriginal: false});
     } catch (err) {
+      // Above should not throw readily
+      // istanbul ignore next
       e = err;
     }
 
