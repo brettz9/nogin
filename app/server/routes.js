@@ -447,6 +447,8 @@ module.exports = async function (app, config) {
       setI18n(req, res),
       am.validatePasswordKey(req.query.key, req.ip)
     ]);
+    // `validatePasswordKey` just looks up database records, so no reason to err
+    // istanbul ignore next
     if (status === 'rejected') {
       e = error;
     }
@@ -488,8 +490,9 @@ module.exports = async function (app, config) {
     const [
       {value: _},
       {
-        // istanbul ignore next
-        value: accounts = []
+        value:
+          // istanbul ignore next
+          accounts = []
       }
       // eslint-disable-next-line node/no-unsupported-features/es-builtins
     ] = await Promise.allSettled([
