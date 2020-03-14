@@ -146,6 +146,7 @@ Questions and suggestions for improvement are welcome.
 
 ## Medium priorities
 
+1. Make form **name field optional**
 1. Allow **adding to "Set up new account" fields** (based on a schema?)
     (to be injected into `app/server/views/account.js`) to be passed to
     the server (`app/server/routes.js`) and saved in the database along
