@@ -1,5 +1,24 @@
 # CHANGES for nogin
 
+## 1.0.0-beta.2
+
+- Change: Avoid a few login defaults (don't want to encourage using them!)
+- Fix: Pass on `injectHTML` properly
+- Fix: Display errors on signup
+- Fix: Send error to user on home page if session is lost
+- Fix (regression): Properly handle `Promise.allSettled` values
+- Fix: Disallow empty string for user attempting to visit `/home`
+- Fix: Ensure `passVer` can be passed in from CLI (but not web)
+- Enhancement: Allow `country` as CLI add/remove/etc. verb option
+- Enhancement: Expose `listIndexes` to CLI
+- Enhancement: Ensure router runs before `*`
+- Enhancement: Avoid font-awesome when using `noBuiltinStylesheets`
+- Docs: Prefer `@example.name` (people should get their own domains for
+    greater independence!)
+- Docs: Add to specific CLI verb command documentation
+- Linting/Refactoring: Misc.
+- Testing: Full 100% coverage
+
 ## 1.0.0-beta.1
 
 - Breaking enhancement: Avoid `process.env` (`app.js` accepts CLI now instead)
