@@ -192,7 +192,7 @@ describe('Home', function () {
       cy.clearCookie('login');
       cy.clearCookie(expressSessionID);
 
-      cy.get('[data-name="email"]').type('brett@example.name');
+      cy.get('[data-name="email"]').type(NL_EMAIL_USER);
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="action2"]').click();
@@ -220,7 +220,10 @@ describe('Home', function () {
     });
 
     it('should reject client-side forgery of another user', function () {
-      cy.get('[data-name="email"]').type('brett@example.name');
+      // If we use the exploiter's own email, will get error of the email
+      //  already existing, and as we aren't testing new emails here,
+      //   we just use the targeted user's existing email
+      cy.get('[data-name="email"]').type(NL_EMAIL_USER);
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
 
@@ -259,7 +262,7 @@ describe('Home', function () {
       });
     });
 
-    it('Make good update', function () {
+    it('Make good update (with same user but different email)', function () {
       const newEmail = 'brett@example.name';
       cy.get('[data-name="email"]').type(newEmail);
       cy.get('[data-name="pass"]').type('boo123456');
@@ -321,7 +324,7 @@ describe('Home', function () {
 
     it('Attempt bad client-side input', function () {
       const tooShortOfAName = 'a';
-      cy.get('[data-name="email"]').type('brett@example.name');
+      cy.get('[data-name="email"]').type(NL_EMAIL_USER);
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type(tooShortOfAName).blur();
 
