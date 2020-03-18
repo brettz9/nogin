@@ -126,6 +126,10 @@ Questions and suggestions for improvement are welcome.
     1. Make distinct badges for local results of each of testable browsers,
         or at least report if all are passing
 
+1. Publish **release**
+
+## Medium priorities
+
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
     1. **Remove `reset` GET page** to a POST on the user (admin) page.
     1. **Multiple group membership** allowing **multiple roles per group**,
@@ -141,11 +145,6 @@ Questions and suggestions for improvement are welcome.
     1. Update **docs** for any privilege additions/config
     1. **Hierarchical** groups and roles?
     1. Use within **authentication**
-
-1. Publish **release**
-
-## Medium priorities
-
 1. Make form **name field optional**
 1. **Ajax pagination of users**
 1. Allow **adding to "Set up new account" fields** (based on a schema?)

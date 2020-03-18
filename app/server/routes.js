@@ -514,7 +514,7 @@ module.exports = async function (app, config) {
     }
   });
 
-  // Todo[>=1.0.0-beta.1]: Should require (read) privileges!
+  // Todo[>=1.1.0]: Should require (read) privileges!
   /**
    * View, delete & reset accounts (currently view only).
   */
@@ -570,16 +570,18 @@ module.exports = async function (app, config) {
     });
   });
 
-  // Todo[>=1.0.0-beta.1]: Should require privileges and expect POST/DELETE!
+  // Todo[>=1.1.0]: Should require privileges
   /**
    * @param {Request} req
    * @param {Response} res
    * @returns {void}
    */
-  app.get('/reset', async function (req, res) {
+  /*
+  app.post('/reset', async function (req, res) {
     await am.deleteAllAccounts();
     res.redirect('/users');
   });
+  */
 
   if (SERVE_COVERAGE) {
     // SHOW COVERAGE HTML ON SERVER

@@ -2,6 +2,8 @@
 
 ## ?
 
+- Breaking change: Disable dangerous `/reset` page (until such
+    time as may reenable as POST API endpoint for privileged users)
 - Fix: Get old values to show on `/home`
 - Fix: Allow user to submit own email again
 - Fix: Reset password dialog sizing and display
