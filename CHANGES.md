@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 1.0.0-beta.3
 
 - Breaking change: Disable dangerous `/reset` page (until such
     time as may reenable as POST API endpoint for privileged users)

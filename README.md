@@ -31,10 +31,10 @@ The name is a portmanteau of "Node" and "login" and is pronounced "noggin"
 
 So if you want Node login, use your "nogin"!
 
-**Note: This revised version of node-login is not yet ready for production use,
-nor is the documentation below fully up-to-date. There are a few serious
-vulernabilities not yet fixed at this time, allowing your users to not only
-be viewed but deleted!**
+**Note: This revised version of node-login is not yet fully ready for
+production use, nor is the documentation below fully up-to-date. Note that
+pending the creation of a privileges system, anyone can view the user
+list.**
 
 ### A basic account management system built in Node.js with the following features:
 

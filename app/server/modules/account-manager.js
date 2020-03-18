@@ -311,7 +311,7 @@ class AccountManager {
     if (_o) {
       throw new Error('email-taken');
     }
-
+    /*
     let oldAccount;
     try {
       oldAccount = await this.accounts.findOne({user: newData.user});
@@ -325,6 +325,7 @@ class AccountManager {
     if (oldAccount.email !== newData.email) {
       console.log('Different emails', oldAccount.email, '::', newData.email);
     }
+    */
 
     const findOneAndUpdate = ({
       name, email, country, pass, id, user, activated
