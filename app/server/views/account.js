@@ -4,7 +4,7 @@
 module.exports = function ({_, user, countries, emailPattern, title}) {
   return [
     // store the `userId` on the client side in a hidden input field
-    ['input', {type: 'hidden', id: 'userId', value: user._id}],
+    ['input', {type: 'hidden', id: 'userId', defaultValue: user._id}],
 
     ['div', {
       id: 'account-form-container', class: 'center-vertical', role: 'form'
@@ -30,7 +30,8 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
               autocomplete: 'name',
               minlength: 3,
               class: 'form-control', id: 'name-tf', 'data-name': 'name',
-              name: 'name', value: user.name
+              name: 'name',
+              defaultValue: user.name
             }]
           ]]
         ]],
@@ -50,7 +51,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
               class: 'form-control', id: 'email-tf',
               'data-name': 'email',
               name: 'email',
-              value: user.email
+              defaultValue: user.email
             }]
           ]]
         ]],
@@ -73,7 +74,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
               ]],
               ...countries.map(({code, name}) => {
                 return ['option', {
-                  value: code, selected: code === user.country
+                  value: code, defaultSelected: code === user.country
                 }, [name]];
               })
             ]]
@@ -94,7 +95,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
               class: 'form-control disabled', id: 'user-tf',
               'data-name': 'user',
               name: 'user',
-              value: user.user
+              defaultValue: user.user
             }]
           ]]
         ]],
@@ -110,7 +111,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
               type: 'password',
               minlength: 6,
               class: 'form-control', id: 'pass-tf',
-              'data-name': 'pass', name: 'pass', value: ''
+              'data-name': 'pass', name: 'pass', defaultValue: ''
             }]
           ]]
         ]],
@@ -130,7 +131,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
                 minlength: 6,
                 class: 'form-control', id: 'pass-confirm-tf',
                 'data-name': 'pass-confirm',
-                name: 'pass-confirm', value: ''
+                name: 'pass-confirm', defaultValue: ''
               }]
             ]]
           ]],

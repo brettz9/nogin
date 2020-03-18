@@ -2,6 +2,7 @@
 
 ## ?
 
+- Fix: Get old values to show on `/home`
 - Fix: Allow user to submit own email again
 - Fix: Reset password dialog sizing and display
 - Refactoring: Use `user` from session (in case code is refactored to use
