@@ -311,6 +311,21 @@ class AccountManager {
     if (_o) {
       throw new Error('email-taken');
     }
+
+    let oldAccount;
+    try {
+      oldAccount = await this.accounts.findOne({user: newData.user});
+    } catch (err) {}
+    // Todo: Should only occur if user established session and then we
+    //  deleted their account
+    // istanbul ignore if
+    if (!oldAccount) {
+      throw new Error('session-lost');
+    }
+    if (oldAccount.email !== newData.email) {
+      console.log('Different emails', oldAccount.email, '::', newData.email);
+    }
+
     const findOneAndUpdate = ({
       name, email, country, pass, id, user, activated
     }) => {

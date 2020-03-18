@@ -327,7 +327,8 @@ module.exports = async function (app, config) {
         // We should probably follow this pattern
         log('message', {message: error.message});
         const message = [
-          'email-taken'
+          'email-taken',
+          'session-lost'
         ].includes(error.message)
           ? error.message
           : _('ErrorUpdatingAccount');
