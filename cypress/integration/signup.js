@@ -182,7 +182,8 @@ describe('Signup', function () {
       ]
       // eslint-disable-next-line promise/prefer-await-to-then
     }, {timeout: 50000}).then((hasEmail) => {
-      // Todo: In full UI version, we could look for the link and visit it.
+      // Todo: In full UI testing mode, we could look for the link and
+      //   visit it.
       return expect(hasEmail).to.be.true;
     // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {

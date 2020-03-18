@@ -53,13 +53,27 @@ const optionDefinitions = [
     typeLabel: '{underline date-timestamp}'
   },
   {
+    name: 'activated', multiple: true, type: Boolean,
+    description: '(Auto-set) activated flag to update'
+  },
+  {
     name: 'activationCode', multiple: true, type: String,
-    description: '(Auto-set) activation code to update',
+    description: 'Primarily for testing only: (Auto-set) activation code ' +
+      'to update',
     typeLabel: '{underline activationCode}'
   },
   {
-    name: 'activated', multiple: true, type: Boolean,
-    description: '(Auto-set) activated flag to update'
+    name: 'unactivatedEmail', multiple: true, type: String,
+    description: 'Primarily for testing only: Email address to which the ' +
+      'user wishes to update but which has not yet been activated',
+    typeLabel: '{underline email}'
+  },
+  {
+    name: 'activationRequestDate', multiple: true, type: Number,
+    description: 'Primarily for testing only: (Auto-set) request date used ' +
+      'to determine if activation has expired by time an individual visits ' +
+      'the email.',
+    typeLabel: '{underline timestamp integer}'
   },
   {
     name: 'passKey', multiple: true, type: String,

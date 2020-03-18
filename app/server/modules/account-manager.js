@@ -14,6 +14,15 @@ const passVer = 1;
  */
 class AccountManager {
   /**
+   * @param {AccountInfo} newData
+   * @returns {Promise<string>}
+   */
+  static getAccountHash (newData) {
+    // Add password into mix so can't be auto-enabled for other users
+    return saltAndHash(newData.user + newData.pass);
+  }
+
+  /**
    * @param {"mongodb"} adapter
    * @param {DBConfigObject} config
    */
@@ -251,12 +260,13 @@ class AccountManager {
       throw new Error('email-taken');
     }
 
-    const [userHash, passHash] = await Promise.all([
-      saltAndHash(newData.user),
+    const [accountHash, passHash] = await Promise.all([
+      // Add password into mix so can't be auto-enabled for other users
+      AccountManager.getAccountHash(newData),
       saltAndHash(newData.pass)
     ]);
 
-    newData.activationCode = userHash;
+    newData.activationCode = accountHash;
     newData.activated = Boolean(newData.activated);
     newData.pass = passHash;
     newData.passVer = (allowCustomPassVer && newData.passVer) || passVer;
@@ -278,25 +288,53 @@ class AccountManager {
    */
   async activateAccount (activationCode) {
     let o;
+    const twentyFourHoursAgo = new Date() - 24 * 60 * 60 * 1000;
+    const unactivatedConditions = {
+      $and: [
+        {activationCode},
+        {$or: [
+          {activated: false},
+          {unactivatedEmail: {$exists: true}}
+        ]},
+        {$or: [
+          {activationRequestDate: null},
+          {activationRequestDate: {$gt: twentyFourHoursAgo}}
+        ]}
+      ]
+    };
+
     try {
-      o = await this.accounts.findOne({
-        activationCode, activated: false
-      });
+      o = await this.accounts.findOne(unactivatedConditions);
     } catch (err) {}
+
     if (!o) {
       throw new Error('activationCodeProvidedInvalid');
     }
 
+    // Overwrite any previous email now that confirmed (if this was an
+    //   update)
+    o.email = o.unactivatedEmail || o.email;
+    delete o.activationRequestDate;
+    delete o.unactivatedEmail;
     o.activated = true;
-    return this.accounts.replaceOne({activationCode, activated: false}, o);
+    return this.accounts.replaceOne(unactivatedConditions, o);
   }
 
   /**
+  * @callback ChangedEmailHandler
+  * @param {AccountInfo} acct
+  * @param {string} user Since not provided on `acct`
+  * @returns {void}
+  */
+
+  /**
    * @param {AccountInfo} newData
-   * @param {boolean} allowUserUpdate
+   * @param {PlainObject} cfg
+   * @param {boolean} cfg.forceUpdate
+   * @param {ChangedEmailHandler} cfg.changedEmailHandler
    * @returns {Promise<FindAndModifyWriteOpResult>}
    */
-  async updateAccount (newData, allowUserUpdate) {
+  async updateAccount (newData, {forceUpdate, changedEmailHandler}) {
     let _o;
 
     // Exclude the user's own account (as we don't want an
@@ -311,7 +349,7 @@ class AccountManager {
     if (_o) {
       throw new Error('email-taken');
     }
-    /*
+
     let oldAccount;
     try {
       oldAccount = await this.accounts.findOne({user: newData.user});
@@ -322,32 +360,50 @@ class AccountManager {
     if (!oldAccount) {
       throw new Error('session-lost');
     }
-    if (oldAccount.email !== newData.email) {
-      console.log('Different emails', oldAccount.email, '::', newData.email);
-    }
-    */
+    const changedEmail = oldAccount.email !== newData.email;
 
-    const findOneAndUpdate = ({
-      name, email, country, pass, id, user, activated
+    const findOneAndUpdate = async ({
+      name, email, country, pass, id, user, activated,
+      unactivatedEmail, activationRequestDate
     }) => {
+      const addingTemporaryEmail = !forceUpdate && changedEmail;
+
       const o = {
-        name, email, country,
+        name, country,
+        ...(addingTemporaryEmail
+          ? {
+            unactivatedEmail: newData.email,
+            activationRequestDate: new Date().getTime()
+          }
+          : forceUpdate
+            ? {email, unactivatedEmail, activationRequestDate}
+            : null
+        ),
         // Will be `true` unless setting to `false` from non-web API
-        activated: !allowUserUpdate || activated !== false
+        activated: !forceUpdate || activated !== false
       };
+      if (addingTemporaryEmail) {
+        // Add password into mix so can't be auto-enabled for other users
+        const accountHash = await AccountManager.getAccountHash(newData);
+        o.activationCode = accountHash;
+      }
       if (pass) {
         o.pass = pass;
         o.passVer = passVer;
       }
-      const filter = id || !allowUserUpdate
+      const filter = id || !forceUpdate
         ? {_id: this.adapter.constructor.getObjectId(id)}
         : {user};
 
-      return this.accounts.findOneAndUpdate(
+      const ret = await this.accounts.findOneAndUpdate(
         filter,
         {$set: o},
         {upsert: true, returnOriginal: false}
       );
+      if (addingTemporaryEmail) {
+        await changedEmailHandler(o, user);
+      }
+      return ret;
     };
     if (!newData.pass) {
       return findOneAndUpdate(newData);

@@ -73,8 +73,11 @@ async function getAccounts (options, update) {
     pass,
     passVer,
     date,
+    activated,
+    // These would mostly just be for testing
     activationCode,
-    activated
+    unactivatedEmail,
+    activationRequestDate
   } = options;
   return options.user.map((user, i) => {
     if (!update) {
@@ -99,8 +102,10 @@ async function getAccounts (options, update) {
       pass: pass && pass[i],
       passVer: passVer && passVer[i],
       date: date && date[i],
+      activated: activated && activated[i],
       activationCode: activationCode && activationCode[i],
-      activated: activated && activated[i]
+      unactivatedEmail: unactivatedEmail && unactivatedEmail[i],
+      activationRequestDate: activationRequestDate && activationRequestDate[i]
     };
   });
 }
@@ -133,7 +138,7 @@ exports.updateAccounts = async (options) => {
   const am = await getAccountManager(options);
   return Promise.all(
     accounts.map(async (acct) => {
-      await am.updateAccount(acct, true);
+      await am.updateAccount(acct, {forceUpdate: true});
       return acct;
     })
   );
@@ -147,7 +152,8 @@ function getAccountInfo (options) {
   const info = {};
   [
     'user', 'name', 'email', 'country', 'pass', 'passVer', 'date',
-    'activationCode', 'activated'
+    'activated',
+    'activationCode', 'unactivatedEmail', 'activationRequestDate'
     // Todo: Add 'passKey', 'ip', 'cookie', and '_id' (here and in
     //  `getAccounts`)?
   ].forEach((prop) => {

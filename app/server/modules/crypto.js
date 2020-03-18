@@ -32,6 +32,10 @@ function pbkdf2Prom (data, salt) {
   });
 }
 
+/**
+ * @param {string} data
+ * @returns {Promise<string>}
+ */
 const saltAndHash = function (data) {
   const saltBytes = 16;
   // eslint-disable-next-line promise/avoid-new

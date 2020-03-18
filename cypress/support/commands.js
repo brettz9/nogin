@@ -107,10 +107,14 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'loginWithSession',
-  () => {
+  ({nondefaultEmail} = {}) => {
     const NL_EMAIL_PASS = Cypress.env('NL_EMAIL_PASS');
     cy.task('deleteAllAccounts');
-    cy.task('addAccount');
+    if (nondefaultEmail) {
+      cy.task('addNondefaultAccount');
+    } else {
+      cy.task('addAccount');
+    }
     // Not just login, but get session, so will be shown `/home`
     //   without redirect upon visit
     return cy.request({

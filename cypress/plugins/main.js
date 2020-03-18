@@ -17,7 +17,7 @@ import {spawn} from 'child_process';
 
 import cookieSign from 'cookie-signature';
 
-import Pop3Command from 'node-pop3';
+import Pop3Command, {listify} from 'node-pop3';
 import getStream from 'get-stream';
 import Envelope from 'envelope';
 
@@ -127,7 +127,7 @@ const exprt = (on, config) => {
    * @returns {Promise<string[]>} Message numbers
   */
   async function connectAndGetMessages () {
-    await popActivatedAccount.connect();
+    await popActivatedAccount._connect();
     // Does not get deleted messages, so safe to use results in
     //  queries like RETR which won't work against deleted
     const [
@@ -136,7 +136,7 @@ const exprt = (on, config) => {
     const listStreamString = await getStream(listStream);
 
     return [
-      ...new Map(Pop3Command.listify(listStreamString)).keys()
+      ...new Map(listify(listStreamString)).keys()
     ];
   }
 
@@ -156,6 +156,7 @@ const exprt = (on, config) => {
           /* retrInfo */, retrStream
         ] = await popActivatedAccount.command('RETR', messageNum);
         const retrStreamString = await getStream(retrStream);
+        console.log('retrStreamString', retrStreamString);
 
         // Tried deleting even here and it is not enough
         // await popActivatedAccount.command('DELE', messageNum);
@@ -266,6 +267,28 @@ const exprt = (on, config) => {
     },
 
     /**
+     * Simulates POST to `/signup` and subsequent visit to `/activation?c=`
+     * for that account (with the `c` value obtained from the activation email).
+     * Sets a different email from `addAccount` initially, however, so can
+     * change to it and then check it.
+     * @returns {Promise<AccountInfo>}
+     */
+    async addNondefaultAccount () {
+      return (await addAccounts({
+        name: ['Brett'],
+        email: ['brettz95@example.name'],
+        user: ['bretto'],
+        pass: [NL_EMAIL_PASS],
+        country: ['US'],
+        activationCode: [
+          // eslint-disable-next-line max-len
+          '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
+        ],
+        activated: [true]
+      }))[0];
+    },
+
+    /**
      * Used so we can get coverage of failed `dispatchResetPasswordLink` on call
      * to `/lost-password`.
      * @returns {Promise<AccountInfo>}
@@ -322,6 +345,20 @@ const exprt = (on, config) => {
       return (await updateAccounts({
         user: ['bretto'],
         activated: [false]
+      }))[0];
+    },
+
+    /**
+     * Like a POST to `/home`, but with the ability to unset
+     *   the `activated` status. (Used for causing an
+     *   `autoLogin` fail).
+     * @returns {Promise<AccountInfo>}
+     */
+    async simulateOldActivationRequestDate () {
+      const fortyEightHoursAgo = new Date() - 48 * 60 * 60 * 1000;
+      return (await updateAccounts({
+        user: ['bretto'],
+        activationRequestDate: [fortyEightHoursAgo]
       }))[0];
     },
 
@@ -435,9 +472,10 @@ const exprt = (on, config) => {
       const parsedMessages = await getEmails();
       const subjectIsNotString = typeof cfg.subject !== 'string';
       const htmlIsNotArray = !Array.isArray(cfg.html);
-      console.log('parsedMessages', parsedMessages.length, parsedMessages);
+      // console.log('parsedMessages', parsedMessages.length, parsedMessages);
       return parsedMessages.some((msg) => {
         const html = msg[0][1] && msg[0][1][0];
+        /*
         console.log(
           'cfg.subject', cfg.subject, '::', msg.header && msg.header.subject,
           cfg.subject === msg.header.subject
@@ -448,15 +486,46 @@ const exprt = (on, config) => {
           'cfg.html',
           cfg.html
         );
+        */
         return (
           (subjectIsNotString ||
             cfg.subject === msg.header.subject) &&
           (htmlIsNotArray || cfg.html.every((requiredHTMLString) => {
-            console.log('html', html, 'requiredHTMLString', requiredHTMLString);
+            // console.log(
+            //   'html', html, 'requiredHTMLString', requiredHTMLString
+            // );
             return html.includes(requiredHTMLString);
           }))
         );
       });
+    },
+
+    /**
+    * @typedef {PlainObject} HTMLAndSubject
+    * @property {string} html
+    * @property {string} subject
+    */
+
+    /**
+     * @returns {Promise<HTMLAndSubject>}
+     */
+    async getMostRecentEmail () {
+      if (config.env.disableEmailChecking) {
+        // Easier to do this than require the client code to check an
+        //  env. variable
+        return {
+          emailDisabled: true
+        };
+      }
+      // Todo: Could see about improving efficiency in getting a single
+      //   email here instead
+      const parsedMessages = await getEmails();
+      // console.log('parsedMessages', parsedMessages);
+      const msg = parsedMessages[0];
+      // console.log('parsedMessages', parsedMessages.length, parsedMessages);
+      const html = msg[0][1] && msg[0][1][0];
+      const {subject} = msg.header;
+      return {html, subject};
     }
   });
 

@@ -189,10 +189,10 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(50000);
+      this.timeout(60000);
       let cliProm;
       const [
-        {text, headers}, {json}, {dynamicText}, {signupText}
+        {text, headers}, {json}, {dynamicText}, {signupText}, {usersText}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -217,7 +217,7 @@ describe('CLI', function () {
           }
           try {
             const [
-              res, staticRes, dynamicRes, signupRes
+              res, staticRes, dynamicRes, signupRes, usersRes
             ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
               // Within `/test/fixtures`
@@ -225,13 +225,17 @@ describe('CLI', function () {
               // Based on `router`
               fetch(`http://localhost:${testPort}/dynamic-route`),
               // Check countryCodes
-              fetch(`http://localhost:${testPort}/signup`)
+              fetch(`http://localhost:${testPort}/signup`),
+              // Check missing `--showUsers` flag (in main Cypress
+              //   tests, we are enabling it so as to fully test it)
+              fetch(`http://localhost:${testPort}/users`)
             ]);
             resolve([
               {headers: res.headers, text: await res.text()},
               {json: await staticRes.json()},
               {dynamicText: await dynamicRes.text()},
-              {signupText: await signupRes.text()}
+              {signupText: await signupRes.text()},
+              {usersText: await usersRes.text()}
             ]);
           } catch (err) {
             reject(err);
@@ -336,6 +340,13 @@ describe('CLI', function () {
         '<option value="MX">Mexico</option>' +
         '<option value="US">United States</option>'
       );
+      const usersDoc = (new JSDOM(usersText)).window.document;
+      expect(
+        usersDoc.querySelector('[data-name=four04]').textContent
+      ).to.contain(
+        'the page or resource you are searching for is currently unavailable'
+      );
+
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
@@ -480,6 +491,10 @@ describe('CLI', function () {
         '1234567890',
         '--activationCode',
         '1234555555555555',
+        '--unactivatedEmail',
+        'new@example.name',
+        '--activationRequestDate',
+        '1584614124120',
         '--activated'
       ]);
       expect(stripPromisesWarning(stderr)).to.equal('');

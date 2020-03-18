@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = function ({_}) {
+module.exports = function ({_, type}) {
   return ['div', {
-    class: 'modal-confirm modal fade', 'data-name': 'modal-confirm'
+    class: 'modal-confirm modal fade',
+    'data-name': 'modal-confirm',
+    'data-confirm-type': type
   }, [
     ['div', {class: 'modal-dialog', role: 'dialog'}, [
       ['div', {class: 'modal-content'}, [
@@ -23,9 +25,13 @@ module.exports = function ({_}) {
         ['div', {class: 'modal-footer'}, [
           ['button', {
             class: 'cancel btn btn-outline-dark',
+            'data-name': 'cancel',
             'data-dismiss': 'modal'
           }, [_('Cancel')]],
-          ['button', {class: 'submit btn btn-primary'}, [_('Ok')]]
+          ['button', {
+            'data-name': 'submit-confirm',
+            class: 'submit btn btn-primary'
+          }, [_('Ok')]]
         ]]
       ]]
     ]]

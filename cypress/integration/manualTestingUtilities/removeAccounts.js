@@ -1,10 +1,6 @@
 describe('Manual testing', function () {
-  beforeEach(() => {
-    cy.task('deleteAllAccounts');
-  });
   it('Added account for testing', function () {
-    // eslint-disable-next-line chai-expect/no-inner-literal
-    expect(true).to.be.true;
+    cy.task('deleteAllAccounts');
   });
 
   // This was the code for when the page was accessable by GET!

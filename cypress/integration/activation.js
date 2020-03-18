@@ -23,7 +23,9 @@ describe('Activation', function () {
   );
 
   it('Visit Activation (Bad code)', function () {
-    cy.visit('/activation?c=00001');
+    cy.visit('/activation?c=00001', {
+      failOnStatusCode: false
+    });
     cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
       'The activation code provided was invalid.'
     );
@@ -36,7 +38,9 @@ describe('Activation', function () {
   it(
     'Visit Activation (Bad code) has no detectable a11y violations on load',
     () => {
-      cy.visitURLAndCheckAccessibility('/activation?c=00001');
+      cy.visitURLAndCheckAccessibility('/activation?c=00001', {
+        failOnStatusCode: false
+      });
     }
   );
 
@@ -76,9 +80,7 @@ describe('Activation', function () {
       // eslint-disable-next-line max-len
       // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
       return cy.task('addNonActivatedAccount').then(({activationCode}) => {
-        cy.visitURLAndCheckAccessibility('/activation?c=' + activationCode, {
-          failOnStatusCode: false
-        });
+        cy.visitURLAndCheckAccessibility('/activation?c=' + activationCode);
       });
     }
   );

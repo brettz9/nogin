@@ -19,6 +19,197 @@ describe('Home', function () {
       }).should('eq', '/');
     }
   );
+  describe('Changing email', function () {
+    beforeEach(() => {
+      cy.loginWithSession({
+        nondefaultEmail: true
+      });
+      cy.task('addNonActivatedAccount');
+      cy.visit('/home');
+    });
+    it('Make good update (with same user but different email)', function () {
+      this.timeout(30000);
+      const startingEmail = 'brettz95@example.name';
+      const newEmail = NL_EMAIL_USER;
+      cy.get('[data-name="email"]').clear().type(newEmail);
+      cy.get('[data-name="pass"]').clear().type('boo123456');
+      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get('[data-name="country"]').select('FR');
+      cy.get('[data-name="action2"]').click();
+
+      // Cypress needs us to wait to be able to find the
+      //   dialog to dismiss it
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(500);
+      cy.get(
+        '[data-confirm-type="notice"] [data-name="submit-confirm"]'
+      ).click();
+
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p',
+        {timeout: 20000}
+      ).contains('Your account has been updated.');
+      cy.get(
+        '[data-name="modal-alert"] [data-name="ok"]'
+      ).click();
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        const {user, name, country, email} = accts[0];
+        expect(user).to.equal('bretto');
+        // Hasn't been activated yet, so keeps old email for now
+        expect(email).to.equal(startingEmail);
+        expect(country).to.equal('FR');
+        return expect(name).to.equal('MyNewName');
+        // eslint-disable-next-line promise/prefer-await-to-then
+      }).then(() => {
+        return cy.task('getMostRecentEmail', {timeout: 50000});
+        // eslint-disable-next-line promise/prefer-await-to-then
+      }).then(({html, subject, emailDisabled}) => {
+        if (emailDisabled) {
+          // eslint-disable-next-line promise/no-return-wrap
+          return Promise.resolve(true);
+        }
+        // A bit of redundancy with `hasEmail`, but we want to get the link too
+        expect(subject).to.equal('Account Activation');
+        expect([
+          'Please click here to activate your account',
+          '<a href=',
+          'activation?c='
+        ].every((str) => {
+          return html.includes(str);
+        })).to.be.true;
+        const match = html.match(/activation\?c=(?<activationCode>[^'"]*)/u);
+        const {activationCode} = (match || {groups: {}}).groups;
+        expect(activationCode).to.be.ok;
+        cy.visit('/activation?c=' + encodeURIComponent(activationCode));
+        // eslint-disable-next-line promise/no-return-wrap
+        return Promise.resolve(false);
+        // eslint-disable-next-line promise/prefer-await-to-then
+      }).then((emailDisabled) => {
+        if (emailDisabled) {
+          // eslint-disable-next-line promise/no-return-wrap
+          return Promise.resolve(true);
+        }
+        return cy.task('getRecords', {user: ['bretto']});
+        // eslint-disable-next-line promise/prefer-await-to-then
+      }).then((accts) => {
+        if (accts === true) {
+          // eslint-disable-next-line promise/no-return-wrap
+          return Promise.resolve(true);
+        }
+        const {user, name, country, email} = accts[0];
+        expect(user).to.equal('bretto');
+        // Should now be activated, so check that
+        expect(email).to.equal(newEmail);
+        expect(country).to.equal('FR');
+        return expect(name).to.equal('MyNewName');
+      });
+    });
+
+    it(
+      'Make good update (with same user but different email) but ' +
+        'simulate visiting activation link too late',
+      function () {
+        this.timeout(30000);
+        const startingEmail = 'brettz95@example.name';
+        const newEmail = NL_EMAIL_USER;
+        cy.get('[data-name="email"]').clear().type(newEmail);
+        cy.get('[data-name="pass"]').clear().type('boo123456');
+        cy.get('[data-name="name"]').clear().type('MyNewName');
+        cy.get('[data-name="name"]:invalid').should('have.length', 0);
+        cy.get('[data-name="country"]').select('FR');
+        cy.get('[data-name="action2"]').click();
+
+        // Cypress needs us to wait to be able to find the
+        //   dialog to dismiss it
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(500);
+        cy.get(
+          '[data-confirm-type="notice"] [data-name="submit-confirm"]'
+        ).click();
+
+        cy.get('[data-name="name"]:invalid').should('have.length', 0);
+        cy.get(
+          '[data-name=modal-alert] [data-name=modal-body] p',
+          {timeout: 20000}
+        ).contains('Your account has been updated.');
+        cy.get(
+          '[data-name="modal-alert"] [data-name="ok"]'
+        ).click();
+        // eslint-disable-next-line promise/prefer-await-to-then
+        return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+          const {user, name, country, email} = accts[0];
+          expect(user).to.equal('bretto');
+          // Hasn't been activated yet, so keeps old email for now
+          expect(email).to.equal(startingEmail);
+          expect(country).to.equal('FR');
+          return expect(name).to.equal('MyNewName');
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then(() => {
+          return cy.task('getMostRecentEmail', {timeout: 50000});
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then(({html, subject, emailDisabled}) => {
+          if (emailDisabled) {
+            // eslint-disable-next-line promise/no-return-wrap
+            return Promise.resolve(true);
+          }
+          // A bit of redundancy with `hasEmail`, but we want to get
+          //  the link too
+          expect(subject).to.equal('Account Activation');
+          expect([
+            'Please click here to activate your account',
+            '<a href=',
+            'activation?c='
+          ].every((str) => {
+            return html.includes(str);
+          })).to.be.true;
+          const match = html.match(/activation\?c=(?<activationCode>[^'"]*)/u);
+          const {activationCode} = (match || {groups: {}}).groups;
+          expect(activationCode).to.be.ok;
+
+          // WE SIMULATE THE DELAY HERE
+          cy.task('simulateOldActivationRequestDate');
+          // END SIMULATION
+
+          cy.visit('/activation?c=' + encodeURIComponent(activationCode), {
+            failOnStatusCode: false
+          });
+          cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+            'The activation code provided was invalid.'
+          );
+          // eslint-disable-next-line promise/no-return-wrap
+          return Promise.resolve(false);
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then((emailDisabled) => {
+          if (emailDisabled) {
+            // eslint-disable-next-line promise/no-return-wrap
+            return Promise.resolve(true);
+          }
+          return cy.task('getRecords', {user: ['bretto']});
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then((accts) => {
+          if (accts === true) {
+            // eslint-disable-next-line promise/no-return-wrap
+            return Promise.resolve(true);
+          }
+          const {user, name, country, email, unactivatedEmail} = accts[0];
+          expect(user).to.equal('bretto');
+
+          // Should not have been activated as we were too late, so
+          //  should have oldemail
+          expect(email).to.equal(startingEmail);
+
+          // It should still have kept the desired email
+          expect(unactivatedEmail).to.equal(newEmail);
+
+          expect(country).to.equal('FR');
+          return expect(name).to.equal('MyNewName');
+        });
+      }
+    );
+  });
   describe('Pre-logging in with session', function () {
     beforeEach(() => {
       cy.loginWithSession();
@@ -48,12 +239,27 @@ describe('Home', function () {
       }).should('eq', '/');
     });
 
+    it('Allows canceling of deleting account', function () {
+      cy.get('[data-name="account-form"] .btn-danger').click();
+      cy.get('[data-name="modal-body"]').contains(
+        'Are you sure you want to delete your account?'
+      );
+      cy.get(
+        '[data-confirm-type="deleteAccount"] [data-name="cancel"]'
+      ).click();
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        expect(accts).to.have.lengthOf(1);
+        return cy.log(accts);
+      });
+    });
+
     it('Delete account', function () {
       cy.get('[data-name="account-form"] .btn-danger').click();
       cy.get('[data-name="modal-body"]').contains(
         'Are you sure you want to delete your account?'
       );
-      cy.get('[data-name="modal-confirm"] .btn-danger').click();
+      cy.get('[data-confirm-type="deleteAccount"] .btn-danger').click();
 
       cy.get(
         '[data-name=modal-alert] [data-name=modal-body] p',
@@ -81,7 +287,7 @@ describe('Home', function () {
       cy.get('[data-name="modal-body"]').contains(
         'Are you sure you want to delete your account?'
       );
-      cy.get('[data-name="modal-confirm"] .btn-danger').click();
+      cy.get('[data-confirm-type="deleteAccount"] .btn-danger').click();
 
       cy.get(
         '[data-name=modal-alert] [data-name=modal-body] p',
@@ -115,6 +321,24 @@ describe('Home', function () {
       return cy.visitURLAndCheckAccessibility('/home');
     });
 
+    it('Allows canceling of submission after changed email', function () {
+      const emailOfAnotherUser = 'me@example.name';
+      cy.get('[data-name="email"]').clear().type(emailOfAnotherUser);
+      cy.get('[data-name="pass"]').clear().type('boo123456');
+      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get('[data-name="action2"]').click();
+      cy.get(
+        '[data-confirm-type="notice"] [data-name="cancel"]'
+      ).click();
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        expect(accts).to.have.lengthOf(1);
+        expect(accts[0].email).to.equal(NL_EMAIL_USER);
+        return cy.log(accts);
+      });
+    });
+
     it('Attempt bad input to server', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
 
@@ -128,6 +352,13 @@ describe('Home', function () {
       cy.get('[data-name="name"]').clear().type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
+      cy.get(
+        '[data-confirm-type="notice"] [data-name="submit-confirm"]'
+      ).click();
+
+      cy.get(
+        '[data-confirm-type="notice"] [data-name="submit-confirm"]'
+      ).click();
 
       cy.get(
         '[data-name=modal-alert] [data-name=modal-body] p'
@@ -259,31 +490,6 @@ describe('Home', function () {
         return expect(accts.some(({user, name}) => {
           return user === 'nicky' && name === 'Nicole';
         })).to.be.true;
-      });
-    });
-
-    it('Make good update (with same user but different email)', function () {
-      const newEmail = 'brett@example.name';
-      cy.get('[data-name="email"]').clear().type(newEmail);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
-      cy.get('[data-name="name"]:invalid').should('have.length', 0);
-      cy.get('[data-name="country"]').select('FR');
-      cy.get('[data-name="action2"]').click();
-      cy.get('[data-name="name"]:invalid').should('have.length', 0);
-      cy.get(
-        '[data-name=modal-alert] [data-name=modal-body] p'
-      ).contains('Your account has been updated.');
-      cy.get(
-        '[data-name="modal-alert"] [data-name="ok"]'
-      ).click();
-      // eslint-disable-next-line promise/prefer-await-to-then
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
-        const {user, name, country, email} = accts[0];
-        expect(user).to.equal('bretto');
-        expect(email).to.equal(newEmail);
-        expect(country).to.equal('FR');
-        return expect(name).to.equal('MyNewName');
       });
     });
 

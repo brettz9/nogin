@@ -61,6 +61,7 @@ module.exports = async function (app, config) {
     DB_URL,
     dbOpts: {DB_NAME, adapter},
     SERVE_COVERAGE,
+    showUsers,
     favicon,
     stylesheet,
     noBuiltinStylesheets,
@@ -308,21 +309,40 @@ module.exports = async function (app, config) {
       // We add `id` here to ensure only posting change for user's own
       //   account, since could otherwise be injecting a different
       //   user's name here
-      const [
-        {value: _}, {status, reason: error, value: o}
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      ] = await Promise.allSettled([
-        setI18n(req, res),
-        am.updateAccount({
+      const _ = await setI18n(req, res);
+      let o;
+      try {
+        o = await am.updateAccount({
           id: req.session.user._id,
           user: req.session.user.user,
           name,
           email,
           pass,
           country
-        })
-      ]);
-      if (status === 'rejected') {
+        }, {
+          async changedEmailHandler (acct, user) {
+            try {
+              // TODO this promise takes a moment to return, add a loader to
+              //   give user feedback
+              await ed.dispatchActivationLink(
+                {
+                  ...acct, // (`name`, `activationCode`)
+                  user,
+                  // Send to updated email (as deliberately not yet saved
+                  //   on `acct`).
+                  email
+                },
+                composeResetPasswordEmailConfig,
+                _
+              );
+            } catch (e) {
+              logErrorProperties(e);
+              // Cause this `updateAccount` to reject and be handled below
+              throw e;
+            }
+          }
+        });
+      } catch (error) {
         // We send a code and let the client i18nize
         // We should probably follow this pattern
         log('message', {message: error.message});
@@ -411,7 +431,7 @@ module.exports = async function (app, config) {
         // Todo: We could supply the precise message to the user, at
         //  least with a revealable cause
 
-        res.render(
+        res.status(400).render(
           'activation-failed', {
             ...getLayoutAndTitle({
               _, title,
@@ -514,38 +534,40 @@ module.exports = async function (app, config) {
     }
   });
 
-  // Todo[>=1.1.0]: Should require (read) privileges!
-  /**
-   * View, delete & reset accounts (currently view only).
-  */
-  app.get('/users', async function (req, res) {
-    const [
-      {value: _},
-      {
-        value:
-          // istanbul ignore next
-          accounts = []
-      }
-      // eslint-disable-next-line node/no-unsupported-features/es-builtins
-    ] = await Promise.allSettled([
-      setI18n(req, res),
-      am.getAllRecords()
-    ]);
-    const title = _('AccountList');
-    res.render('users', {
-      ...getLayoutAndTitle({_, title, template: 'users'}),
-      accounts: accounts.map(({name, user, country, date}) => {
-        return {
-          user,
-          name: name || '',
-          country: country ? _('country' + country) : '',
-          date: new Intl.DateTimeFormat(
-            _.resolvedLocale, {dateStyle: 'full'}
-          ).format(date)
-        };
-      })
+  // Todo[>=1.1.0]: Should always be enabled when there are (read) privileges.
+  if (showUsers) {
+    /**
+     * View, delete & reset accounts (currently view only).
+    */
+    app.get('/users', async function (req, res) {
+      const [
+        {value: _},
+        {
+          value:
+            // istanbul ignore next
+            accounts = []
+        }
+        // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      ] = await Promise.allSettled([
+        setI18n(req, res),
+        am.getAllRecords()
+      ]);
+      const title = _('AccountList');
+      res.render('users', {
+        ...getLayoutAndTitle({_, title, template: 'users'}),
+        accounts: accounts.map(({name, user, country, date}) => {
+          return {
+            user,
+            name: name || '',
+            country: country ? _('country' + country) : '',
+            date: new Intl.DateTimeFormat(
+              _.resolvedLocale, {dateStyle: 'full'}
+            ).format(date)
+          };
+        })
+      });
     });
-  });
+  }
 
   /**
    * Should be safe as express-session stores session object server-side.

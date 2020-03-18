@@ -185,6 +185,12 @@ const optionDefinitions = [
       'to `false`.'
   },
   {
+    name: 'showUsers', type: Boolean,
+    description: 'Whether to show the `/users` page. Off by default ' +
+      'for privacy. (May be removed as an option in the future if privileges ' +
+      'are added.)'
+  },
+  {
     name: 'RATE_LIMIT', alias: 'r', type: Number,
     description: 'Used for mitigating DoS attacks; defaults to 100',
     typeLabel: '{underline rate limit}'

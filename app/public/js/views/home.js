@@ -1,5 +1,23 @@
-/* globals $, _, populateConfirmDialog, AlertDialog, populateForm */
+/* globals $, _, ConfirmDialog, AlertDialog, populateForm */
 'use strict';
+
+(() => {
+/**
+ * @param {PlainObject} cfg
+ * @param {string} [cfg.message]
+ * @param {string} [cfg.type]
+ * @returns {external:jQuery} `HTMLDivElement`
+ */
+function lockedAlert ({type, message, heading}) {
+  return AlertDialog.populate({
+    heading: _(heading),
+    body: message || _(type, {
+      lb: $('<br/>')[0]
+    }),
+    keyboard: false,
+    backdrop: 'static'
+  });
+}
 
 window.HomeView = {
   /**
@@ -16,11 +34,10 @@ window.HomeView = {
   },
 
   /**
-   * @param {external:jQuery} deleteAccountConfirmDialog
    * @returns {external:jQuery}
    */
-  getDeleteAccountSubmit (deleteAccountConfirmDialog) {
-    return deleteAccountConfirmDialog.find('.submit');
+  getEmail () {
+    return $('[data-name="email"]');
   },
 
   /**
@@ -53,13 +70,32 @@ window.HomeView = {
   getUser () {
     return $('[data-name="user"]');
   },
+
+  /**
+   * @param {PlainObject} cfg
+   * @param {"AppearsChangingEmail"} cfg.type
+   * @returns {external:jQuery} `HTMLDivElement`
+  */
+  onShowConfirmation ({type}) {
+    return ConfirmDialog.populate({
+      type: 'notice',
+      header: _('notice'),
+      body: _(type, {
+        lb: $('<br/>')[0]
+      }),
+      cancel: _('cancel'),
+      submit: _('confirm')
+    });
+  },
+
   /**
    * @returns {external:jQuery} `HTMLDivElement`
    */
   setDeleteAccount () {
     // setup the confirm window that displays when the user chooses to
     //  delete their account
-    const deleteAccountConfirmDialog = populateConfirmDialog({
+    const deleteAccountConfirmDialog = ConfirmDialog.populate({
+      type: 'deleteAccount',
       header: _('deleteAccount'),
       body: _('sureWantDeleteAccount'),
       cancel: _('cancel'),
@@ -94,20 +130,14 @@ window.HomeView = {
       backdrop: true
     });
   },
+
   /**
    * @param {PlainObject} cfg
    * @param {"accountDeleted"|"loggedOut"} cfg.type
    * @returns {external:jQuery} `HTMLDivElement`
    */
   onShowLockedAlert ({type}) {
-    return AlertDialog.populate({
-      heading: _('success'),
-      body: _(type, {
-        lb: $('<br/>')[0]
-      }),
-      keyboard: false,
-      backdrop: 'static'
-    });
+    return lockedAlert({type, heading: 'success'});
   },
 
   /**
@@ -118,13 +148,7 @@ window.HomeView = {
    * @returns {external:jQuery} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type, message}) {
-    return AlertDialog.populate({
-      heading: _('error'),
-      body: message || _(type, {
-        lb: $('<br/>')[0]
-      }),
-      keyboard: false,
-      backdrop: 'static'
-    });
+    return lockedAlert({type, message, heading: 'error'});
   }
 };
+})();

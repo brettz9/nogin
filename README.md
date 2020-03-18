@@ -32,9 +32,7 @@ The name is a portmanteau of "Node" and "login" and is pronounced "noggin"
 So if you want Node login, use your "nogin"!
 
 **Note: This revised version of node-login is not yet fully ready for
-production use, nor is the documentation below fully up-to-date. Note that
-pending the creation of a privileges system, anyone can view the user
-list.**
+production use, nor is the documentation below fully up-to-date.**
 
 ### A basic account management system built in Node.js with the following features:
 
@@ -73,7 +71,7 @@ node app
 
 To enable the password retrieval feature, it is recommended that you create
 environment variables for your credentials instead of hard coding them into
-the [email dispatcher module](https://github.com/braitsch/node-login/blob/master/app/server/modules/email-dispatcher.js).
+the [email dispatcher module](https://github.com/brettz9/nogin/blob/master/app/server/modules/email-dispatcher.js).
 
 To do this on OSX you can simply add them to your `.profile` or `.bashrc` file.
 
@@ -113,20 +111,30 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Upon **update of email address**, send email to confirm it,
-    resetting to inactive state until activated (?).
-1. Link to **resend activation link** (mention at
-    <https://github.com/braitsch/node-login/pull/11> when may be done)
+1. Fix **test regressions** (`node-envelope` and also ensure pop is
+    using `_connect`)
+1. **Change client-side (email) update message** to mention email not
+    yet changed
+1. Review **error messages for privacy** (avoid allowing testing
+    presence of email by feedback from login or lost password attempts, etc.)
+    1. Might keep code present though for debugging
+1. Link to **resend activation link**
 1. Allow convenience for easier **customization of where route
     redirects after login**
-    1. Allow redirect to be based on URL (e.g., if user coming to the
-        login from another page, let them redirect to that).
+    1. Allow **redirect to be based on URL** (e.g., if user coming to the
+        login from another page, let them redirect to that; ideally
+        client-side also, so can work with anchors).
 
 1. Update **docs** above
-    1. Make distinct badges for local results of each of testable browsers,
-        or at least report if all are passing
-
+    1. Make **distinct badges** for local results of each of testable
+        browsers, or at least report if all are passing
+    1. **Review CHANGES** to ensure includes all changes (and so docs
+        are mentioning)
 1. Publish **release**
+    1. Inform `node-login` main in relevant PRs
+        1. Mention any new behavior for resending activation link (and how
+            update now causes new activation to be required) at
+            <https://github.com/braitsch/node-login/pull/11> when may be done)
 
 ## Medium priorities
 
@@ -183,3 +191,5 @@ Questions and suggestions for improvement are welcome.
 1. See about minor **to-dos in code** along the way
 1. Review **client-side validation** for any other opportunities (e.g., for
     any missing `required` fields, etc.)
+1. Allow **changing activation email or reset password email template** (with
+    an alternative JS module)

@@ -1,4 +1,5 @@
-/* globals $, _, AccountValidator, ajaxFormClientSideValidate, HomeView */
+/* globals $, _, AccountValidator, ajaxFormClientSideValidate,
+  HomeView, ConfirmDialog */
 'use strict';
 
 (() => {
@@ -12,7 +13,7 @@ user.attr('disabled', 'disabled');
 
 // handle account deletion
 const deleteAccountConfirmDialog = HomeView.setDeleteAccount();
-HomeView.getDeleteAccountSubmit(deleteAccountConfirmDialog).click(async () => {
+ConfirmDialog.getAccountSubmit(deleteAccountConfirmDialog).click(async () => {
   try {
     await deleteAccount();
   } catch (err) {
@@ -58,7 +59,27 @@ setupValidationSubmission();
  * @returns {void}
  */
 function setupValidationSubmission () {
+  let confirmed = false;
   const av = new AccountValidator();
+  accountForm[0].addEventListener('submit', (e) => {
+    const email = HomeView.getEmail();
+    const submissionOkToContinue = confirmed ||
+      email[0].value === email[0].defaultValue;
+    if (submissionOkToContinue) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    const emailChangeConfirmDialog = HomeView.onShowConfirmation({
+      type: 'AppearsChangingEmail'
+    });
+    emailChangeConfirmDialog.modal('show');
+    ConfirmDialog.getAccountSubmit(emailChangeConfirmDialog).click(() => {
+      confirmed = true;
+      accountForm.submit();
+      emailChangeConfirmDialog.modal('hide');
+    });
+  }, true);
   ajaxFormClientSideValidate(accountForm, {
     validate () {
       av.validateForm();
@@ -76,8 +97,10 @@ function setupValidationSubmission () {
       if (status === 'success') {
         onUpdateSuccess();
       }
+      confirmed = false; // Allow resubmission
     },
     error (e) {
+      confirmed = false; // Allow resubmission
       switch (e.responseText) {
       case 'email-taken':
         av.showInvalidEmail();

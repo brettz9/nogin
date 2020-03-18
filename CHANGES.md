@@ -1,5 +1,17 @@
 # CHANGES for nogin
 
+## ?
+
+- Security: Add password into activation hash so lesser chance for
+    auto-enabling of other users
+- Fix: Ensure all actviation-failed pages are status 400
+- Enhancement: Upon email update, dispatch email and require activation;
+    ask user for confirmation before doing so (and inform user of
+    consequences for confirmation)
+- Enhancement: Add config (on by default) to disable `/users` list page
+- Testing: Add manul testing for non-activated account
+- npm: Update devDeps
+
 ## 1.0.0-beta.3
 
 - Breaking change: Disable dangerous `/reset` page (until such
