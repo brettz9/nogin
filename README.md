@@ -113,11 +113,6 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. **Testing:** Spot check that all dialogs are fully visible
-1. Update **docs** above
-    1. Make distinct badges for local results of each of testable browsers,
-        or at least report if all are passing
-
 1. Upon **update of email address**, send email to confirm it,
     resetting to inactive state until activated (?).
 1. Link to **resend activation link** (mention at
@@ -126,6 +121,10 @@ Questions and suggestions for improvement are welcome.
     redirects after login**
     1. Allow redirect to be based on URL (e.g., if user coming to the
         login from another page, let them redirect to that).
+
+1. Update **docs** above
+    1. Make distinct badges for local results of each of testable browsers,
+        or at least report if all are passing
 
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
     1. **Remove `reset` GET page** to a POST on the user (admin) page.

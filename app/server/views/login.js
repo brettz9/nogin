@@ -61,9 +61,9 @@ module.exports = function ({_, layout, emailPattern}) {
             ]]
           ]],
           require('./modals/alert.js')({_})
-        ]],
-        require('./modals/lost-password.js')({_, emailPattern})
-      ]]
+        ]]
+      ]],
+      require('./modals/lost-password.js')({_, emailPattern})
     ],
     scripts: [
       ['script', {

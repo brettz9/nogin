@@ -3,6 +3,7 @@
 ## ?
 
 - Fix: Allow user to submit own email again
+- Fix: Reset password dialog sizing and display
 - Refactoring: Use `user` from session (in case code is refactored to use
     the client-obtained variable, and there is a forgery)
 - Testing: Resume nodemon

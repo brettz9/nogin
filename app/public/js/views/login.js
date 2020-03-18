@@ -22,7 +22,7 @@ window.LoginView = {
   retrievePasswordModal () {
     const retrievePasswordModal = $('#retrieve-password');
     retrievePasswordModal.modal({
-      show: false, keyboard: true, backdrop: false
+      show: false, keyboard: true, backdrop: true
     });
     return retrievePasswordModal;
   },
