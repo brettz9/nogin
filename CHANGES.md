@@ -7,6 +7,7 @@
 - Refactoring: Use `user` from session (in case code is refactored to use
     the client-obtained variable, and there is a forgery)
 - Testing: Resume nodemon
+- Testing: Misc. additions/improvements
 - Docs: Change to just link to devDep licenses
 - npm: Update devDeps and `package-lock.json`
 
