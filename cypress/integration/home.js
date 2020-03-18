@@ -280,7 +280,7 @@ describe('Home', function () {
       });
     });
 
-    it.only('Make good update (with same user and same email)', function () {
+    it('Make good update (with same user and same email)', function () {
       cy.get('[data-name="email"]').type(NL_EMAIL_USER);
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');

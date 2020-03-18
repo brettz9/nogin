@@ -298,13 +298,15 @@ class AccountManager {
    */
   async updateAccount (newData, allowUserUpdate) {
     let _o;
+
+    // Exclude the user's own account (as we don't want an
+    //  `email-taken` error by finding their account).
+    const differentUserWithEmailFilter = {
+      email: newData.email,
+      user: {$ne: newData.user}
+    };
     try {
-      _o = await this.accounts.findOne({
-        email: newData.email,
-        // Exclude the user's own account (as we don't want an
-        //  `email-taken` error by finding their account).
-        user: {$ne: newData.user}
-      });
+      _o = await this.accounts.findOne(differentUserWithEmailFilter);
     } catch (err) {}
     if (_o) {
       throw new Error('email-taken');

@@ -1,5 +1,14 @@
 # CHANGES for nogin
 
+## ?
+
+- Fix: Allow user to submit own email again
+- Refactoring: Use `user` from session (in case code is refactored to use
+    the client-obtained variable, and there is a forgery)
+- Testing: Resume nodemon
+- Docs: Change to just link to devDep licenses
+- npm: Update devDeps and `package-lock.json`
+
 ## 1.0.0-beta.2
 
 - Change: Avoid a few login defaults (don't want to encourage using them!)

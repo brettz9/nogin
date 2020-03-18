@@ -304,7 +304,7 @@ module.exports = async function (app, config) {
     if (isNullish(req.session.user)) {
       res.status(400).send('session-lost');
     } else {
-      const {name, email, pass, country, user} = req.body;
+      const {name, email, pass, country} = req.body;
       // We add `id` here to ensure only posting change for user's own
       //   account, since could otherwise be injecting a different
       //   user's name here
@@ -315,8 +315,8 @@ module.exports = async function (app, config) {
         setI18n(req, res),
         am.updateAccount({
           id: req.session.user._id,
+          user: req.session.user.user,
           name,
-          user,
           email,
           pass,
           country
