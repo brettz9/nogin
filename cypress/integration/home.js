@@ -163,14 +163,14 @@ describe('Home', function () {
       return cy.simulateServerError({
         url: '/home',
         body: {
-          email: 'me2@example.name',
+          email: NL_EMAIL_USER,
           name: 'MyNewName',
           pass: {}
         },
         error: 'Error Updating Account'
       // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
-        cy.get('[data-name="email"]').clear().type('me2@example.name');
+        cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
         cy.get('[data-name="pass"]').type('boo123456');
         cy.get('[data-name="name"]').type('MyNewName');
         cy.get('[data-name="action2"]').click();
