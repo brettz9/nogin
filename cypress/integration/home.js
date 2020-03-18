@@ -268,6 +268,7 @@ describe('Home', function () {
       cy.get('[data-name="pass"]').clear().type('boo123456');
       cy.get('[data-name="name"]').clear().type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get('[data-name="country"]').select('FR');
       cy.get('[data-name="action2"]').click();
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get(
@@ -278,34 +279,49 @@ describe('Home', function () {
       ).click();
       // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
-        const {user, name, email} = accts[0];
+        const {user, name, country, email} = accts[0];
         expect(user).to.equal('bretto');
         expect(email).to.equal(newEmail);
+        expect(country).to.equal('FR');
         return expect(name).to.equal('MyNewName');
       });
     });
 
-    it('Make good update (with same user and same email)', function () {
-      cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
-      cy.get('[data-name="name"]:invalid').should('have.length', 0);
-      cy.get('[data-name="action2"]').click();
-      cy.get('[data-name="name"]:invalid').should('have.length', 0);
-      cy.get(
-        '[data-name=modal-alert] [data-name=modal-body] p'
-      ).contains('Your account has been updated.');
-      cy.get(
-        '[data-name="modal-alert"] [data-name="ok"]'
-      ).click();
-      // eslint-disable-next-line promise/prefer-await-to-then
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
-        const {user, name, email} = accts[0];
-        expect(user).to.equal('bretto');
-        expect(email).to.equal(NL_EMAIL_USER);
-        return expect(name).to.equal('MyNewName');
-      });
-    });
+    it(
+      'Shows old values and makes good update (with same user and same email)',
+      function () {
+        cy.get('[data-name="name"]').should('have.value', 'Brett');
+        cy.get('[data-name="email"]').should('have.value', NL_EMAIL_USER);
+        cy.get('[data-name="country"] option[value="US"]').should(
+          'be.selected'
+        );
+        cy.get('[data-name="user"]').should('have.value', 'bretto');
+        const passwordNotAutoAdded = '';
+        cy.get('[data-name="pass"]').should('have.value', passwordNotAutoAdded);
+
+        cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
+        cy.get('[data-name="pass"]').clear().type('boo123456');
+        cy.get('[data-name="name"]').clear().type('MyNewName');
+        cy.get('[data-name="country"]').select('');
+        cy.get('[data-name="name"]:invalid').should('have.length', 0);
+        cy.get('[data-name="action2"]').click();
+        cy.get('[data-name="name"]:invalid').should('have.length', 0);
+        cy.get(
+          '[data-name=modal-alert] [data-name=modal-body] p'
+        ).contains('Your account has been updated.');
+        cy.get(
+          '[data-name="modal-alert"] [data-name="ok"]'
+        ).click();
+        // eslint-disable-next-line promise/prefer-await-to-then
+        return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+          const {user, name, email, country} = accts[0];
+          expect(user).to.equal('bretto');
+          expect(email).to.equal(NL_EMAIL_USER);
+          expect(country).to.equal('');
+          return expect(name).to.equal('MyNewName');
+        });
+      }
+    );
 
     it('Prevent update with empty email', function () {
       cy.get('[data-name="pass"]').clear().type('boo123456');
