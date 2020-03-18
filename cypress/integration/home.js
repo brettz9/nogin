@@ -1,10 +1,10 @@
 const expressSessionID = 'connect.sid';
 
 describe('Home', function () {
-  let NL_EMAIL_PASS;
+  let NL_EMAIL_PASS, NL_EMAIL_USER;
   before(() => {
     ({
-      NL_EMAIL_PASS
+      NL_EMAIL_PASS, NL_EMAIL_USER
     } = Cypress.env());
   });
   it(
@@ -122,7 +122,8 @@ describe('Home', function () {
       cy.get('[data-name="email"]').type(nonEmail);
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
 
-      cy.get('[data-name="email"]').clear().type('me@example.name');
+      const emailOfAnotherUser = 'me@example.name';
+      cy.get('[data-name="email"]').clear().type(emailOfAnotherUser);
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
@@ -144,9 +145,17 @@ describe('Home', function () {
 
       // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
-        const {user, name} = accts[0];
+        const {user, name, email} = accts[0];
         expect(user).to.equal('bretto');
-        return expect(name).to.equal('Brett');
+        expect(email).to.equal(NL_EMAIL_USER);
+        expect(name).to.equal('Brett');
+        return cy.task('getRecords', {user: ['nicky']});
+        // eslint-disable-next-line promise/prefer-await-to-then
+      }).then((accts) => {
+        const {user, name, email} = accts[0];
+        expect(user).to.equal('nicky');
+        expect(email).to.equal(emailOfAnotherUser);
+        return expect(name).to.equal('Nicole');
       });
     });
 
@@ -249,7 +258,8 @@ describe('Home', function () {
     });
 
     it('Make good update', function () {
-      cy.get('[data-name="email"]').type('brett@example.name');
+      const newEmail = 'brett@example.name';
+      cy.get('[data-name="email"]').type(newEmail);
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
@@ -263,9 +273,47 @@ describe('Home', function () {
       ).click();
       // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
-        const {user, name} = accts[0];
+        const {user, name, email} = accts[0];
         expect(user).to.equal('bretto');
+        expect(email).to.equal(newEmail);
         return expect(name).to.equal('MyNewName');
+      });
+    });
+
+    it.only('Make good update (with same user and same email)', function () {
+      cy.get('[data-name="email"]').type(NL_EMAIL_USER);
+      cy.get('[data-name="pass"]').type('boo123456');
+      cy.get('[data-name="name"]').type('MyNewName');
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get('[data-name="action2"]').click();
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).contains('Your account has been updated.');
+      cy.get(
+        '[data-name="modal-alert"] [data-name="ok"]'
+      ).click();
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        const {user, name, email} = accts[0];
+        expect(user).to.equal('bretto');
+        expect(email).to.equal(NL_EMAIL_USER);
+        return expect(name).to.equal('MyNewName');
+      });
+    });
+
+    it('Prevent update with empty email', function () {
+      cy.get('[data-name="pass"]').type('boo123456');
+      cy.get('[data-name="name"]').type('MyNewName');
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      cy.get('[data-name="action2"]').click();
+      cy.get('[data-name="email"]:invalid').should('have.length', 1);
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        const {user, name, email} = accts[0];
+        expect(user).to.equal('bretto');
+        expect(email).to.equal(NL_EMAIL_USER);
+        return expect(name).to.equal('Brett');
       });
     });
 
@@ -277,8 +325,8 @@ describe('Home', function () {
 
       cy.get('[data-name="action2"]').click();
 
-      // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
-      //   see https://github.com/cypress-io/cypress/issues/6678
+      // Todo[cypress@>4.1.0]: See if fixed:
+      //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len
       // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then

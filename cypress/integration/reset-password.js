@@ -39,8 +39,8 @@ describe('Reset password', function () {
       cy.get('[data-name="reset-pass"]').type(tooShortPassword);
       // cy.get('[data-name="reset-password-submit"]').click();
 
-      // Todo[cypress@>4.1.0]: Remove this disabling of istanbul to see if fixed
-      //   see https://github.com/cypress-io/cypress/issues/6678
+      // Todo[cypress@>4.1.0]: See if fixed:
+      //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
       return cy.get('[data-name="reset-pass"]');
       // eslint-disable-next-line promise/prefer-await-to-then
