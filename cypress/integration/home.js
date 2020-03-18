@@ -329,7 +329,7 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
 
-      // Todo[cypress@>4.1.0]: See if fixed:
+      // Todo[cypress@>4.2.0]: See if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
       // eslint-disable-next-line promise/prefer-await-to-then
@@ -349,7 +349,7 @@ describe('Home', function () {
 
       cy.get('[data-name="action2"]').click();
 
-      // Todo[cypress@>4.1.0]: See if fixed:
+      // Todo[cypress@>4.2.0]: See if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len

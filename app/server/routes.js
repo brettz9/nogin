@@ -13,8 +13,8 @@ const EmailDispatcher = require('./modules/email-dispatcher.js');
 global.fetch = fileFetch;
 global.document = (new JSDOM()).window.document;
 
-// Todo[engine:node@>12.9.0]: Remove polyfill (or forego this and don't
-//  i18nize server responses (do on client))
+// Todo[engine:node@>12.9.0]: Remove `Promise.allSettled` polyfill (or
+//  forego this and don't i18nize server responses (do on client))
 // eslint-disable-next-line node/no-unsupported-features/es-builtins
 Promise.allSettled = require('promise.allsettled/polyfill')();
 
