@@ -111,8 +111,9 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Fix **test regressions** (`node-envelope` and also ensure pop is
-    using `_connect`)
+1. Fix **test coverage regressions**
+    1. `routes.js` (339, 341)
+    1. `getLogger.js` (38)
 1. **Change client-side (email) update message** to mention email not
     yet changed
 1. Review **error messages for privacy** (avoid allowing testing
@@ -125,11 +126,16 @@ Questions and suggestions for improvement are welcome.
         login from another page, let them redirect to that; ideally
         client-side also, so can work with anchors).
 
-1. Update **docs** above
+1. Update **docs**
+    1. Update **docs above**
     1. Make **distinct badges** for local results of each of testable
         browsers, or at least report if all are passing
     1. **Review CHANGES** to ensure includes all changes (and so docs
         are mentioning)
+    1. Document `env` vars in `main.js` plugin file (`env`, `coverage`,
+        `disableEmailChecking`; and distinguish from `secret` and
+        `NL_EMAIL_HOST`, `NL_EMAIL_USER`, and `NL_EMAIL_PASS`);
+        see <https://docs.cypress.io/guides/guides/environment-variables.html#Setting>
 1. Publish **release**
     1. Inform `node-login` main in relevant PRs
         1. Mention any new behavior for resending activation link (and how

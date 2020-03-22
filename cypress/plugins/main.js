@@ -17,8 +17,7 @@ import {spawn} from 'child_process';
 
 import cookieSign from 'cookie-signature';
 
-import Pop3Command, {listify} from 'node-pop3';
-import getStream from 'get-stream';
+import Pop3Command from 'node-pop3'; // , {listify}
 import Envelope from 'envelope';
 
 import browserify from '@cypress/browserify-preprocessor';
@@ -89,10 +88,6 @@ const exprt = (on, config) => {
     return key;
   }
 
-  // Todo: Document these `env` vars in our README/docs (env,
-  //          coverage, disableEmailChecking; and distinguish from `secret`
-  //          and NL_EMAIL_HOST, NL_EMAIL_USER, and NL_EMAIL_PASS)
-  // See https://docs.cypress.io/guides/guides/environment-variables.html#Setting
   config.env = config.env || {};
 
   config.env.secret = secret;
@@ -130,13 +125,10 @@ const exprt = (on, config) => {
     await popActivatedAccount._connect();
     // Does not get deleted messages, so safe to use results in
     //  queries like RETR which won't work against deleted
-    const [
-      /* listInfo */, listStream
-    ] = await popActivatedAccount.command('LIST');
-    const listStreamString = await getStream(listStream);
+    const list = await popActivatedAccount.LIST();
 
     return [
-      ...new Map(listify(listStreamString)).keys()
+      ...new Map(list).keys()
     ];
   }
 
@@ -149,17 +141,11 @@ const exprt = (on, config) => {
 
     const parsedMessages = await Promise.all(
       messageNums.map(async (messageNum) => {
-        // Todo: Seems to be a problem with messages not getting deleted,
-        //  so remove that status.
-        await popActivatedAccount.command('RSET', messageNum);
-        const [
-          /* retrInfo */, retrStream
-        ] = await popActivatedAccount.command('RETR', messageNum);
-        const retrStreamString = await getStream(retrStream);
+        const retrStreamString = await popActivatedAccount.RETR(messageNum);
         console.log('retrStreamString', retrStreamString);
+        // console.log('retrStreamStringListified', listify(retrStreamString));
 
-        // Tried deleting even here and it is not enough
-        // await popActivatedAccount.command('DELE', messageNum);
+        await popActivatedAccount.DELE(messageNum);
         return new Envelope(retrStreamString);
       })
     );
@@ -176,9 +162,7 @@ const exprt = (on, config) => {
 
     // We might not even want to wait here, but we do for now to get the error.
     try {
-    /* const [quitInfo] = */ await popActivatedAccount.command(
-        'QUIT'
-      ); // No args
+    /* const quitInfo = */ await popActivatedAccount.QUIT(); // No args
     } catch (err) {
       console.log(err);
     }
@@ -436,19 +420,15 @@ const exprt = (on, config) => {
           messageNums.map(async (messageNum) => {
             // Seems to keep thinking messages are deleted, so reset
             //  first.
-            await popActivatedAccount.command('RSET', messageNum);
-            return popActivatedAccount.command('DELE', messageNum);
+            await popActivatedAccount.RSET(messageNum);
+            return popActivatedAccount.DELE(messageNum);
           })
         );
         console.log('Finished delete commands...');
 
-        // Todo: Can't seem to get this without getting a message about
-
         // We should probably wait here as we do since the messages
         //  are only to be deleted after exiting.
-        /* const [quitInfo] = */ await popActivatedAccount.command(
-          'QUIT'
-        ); // No args
+        /* const quitInfo = */ await popActivatedAccount.QUIT(); // No args
         console.log('Successfully quit after deletion.');
       } catch (err) {
         console.log(err);
@@ -469,12 +449,13 @@ const exprt = (on, config) => {
         //  env. variable
         return true;
       }
-      const parsedMessages = await getEmails();
       const subjectIsNotString = typeof cfg.subject !== 'string';
       const htmlIsNotArray = !Array.isArray(cfg.html);
+
+      const parsedMessages = await getEmails();
       // console.log('parsedMessages', parsedMessages.length, parsedMessages);
       return parsedMessages.some((msg) => {
-        const html = msg[0][1] && msg[0][1][0];
+        const html = msg[0][0] && msg[0][0].body;
         /*
         console.log(
           'cfg.subject', cfg.subject, '::', msg.header && msg.header.subject,
@@ -489,7 +470,7 @@ const exprt = (on, config) => {
         */
         return (
           (subjectIsNotString ||
-            cfg.subject === msg.header.subject) &&
+            cfg.subject === msg.header.get('subject')) &&
           (htmlIsNotArray || cfg.html.every((requiredHTMLString) => {
             // console.log(
             //   'html', html, 'requiredHTMLString', requiredHTMLString
@@ -520,11 +501,13 @@ const exprt = (on, config) => {
       // Todo: Could see about improving efficiency in getting a single
       //   email here instead
       const parsedMessages = await getEmails();
-      // console.log('parsedMessages', parsedMessages);
-      const msg = parsedMessages[0];
-      // console.log('parsedMessages', parsedMessages.length, parsedMessages);
-      const html = msg[0][1] && msg[0][1][0];
-      const {subject} = msg.header;
+      const mostRecentEmail = parsedMessages[0];
+      const {header} = mostRecentEmail;
+      const subject = header.get('subject');
+
+      const msg = mostRecentEmail[0][0];
+      // console.log('parsed msg', msg);
+      const html = msg && msg.body;
       return {html, subject};
     }
   });
