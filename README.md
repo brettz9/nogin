@@ -111,15 +111,14 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Fix **test coverage regressions**
-    1. `routes.js` (339, 341)
-    1. `getLogger.js` (38)
 1. **Change client-side (email) update message** to mention email not
-    yet changed
+    yet changed; other to mention that email was changed but error
+    sending (possibly bad email)
 1. Review **error messages for privacy** (avoid allowing testing
     presence of email by feedback from login or lost password attempts, etc.)
     1. Might keep code present though for debugging
 1. Link to **resend activation link**
+    1. Ensure this works when needing to get one resent **after an update**
 1. Allow convenience for easier **customization of where route
     redirects after login**
     1. Allow **redirect to be based on URL** (e.g., if user coming to the

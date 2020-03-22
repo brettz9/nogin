@@ -390,6 +390,47 @@ describe('Home', function () {
       });
     });
 
+    it(
+      'Attempt bad input to server (circumventing client-side validation) ' +
+        'and to simulate a server email-sending error',
+      function () {
+        const badEmail = 'badEmail';
+        return cy.simulateServerError({
+          url: '/home',
+          body: {
+            email: badEmail,
+            name: 'MyNewName',
+            country: 'FR',
+            pass: NL_EMAIL_PASS
+          },
+          error: 'Error Updating Account'
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then(() => {
+          const goodEmailToPassClientValidation = NL_EMAIL_USER;
+          cy.get('[data-name="email"]').clear().type(
+            goodEmailToPassClientValidation
+          );
+          cy.get('[data-name="pass"]').clear().type(NL_EMAIL_PASS);
+          cy.get('[data-name="name"]').clear().type('MyNewName');
+          cy.get('[data-name="action2"]').click();
+
+          cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+            'There was a failure submitting your info'
+          );
+
+          // Still the same old pass
+          return cy.task('getRecords', {user: ['bretto']});
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then((accts) => {
+          const {user, name, country, email} = accts[0];
+          expect(user).to.equal('bretto');
+          expect(email).to.equal(NL_EMAIL_USER);
+          expect(country).to.equal('FR');
+          return expect(name).to.equal('MyNewName');
+        });
+      }
+    );
+
     it('Attempt bad input to server (generic error)', function () {
       return cy.simulateServerError({
         url: '/home',
@@ -402,7 +443,10 @@ describe('Home', function () {
       // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
         cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
-        cy.get('[data-name="pass"]').clear().type('boo123456');
+        const goodPasswordToPassClientValidation = 'boo123456';
+        cy.get('[data-name="pass"]').clear().type(
+          goodPasswordToPassClientValidation
+        );
         cy.get('[data-name="name"]').clear().type('MyNewName');
         cy.get('[data-name="action2"]').click();
 

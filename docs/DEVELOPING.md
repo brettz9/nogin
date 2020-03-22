@@ -2,7 +2,8 @@
 
 ## Jamilih
 
-While Jamilih should be pretty intuitive to HTML developers, for server-side-templating, there are at least two gotchas:
+While Jamilih should be pretty intuitive to HTML developers, for
+server-side-templating, there are at least a few gotchas:
 
 1. One must set `value` on `<input>` with `defaultValue` rather than
     `value`. This is because Jamilih is normally aware that `value`

@@ -52,6 +52,135 @@ const escRegex = (str) => {
 };
 
 describe('CLI', function () {
+  // Was causing errors next to the other `fetch` testing script
+  it(
+    'Null config with non-local scripts and `noBuiltinStylesheets`',
+    async function () {
+      this.timeout(60000);
+      let cliProm;
+      // eslint-disable-next-line promise/avoid-new
+      const {text} = await new Promise((resolve, reject) => {
+        cliProm = spawnPromise(cliPath, [
+          '--noBuiltinStylesheets',
+          '--secret', secret,
+          '--PORT', testPort2,
+          '--config', ''
+        ], 40000, async (stdout) => {
+          // if (stdout.includes(
+          //   `Express server listening on port ${testPort2}`)
+          // ) {
+          if (stdout.includes('Beginning server...')) {
+            try {
+              const res = await fetch(`http://localhost:${testPort2}`);
+              resolve(
+                {text: await res.text()}
+              );
+            } catch (err) {
+              reject(err);
+            }
+          }
+        });
+      });
+      const {stdout, stderr} = await cliProm;
+      console.log('text', text);
+      const doc = (new JSDOM(text)).window.document;
+      const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
+        return link.outerHTML;
+      }).join('');
+      expect(headLinks).to.equal(
+        '<link rel="shortcut icon" type="image/x-icon" ' +
+          'href="data:image/x-icon;,">'
+      );
+      expect(stripMongoAndServerListeningMessages(
+        stdout, testPort
+      )).to.contain(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n' +
+        'Awaiting database account connection...\n' +
+        'Beginning server...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.equal('');
+    }
+  );
+
+  it('--noLogging option and bad config', async function () {
+    this.timeout(30000);
+    const {stdout, stderr} = await spawnPromise(cliPath, [
+      '--localScripts',
+      '--secret', secret,
+      '--noLogging',
+      '--config',
+      'badFile',
+      '--PORT', testPort
+    ], 20000);
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
+    expect(stripPromisesWarning(stderr)).to.equal('');
+  });
+
+  // Above with bad config didn't seem to give coverage for some reason
+  it('--noLogging option and null config', async function () {
+    this.timeout(30000);
+    const {stdout, stderr} = await spawnPromise(cliPath, [
+      '--localScripts',
+      '--secret', secret,
+      '--noLogging',
+      '--config', '',
+      '--PORT', testPort
+    ], 20000);
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
+    expect(stripPromisesWarning(stderr)).to.equal('');
+  });
+
+  it('Default config', async function () {
+    this.timeout(30000);
+    const {stdout, stderr} = await spawnPromise(cliPath, [
+      '--localScripts',
+      '--secret', secret,
+      '--PORT', testPort
+    ]);
+    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
+    expect(stripPromisesWarning(stderr)).to.equal(
+      'No config file detected at nogin.json; supply a ' +
+        '`null` `config` to avoid this message.\n'
+    );
+  });
+
+  it('Null config', async function () {
+    this.timeout(30000);
+    const {stdout, stderr} = await spawnPromise(cliPath, [
+      '--localScripts',
+      '--secret', secret,
+      '--PORT', testPort,
+      '--config', ''
+    ], 20000);
+    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+      'Beginning routes...\n' +
+      'Awaiting internationalization and logging...\n' +
+      'Awaiting database account connection...\n' +
+      'Beginning server...\n'
+    );
+    expect(stripPromisesWarning(stderr)).to.equal('');
+  });
+
+  it(
+    'null config but with a bad `adapter` ' +
+      '(passed on to `DBFactory.getURL`)',
+    async function () {
+      this.timeout(30000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        '--adapter', 'badAdapter',
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 20000);
+      expect(stripPromisesWarning(stderr)).to.contain(
+        'Unrecognized database adapter "badAdapter"!'
+      );
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
+    }
+  );
+
   // While we could make a full-blown UI test out of this, it would
   //  require setting up another server either before Cypress runs,
   //  or before another instance of Cypress runs, both of which seem
@@ -218,142 +347,13 @@ describe('CLI', function () {
         'the page or resource you are searching for is currently unavailable'
       );
 
-      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
         'Awaiting database account connection...\n' +
         'Beginning server...\n'
       );
       expect(stripPromisesWarning(stderr)).to.equal('');
-    }
-  );
-
-  // Was causing errors next to the other `fetch` testing script
-  it(
-    'Null config with non-local scripts and `noBuiltinStylesheets`',
-    async function () {
-      this.timeout(60000);
-      let cliProm;
-      // eslint-disable-next-line promise/avoid-new
-      const {text} = await new Promise((resolve, reject) => {
-        cliProm = spawnPromise(cliPath, [
-          '--noBuiltinStylesheets',
-          '--secret', secret,
-          '--PORT', testPort2,
-          '--config', ''
-        ], 40000, async (stdout) => {
-          // if (stdout.includes(
-          //   `Express server listening on port ${testPort2}`)
-          // ) {
-          if (stdout.includes('Beginning server...')) {
-            try {
-              const res = await fetch(`http://localhost:${testPort2}`);
-              resolve(
-                {text: await res.text()}
-              );
-            } catch (err) {
-              reject(err);
-            }
-          }
-        });
-      });
-      const {stdout, stderr} = await cliProm;
-      console.log('text', text);
-      const doc = (new JSDOM(text)).window.document;
-      const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
-        return link.outerHTML;
-      }).join('');
-      expect(headLinks).to.equal(
-        '<link rel="shortcut icon" type="image/x-icon" ' +
-          'href="data:image/x-icon;,">'
-      );
-      expect(stripMongoAndServerListeningMessages(
-        stdout, testPort
-      )).to.equal(
-        'Beginning routes...\n' +
-        'Awaiting internationalization and logging...\n' +
-        'Awaiting database account connection...\n' +
-        'Beginning server...\n'
-      );
-      expect(stripPromisesWarning(stderr)).to.equal('');
-    }
-  );
-
-  it('--noLogging option and bad config', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      '--localScripts',
-      '--secret', secret,
-      '--noLogging',
-      '--config',
-      'badFile',
-      '--PORT', testPort
-    ]);
-    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
-    expect(stripPromisesWarning(stderr)).to.equal('');
-  });
-
-  // Above with bad config didn't seem to give coverage for some reason
-  it('--noLogging option and null config', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      '--localScripts',
-      '--secret', secret,
-      '--noLogging',
-      '--config', '',
-      '--PORT', testPort
-    ]);
-    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
-    expect(stripPromisesWarning(stderr)).to.equal('');
-  });
-
-  it('Default config', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      '--localScripts',
-      '--secret', secret,
-      '--PORT', testPort
-    ]);
-    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
-    expect(stripPromisesWarning(stderr)).to.equal(
-      'No config file detected at nogin.json; supply a ' +
-        '`null` `config` to avoid this message.\n'
-    );
-  });
-
-  it('Null config', async function () {
-    this.timeout(30000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      '--localScripts',
-      '--secret', secret,
-      '--PORT', testPort,
-      '--config', ''
-    ], 20000);
-    expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
-      'Beginning routes...\n' +
-      'Awaiting internationalization and logging...\n' +
-      'Awaiting database account connection...\n' +
-      'Beginning server...\n'
-    );
-    expect(stripPromisesWarning(stderr)).to.equal('');
-  });
-
-  it(
-    'null config but with a bad `adapter` ' +
-      '(passed on to `DBFactory.getURL`)',
-    async function () {
-      this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
-        '--adapter', 'badAdapter',
-        '--localScripts',
-        '--secret', secret,
-        '--PORT', testPort,
-        '--config', ''
-      ], 20000);
-      expect(stripPromisesWarning(stderr)).to.contain(
-        'Unrecognized database adapter "badAdapter"!'
-      );
-      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     }
   );
 
