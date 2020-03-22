@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 1.0.0-beta.4
 
 - Security: Add password into activation hash so lesser chance for
     auto-enabling of other users
