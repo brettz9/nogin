@@ -120,6 +120,7 @@ Cypress.Commands.add(
     return cy.request({
       url: '/',
       method: 'POST',
+      timeout: 50000,
       body: {
         user: 'bretto',
         pass: NL_EMAIL_PASS
@@ -144,6 +145,7 @@ Cypress.Commands.add(
     //  then we simulate it here).
     return cy.request({
       method: 'POST',
+      timeout: 50000,
       url: cfg.url,
       // Don't URL-encode; we want non-string JSON to trigger the error
       form: false,

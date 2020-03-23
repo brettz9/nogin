@@ -248,14 +248,21 @@ class AccountManager {
   async addNewAccount (newData, {allowCustomPassVer = false} = {}) {
     let o;
     try {
-      o = await this.accounts.findOne({user: newData.user});
+      o = await this.accounts.findOne({
+        user: newData.user,
+        activated: true
+      });
     } catch (err) {}
     if (o) {
       throw new Error('username-taken');
     }
+
     let _o;
     try {
-      _o = await this.accounts.findOne({email: newData.email});
+      _o = await this.accounts.findOne({
+        email: newData.email,
+        activated: true
+      });
     } catch (err) {}
     if (_o) {
       throw new Error('email-taken');
@@ -280,6 +287,12 @@ class AccountManager {
     newData.date = new Date().getTime();
 
     await this.accounts.insertOne(newData);
+    if (newData.activated) {
+      await this.deleteAccounts({
+        user: newData.user,
+        activated: false
+      });
+    }
     return newData;
   }
 
@@ -318,7 +331,12 @@ class AccountManager {
     delete o.activationRequestDate;
     delete o.unactivatedEmail;
     o.activated = true;
-    return this.accounts.replaceOne(unactivatedConditions, o);
+    const ret = this.accounts.replaceOne(unactivatedConditions, o);
+    await this.deleteAccounts({
+      user: o.user,
+      activated: false
+    });
+    return ret;
   }
 
   /**
@@ -353,7 +371,13 @@ class AccountManager {
 
     let oldAccount;
     try {
-      oldAccount = await this.accounts.findOne({user: newData.user});
+      const oldAccountFilter = {
+        user: newData.user
+      };
+      if (!forceUpdate) {
+        oldAccountFilter.activated = true;
+      }
+      oldAccount = await this.accounts.findOne(oldAccountFilter);
     } catch (err) {}
     // Todo: Should only occur if user established session and then we
     //  deleted their account

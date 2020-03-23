@@ -137,7 +137,7 @@ describe('CLI', function () {
       '--localScripts',
       '--secret', secret,
       '--PORT', testPort
-    ]);
+    ], 20000);
     expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
     expect(stripPromisesWarning(stderr)).to.equal(
       'No config file detected at nogin.json; supply a ' +
@@ -458,7 +458,7 @@ describe('CLI', function () {
         'add',
         '--userFile',
         'test/fixtures/addUsers.json'
-      ]);
+      ], 30000);
       expect(stripPromisesWarning(stderr)).to.equal('');
       try {
         expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
@@ -496,11 +496,55 @@ describe('CLI', function () {
         '--activationRequestDate',
         '1584614124120',
         '--activated'
-      ]);
+      ], 30000);
       expect(stripPromisesWarning(stderr)).to.equal('');
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Added 1 accounts: testUser!\n'
       );
+      const accts = await readAccounts();
+      expect(accts).to.have.lengthOf(1);
+      expect(accts[0].user).to.equal('testUser');
+    });
+
+    it('add (flags) and deletes other unactivated accounts', async function () {
+      this.timeout(50000);
+      await addAccounts({
+        user: ['testUser'],
+        email: ['test@example.name'],
+        pass: ['myPass12345'],
+        activated: [false]
+      });
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        'add',
+        '--user',
+        'testUser',
+        '--pass',
+        '123456',
+        '--email',
+        'test@example.name',
+        '--country',
+        'US',
+        '--name',
+        'Joe Bob',
+        '--passVer',
+        '1',
+        '--date',
+        '1234567890',
+        '--activationCode',
+        '1234555555555555',
+        '--unactivatedEmail',
+        'new@example.name',
+        '--activationRequestDate',
+        '1584614124120',
+        '--activated'
+      ], 30000);
+      expect(stripPromisesWarning(stderr)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
+        'Added 1 accounts: testUser!\n'
+      );
+      const accts = await readAccounts();
+      expect(accts).to.have.lengthOf(1);
+      expect(accts[0].user).to.equal('testUser');
     });
 
     it('add (erring --userFile)', async function () {
@@ -509,7 +553,7 @@ describe('CLI', function () {
         'add',
         '--userFile',
         'nonexistent-file.json'
-      ]);
+      ], 30000);
       expect(stripPromisesWarning(stderr)).to.contain(
         'no such file or directory'
       );
@@ -522,7 +566,7 @@ describe('CLI', function () {
         'add',
         '--user',
         'testUser'
-      ]);
+      ], 30000);
       expect(stripPromisesWarning(stderr)).to.contain(
         'A `pass` argument must be provided with `user`; ' +
             'for user "testUser" index 0'
@@ -538,7 +582,7 @@ describe('CLI', function () {
         'testUser',
         '--pass',
         '123456'
-      ]);
+      ], 30000);
       expect(stripPromisesWarning(stderr)).to.contain(
         'An `email` argument must be provided with `user`; ' +
             'for user "testUser" index 0'
@@ -562,7 +606,7 @@ describe('CLI', function () {
           prop,
           '--user',
           'brett'
-        ]);
+        ], 30000);
         expect(stripPromisesWarning(stderr)).to.equal('');
 
         const strippedStdout = stripMongoAndServerListeningMessages(stdout);
@@ -586,7 +630,7 @@ describe('CLI', function () {
           prop,
           '--user',
           'brett'
-        ]);
+        ], 30000);
         expect(stripPromisesWarning(stderr)).to.equal('');
 
         const strippedStdout = stripMongoAndServerListeningMessages(stdout);
@@ -595,16 +639,16 @@ describe('CLI', function () {
         expect(strippedStdout).to.equal(expected);
 
         const accts = await readAccounts();
-        expect(accts.length).to.equal(1);
+        expect(accts).to.have.lengthOf(1);
         expect(accts[0].user).to.equal('coco');
       });
     });
 
     it('listIndexes', async function () {
-      this.timeout(20000);
+      this.timeout(30000);
       const {stdout, stderr} = await spawnPromise(cliPath, [
         'listIndexes'
-      ]);
+      ], 20000);
 
       expect(stripPromisesWarning(stderr)).to.equal('');
 
@@ -616,14 +660,14 @@ describe('CLI', function () {
     });
 
     it('update', async function () {
-      this.timeout(20000);
+      this.timeout(30000);
       const {stdout, stderr} = await spawnPromise(cliPath, [
         'update',
         '--user',
         'brett',
         '--email',
         'bretto@example.name'
-      ]);
+      ], 20000);
       expect(stripPromisesWarning(stderr)).to.equal('');
 
       const strippedStdout = stripMongoAndServerListeningMessages(stdout);
@@ -632,7 +676,7 @@ describe('CLI', function () {
       expect(strippedStdout).to.equal(expected);
 
       const accts = await readAccounts();
-      expect(accts.length).to.equal(2);
+      expect(accts).to.have.lengthOf(2);
       try {
         expect(accts[0].user).to.equal('brett');
         expect(accts[0].email).to.equal('bretto@example.name');

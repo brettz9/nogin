@@ -319,6 +319,36 @@ const exprt = (on, config) => {
     },
 
     /**
+     * Simulates POST to `/signup`.
+     * @returns {Promise<AccountInfo>}
+     */
+    async addExtraNonActivatedAccount () {
+      return (await addAccounts({
+        name: ['Nicole'],
+        email: ['nicky@example.name'],
+        user: ['nicky'],
+        pass: ['bbb123456'],
+        country: ['IR'],
+        activated: [false]
+      }))[0];
+    },
+
+    /**
+     * Simulates POST to `/signup`.
+     * @returns {Promise<AccountInfo>}
+     */
+    async addExtraActivatedAccount () {
+      return (await addAccounts({
+        name: ['Nicole'],
+        email: ['me@example.name'],
+        user: ['nicky'],
+        pass: ['bbb123456'],
+        country: ['IR'],
+        activated: [true]
+      }))[0];
+    },
+
+    /**
      * Allows checking `passVer` validity.
      * @returns {Promise<AccountInfo>}
      */

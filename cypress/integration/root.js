@@ -190,19 +190,20 @@ describe('Root (Login)', function () {
   });
 
   it('Retrieve lost password', function () {
-    cy.task('deleteEmails');
+    this.timeout(200000);
+    cy.task('deleteEmails', null, {timeout: 100000});
     cy.get('[data-name="forgot-password"]').click();
     cy.get('[data-name="email"]').type(NL_EMAIL_USER);
     cy.get('[data-name=retrieve-password-submit]').click();
     cy.get('[data-name=alert]').contains(
       'A link to reset your password was emailed to you',
       {
-        timeout: 50000
+        timeout: 60000
       }
     );
     // We don't know exactly how long until the email will be delivered
-    // // eslint-disable-next-line cypress/no-unnecessary-waiting
-    // cy.wait(15000);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(15000);
     // Check that password was received by email
     return cy.task('hasEmail', {
       subject: 'Password Reset',

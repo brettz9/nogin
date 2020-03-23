@@ -30,8 +30,9 @@ describe('Signup', function () {
   });
 
   it('Visit Signup and submit with bad data (email in use)', function () {
-    cy.task('deleteEmails');
-    cy.task('addNonActivatedAccount');
+    this.timeout(100000);
+    cy.task('deleteEmails', null, {timeout: 100000});
+    cy.task('addExtraActivatedAccount');
     cy.visit('/signup');
 
     cy.get('[data-name="name"]:invalid').should('have.length', 0);
@@ -70,8 +71,7 @@ describe('Signup', function () {
   });
 
   it('Visit Signup and submit with bad data (user in use)', function () {
-    cy.task('deleteEmails');
-    cy.task('addNonActivatedAccount');
+    cy.task('addExtraActivatedAccount');
     cy.visit('/signup');
 
     cy.get('[data-name="name"]:invalid').should('have.length', 0);
@@ -154,7 +154,8 @@ describe('Signup', function () {
   });
 
   it('Visit Signup and submit', function () {
-    cy.task('deleteEmails');
+    this.timeout(100000);
+    cy.task('deleteEmails', null, {timeout: 100000});
     cy.visit('/signup');
     cy.get('[data-name="name"]').type('Brett');
     cy.get('[data-name="email"]').type(NL_EMAIL_USER);
@@ -163,16 +164,20 @@ describe('Signup', function () {
     cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
     cy.get('[data-name="pass-confirm"]').type(NL_EMAIL_PASS);
     cy.get('[data-name=account-form] [data-name=action2]').click();
-    cy.get('[data-name=modal-alert] [data-name=ok]').click({
-      timeout: 50000
-    });
+    cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+      'Please check your email for a verification link',
+      {
+        timeout: 50000
+      }
+    );
+    cy.get('[data-name=modal-alert] [data-name=ok]').click();
     cy.location('pathname', {
       timeout: 10000
     }).should('eq', '/');
 
     // We don't know exactly how long until the email will be delivered
-    // // eslint-disable-next-line cypress/no-unnecessary-waiting
-    // cy.wait(15000);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(15000);
 
     // Check that received activation email
     return cy.task('hasEmail', {
@@ -198,6 +203,44 @@ describe('Signup', function () {
       return cy.log(accts);
     });
   });
+
+  it(
+    'Visit Signup and submit successfully despite having a previous ' +
+      'non-activated account',
+    function () {
+      // cy.task('deleteEmails');
+      cy.task('addNonActivatedAccount');
+      cy.visit('/signup');
+
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+
+      cy.get('[data-name="email"]').clear().type('me@example.name');
+      cy.get('[data-name="pass"]').type('boo123456');
+      cy.get('[data-name="pass-confirm"]').type('boo123456');
+      cy.get('[data-name="name"]').type('MyName');
+      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      const nonactivatedExistingUser = 'nicky';
+      cy.get('[data-name="user"]').type(nonactivatedExistingUser);
+      cy.get('[data-name="action2"]').click();
+
+      cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p'
+      ).should('be.hidden');
+
+      // eslint-disable-next-line promise/prefer-await-to-then
+      return cy.task('getRecords').then((accts) => {
+        // Will only delete old account once activated
+        expect(accts).to.have.lengthOf(2);
+        const bothInactive = accts.every((acct) => {
+          return acct.activated === false;
+        });
+        expect(bothInactive).to.be.true;
+        return expect([accts[0].name, accts[1].name]).to.have.members(
+          ['MyName', 'Nicole']
+        );
+      });
+    }
+  );
 
   it('Visit Signup but cancel to be redirected', function () {
     cy.visit('/signup');

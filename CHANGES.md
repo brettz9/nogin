@@ -2,15 +2,19 @@
 
 ## ?
 
+- Fix: Ensure that user can signup again if email dispatch fails
 - Fix: Change error messages (both for signup or updating) to indicate
     conditions when an email is changed but there is an error sending
     the activation link out (possibly due to a bad email address)
+- Fix: Avoid chance for clashes or unnecessary data by deleting
+    unactivated accounts once one is activated.
 - Enhancement: Change client-side (email) update message to mention
     that though otherwise changed, the email change awaits link activation
 - Testing: Add test to ensure one can indeed to update email after
     bad link dispatch
 - Testing: Optimize email retrieval when getting most recent email; bump
     timeouts; avoid no longer needed code
+- Testing: Check that message is received upon successful signups
 
 ## 1.0.0-beta.4
 

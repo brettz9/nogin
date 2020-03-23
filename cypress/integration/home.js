@@ -21,6 +21,7 @@ describe('Home', function () {
   );
   describe('Changing email', function () {
     beforeEach(() => {
+      cy.task('deleteEmails', null, {timeout: 100000});
       cy.loginWithSession({
         nondefaultEmail: true
       });
@@ -49,7 +50,7 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get(
         '[data-name=modal-alert] [data-name=modal-body] p',
-        {timeout: 40000}
+        {timeout: 50000}
       ).contains('Your account has been updated but your email address');
       cy.get(
         '[data-name="modal-alert"] [data-name="ok"]'
@@ -64,6 +65,9 @@ describe('Home', function () {
         return expect(name).to.equal('MyNewName');
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
+        // We don't know exactly how long until the email will be delivered
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(15000);
         return cy.task('getMostRecentEmail', {timeout: 90000});
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then(({html, subject, emailDisabled}) => {
@@ -112,7 +116,7 @@ describe('Home', function () {
       'Make good update (with same user but different email) but ' +
         'simulate visiting activation link too late',
       function () {
-        this.timeout(30000);
+        this.timeout(100000);
         const startingEmail = 'brettz95@example.name';
         const newEmail = NL_EMAIL_USER;
         cy.get('[data-name="email"]').clear().type(newEmail);
@@ -133,7 +137,7 @@ describe('Home', function () {
         cy.get('[data-name="name"]:invalid').should('have.length', 0);
         cy.get(
           '[data-name=modal-alert] [data-name=modal-body] p',
-          {timeout: 40000}
+          {timeout: 60000}
         ).contains('Your account has been updated but your email address');
         cy.get(
           '[data-name="modal-alert"] [data-name="ok"]'
@@ -148,6 +152,9 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
+          // We don't know exactly how long until the email will be delivered
+          // eslint-disable-next-line cypress/no-unnecessary-waiting
+          cy.wait(15000);
           return cy.task('getMostRecentEmail', {timeout: 90000});
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(({html, subject, emailDisabled}) => {
