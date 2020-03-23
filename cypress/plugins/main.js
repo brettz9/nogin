@@ -133,25 +133,40 @@ const exprt = (on, config) => {
   }
 
   /**
+   * @param {string|number} messageNum
+   * @returns {Promise<EnvelopeMessage>}
+   */
+  async function getEmail (messageNum) {
+    const retrStreamString = await popActivatedAccount.RETR(messageNum);
+    console.log('retrStreamString', retrStreamString);
+    // console.log('retrStreamStringListified', listify(retrStreamString));
+
+    // This is good to do, but may sometimes be problematic for
+    //  a slow connection
+    await popActivatedAccount.DELE(messageNum);
+    console.log('deleted from server');
+    return new Envelope(retrStreamString);
+  }
+
+  /**
    * Probably only needed in testing, not from command line.
+   * @param {PlainObject} [cfg]
+   * @param {boolean} [cfg.lastItem=false]
    * @returns {Promise<EnvelopeMessage[]>}
    */
-  async function getEmails () {
-    const messageNums = await connectAndGetMessages();
+  async function getEmails ({lastItem} = {}) {
+    let messageNums = await connectAndGetMessages();
+    if (lastItem) {
+      messageNums = messageNums.slice(-1);
+    }
 
     const parsedMessages = await Promise.all(
-      messageNums.map(async (messageNum) => {
-        const retrStreamString = await popActivatedAccount.RETR(messageNum);
-        console.log('retrStreamString', retrStreamString);
-        // console.log('retrStreamStringListified', listify(retrStreamString));
-
-        await popActivatedAccount.DELE(messageNum);
-        return new Envelope(retrStreamString);
-      })
+      messageNums.map((msgNum) => getEmail(msgNum))
     );
+
     // Each has numbers as strings for each content-type ("0", "1"),
     //   and `header`)
-    // console.log('parsedMessages', parsedMessages);
+    console.log('parsedMessages', parsedMessages);
     /*
     console.log(
       'parsedMessages[0].header.contentType',
@@ -417,10 +432,7 @@ const exprt = (on, config) => {
 
       try {
         await Promise.all(
-          messageNums.map(async (messageNum) => {
-            // Seems to keep thinking messages are deleted, so reset
-            //  first.
-            await popActivatedAccount.RSET(messageNum);
+          messageNums.map((messageNum) => {
             return popActivatedAccount.DELE(messageNum);
           })
         );
@@ -498,9 +510,9 @@ const exprt = (on, config) => {
           emailDisabled: true
         };
       }
-      // Todo: Could see about improving efficiency in getting a single
-      //   email here instead
-      const parsedMessages = await getEmails();
+
+      // Could be risk of race condition
+      const parsedMessages = await getEmails({lastItem: true});
       const mostRecentEmail = parsedMessages[0];
       const {header} = mostRecentEmail;
       const subject = header.get('subject');

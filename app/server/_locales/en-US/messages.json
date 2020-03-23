@@ -200,6 +200,9 @@
     "yourAccountHasBeenUpdated": {
       "message": "Your account has been updated."
     },
+    "yourAccountHasBeenUpdatedButEmail": {
+      "message": "Your account has been updated but your email address will not be changed until you visit the activation link sent to you."
+    },
     "success": {
       "message": "Success!"
     },

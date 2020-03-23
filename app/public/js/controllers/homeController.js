@@ -56,15 +56,22 @@ HomeView.getDeleteAccountAction(accountForm).click(() => {
 setupValidationSubmission();
 
 /**
+ * @returns {boolean}
+ */
+function emailHasChanged () {
+  const email = HomeView.getEmail();
+  return email[0].value !== email[0].defaultValue;
+}
+
+/**
  * @returns {void}
  */
 function setupValidationSubmission () {
   let confirmed = false;
   const av = new AccountValidator();
   accountForm[0].addEventListener('submit', (e) => {
-    const email = HomeView.getEmail();
     const submissionOkToContinue = confirmed ||
-      email[0].value === email[0].defaultValue;
+      !emailHasChanged();
     if (submissionOkToContinue) {
       return;
     }
@@ -123,7 +130,9 @@ function setupValidationSubmission () {
  * @returns {void}
  */
 function onUpdateSuccess () {
-  const accountUpdatedAlertDialog = HomeView.onAccountUpdated();
+  const accountUpdatedAlertDialog = emailHasChanged()
+    ? HomeView.onAccountUpdatedButNotYetEmail()
+    : HomeView.onAccountUpdated();
   accountUpdatedAlertDialog.modal('show');
   HomeView.getAccountUpdatedButton(accountUpdatedAlertDialog).off('click');
 }

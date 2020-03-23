@@ -49,8 +49,8 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get(
         '[data-name=modal-alert] [data-name=modal-body] p',
-        {timeout: 20000}
-      ).contains('Your account has been updated.');
+        {timeout: 40000}
+      ).contains('Your account has been updated but your email address');
       cy.get(
         '[data-name="modal-alert"] [data-name="ok"]'
       ).click();
@@ -64,7 +64,7 @@ describe('Home', function () {
         return expect(name).to.equal('MyNewName');
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
-        return cy.task('getMostRecentEmail', {timeout: 50000});
+        return cy.task('getMostRecentEmail', {timeout: 90000});
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then(({html, subject, emailDisabled}) => {
         if (emailDisabled) {
@@ -133,8 +133,8 @@ describe('Home', function () {
         cy.get('[data-name="name"]:invalid').should('have.length', 0);
         cy.get(
           '[data-name=modal-alert] [data-name=modal-body] p',
-          {timeout: 20000}
-        ).contains('Your account has been updated.');
+          {timeout: 40000}
+        ).contains('Your account has been updated but your email address');
         cy.get(
           '[data-name="modal-alert"] [data-name="ok"]'
         ).click();
@@ -148,7 +148,7 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
-          return cy.task('getMostRecentEmail', {timeout: 50000});
+          return cy.task('getMostRecentEmail', {timeout: 90000});
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(({html, subject, emailDisabled}) => {
           if (emailDisabled) {

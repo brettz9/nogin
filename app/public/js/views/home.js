@@ -132,6 +132,18 @@ window.HomeView = {
   },
 
   /**
+   * @returns {external:jQuery} `HTMLDivElement`
+   */
+  onAccountUpdatedButNotYetEmail () {
+    return AlertDialog.populate({
+      heading: _('success'),
+      body: _('yourAccountHasBeenUpdatedButEmail'),
+      keyboard: true,
+      backdrop: true
+    });
+  },
+
+  /**
    * @param {PlainObject} cfg
    * @param {"accountDeleted"|"loggedOut"} cfg.type
    * @returns {external:jQuery} `HTMLDivElement`

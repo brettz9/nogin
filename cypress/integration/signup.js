@@ -181,7 +181,7 @@ describe('Signup', function () {
         'activation?c='
       ]
       // eslint-disable-next-line promise/prefer-await-to-then
-    }, {timeout: 50000}).then((hasEmail) => {
+    }, {timeout: 70000}).then((hasEmail) => {
       // Todo: In full UI testing mode, we could look for the link and
       //   visit it.
       return expect(hasEmail).to.be.true;

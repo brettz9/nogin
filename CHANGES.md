@@ -5,6 +5,12 @@
 - Fix: Change error message to indicate situation when an email is
     changed but there is an error sending the activation link out
     (possibly due to a bad email address)
+- Enhancement: Change client-side (email) update message to mention
+    that though otherwise changed, the email change awaits link activation
+- Testing: Add test to ensure one can indeed to update email after
+    bad link dispatch
+- Testing: Optimize email retrieval when getting most recent email; bump
+    timeouts; avoid no longer needed code
 
 ## 1.0.0-beta.4
 
@@ -15,7 +21,7 @@
     ask user for confirmation before doing so (and inform user of
     consequences for confirmation)
 - Enhancement: Add config (on by default) to disable `/users` list page
-- Testing: Add manul testing for non-activated account
+- Testing: Add manual testing for non-activated account
 - npm: Update devDeps
 
 ## 1.0.0-beta.3

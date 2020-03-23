@@ -111,8 +111,6 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. **Change client-side (email) update message** to mention email not
-    yet changed
 1. Review **error messages for privacy** (avoid allowing testing
     presence of email by feedback from login or lost password attempts, etc.)
     1. Might keep code present though for debugging
