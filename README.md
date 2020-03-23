@@ -156,6 +156,8 @@ Questions and suggestions for improvement are welcome.
     1. Use within **authentication**
     1. Need to remember to **handle case of users added before privilege
         changes**
+    1. Tie into `PaymentRequest` so privilege groups can be tied to
+        payments or subscriptions
 1. Make form **name field optional**
 1. **Ajax pagination of users**
 1. Allow **adding to "Set up new account" fields** (based on a schema?)
