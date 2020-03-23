@@ -111,15 +111,15 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Review **error messages for privacy** (avoid allowing testing
-    presence of email by feedback from login or lost password attempts, etc.)
-    1. Might keep code present though for debugging
-
 1. Allow convenience for easier **customization of where route
     redirects after login**
     1. Allow **redirect to be based on URL** (e.g., if user coming to the
         login from another page, let them redirect to that; ideally
         client-side also, so can work with anchors).
+
+1. Review **error messages for privacy** (avoid allowing testing
+    presence of email by feedback from login or lost password attempts, etc.)
+    1. Might keep code present though for debugging
 
 1. Update **docs**
     1. Update **docs above**
