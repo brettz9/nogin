@@ -207,18 +207,17 @@ class AccountManager {
 
   /**
   * @typedef {PlainObject} AccountInfoFilter
-  * @property {PlainObject<"$in",string[]>} _id Auto-set
   * @property {PlainObject<"$in",string[]>} user
   * @property {PlainObject<"$in",string[]>} name
   * @property {PlainObject<"$in",string[]>} email
+  * @property {PlainObject<"$in",string[]>} country
   * @property {PlainObject<"$in",string[]>} pass
   * @property {PlainObject<"$in",number[]>} passVer
-  * @property {PlainObject<"$in",number[]>} date
-  * @property {PlainObject<"$in",string[]>} activationCode
+  * @property {PlainObject<"$in",number[]>} date Timestamp
   * @property {PlainObject<"$in",boolean[]>} activated
-  * @property {PlainObject<"$in",string[]>} cookie
-  * @property {PlainObject<"$in",string[]>} ip
-  * @property {PlainObject<"$in",string[]>} passKey
+  * @property {PlainObject<"$in",string[]>} activationCode
+  * @property {PlainObject<"$in",string[]>} unactivatedEmail
+  * @property {PlainObject<"$in",number[]>} activationRequestDate Timestamp
   */
 
   /**
@@ -230,8 +229,10 @@ class AccountManager {
   * @property {string} pass Will be overwritten with hash
   * @property {number} passVer Auto-generated version.
   * @property {number} date Auto-generated timestamp.
-  * @property {string} activationCode Auto-set
   * @property {boolean} activated Auto-set
+  * @property {string} activationCode Auto-set
+  * @property {string} unactivatedEmail
+  * @property {number} activationRequestDate Timestamp
   * @property {string} cookie Auto-set
   * @property {string} ip Auto-set
   * @property {string} passKey Auto-set and unset

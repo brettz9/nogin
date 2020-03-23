@@ -155,7 +155,7 @@ function getAccountInfo (options) {
     'activated',
     'activationCode', 'unactivatedEmail', 'activationRequestDate'
     // Todo: Add 'passKey', 'ip', 'cookie', and '_id' (here and in
-    //  `getAccounts`)?
+    //  `getAccounts` and `AccountInfoFilter` typedef)?
   ].forEach((prop) => {
     if (options[prop]) {
       info[prop] = {$in: options[prop]};

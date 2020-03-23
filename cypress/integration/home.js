@@ -392,9 +392,13 @@ describe('Home', function () {
 
     it(
       'Attempt bad input to server (circumventing client-side validation) ' +
-        'and to simulate a server email-sending error',
+        'and to simulate a server email-sending error, followed by successful' +
+        'update',
       function () {
         const badEmail = 'badEmail';
+        // Todo: Should probably send to a legitimate email that we
+        //  can auto-delete (without getting a forwarding error)
+        const validEmail = 'brettz9@example.name';
         return cy.simulateServerError({
           url: '/home',
           body: {
@@ -417,16 +421,49 @@ describe('Home', function () {
           cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
             'While your account was otherwise updated'
           );
+          cy.get('[data-name="ok"]').click();
 
-          // Still the same old pass
           return cy.task('getRecords', {user: ['bretto']});
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then((accts) => {
-          const {user, name, country, email} = accts[0];
+          const {user, name, country, email, unactivatedEmail} = accts[0];
           expect(user).to.equal('bretto');
           expect(email).to.equal(NL_EMAIL_USER);
+          // Should probably be preventing the server from saving this,
+          //  but useful to trigger error and check our behavior
+          expect(unactivatedEmail).to.equal(badEmail);
           expect(country).to.equal('FR');
           return expect(name).to.equal('MyNewName');
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then(() => {
+          cy.server({enable: false});
+          cy.get('[data-name="email"]').clear().type(
+            validEmail
+          );
+          cy.get('[data-name="pass"]').clear().type(NL_EMAIL_PASS);
+          cy.get('[data-name="name"]').clear().type('YetAnotherName');
+          cy.get('[data-name="action2"]').click();
+          // Cypress needs us to wait to be able to find the
+          //   dialog to dismiss it (at least when visually viewing tests)
+          // eslint-disable-next-line cypress/no-unnecessary-waiting
+          cy.wait(500);
+          cy.get(
+            '[data-confirm-type="notice"] [data-name="submit-confirm"]'
+          ).click();
+
+          cy.get(
+            '[data-name=modal-alert] [data-name=modal-body] p'
+          ).should('be.hidden');
+
+          return cy.task('getRecords', {user: ['bretto']});
+          // eslint-disable-next-line promise/prefer-await-to-then
+        }).then((accts) => {
+          const {user, name, country, email, unactivatedEmail} = accts[0];
+          expect(user).to.equal('bretto');
+          expect(unactivatedEmail).to.equal(validEmail);
+          expect(email).to.equal(NL_EMAIL_USER);
+          expect(country).to.equal('FR');
+          return expect(name).to.equal('YetAnotherName');
         });
       }
     );
