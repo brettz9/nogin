@@ -56,13 +56,15 @@ window.SignupView = {
 
   /**
    * @param {PlainObject} cfg
-   * @param {"EmailServerError"} [cfg.type]
+   * @param {"DispatchActivationLinkError"} [cfg.type]
    * @returns {external:jQuery} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type}) {
     return AlertDialog.populate({
       heading: _('error'),
-      body: _(type),
+      body: _(type, {
+        lb: $('<br/>')[0]
+      }),
       keyboard: false,
       backdrop: 'static'
     });

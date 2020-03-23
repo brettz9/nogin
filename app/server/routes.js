@@ -405,7 +405,7 @@ module.exports = async function (app, config) {
       //   give user feedback
       await ed.dispatchActivationLink(o, composeResetPasswordEmailConfig, _);
     } catch (e) {
-      res.status(400).send(_('EmailServerError'));
+      res.status(400).send('DispatchActivationLinkError');
       logErrorProperties(e);
       return;
     }

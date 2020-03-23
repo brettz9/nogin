@@ -45,7 +45,7 @@ function setupValidationSubmission () {
           break;
         default: {
           const lockedAlertDialog = SignupView.onShowLockedErrorAlert({
-            type: 'EmailServerError'
+            type: 'DispatchActivationLinkError'
           });
           lockedAlertDialog.modal('show');
           break;

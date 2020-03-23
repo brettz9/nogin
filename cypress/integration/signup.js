@@ -114,7 +114,6 @@ describe('Signup', function () {
     // The client won't allow bad values, so we pass without
     //   client-side validation
     const badEmail = null;
-    const error = 'Email Server Error';
     cy.visit('/signup');
     return cy.simulateServerError({
       url: '/signup',
@@ -125,7 +124,7 @@ describe('Signup', function () {
         pass: 'okPassword1234',
         country: 'GB'
       },
-      error
+      error: 'DispatchActivationLinkError'
       // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       const goodEmailButStubbingToGetAsThoughBad = 'bad@example.name';
@@ -140,7 +139,10 @@ describe('Signup', function () {
         timeout: 50000
       });
       cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
-        error
+        'There was an error sending out your activation link.'
+      );
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+        'If you did enter a valid email'
       );
       // Still gets added as just had trouble sending email out
       return cy.task('getRecords');

@@ -2,9 +2,9 @@
 
 ## ?
 
-- Fix: Change error message to indicate situation when an email is
-    changed but there is an error sending the activation link out
-    (possibly due to a bad email address)
+- Fix: Change error messages (both for signup or updating) to indicate
+    conditions when an email is changed but there is an error sending
+    the activation link out (possibly due to a bad email address)
 - Enhancement: Change client-side (email) update message to mention
     that though otherwise changed, the email change awaits link activation
 - Testing: Add test to ensure one can indeed to update email after
