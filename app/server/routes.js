@@ -338,7 +338,7 @@ module.exports = async function (app, config) {
             } catch (e) {
               logErrorProperties(e);
               // Cause this `updateAccount` to reject and be handled below
-              throw e;
+              throw new Error('problem-dispatching-link');
             }
           }
         });
@@ -348,7 +348,8 @@ module.exports = async function (app, config) {
         log('message', {message: error.message});
         const message = [
           'email-taken',
-          'session-lost'
+          'session-lost',
+          'problem-dispatching-link'
         ].includes(error.message)
           ? error.message
           : _('ErrorUpdatingAccount');

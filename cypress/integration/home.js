@@ -403,7 +403,7 @@ describe('Home', function () {
             country: 'FR',
             pass: NL_EMAIL_PASS
           },
-          error: 'Error Updating Account'
+          error: 'problem-dispatching-link'
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
           const goodEmailToPassClientValidation = NL_EMAIL_USER;
@@ -415,7 +415,7 @@ describe('Home', function () {
           cy.get('[data-name="action2"]').click();
 
           cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
-            'There was a failure submitting your info'
+            'While your account was otherwise updated'
           );
 
           // Still the same old pass

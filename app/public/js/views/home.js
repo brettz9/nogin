@@ -144,7 +144,7 @@ window.HomeView = {
    * @param {PlainObject} cfg
    * @param {string} [cfg.message]
    * @param {"ErrorLoggingOut"|"FailureSubmittingUserInfo"|
-   * "SessionLost"} [cfg.type]
+   * "SessionLost"|"ProblemDispatchingLink"} [cfg.type]
    * @returns {external:jQuery} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type, message}) {

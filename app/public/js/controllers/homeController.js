@@ -108,6 +108,9 @@ function setupValidationSubmission () {
       case 'session-lost': {
         showLockedErrorAlert({type: 'SessionLost'});
         break;
+      } case 'problem-dispatching-link': {
+        showLockedErrorAlert({type: 'ProblemDispatchingLink'});
+        break;
       } default:
         HomeView.onShowLockedErrorAlert({type: 'FailureSubmittingUserInfo'});
         break;

@@ -215,6 +215,9 @@
     "SessionLost": {
       "message": "Your session has been lost.{lb}Please log in and try again. You will now be redirected."
     },
+    "ProblemDispatchingLink": {
+      "message": "While your account was otherwise updated, there was an error sending out an activation link to your targeted email (and until the link is activated, your account won't show the email as updated).{lb}If you indicated your desired new email address correctly, you should try updating again later as there has likely been a temporary server problem.{lb}If you instead mistyped your email, you can submit another update now to correct it."
+    },
     "accountDeleted": {
       "message": "Your account has been deleted.{lb}Redirecting you to the site root."
     },

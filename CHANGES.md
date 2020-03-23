@@ -1,5 +1,11 @@
 # CHANGES for nogin
 
+## ?
+
+- Fix: Change error message to indicate situation when an email is
+    changed but there is an error sending the activation link out
+    (possibly due to a bad email address)
+
 ## 1.0.0-beta.4
 
 - Security: Add password into activation hash so lesser chance for
