@@ -117,10 +117,6 @@ Questions and suggestions for improvement are welcome.
         login from another page, let them redirect to that; ideally
         client-side also, so can work with anchors).
 
-1. Review **error messages for privacy** (avoid allowing testing
-    presence of email by feedback from login or lost password attempts, etc.)
-    1. Might keep code present though for debugging
-
 1. Update **docs**
     1. Update **docs above**
     1. Make **distinct badges** for local results of each of testable
