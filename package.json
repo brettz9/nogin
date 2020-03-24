@@ -166,7 +166,7 @@
     "@cypress/browserify-preprocessor": "^2.1.4",
     "@cypress/code-coverage": "^1.14.0",
     "@cypress/fiddle": "^1.4.3",
-    "@fintechstudios/eslint-plugin-chai-as-promised": "^2.0.0",
+    "@fintechstudios/eslint-plugin-chai-as-promised": "^3.0.1",
     "@mysticatea/eslint-plugin": "^13.0.0",
     "acorn": "^7.1.1",
     "axe-core": "^3.5.2",
@@ -182,7 +182,7 @@
     "envelope": "^2.1.0",
     "escape-string-regexp": "^2.0.0",
     "eslint": "^6.8.0",
-    "eslint-config-ash-nazg": "^17.4.0",
+    "eslint-config-ash-nazg": "^17.5.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-array-func": "^3.1.4",
     "eslint-plugin-chai-expect": "^2.1.0",
@@ -216,7 +216,7 @@
     "npm-run-all": "^4.1.5",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
-    "snyk": "^1.301.0",
+    "snyk": "^1.303.1",
     "stop-only": "^3.1.0",
     "typescript": "^3.8.3"
   }
