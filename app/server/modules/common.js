@@ -15,5 +15,15 @@ const guid = function () {
   /* eslint-enable no-bitwise */
 };
 
+/**
+ * @param {GenericObject} obj
+ * @param {string} prop
+ * @returns {boolean}
+ */
+const hasOwn = (obj, prop) => {
+  return {}.hasOwnProperty.call(obj, prop);
+};
+
 exports.isNullish = isNullish;
 exports.guid = guid;
+exports.hasOwn = hasOwn;

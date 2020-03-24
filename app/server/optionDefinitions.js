@@ -74,6 +74,32 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
+    name: 'localesBasePath', type: String,
+    description: 'Points to a base path for finding locales. Defaults to ' +
+      '`app/server`.',
+    typeLabel: '{underline path}'
+  },
+  {
+    name: 'postLoginRedirectPath', type: String,
+    description: 'Points to a path or URL to which to redirect after users ' +
+      'successfully log in. Defaults to `/home` (or locale equivalent). Note ' +
+      'that you are overriding this option, you should provide another means ' +
+      'to your users to visit `/home`, e.g., through the ' +
+      'accessibility-recommended approach of having a site-wide navigation ' +
+      'bar, so as to allow your users to update or delete their accounts. ' +
+      'Note that this option will be overridden by any `redirect` query ' +
+      'parameter present in the URL.',
+    typeLabel: '{underline path or URL}'
+  },
+  {
+    name: 'customRoutes', type: String, multiple: true,
+    description: 'A convenience to allow overriding the default route name ' +
+      'per locale, e.g., `en-US=home=/updateAccount` would change the ' +
+      '`/home` path to `/updateAccount` for the `en-US` locale. This will ' +
+      'take precedence over the routes in `localesBasePath`.',
+    typeLabel: '{underline locale=route=path}'
+  },
+  {
     name: 'staticDir', type: String, multiple: true,
     description: 'Point to absolute path at which to serve static files on ' +
       'the same server. Multiple allowed. Not required. To require serving ' +

@@ -1,20 +1,41 @@
 'use strict';
 
+const {readdirSync} = require('fs');
+const {join} = require('path');
 const {JSDOM} = require('jsdom');
-const {i18n} = require('intl-dom');
-global.fetch = require('file-fetch'); // For `intl-dom`
+const {i18n, getMatchingLocale, setFetch, setDocument} = require('intl-dom');
+const fileFetch = require('file-fetch'); // For `intl-dom`
 
-global.document = (new JSDOM()).window.document;
+setFetch(fileFetch);
+setDocument((new JSDOM()).window.document);
 
-module.exports = function () {
+const localeMap = new Map();
+const availableLocales = readdirSync(join(__dirname, '../_locales'));
+
+module.exports = function (localesBasePath = 'app/server') {
   return async function (req, res, next = () => { /**/ }) {
-    const _ = await i18n({
-      // Detects locale from `req.headers['accept-language']` and
-      //   requires appropriate i18n file; this is for Express;
-      //   for non-Express, could use https://github.com/florrain/locale
-      locales: req.acceptsLanguages(),
-      localesBasePath: 'app/server'
-    });
+    // To reduce memory leaks with our `Map` (which avoids repeated file system
+    //   checks), we limit number of locales here, filtering among our existing
+    //   locales (even though our i18n can handle bad locales)
+    const locales = req.acceptsLanguages().map((locale) => {
+      return getMatchingLocale({locale, locales: availableLocales});
+    }).filter((locale) => locale);
+
+    const langKey = JSON.stringify(locales);
+    let _;
+    if (localeMap.has(langKey)) {
+      _ = localeMap.get(langKey);
+    } else {
+      // Todo: Set this on req and genuinely use as middleware
+      _ = await i18n({
+        // Detects locale from `req.headers['accept-language']` and
+        //   requires appropriate i18n file; this is for Express;
+        //   for non-Express, could use https://github.com/florrain/locale
+        locales,
+        localesBasePath
+      });
+      localeMap.set(langKey, _);
+    }
 
     // Todo: Detect template requested from `req.url`
     // See https://expressjs.com/en/guide/using-template-engines.html

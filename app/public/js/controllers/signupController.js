@@ -1,4 +1,5 @@
-/* globals AccountValidator, ajaxFormClientSideValidate, SignupView */
+/* globals AccountValidator, ajaxFormClientSideValidate,
+  SignupView, NL_ROUTES */
 'use strict';
 
 (() => {
@@ -9,7 +10,7 @@ const accountForm = SignupView.setAccountSettings();
 
 // redirect to homepage when cancel button is clicked
 const redirectToRoot = () => {
-  location.href = '/';
+  location.href = NL_ROUTES.root;
 };
 const actionButton = SignupView.getActionForAccountForm(accountForm);
 actionButton.click(redirectToRoot);

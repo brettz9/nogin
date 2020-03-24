@@ -1,5 +1,5 @@
 /* globals $, _, AccountValidator, ajaxFormClientSideValidate,
-  HomeView, ConfirmDialog */
+  HomeView, ConfirmDialog, NL_ROUTES */
 'use strict';
 
 (() => {
@@ -185,7 +185,7 @@ function post (url) {
  */
 async function deleteAccount () {
   deleteAccountConfirmDialog.modal('hide');
-  await post('/delete');
+  await post(NL_ROUTES.delete);
   showLockedAlert({type: 'accountDeleted'});
 }
 
@@ -194,7 +194,7 @@ async function deleteAccount () {
  * @returns {Promise<void>}
  */
 async function attemptLogout () {
-  await post('/logout');
+  await post(NL_ROUTES.logout);
   showLockedAlert({type: 'loggedOut'});
 }
 
@@ -207,7 +207,7 @@ function showLockedAlert ({type}) {
   const lockedAlertDialog = HomeView.onShowLockedAlert({type});
   lockedAlertDialog.modal('show');
   const redirectToRoot = () => {
-    location.href = '/';
+    location.href = NL_ROUTES.root;
   };
   HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
   setTimeout(redirectToRoot, 3000);
@@ -223,7 +223,7 @@ function showLockedErrorAlert ({type, message}) {
   const lockedAlertDialog = HomeView.onShowLockedErrorAlert({type, message});
   lockedAlertDialog.modal('show');
   const redirectToRoot = () => {
-    location.href = '/';
+    location.href = NL_ROUTES.root;
   };
   HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
   setTimeout(redirectToRoot, 3000);

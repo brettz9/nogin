@@ -1,4 +1,4 @@
-/* globals ActivationFailedView */
+/* globals ActivationFailedView, NL_ROUTES */
 'use strict';
 (() => {
 const accountFailedActivationAlertDialog =
@@ -12,7 +12,7 @@ okButton.click(function () {
   // Redirect to homepage on account failure, adding short delay so user
   //   can read alert window
   setTimeout(function () {
-    location.href = '/';
+    location.href = NL_ROUTES.root;
   }, 300);
 });
 })();

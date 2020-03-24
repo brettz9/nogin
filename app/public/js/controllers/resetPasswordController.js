@@ -1,5 +1,5 @@
 /* globals ResetPasswordValidator, ajaxFormClientSideValidate,
-  ResetPasswordView */
+    ResetPasswordView, NL_ROUTES */
 'use strict';
 
 (() => {
@@ -26,7 +26,7 @@ ajaxFormClientSideValidate(
       setPasswordSubmit.prop('disabled', true);
       rv.showSuccess();
       setTimeout(() => {
-        location.href = '/';
+        location.href = NL_ROUTES.root;
       }, 3000);
     },
     error () {

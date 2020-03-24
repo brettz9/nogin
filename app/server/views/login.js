@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 'use strict';
-module.exports = function ({_, layout, emailPattern}) {
+module.exports = function ({_, layout, emailPattern, signup}) {
   return layout({
     content: [
       ['div', {
@@ -57,7 +57,7 @@ module.exports = function ({_, layout, emailPattern}) {
               ['a', {href: '#'}, [_('ForgotYourPassword')]]
             ]],
             ['div', {id: 'create-account'}, [
-              ['a', {href: '/signup'}, [_('CreateAnAccount')]]
+              ['a', {href: signup}, [_('CreateAnAccount')]]
             ]]
           ]],
           require('./modals/alert.js')({_})

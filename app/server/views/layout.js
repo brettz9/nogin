@@ -100,7 +100,7 @@ module.exports = ({
         src: '/node_modules/intl-dom/dist/index.umd.min.js'
       }],
       ['script', {
-        src: '/lang'
+        src: '/_lang'
       }],
       triggerCoverage && !scripts
         // Need this to set `__coverage__` for those pages which

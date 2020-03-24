@@ -111,10 +111,18 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Allow convenience for easier **customization of where route
-    redirects after login**
-    1. Allow **redirect to be based on URL** (e.g., if user coming to the
-        login from another page, let them redirect to that).
+1. Make **error messages of potential concern to privacy** optional (avoid
+    allowing testing presence of an email in the system by feedback from
+    lost password (detecting existent vs. non-existent email); this option
+    would only make sense though if it also prevented signup/update from
+    complaining about an existing email as otherwise those pages could be
+    used for detection instead. If implemented, this should be optional,
+    as some sites might wish to enforce unique emails or identity-by-email,
+    or may simply wish to give users full feedback about whether a lost
+    password email was successfully sent or not.
+    1. See <https://github.com/brettz9/nogin/issues/1>
+    1. Note that login would always allow detecting existent vs.
+        non-existent user names (this is just for email detection)
 
 1. Update **docs**
     1. Update **docs above**
@@ -151,7 +159,6 @@ Questions and suggestions for improvement are welcome.
         changes**
     1. Tie into `PaymentRequest` so privilege groups can be tied to
         payments or subscriptions
-1. Make form **name field optional**
 1. **Ajax pagination of users**
 1. Allow **adding to "Set up new account" fields** (based on a schema?)
     (to be injected into `app/server/views/account.js`) to be passed to
@@ -171,6 +178,11 @@ Questions and suggestions for improvement are welcome.
 1. **BrowserID** - Implement browser add-on (or work with existing Persona)
     to use with a server-side validation
 1. Add **passwordless** option
+1. Method to auto-create accessibility-friendly **navigation bar**, including
+    login (root), logout, home, signup, and users (the special pages,
+    'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
+    'coverage', should not need to be added). Also add breadcrumbs and
+    `<link rel=next/prev>`.
 
 ## Lower priorities
 
@@ -178,23 +190,12 @@ Questions and suggestions for improvement are welcome.
     names, but we should be **rejecting bad values of lesser importance on
     the server-side** as we do on the client-side (e.g., non-emails, too
     short of passwords, etc.)
+1. Review **client-side validation** for any other opportunities (e.g., for
+    any missing `required` fields, etc.)
 1. Switch from `jsdom` to **`dominum`** (once latter may be capable), as latter
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
-1. See about minor **to-dos in code** along the way
-1. Review **client-side validation** for any other opportunities (e.g., for
-    any missing `required` fields, etc.)
 1. Allow **changing activation email or reset password email template** (with
     an alternative JS module)
-1. Make **error messages of potential concern to privacy** optional (avoid
-    allowing testing presence of an email in the system by feedback from
-    lost password (detecting existent vs. non-existent email); this option
-    would only make sense though if it also prevented signup/update from
-    complaining about an existing email as otherwise those pages could be
-    used for detection instead. If implemented, this should be optional,
-    as some sites might wish to enforce unique emails or identity-by-email,
-    or may simply wish to give users full feedback about whether a lost
-    password email was successfully sent or not.
-    1. See <https://github.com/brettz9/nogin/issues/1>
-    1. Note that login would always allow detecting existent vs.
-        non-existent user names (this is just for email detection)
+1. Make form **name field optional**
+1. See about minor **to-dos in code** along the way

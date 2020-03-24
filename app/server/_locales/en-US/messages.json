@@ -422,6 +422,39 @@
       "description": "Allows for using `log` and its checks with a raw message.",
       "message": "{message}"
     },
+    "route_root": {
+      "message": "/"
+    },
+    "route_logout": {
+      "message": "/logout"
+    },
+    "route_home": {
+      "message": "/home"
+    },
+    "route_signup": {
+      "message": "/signup"
+    },
+    "route_activation": {
+      "message": "/activation"
+    },
+    "route_lostPassword": {
+      "message": "/lost-password"
+    },
+    "route_resetPassword": {
+      "message": "/reset-password"
+    },
+    "route_users": {
+      "message": "/users"
+    },
+    "route_delete": {
+      "message": "/delete"
+    },
+    "route_reset": {
+      "message": "/reset"
+    },
+    "route_coverage": {
+      "message": "/coverage"
+    },
 
     "COUNTRIES (BUSINESS LOGIC)": true,
     "PleaseSelectACountry": {

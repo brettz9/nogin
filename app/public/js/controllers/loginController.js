@@ -1,5 +1,5 @@
 /* globals LoginValidator, EmailValidator, LoginView, LoginValidatorView,
-  ajaxFormClientSideValidate */
+  ajaxFormClientSideValidate, NL_ROUTES */
 'use strict';
 
 (() => {
@@ -77,7 +77,7 @@ ajaxFormClientSideValidate(
       // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
       // istanbul ignore else
       if (status === 'success') {
-        location.href = '/home';
+        location.href = NL_ROUTES.home;
       }
     },
     error (e) {
@@ -110,7 +110,7 @@ ajaxFormClientSideValidate(
         ev.hideEmailAlert();
       }
     },
-    url: '/lost-password',
+    url: NL_ROUTES.lostPassword,
     success (responseText, status, xhr, $form) {
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();

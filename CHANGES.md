@@ -8,13 +8,26 @@
     the activation link out (possibly due to a bad email address)
 - Fix: Avoid chance for clashes or unnecessary data by deleting
     unactivated accounts once one is activated.
+- Enhancement: i18nize routes
 - Enhancement: Change client-side (email) update message to mention
     that though otherwise changed, the email change awaits link activation
+- Enhancement: Allow pointing to own locales base path via `localesBasePath`
+    option.
+- Enhancement: Add `postLoginRedirectPath` option for users to redirect
+    by default somewhere other than `/home` (or locale equivalent) after
+    login.
+- Enhancement: Ensure that any `?redirect=` query parameter present in
+    the path passed to root (`/` by default) is used for redirecting after
+    login.
+- Optimization: Cache i18n functions
+- Refactoring: Avoid setting global `fetch` or `document` per updated
+    `intl-dom`
 - Testing: Add test to ensure one can indeed to update email after
     bad link dispatch
 - Testing: Optimize email retrieval when getting most recent email; bump
     timeouts; avoid no longer needed code
 - Testing: Check that message is received upon successful signups
+- npm: Update devDeps; update `intl-dom` dep.
 
 ## 1.0.0-beta.4
 
