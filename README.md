@@ -192,3 +192,15 @@ Questions and suggestions for improvement are welcome.
     any missing `required` fields, etc.)
 1. Allow **changing activation email or reset password email template** (with
     an alternative JS module)
+1. Make **error messages of potential concern to privacy** optional (avoid
+    allowing testing presence of an email in the system by feedback from
+    lost password (detecting existent vs. non-existent email); this option
+    would only make sense though if it also prevented signup/update from
+    complaining about an existing email as otherwise those pages could be
+    used for detection instead. If implemented, this should be optional,
+    as some sites might wish to enforce unique emails or identity-by-email,
+    or may simply wish to give users full feedback about whether a lost
+    password email was successfully sent or not.
+    1. See <https://github.com/brettz9/nogin/issues/1>
+    1. Note that login would always allow detecting existent vs.
+        non-existent user names (this is just for email detection)
