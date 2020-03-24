@@ -114,9 +114,7 @@ Questions and suggestions for improvement are welcome.
 1. Allow convenience for easier **customization of where route
     redirects after login**
     1. Allow **redirect to be based on URL** (e.g., if user coming to the
-        login from another page, let them redirect to that; ideally
-        client-side also, so can work with anchors, at least if
-        implementing "option for integration" into a page mentioned below).
+        login from another page, let them redirect to that).
 
 1. Update **docs**
     1. Update **docs above**
@@ -169,6 +167,8 @@ Questions and suggestions for improvement are welcome.
 1. **Security** CSRF protection
 1. Provide **option for integration** within an existing page to avoid need
     for separate login page
+    1. Adapt server-side redirect functionality to give Ajax feedback to
+        client so it could instead handle forwarding *with* a hash.
 1. See about **`passport-next`** integration
 1. **BrowserID** - Implement browser add-on (or work with existing Persona)
     to use with a server-side validation
