@@ -179,11 +179,6 @@ Questions and suggestions for improvement are welcome.
     names, but we should be **rejecting bad values of lesser importance on
     the server-side** as we do on the client-side (e.g., non-emails, too
     short of passwords, etc.)
-1. Figure out why **opt-in email tests are problematic**
-    (`'cypress.env.disableEmailChecking': false`) in POP3 `DELE` (with `QUIT`)
-    not deleting. Is it the library, my server or something else? (Email tests
-    are all passing, just not properly deleting within the test). See
-    <https://tools.ietf.org/html/rfc1939>
 1. Switch from `jsdom` to **`dominum`** (once latter may be capable), as latter
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
