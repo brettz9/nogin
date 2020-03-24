@@ -117,9 +117,9 @@ Questions and suggestions for improvement are welcome.
         login from another page, let them redirect to that).
 
 1. Update **docs**
-    1. Update **docs above**
     1. Make **distinct badges** for local results of each of testable
         browsers, or at least report if all are passing
+    1. Update **docs above**
     1. **Review CHANGES** to ensure includes all changes (and so docs
         are mentioning)
     1. Document `env` vars in `main.js` plugin file (`env`, `coverage`,
