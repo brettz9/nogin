@@ -115,7 +115,8 @@ Questions and suggestions for improvement are welcome.
     redirects after login**
     1. Allow **redirect to be based on URL** (e.g., if user coming to the
         login from another page, let them redirect to that; ideally
-        client-side also, so can work with anchors).
+        client-side also, so can work with anchors, at least if
+        implementing "option for integration" into a page mentioned below).
 
 1. Update **docs**
     1. Update **docs above**
