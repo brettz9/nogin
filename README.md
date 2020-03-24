@@ -4,7 +4,7 @@
 [![Dependencies](https://img.shields.io/david/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin)
 [![devDependencies](https://img.shields.io/david/dev/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin?type=dev)
 [![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/tests-badge.svg?sanitize=true)](readme_includes/tests-badge.svg)
-[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/coverage-badge.svg?sanitize=true)](readme_includes/coverage-badge.svg)
+[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/coverage-badge.svg?sanitize=true)](readme_includes/coverage-badge.svg) (Tested on Firefox and Chrome)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/brettz9/nogin/badge.svg)](https://snyk.io/test/github/brettz9/nogin)
 <!--
@@ -117,8 +117,6 @@ Questions and suggestions for improvement are welcome.
         login from another page, let them redirect to that).
 
 1. Update **docs**
-    1. Make **distinct badges** for local results of each of testable
-        browsers, or at least report if all are passing
     1. Update **docs above**
     1. **Review CHANGES** to ensure includes all changes (and so docs
         are mentioning)
