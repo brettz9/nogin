@@ -118,6 +118,10 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
+    name: 'requireName', type: Boolean,
+    description: 'Whether to require a name from users. Default is `false`.'
+  },
+  {
     name: 'staticDir', type: String, multiple: true,
     description: 'Point to absolute path at which to serve static files on ' +
       'the same server. Multiple allowed. Not required. To require serving ' +

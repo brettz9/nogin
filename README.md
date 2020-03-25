@@ -120,7 +120,6 @@ Questions and suggestions for improvement are welcome.
     as some sites might wish to enforce unique emails or identity-by-email,
     or may simply wish to give users full feedback about whether a lost
     password email was successfully sent or not.
-    1. See <https://github.com/brettz9/nogin/issues/1>
     1. Note that login would always allow detecting existent vs.
         non-existent user names (this is just for email detection)
 
@@ -195,5 +194,4 @@ Questions and suggestions for improvement are welcome.
 1. Switch from `jsdom` to **`dominum`** (once latter may be capable), as latter
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
-1. Make form **name field optional**
 1. See about minor **to-dos in code** along the way

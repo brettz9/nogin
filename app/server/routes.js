@@ -44,6 +44,7 @@ module.exports = async function (app, config) {
     showUsers,
     fromText,
     fromURL,
+    requireName,
     router,
     localesBasePath,
     postLoginRedirectPath,
@@ -594,11 +595,12 @@ module.exports = async function (app, config) {
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
-  const wrapResult = (args, routes) => {
+  const wrapResult = (args, routes, cfg) => {
     return `
       /* globals IntlDom */
       window._ = IntlDom.i18nServer(${JSON.stringify(args)});
       window.NL_ROUTES = ${JSON.stringify(routes)};
+      window.NL_CONFIG = ${JSON.stringify(cfg)};
 `;
   };
 
@@ -611,7 +613,13 @@ module.exports = async function (app, config) {
     const {resolvedLocale, strings} = _;
     const routes = getRoutes(_);
 
-    res.status(200).send(wrapResult({resolvedLocale, strings}, routes));
+    res.status(200).send(
+      wrapResult(
+        {resolvedLocale, strings},
+        routes,
+        {requireName}
+      )
+    );
   });
 
   if (router) {

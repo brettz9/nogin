@@ -9,6 +9,7 @@
 - Fix: Avoid chance for clashes or unnecessary data by deleting
     unactivated accounts once one is activated.
 - Enhancement: i18nize routes
+- Enhancement: Add option on whether to require name (`requireName`)
 - Enhancement: Allow changing activation email or reset password email
     template (with alternative JS template modules)
 - Enhancement: Change client-side (email) update message to mention

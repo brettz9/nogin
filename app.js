@@ -84,6 +84,7 @@ exports.createServer = async function (options) {
     countryCodes,
     fromText,
     fromURL,
+    requireName,
     localesBasePath,
     postLoginRedirectPath,
     customRoutes
@@ -199,6 +200,7 @@ exports.createServer = async function (options) {
     countryCodes,
     fromText,
     fromURL,
+    requireName,
     router,
     localesBasePath,
     postLoginRedirectPath,

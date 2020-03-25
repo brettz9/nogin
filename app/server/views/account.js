@@ -1,3 +1,4 @@
+/* globals NL_CONFIG */
 /* eslint-disable global-require */
 'use strict';
 
@@ -28,7 +29,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
             ['input', {
               type: 'text',
               autocomplete: 'name',
-              minlength: 3,
+              minlength: NL_CONFIG.requireName ? 3 : null,
               class: 'form-control', id: 'name-tf', 'data-name': 'name',
               name: 'name',
               defaultValue: user.name
