@@ -15,7 +15,7 @@ const setI18n = require('./i18n.js')();
  */
 const getLogger = async (options) => {
   const _ = await setI18n({
-    acceptsLanguages: () => options.loggerLocale || 'en-US'
+    acceptsLanguages: () => [options.loggerLocale || 'en-US']
   });
   /**
    * @callback Logger

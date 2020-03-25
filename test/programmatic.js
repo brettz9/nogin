@@ -88,7 +88,7 @@ describe('Programmatic', function () {
     it('AccountManager with no log', async function () {
       this.timeout(30000);
       const _ = await setI18n({
-        acceptsLanguages: () => 'en-US'
+        acceptsLanguages: () => ['en-US']
       });
       let erred = false;
       // Todo: Fix this per https://stackoverflow.com/questions/37372684/mongodb-3-2-authentication-failed
@@ -117,7 +117,7 @@ describe('Programmatic', function () {
     it('AccountManager with authenticated user', async function () {
       this.timeout(30000);
       const _ = await setI18n({
-        acceptsLanguages: () => 'en-US'
+        acceptsLanguages: () => ['en-US']
       });
       let erred = false;
       // Todo: Fix this per https://stackoverflow.com/questions/37372684/mongodb-3-2-authentication-failed

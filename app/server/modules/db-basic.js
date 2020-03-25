@@ -35,7 +35,7 @@ const getAccountManager = exports.getAccountManager = async (options) => {
 
   const [_, log] = await Promise.all([
     setI18n({
-      acceptsLanguages: () => options.loggerLocale || 'en-US'
+      acceptsLanguages: () => [options.loggerLocale || 'en-US']
     }),
     getLogger(options)
   ]);

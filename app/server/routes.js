@@ -6,16 +6,15 @@ const express = require('express');
 const fileFetch = require('file-fetch');
 const {JSDOM} = require('jsdom');
 
-const {checkLocaleRoutes, layoutAndTitleGetter} = require('./routeUtils.js');
+const {
+  checkLocaleRoutes, routeGetter, layoutAndTitleGetter
+} = require('./routeUtils.js');
 const AccountManager = require('./modules/account-manager.js');
 const {isNullish, hasOwn} = require('./modules/common.js');
 const EmailDispatcher = require('./modules/email-dispatcher.js');
 const getLogger = require('./modules/getLogger.js');
 const i18n = require('./modules/i18n.js');
 const {emailPattern} = require('./modules/patterns.js');
-
-// Throw early if there are problems
-checkLocaleRoutes();
 
 // For intl-dom
 global.fetch = fileFetch;
@@ -46,7 +45,7 @@ module.exports = async function (app, config) {
     router,
     localesBasePath,
     postLoginRedirectPath,
-    customRoutes,
+    customRoutes = [],
     opts
   } = config;
 
@@ -71,9 +70,14 @@ module.exports = async function (app, config) {
   };
 
   log('AwaitingI18NAndLogging');
+
+  // Throw early if there are problems
+  const getRoutes = routeGetter(customRoutes);
+  await checkLocaleRoutes(getRoutes, localesBasePath);
+
   const [globalI18n, errorLogger] = await Promise.all([
     setI18n({
-      acceptsLanguages: () => loggerLocale
+      acceptsLanguages: () => [loggerLocale]
     }),
     getLogger({loggerLocale, errorLog: true})
   ]);
@@ -601,43 +605,6 @@ module.exports = async function (app, config) {
   if (router) {
     // eslint-disable-next-line global-require, import/no-dynamic-require
     require(router)(app, opts);
-  }
-
-  const customRoutesObj = customRoutes.reduce((routes, routeInfo) => {
-    const [locale, route, path] = routeInfo.split('=');
-    if (!routes[locale]) {
-      routes[locale] = {};
-    }
-    routes[locale][route] = path;
-    return routes;
-  }, {});
-
-  /**
-  * @typedef {Object<string, string>} Routes
-  */
-
-  const routeMap = new Map();
-  /**
-   * @param {Internationalizer} _
-   * @returns {Routes}
-   */
-  function getRoutes (_) {
-    if (routeMap.has(_.resolvedLocale)) {
-      return routeMap.get(_.resolvedLocale);
-    }
-    const routeObj = [
-      'root', 'logout', 'home', 'signup', 'activation',
-      'lostPassword', 'resetPassword', 'users', 'delete',
-      'reset', 'coverage'
-    ].reduce((o, route) => {
-      o[route] = (
-        customRoutesObj[_.resolvedLocale] &&
-        customRoutesObj[_.resolvedLocale][route]
-      ) || _(`route_${route}`);
-      return o;
-    }, {});
-    routeMap.set(_.resolvedLocale, routeObj);
-    return routeObj;
   }
 
   /**
