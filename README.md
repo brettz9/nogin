@@ -140,24 +140,34 @@ Questions and suggestions for improvement are welcome.
 ## Medium priorities
 
 1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
-    1. **Remove `reset` GET page** to a POST on the user (admin) page.
+    1. **Hierarchical** groups and roles?
     1. **Multiple group membership** allowing **multiple roles per group**,
         including **user-customizable roles** in addition to built-in ones
-        such as the "login" privilege
+        such as the "login" privilege; **roles per user (without group)**
         1. Make a simple version of groups where **groups are auto-created**
             that map to privileges (e.g., a login group), so can easily add a
             user to a login group rather than needing to first create the group
             and add the privilege to that group (these could be the built-in
             groups, along with a few combined ones like
             visitor/user/admin/superadmin)
+    1. Anticipate privileges that come automatically based on events (e.g., as
+        with StackExchange)
+    1. **Atomic privileges** (e.g., `view-users` as well as more encompassing
+        `view` privilege)
+    1. **IP addressed-based privileges (or exclusions)**
+    1. **Expiring privileges** (or tied into payment subscription or some
+        other event, auto-renewing or not)
     1. See **to-dos in code** for methods needing these!
-    1. Update **docs** for any privilege additions/config
-    1. **Hierarchical** groups and roles?
+        1. **Restore `reset`** from GET page to POST on the user (admin) page.
     1. Use within **authentication**
-    1. Need to remember to **handle case of users added before privilege
-        changes**
     1. Tie into `PaymentRequest` so privilege groups can be tied to
         payments or subscriptions
+        1. npm package for processing/submitting credit info?
+        1. might restrict access to whole site (though more likely just parts)
+            until payment made
+    1. Need to remember to **handle case of users added before privilege
+        changes**
+    1. Update **docs** for any privilege additions/config
 1. **Ajax pagination of users**
 1. Allow **adding to "Set up new account" fields** (based on a schema?)
     (to be injected into `app/server/views/account.js`) to be passed to
