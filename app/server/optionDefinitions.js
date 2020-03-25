@@ -100,6 +100,24 @@ const optionDefinitions = [
     typeLabel: '{underline locale=route=path}'
   },
   {
+    name: 'composeResetPasswordEmailView', type: String,
+    description: 'Path to a Node file that will be required. The file must ' +
+      'have a `module.exports` default function export that will be ' +
+      'passed the template options (_, jml, baseurl, name, user, passKey, ' +
+      'fromText, fromURL). Defaults to ' +
+      '`/app/server/views/composeResetPasswordEmail.js`.',
+    typeLabel: '{underline path}'
+  },
+  {
+    name: 'composeActivationEmailView', type: String,
+    description: 'Path to a Node file that will be required. The file must ' +
+      'have a `module.exports` default function export that will be ' +
+      'passed the template options (_, jml, baseurl, name, user, ' +
+      'activationCode, fromText, fromURL). Defaults to ' +
+      '`/app/server/views/composeActivationEmail.js`.',
+    typeLabel: '{underline path}'
+  },
+  {
     name: 'staticDir', type: String, multiple: true,
     description: 'Point to absolute path at which to serve static files on ' +
       'the same server. Multiple allowed. Not required. To require serving ' +

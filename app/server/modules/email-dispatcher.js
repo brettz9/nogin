@@ -8,10 +8,10 @@ const emailjs = require('emailjs/email');
 // const jml = require('jamilih/dist/jml-dominum.js').default;
 const jml = require('jamilih/dist/jml-jsdom.js').default;
 
-const composeResetPasswordEmailView = require(
+const composeResetPasswordEmailViewDefault = require(
   '../views/composeResetPasswordEmail.js'
 );
-const composeActivationEmailView = require(
+const composeActivationEmailViewDefault = require(
   '../views/composeActivationEmail.js'
 );
 
@@ -39,9 +39,13 @@ class EmailDispatcher {
       NL_EMAIL_PASS, // = '1234',
       NL_EMAIL_FROM, // = 'Node Login <do-not-reply@example.name>',
       NS_EMAIL_TIMEOUT,
-      NL_SITE_URL = 'http://localhost:3000'
+      NL_SITE_URL = 'http://localhost:3000',
+      composeResetPasswordEmailView = composeResetPasswordEmailViewDefault,
+      composeActivationEmailView = composeActivationEmailViewDefault
     } = config;
     Object.assign(this, {
+      composeResetPasswordEmailView,
+      composeActivationEmailView,
       NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
       NS_EMAIL_TIMEOUT,
       NL_EMAIL_FROM, NL_SITE_URL
@@ -110,7 +114,7 @@ class EmailDispatcher {
   ) {
     const baseurl = this.NL_SITE_URL;
 
-    const jamilih = composeResetPasswordEmailView({
+    const jamilih = this.composeResetPasswordEmailView({
       _, jml, baseurl, name, user, passKey,
       fromText, fromURL
     });
@@ -146,7 +150,7 @@ class EmailDispatcher {
   ) {
     const baseurl = this.NL_SITE_URL;
 
-    const jamilih = composeActivationEmailView({
+    const jamilih = this.composeActivationEmailView({
       _, jml, baseurl, name, user, activationCode,
       fromText, fromURL
     });

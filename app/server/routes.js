@@ -39,6 +39,8 @@ module.exports = async function (app, config) {
     DB_URL,
     dbOpts: {DB_NAME, adapter},
     SERVE_COVERAGE,
+    composeResetPasswordEmailView,
+    composeActivationEmailView,
     showUsers,
     fromText,
     fromURL,
@@ -102,7 +104,17 @@ module.exports = async function (app, config) {
     NL_EMAIL_PASS,
     NL_EMAIL_FROM,
     NS_EMAIL_TIMEOUT,
-    NL_SITE_URL
+    NL_SITE_URL,
+    composeResetPasswordEmailView:
+      typeof composeResetPasswordEmailView === 'string'
+        // eslint-disable-next-line global-require, import/no-dynamic-require
+        ? require(composeResetPasswordEmailView)
+        : null,
+    composeActivationEmailView:
+      typeof composeActivationEmailView === 'string'
+        // eslint-disable-next-line global-require, import/no-dynamic-require
+        ? require(composeActivationEmailView)
+        : null
   });
 
   const GetRoutes = {

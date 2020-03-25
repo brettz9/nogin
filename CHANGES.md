@@ -9,6 +9,8 @@
 - Fix: Avoid chance for clashes or unnecessary data by deleting
     unactivated accounts once one is activated.
 - Enhancement: i18nize routes
+- Enhancement: Allow changing activation email or reset password email
+    template (with alternative JS template modules)
 - Enhancement: Change client-side (email) update message to mention
     that though otherwise changed, the email change awaits link activation
 - Enhancement: Allow pointing to own locales base path via `localesBasePath`
