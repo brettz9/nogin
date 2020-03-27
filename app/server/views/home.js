@@ -1,7 +1,9 @@
 /* eslint-disable global-require */
 'use strict';
 
-module.exports = function ({_, layout, user, countries, emailPattern, title}) {
+module.exports = function ({
+  _, layout, user, countries, emailPattern, requireName, title
+}) {
   return layout({
     content: [
       ['nav', {

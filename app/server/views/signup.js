@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports = function ({
-  _, layout, emptyUser, countries, emailPattern, title
+  _, layout, emptyUser, countries, emailPattern, requireName, title
 }) {
   return layout({
     content: [
@@ -10,7 +10,7 @@ module.exports = function ({
         role: 'main'
       }, [
         ...require('./account.js')({
-          _, user: emptyUser, countries, emailPattern, title
+          _, user: emptyUser, countries, emailPattern, requireName, title
         }),
         require('./modals/alert.js')({_})
       ]]

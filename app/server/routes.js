@@ -107,15 +107,17 @@ module.exports = async function (app, config) {
     NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
     composeResetPasswordEmailView:
-      typeof composeResetPasswordEmailView === 'string'
+      composeResetPasswordEmailView &&
+        typeof composeResetPasswordEmailView === 'string'
         // eslint-disable-next-line global-require, import/no-dynamic-require
         ? require(composeResetPasswordEmailView)
-        : null,
+        : undefined,
     composeActivationEmailView:
-      typeof composeActivationEmailView === 'string'
+      composeActivationEmailView &&
+        typeof composeActivationEmailView === 'string'
         // eslint-disable-next-line global-require, import/no-dynamic-require
         ? require(composeActivationEmailView)
-        : null
+        : undefined
   });
 
   const GetRoutes = {
@@ -207,7 +209,8 @@ module.exports = async function (app, config) {
           user,
           ...getLayoutAndTitle({_, title, template: 'home'}),
           countries: getCountries(_),
-          emailPattern
+          emailPattern,
+          requireName
         });
       }
     },
@@ -228,7 +231,8 @@ module.exports = async function (app, config) {
         },
         ...getLayoutAndTitle({_, title, template: 'signup'}),
         countries: getCountries(_),
-        emailPattern
+        emailPattern,
+        requireName
       });
     },
 
@@ -327,7 +331,7 @@ module.exports = async function (app, config) {
       // Todo[>=1.1.0]: `/users` should always be enabled when there are (read)
       //   privileges.
       if (!showUsers) {
-        pageNotFound(_);
+        pageNotFound(_, res);
         return;
       }
 
@@ -356,7 +360,7 @@ module.exports = async function (app, config) {
       }
 
       const _ = setI18n(req, res);
-      pageNotFound(_);
+      pageNotFound(_, res);
     }
   };
 
@@ -595,12 +599,11 @@ module.exports = async function (app, config) {
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
-  const wrapResult = (args, routes, cfg) => {
+  const wrapResult = (args, routes) => {
     return `
       /* globals IntlDom */
       window._ = IntlDom.i18nServer(${JSON.stringify(args)});
       window.NL_ROUTES = ${JSON.stringify(routes)};
-      window.NL_CONFIG = ${JSON.stringify(cfg)};
 `;
   };
 
@@ -616,8 +619,7 @@ module.exports = async function (app, config) {
     res.status(200).send(
       wrapResult(
         {resolvedLocale, strings},
-        routes,
-        {requireName}
+        routes
       )
     );
   });
@@ -631,11 +633,12 @@ module.exports = async function (app, config) {
    * Reverse detect the locale key from the locale value.
    * @param {Routes} routes
    * @param {string} locale
-   * @param {string} url
+   * @param {Request} req
    * @returns {string} The route code; empty string if not found
    */
-  function getRouteForLocale (routes, locale, url) {
-    const {pathname} = new URL(url);
+  function getRouteForLocale (routes, locale, req) {
+    const {pathname} = new URL(req.url, `http://${req.headers.host}`);
+
     const routeObj = Object.entries(routes).find(([, message]) => {
       return message === pathname;
     });
@@ -658,23 +661,23 @@ module.exports = async function (app, config) {
     const _ = await setI18n(req, res);
     const routes = getRoutes(_);
     // Note: We don't use middleware for this, as we need a dynamic route.
-    const route = getRouteForLocale(routes, _.resolvedLocale, req.url);
+    const route = getRouteForLocale(routes, _.resolvedLocale, req);
     if (hasOwn(PostRoutes, route)) {
       PostRoutes[route](routes, req, res);
       return;
     }
-    pageNotFound(_);
+    pageNotFound(_, res);
   });
 
   app.get('*', async function (req, res) {
     const _ = await setI18n(req, res);
     const routes = getRoutes(_);
     // Note: We don't use middleware for this, as we need a dynamic route.
-    const route = getRouteForLocale(routes, _.resolvedLocale, req.url);
+    const route = getRouteForLocale(routes, _.resolvedLocale, req);
     if (hasOwn(GetRoutes, route)) {
       GetRoutes[route](routes, req, res);
       return;
     }
-    pageNotFound(_);
+    pageNotFound(_, res);
   });
 };

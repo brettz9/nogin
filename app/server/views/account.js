@@ -1,8 +1,9 @@
-/* globals NL_CONFIG */
 /* eslint-disable global-require */
 'use strict';
 
-module.exports = function ({_, user, countries, emailPattern, title}) {
+module.exports = function ({
+  _, user, countries, emailPattern, requireName, title
+}) {
   return [
     // store the `userId` on the client side in a hidden input field
     ['input', {type: 'hidden', id: 'userId', defaultValue: user._id}],
@@ -29,7 +30,7 @@ module.exports = function ({_, user, countries, emailPattern, title}) {
             ['input', {
               type: 'text',
               autocomplete: 'name',
-              minlength: NL_CONFIG.requireName ? 3 : null,
+              minlength: requireName ? 3 : null,
               class: 'form-control', id: 'name-tf', 'data-name': 'name',
               name: 'name',
               defaultValue: user.name
