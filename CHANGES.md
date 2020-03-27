@@ -23,6 +23,7 @@
     the path passed to root (`/` by default) is used for redirecting after
     login.
 - Optimization: Cache i18n functions
+- Docs: Update coverage badge per latest coveradge
 - Refactoring: Avoid setting global `fetch` or `document` per updated
     `intl-dom`
 - Testing: Add test to ensure one can indeed to update email after
