@@ -351,11 +351,15 @@ module.exports = async function (app, config) {
       });
     },
 
-    coverage (routes, req, res) {
+    coverage (routes, req, res, next) {
       if (SERVE_COVERAGE) {
+        // Tried just this, but apparently must be used with `app.use`
+        // express.static(join(__dirname, '../../coverage'))(req, res, next);
+
         // SHOW COVERAGE HTML ON SERVER
         // We could add this in a separate file, but we'll leverage express here
-        express.static(join(__dirname, '../../coverage'))(req, res);
+        app.use(req.url, express.static(join(__dirname, '../../coverage')));
+        next(); // Now check static
         return;
       }
 
@@ -637,10 +641,12 @@ module.exports = async function (app, config) {
    * @returns {string} The route code; empty string if not found
    */
   function getRouteForLocale (routes, locale, req) {
+    const pathBeforeSlashes = /\/[^/]*/u;
     const {pathname} = new URL(req.url, `http://${req.headers.host}`);
+    const path = pathname.match(pathBeforeSlashes)[0];
 
     const routeObj = Object.entries(routes).find(([, message]) => {
-      return message === pathname;
+      return message === path;
     });
     return routeObj ? routeObj[0] : '';
   }
@@ -660,7 +666,10 @@ module.exports = async function (app, config) {
   app.post('*', async function (req, res) {
     const _ = await setI18n(req, res);
     const routes = getRoutes(_);
-    // Note: We don't use middleware for this, as we need a dynamic route.
+    // Note: We don't use separate middleware for this, as we need
+    //  a dynamic route (we could pre-build if examining all locales in
+    //  beginning, but this would need to take into account locales
+    //  reusing the same name).
     const route = getRouteForLocale(routes, _.resolvedLocale, req);
     if (hasOwn(PostRoutes, route)) {
       PostRoutes[route](routes, req, res);
@@ -669,13 +678,15 @@ module.exports = async function (app, config) {
     pageNotFound(_, res);
   });
 
-  app.get('*', async function (req, res) {
+  app.get('*', async function (req, res, next) {
     const _ = await setI18n(req, res);
     const routes = getRoutes(_);
-    // Note: We don't use middleware for this, as we need a dynamic route.
+    // Note: We don't use separate middleware for this. See comment
+    //   under `app.post('*')` on why.
     const route = getRouteForLocale(routes, _.resolvedLocale, req);
+
     if (hasOwn(GetRoutes, route)) {
-      GetRoutes[route](routes, req, res);
+      GetRoutes[route](routes, req, res, next);
       return;
     }
     pageNotFound(_, res);
