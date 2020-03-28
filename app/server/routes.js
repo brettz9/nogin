@@ -351,7 +351,7 @@ module.exports = async function (app, config) {
       });
     },
 
-    coverage (routes, req, res, next) {
+    async coverage (routes, req, res, next) {
       if (SERVE_COVERAGE) {
         // Tried just this, but apparently must be used with `app.use`
         // express.static(join(__dirname, '../../coverage'))(req, res, next);
@@ -363,7 +363,7 @@ module.exports = async function (app, config) {
         return;
       }
 
-      const _ = setI18n(req, res);
+      const _ = await setI18n(req, res);
       pageNotFound(_, res);
     }
   };

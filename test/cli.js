@@ -192,7 +192,8 @@ describe('CLI', function () {
       this.timeout(60000);
       let cliProm;
       const [
-        {text, headers}, {json}, {dynamicText}, {signupText}, {usersText}
+        {text, headers}, {json}, {dynamicText},
+        {signupText}, {usersText}, {coverageStatus, coverageText}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -217,7 +218,7 @@ describe('CLI', function () {
           }
           try {
             const [
-              res, staticRes, dynamicRes, signupRes, usersRes
+              res, staticRes, dynamicRes, signupRes, usersRes, covRes
             ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
               // Within `/test/fixtures`
@@ -232,20 +233,30 @@ describe('CLI', function () {
               //   we would ideally test these in the UI as well,
               //   a unit test should be adequate given the burden of
               //   setting up another Cypress instance)
-              fetch(`http://localhost:${testPort}/users`)
+              fetch(`http://localhost:${testPort}/users`),
+              // Check static coverage
+              fetch(`http://localhost:${testPort}/coverage`)
             ]);
             resolve([
               {headers: res.headers, text: await res.text()},
               {json: await staticRes.json()},
               {dynamicText: await dynamicRes.text()},
               {signupText: await signupRes.text()},
-              {usersText: await usersRes.text()}
+              {usersText: await usersRes.text()},
+              {coverageStatus: covRes.status, coverageText: await covRes.text()}
             ]);
           } catch (err) {
             reject(err);
           }
         });
       });
+      const coverageDoc = (new JSDOM(coverageText)).window.document;
+      const msg = coverageDoc.querySelector('[data-name=four04]').textContent;
+      expect(coverageStatus).to.equal(404);
+      expect(msg).contains(
+        'the page or resource you are searching for is currently unavailable'
+      );
+
       const {stdout, stderr} = await cliProm;
       console.log('text', text);
       expect(headers.get('x-middleware-gets-options')).to.equal('favicon.ico');
