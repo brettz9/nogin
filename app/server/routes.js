@@ -1,6 +1,6 @@
 'use strict';
 
-const {join} = require('path');
+const {join, resolve: pathResolve} = require('path');
 
 const express = require('express');
 const fileFetch = require('file-fetch');
@@ -49,7 +49,8 @@ module.exports = async function (app, config) {
     localesBasePath,
     postLoginRedirectPath,
     customRoute = [],
-    opts
+    opts,
+    cwd
   } = config;
 
   const setI18n = i18n(localesBasePath);
@@ -110,13 +111,13 @@ module.exports = async function (app, config) {
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'
         // eslint-disable-next-line global-require, import/no-dynamic-require
-        ? require(composeResetPasswordEmailView)
+        ? require(pathResolve(cwd, composeResetPasswordEmailView))
         : undefined,
     composeActivationEmailView:
       composeActivationEmailView &&
         typeof composeActivationEmailView === 'string'
         // eslint-disable-next-line global-require, import/no-dynamic-require
-        ? require(composeActivationEmailView)
+        ? require(pathResolve(cwd, composeActivationEmailView))
         : undefined
   });
 

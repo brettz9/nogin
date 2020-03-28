@@ -8,7 +8,7 @@ import fetch from 'node-fetch';
 import escStringRegex from 'escape-string-regexp';
 
 import {
-  removeAccounts, addAccounts, readAccounts
+  removeAccounts, addAccounts, readAccounts, updateAccounts
 } from '../app/server/modules/db-basic.js';
 
 import nodeLogin from '../nogin.js';
@@ -17,7 +17,11 @@ import spawnPromise from './utilities/spawnPromise.js';
 
 import addUsersJSON from './fixtures/addUsers.json';
 
-const {secret} = nodeLogin;
+const {
+  secret,
+  NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
+  NL_EMAIL_FROM, NS_EMAIL_TIMEOUT
+} = nodeLogin;
 
 const stripPromisesWarning = (s) => {
   return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
@@ -259,18 +263,22 @@ describe('CLI', function () {
   //  or before another instance of Cypress runs, both of which seem
   //  like unnecessary overhead since we are not testing post-load
   //  behavior/JavaScript.
-  it(
+  it.only(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(70000);
+      this.timeout(80000);
+      // Adding to ensure there is a fresh `signup` below
+      await removeAccounts({all: true});
       let cliProm;
       const [
         {text, headers}, {json}, {dynamicText},
         {signupText}, {usersText},
         {coverageStatus, coverageText},
-        {postStatus, postText},
+        {badURLPostStatus, badURLPostText},
         {updateAccountText},
-        {homeStatus, homeText}
+        {homeStatus, homeText},
+        {signupPostStatus},
+        {lostPasswordPostStatus}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -285,10 +293,32 @@ describe('CLI', function () {
           '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
           '--customRoute', 'en-US=home=/updateAccount',
           '--customRoute', 'en-US=logout=/log-me-out',
+
+          '--composeResetPasswordEmailView',
+          './test/fixtures/views/composeResetPasswordEmailView.js',
+          '--composeActivationEmailView',
+          './test/fixtures/views/composeActivationEmailView.js',
+
+          // These seven are needed for the previous two
+          '--fromText',
+          'brettz9',
+          '--fromURL',
+          'https://github.com/brettz9/nogin',
+          '--NL_EMAIL_FROM',
+          NL_EMAIL_FROM,
+          '--NS_EMAIL_TIMEOUT',
+          NS_EMAIL_TIMEOUT,
+          '--NL_EMAIL_HOST',
+          NL_EMAIL_HOST,
+          '--NL_EMAIL_USER',
+          NL_EMAIL_USER,
+          '--NL_EMAIL_PASS',
+          NL_EMAIL_PASS,
+
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 50000, async (stdout) => {
+        ], 60000, async (stdout) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
@@ -298,7 +328,8 @@ describe('CLI', function () {
           try {
             const [
               res, staticRes, dynamicRes, signupRes, usersRes,
-              covRes, postRes, updateAccountRes, homeRes
+              covRes, postRes, updateAccountRes, homeRes,
+              signupPostRes
             ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
               // Within `/test/fixtures`
@@ -323,8 +354,41 @@ describe('CLI', function () {
               // Check that `/updateAccount` works as `/home` (redirects)
               fetch(`http://localhost:${testPort}/updateAccount`),
               // Check that `/home` is no longer available
-              fetch(`http://localhost:${testPort}/home`)
+              fetch(`http://localhost:${testPort}/home`),
+              // Check for custom `composeResetPasswordEmailView`
+              fetch(`http://localhost:${testPort}/signup`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  name: 'Brett',
+                  email: NL_EMAIL_USER,
+                  user: 'bretto',
+                  pass: NL_EMAIL_PASS,
+                  country: 'US'
+                })
+              })
             ]);
+
+            // So we lost password can be requested
+            await updateAccounts({
+              user: ['bretto'],
+              activated: [true]
+            })[0];
+            // Check for custom `composeActivationEmailView`
+            const lostPasswordPostRes = await fetch(
+              `http://localhost:${testPort}/lost-password`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  email: NL_EMAIL_USER
+                })
+              }
+            );
             resolve([
               {headers: res.headers, text: await res.text()},
               {json: await staticRes.json()},
@@ -335,15 +399,26 @@ describe('CLI', function () {
                 coverageStatus: covRes.status,
                 coverageText: await covRes.text()
               },
-              {postStatus: postRes.status, postText: await postRes.text()},
+              {
+                badURLPostStatus: postRes.status,
+                badURLPostText: await postRes.text()
+              },
               {updateAccountText: await updateAccountRes.text()},
-              {homeStatus: homeRes.status, homeText: await homeRes.text()}
+              {homeStatus: homeRes.status, homeText: await homeRes.text()},
+              {
+                signupPostStatus: signupPostRes.status
+              },
+              {
+                lostPasswordPostStatus: lostPasswordPostRes.status
+              }
             ]);
           } catch (err) {
             reject(err);
           }
         });
       });
+      const {stdout, stderr} = await cliProm;
+
       const coverageDoc = (new JSDOM(coverageText)).window.document;
       const covMsg = coverageDoc.querySelector(
         '[data-name=four04]'
@@ -353,9 +428,13 @@ describe('CLI', function () {
         'the page or resource you are searching for is currently unavailable'
       );
 
-      const postDoc = (new JSDOM(postText)).window.document;
+      console.log('stderr', stderr);
+      expect(signupPostStatus).to.equal(200);
+      expect(lostPasswordPostStatus).to.equal(200);
+
+      const postDoc = (new JSDOM(badURLPostText)).window.document;
       const postMsg = postDoc.querySelector('[data-name=four04]').textContent;
-      expect(postStatus).to.equal(404);
+      expect(badURLPostStatus).to.equal(404);
       expect(postMsg).contains(
         'the page or resource you are searching for is currently unavailable'
       );
@@ -369,7 +448,6 @@ describe('CLI', function () {
         'the page or resource you are searching for is currently unavailable'
       );
 
-      const {stdout, stderr} = await cliProm;
       console.log('text', text);
       expect(headers.get('x-middleware-gets-options')).to.equal('favicon.ico');
       expect(headers.get('x-middleware-gets-req')).to.equal('/');

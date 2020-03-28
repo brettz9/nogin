@@ -205,6 +205,7 @@ exports.createServer = async function (options) {
     localesBasePath,
     postLoginRedirectPath,
     customRoute,
+    cwd,
     opts,
     // User is using instrumenting
     triggerCoverage: JS_DIR !== '/app/public'

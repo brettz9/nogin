@@ -16,7 +16,7 @@ module.exports = function ({
         _('ClickToResetPassword')
       ]],
       ['br', 'br'],
-      _('Cheers'), ['br'],
+      _('Regards'), ['br'],
       ['a', {
         href: fromURL
       }, [

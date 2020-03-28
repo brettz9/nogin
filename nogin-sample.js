@@ -6,5 +6,5 @@ module.exports = {
   NL_EMAIL_USER: 'me@example.name',
   NL_EMAIL_PASS: 'abc123456',
   NL_EMAIL_FROM: 'Node Login <do-not-reply@example.name>',
-  NS_EMAIL_TIMEOUT: 20000
+  NS_EMAIL_TIMEOUT: 50000
 };

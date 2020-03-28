@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function ({
-  _, jml, baseurl, name, user, activationCode, fromText, fromURL
+  _, jml, baseurl, name, user, passKey, fromText, fromURL
 }) {
   return {$document: {
     body: [
@@ -11,12 +11,12 @@ module.exports = function ({
       }),
       ['br', 'br'],
       ['a', {
-        href: `${baseurl}/activation?c=${activationCode}`
+        href: `${baseurl}/reset-password?key=${passKey}`
       }, [
-        _('ClickToActivateAccount')
+        _('ClickToResetPassword')
       ]],
       ['br', 'br'],
-      _('Regards'), ['br'],
+      'See you later alligator', ['br'],
       ['a', {
         href: fromURL
       }, [

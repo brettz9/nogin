@@ -20,7 +20,7 @@ const composeActivationEmailViewDefault = require(
 * @property {string} [NL_EMAIL_HOST='smtp.gmail.com']
 * @property {string} NL_EMAIL_USER E.g., your-email-address@gmail.com
 * @property {string} NL_EMAIL_PASS E.g., 1234
-* @property {string} [NL_EMAIL_FROM='Node Login <do-not-reply@gmail.com>']
+* @property {string} NL_EMAIL_FROM
 * @property {string} [NL_SITE_URL='http://localhost:3000']
 */
 

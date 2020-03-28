@@ -16,7 +16,7 @@ module.exports = function ({
         _('ClickToActivateAccount')
       ]],
       ['br', 'br'],
-      _('Regards'), ['br'],
+      'See you later alligator', ['br'],
       ['a', {
         href: fromURL
       }, [
