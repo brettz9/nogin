@@ -25,7 +25,11 @@ function noVerb () {
     return;
   }
 
-  createServer(options);
+  try {
+    createServer(options);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 let verb = process.argv[2];

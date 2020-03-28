@@ -181,6 +181,79 @@ describe('CLI', function () {
     }
   );
 
+  describe('Erring with bad locale routes', function () {
+    it('Throw with non-distinct route paths', async function () {
+      this.timeout(30000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--localesBasePath', 'test/fixtures/locales/non-distinct',
+        '--config', ''
+      ], 20000);
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.contain(
+        'Localized route paths must be distinct within a locale'
+      );
+    });
+    it('Throw with reserved routes', async function () {
+      this.timeout(30000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--localesBasePath', 'test/fixtures/locales/reserved-routes',
+        '--config', ''
+      ], 20000);
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.contain(
+        'Localized routes must not use reserved routes (/_lang)'
+      );
+    });
+    it('Throw with paths possessing dots', async function () {
+      this.timeout(30000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--localesBasePath', 'test/fixtures/locales/path-dots',
+        '--config', ''
+      ], 20000);
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.contain(
+        'Localized routes must have an initial slash but no ' +
+          'dots or slashes afterward.'
+      );
+    });
+    it('Throw with paths possessing extra slashes', async function () {
+      this.timeout(30000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--localesBasePath', 'test/fixtures/locales/path-slashes',
+        '--config', ''
+      ], 20000);
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        'Beginning routes...\n' +
+        'Awaiting internationalization and logging...\n'
+      );
+      expect(stripPromisesWarning(stderr)).to.contain(
+        'Localized routes must have an initial slash but no ' +
+          'dots or slashes afterward.'
+      );
+    });
+  });
+
   // While we could make a full-blown UI test out of this, it would
   //  require setting up another server either before Cypress runs,
   //  or before another instance of Cypress runs, both of which seem

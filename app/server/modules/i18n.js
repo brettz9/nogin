@@ -9,7 +9,7 @@ const fileFetch = require('file-fetch'); // For `intl-dom`
 setFetch(fileFetch);
 setDocument((new JSDOM()).window.document);
 
-const localeMap = new Map();
+const localeMaps = {};
 const availableLocales = readdirSync(join(__dirname, '../_locales'));
 
 module.exports = function (localesBasePath = 'app/server') {
@@ -23,8 +23,11 @@ module.exports = function (localesBasePath = 'app/server') {
 
     const langKey = JSON.stringify(locales);
     let _;
-    if (localeMap.has(langKey)) {
-      _ = localeMap.get(langKey);
+    if (!localeMaps[localesBasePath]) {
+      localeMaps[localesBasePath] = new Map();
+    }
+    if (localeMaps[localesBasePath].has(langKey)) {
+      _ = localeMaps[localesBasePath].get(langKey);
     } else {
       // Todo: Set this on req and genuinely use as middleware
       _ = await i18n({
@@ -34,7 +37,7 @@ module.exports = function (localesBasePath = 'app/server') {
         locales,
         localesBasePath
       });
-      localeMap.set(langKey, _);
+      localeMaps[localesBasePath].set(langKey, _);
     }
 
     // Todo: Detect template requested from `req.url`

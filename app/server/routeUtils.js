@@ -106,7 +106,7 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
             `Localized routes must not use reserved routes (${message})`
           );
         }
-        if (!(/\/[^./]*$/u).test(message)) {
+        if (!(/^\/[^./]*$/u).test(message)) {
           throw new Error(
             'Localized routes must have an initial slash but no dots ' +
               'or slashes afterward.'

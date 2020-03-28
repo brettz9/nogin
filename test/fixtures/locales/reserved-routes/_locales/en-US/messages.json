@@ -1,0 +1,1184 @@
+{
+  "body": {
+
+    "ROOT (BUSINESS)": true,
+    "PleaseLoginToAccount": {
+      "message": "Hello - Please Login To Your Account"
+    },
+
+    "404 (TEMPLATES)": true,
+    "SorryUnavailable": {
+      "message": "I'm sorry, the page or resource you are searching for is currently unavailable."
+    },
+
+    "404 (BUSINESS LOGIC)": true,
+    "PageNotFound": {
+      "message": "Page Not Found"
+    },
+
+
+    "ALERT (TEMPLATES)": true,
+    "OK": {
+      "message": "OK"
+    },
+
+
+    "CONFIRM (TEMPLATES)": true,
+    "Ok": {
+      "message": "Ok"
+    },
+    "Cancel": {
+      "message": "Cancel"
+    },
+
+
+    "FORM-ERRORS (TEMPLATES)": true,
+    "Whoops": {
+      "message": "Whoops!"
+    },
+    "LooksLikeProblem": {
+      "message": "It looks like there was a problem."
+    },
+
+
+    "LOST-PASSWORD (TEMPLATES)": true,
+    "RetrievePassword": {
+      "message": "Retrieve Password"
+    },
+    "PleaseEnterEmail": {
+      "message": "Please enter the email address associated with your account"
+    },
+    "Submit": {
+      "message": "Submit"
+    },
+
+    "LOST-PASSWORD (TEMPLATES)": true,
+    "UnableToDispatchPasswordReset": {
+      "message": "Unable to dispatch password reset"
+    },
+
+
+    "RESET-PASSWORD (TEMPLATES)": true,
+    "ResetPassword": {
+      "message": "Reset Password"
+    },
+    "PleaseEnterNewPassword": {
+      "message": "Please enter your new password"
+    },
+    "ACloseButton": {
+      "message": "×"
+    },
+
+    "RESET-PASSWORD (BUSINESS-LOGIC)": true,
+    "UnableToUpdatePassword": {
+      "message": "Unable to update password"
+    },
+    "ResetPassword": {
+      "message": "Reset Password"
+    },
+
+    "RESET-PASSWORD (CLIENT)": true,
+    "ShouldBeMinimumLength": {
+      "message": "Password Should Be At Least 6 Characters"
+    },
+    "YourPasswordHasBeenReset": {
+      "message": "Your password has been reset."
+    },
+    "SomethingWentWrongPleaseTryAgain": {
+      "message": "I'm sorry something went wrong, please try again."
+    },
+
+    "LOGIN (TEMPLATES)": true,
+    "Hello": {
+      "message": "Hello!"
+    },
+    "PleaseLoginToYourAccount": {
+      "message": "Please Login To Your Account"
+    },
+    "Username": {
+      "message": "Username"
+    },
+    "Password": {
+      "message": "Password"
+    },
+    "RememberMe": {
+      "message": "Remember Me"
+    },
+    "SignIn": {
+      "message": "Sign In"
+    },
+    "ForgotYourPassword": {
+      "message": "Forgot Your Password?"
+    },
+    "CreateAnAccount": {
+      "message": "Create An Account"
+    },
+
+    "LOGIN (CLIENT)": true,
+    "PleaseEnterValidUserName": {
+      "message": "Please enter a valid username"
+    },
+    "PleaseEnterValidPassword": {
+      "message": "Please enter a valid password"
+    },
+    "LoginFailure": {
+      "message": "Login Failure"
+    },
+    "MismatchUserDataFormat": {
+      "message": "There is a mismatch in the user data format. Please contact the site administrator with this message."
+    },
+    "PleaseCheckYourUserNameOrPassword": {
+      "message": "Please check your username and/or password"
+    },
+    "PleaseEnterValidEmailAddress": {
+      "message": "Please enter a valid email address"
+    },
+    "LinkToResetPasswordMailed": {
+      "message": "A link to reset your password was emailed to you."
+    },
+    "EmailNotFound": {
+      "message": "Email not found. Are you sure you entered it correctly?"
+    },
+    "ProblemTryAgainLater": {
+      "message": "Sorry. There was a problem, please try again later."
+    },
+
+    "ACCOUNT (TEMPLATES)": true,
+    "PleaseTellAboutYourself": {
+      "message": "Please tell us a little about yourself."
+    },
+    "Name": {
+      "message": "Name"
+    },
+    "Email": {
+      "message": "Email"
+    },
+    "Location": {
+      "message": "Location"
+    },
+    "ConfirmPassword": {
+      "message": "Confirm password"
+    },
+
+    "HOME (TEMPLATES)": true,
+    "ControlPanel": {
+      "message": "Control Panel"
+    },
+    "SignOut": {
+      "message": "Sign Out"
+    },
+    "ErrorFormat": {
+      "message": "{text} :: {statusText}"
+    },
+
+    "CLI": true,
+    "Erred": {
+      "message": "Erred"
+    },
+    "Account": {
+      "message": "Account {acct}"
+    },
+    "RemovedAccounts": {
+      "message": "Removed {deletedCount} accounts!"
+    },
+    "UpdatedAccounts": {
+      "message": "Updated {acctLength} accounts: {accts}!"
+    },
+    "AccountJoiner": {
+      "message": ", "
+    },
+    "AddedAccounts": {
+      "message": "Added {acctLength} accounts: {accts}!"
+    },
+
+    "HOME (BUSINESS LOGIC)": true,
+    "ErrorUpdatingAccount": {
+      "message": "Error Updating Account"
+    },
+
+    "HOME (CLIENT)": true,
+    "yourAccountHasBeenUpdated": {
+      "message": "Your account has been updated."
+    },
+    "yourAccountHasBeenUpdatedButEmail": {
+      "message": "Your account has been updated but your email address will not be changed until you visit the activation link sent to you."
+    },
+    "success": {
+      "message": "Success!"
+    },
+    "error": {
+      "message": "Error"
+    },
+    "loggedOut": {
+      "message": "You are now logged out.{lb}Redirecting you to the site root."
+    },
+    "ErrorLoggingOut": {
+      "message": "There was a problem logging out.{lb}Redirecting you to the site root."
+    },
+    "SessionLost": {
+      "message": "Your session has been lost.{lb}Please log in and try again. You will now be redirected."
+    },
+    "ProblemDispatchingLink": {
+      "message": "While your account was otherwise updated, there was an error sending out an activation link to your targeted email (and until the link is activated, your account won't show the email as updated).{lb}If you indicated your desired new email address correctly, you should try updating again later as there has likely been a temporary server problem.{lb}If you instead mistyped your email, you can submit another update now to correct it."
+    },
+    "accountDeleted": {
+      "message": "Your account has been deleted.{lb}Redirecting you to the site root."
+    },
+    "deleteAccount": {
+      "message": "Delete Account"
+    },
+    "sureWantDeleteAccount": {
+      "message": "Are you sure you want to delete your account?"
+    },
+    "delete": {
+      "message": "Delete"
+    },
+    "cancel": {
+      "message": "Cancel"
+    },
+    "accountSettings": {
+      "message": "Account Settings"
+    },
+    "hereAreCurrentSettings": {
+      "message": "Here are the current settings for your account."
+    },
+    "deleteText": {
+      "message": "Delete"
+    },
+    "updateText": {
+      "message": "Update"
+    },
+    "notice": {
+      "message": "Notice"
+    },
+    "confirm": {
+      "message": "Confirm"
+    },
+    "AppearsChangingEmail": {
+      "message": "It appears you wish to change from your previously saved email address.{lb}Note that if you do opt to continue and change it, we will not treat your email account as changed unless and until you confirm by visiting the link in the email sent to you in the next 24 hours."
+    },
+
+    "ACCOUNT VALIDATOR (CLIENT)": true,
+    "emailAddressAlreadyInUse": {
+      "message": "That email address is already in use."
+    },
+    "userNameAlreadyInUse": {
+      "message": "That username is already in use."
+    },
+    "PleaseEnterName": {
+      "message": "Please enter a sufficiently long name"
+    },
+    "PleaseEnterValidEmail": {
+      "message": "Please Enter A Valid Email"
+    },
+    "PleaseChooseUserName": {
+      "message": "Please Choose A Username"
+    },
+    "PasswordMinimumLength": {
+      "message": "Password Should Be At Least 6 Characters"
+    },
+    "PasswordsDontMatch": {
+      "message": "Passwords don't match"
+    },
+    "FailureSubmittingUserInfo": {
+      "message": "There was a failure submitting your info.{lb}Please check your information and submit again."
+    },
+
+    "SIGNUP (CLIENT)": true,
+    "PleaseTellUsAboutYourself": {
+      "message": "Please tell us a little about yourself"
+    },
+    "AccountCreatedSignup": {
+      "message": "Account Created!"
+    },
+    "PleaseCheckEmailForVerificationLink": {
+      "message": "Please check your email for a verification link which will confirm your email address.{lb}Click OK to return to the login page."
+    },
+
+
+    "USERS (TEMPLATES)": true,
+    "AccountCreated": {
+      "message": "Account Created"
+    },
+    "NumberAbbreviated": {
+      "message": "#"
+    },
+    "Users": {
+      "message": "Users"
+    },
+
+    "USERS (BUSINESS LOGIC)": true,
+    "AccountList": {
+      "message": "Account List"
+    },
+
+
+    "SIGNUP (BUSINESS LOGIC)": true,
+    "Signup": {
+      "message": "Signup"
+    },
+    "DispatchActivationLinkError": {
+      "message": "There was an error sending out your activation link.{lb}If you did enter a valid email, the error may have been due to a temporary server problem, so please try again later. If you think you may have entered an invalid email, you may try signing up again."
+    },
+
+    "ACTIVATION (BUSINESS LOGIC)": true,
+    "ActivationCodeRequired": {
+      "message": "Activation code required.{lb}Click OK to return to the login page."
+    },
+    "Activation": {
+      "message": "Activation"
+    },
+
+    "ACTIVATION (CLIENT)": true,
+    "ClickToActivateAccount": {
+      "message": "Please click here to activate your account"
+    },
+    "Activated": {
+      "message": "Activated!"
+    },
+    "yourAccountHasBeenActivated": {
+      "message": "Your account has been activated.{lb}Click OK to return to the login page."
+    },
+
+    "ACTIVATION FAILED (CLIENT)": true,
+    "ActivationFailed": {
+      "message": "Activation Failed."
+    },
+    "activationCodeProvidedInvalid": {
+      "message": "The activation code provided was invalid.{lb}Click OK to return to the login page."
+    },
+
+    "EMAIL DISPATCHER (BUSINESS LOGIC)": true,
+    "PasswordReset": {
+      "message": "Password Reset"
+    },
+    "HiPerson": {
+      "message": "Hi {name}"
+    },
+    "YourUserNameIs": {
+      "message": "Your username is {user}"
+    },
+    "ClickToResetPassword": {
+      "message": "Click here to reset your password"
+    },
+    "Cheers": {
+      "message": "Cheers,"
+    },
+    "AccountActivation": {
+      "message": "Account Activation"
+    },
+
+    "APP.JS (BUSINESS LOGIC)": true,
+    "express_server_listening": {
+      "message": "Express server listening on port {port}"
+    },
+    "noConfigFileDetected": {
+      "message": "No config file detected at {config}; supply a `null` `config` to avoid this message."
+    },
+    "ProductionNeedsUserAndPass": {
+      "message": "A production environment requires setting `DB_USER` and `DB_PASS`."
+    },
+
+    "DATABASE (BUSINESS LOGIC)": true,
+    "ConnectedToDatabase": {
+      "message": "{adapter} :: connected to database :: \"{DB_NAME}\""
+    },
+    "index": {
+      "message": "index: {i} {index}"
+    },
+
+    "ROUTER (BUSINESS LOGIC)": true,
+    "ServerError": {
+      "message": "Server Error"
+    },
+    "ERROR": {
+      "message": "ERROR:"
+    },
+    "RecordNotFound": {
+      "message": "Record not found"
+    },
+    "BeginningRoutes": {
+      "message": "Beginning routes..."
+    },
+    "BeginningServer": {
+      "message": "Beginning server..."
+    },
+    "AwaitingI18NAndLogging": {
+      "message": "Awaiting internationalization and logging..."
+    },
+    "AwaitingDatabaseAccountConnection": {
+      "message": "Awaiting database account connection..."
+    },
+    "user-not-found": {
+      "message": "User not found"
+    },
+    "unexpected-pass-version-error": {
+      "message": "Unexpected passVer error"
+    },
+    "bad-password": {
+      "message": "Bad password"
+    },
+    "message": {
+      "description": "Allows for using `log` and its checks with a raw message.",
+      "message": "{message}"
+    },
+    "route_root": {
+      "message": "/"
+    },
+    "route_logout": {
+      "message": "/_lang"
+    },
+    "route_home": {
+      "message": "/home"
+    },
+    "route_signup": {
+      "message": "/signup"
+    },
+    "route_activation": {
+      "message": "/activation"
+    },
+    "route_lostPassword": {
+      "message": "/lost-password"
+    },
+    "route_resetPassword": {
+      "message": "/reset-password"
+    },
+    "route_users": {
+      "message": "/users"
+    },
+    "route_delete": {
+      "message": "/delete"
+    },
+    "route_reset": {
+      "message": "/reset"
+    },
+    "route_coverage": {
+      "message": "/coverage"
+    },
+
+    "COUNTRIES (BUSINESS LOGIC)": true,
+    "PleaseSelectACountry": {
+      "message": "Please select a country"
+    },
+    "countryAF": {
+      "message": "Afghanistan"
+    },
+    "countryAL": {
+      "message": "Albania"
+    },
+    "countryDZ": {
+      "message": "Algeria"
+    },
+    "countryAS": {
+      "message": "American Samoa"
+    },
+    "countryAD": {
+      "message": "Andorra"
+    },
+    "countryAO": {
+      "message": "Angola"
+    },
+    "countryAI": {
+      "message": "Anguilla"
+    },
+    "countryAQ": {
+      "message": "Antarctica"
+    },
+    "countryAG": {
+      "message": "Antigua and Barbuda"
+    },
+    "countryAR": {
+      "message": "Argentina"
+    },
+    "countryAM": {
+      "message": "Armenia"
+    },
+    "countryAW": {
+      "message": "Aruba"
+    },
+    "countryAU": {
+      "message": "Australia"
+    },
+    "countryAT": {
+      "message": "Austria"
+    },
+    "countryAZ": {
+      "message": "Azerbaijan"
+    },
+    "countryBS": {
+      "message": "Bahamas"
+    },
+    "countryBH": {
+      "message": "Bahrain"
+    },
+    "countryBD": {
+      "message": "Bangladesh"
+    },
+    "countryBB": {
+      "message": "Barbados"
+    },
+    "countryBY": {
+      "message": "Belarus"
+    },
+    "countryBE": {
+      "message": "Belgium"
+    },
+    "countryBZ": {
+      "message": "Belize"
+    },
+    "countryBJ": {
+      "message": "Benin"
+    },
+    "countryBM": {
+      "message": "Bermuda"
+    },
+    "countryBT": {
+      "message": "Bhutan"
+    },
+    "countryBO": {
+      "message": "Bolivia"
+    },
+    "countryBA": {
+      "message": "Bosnia and Herzegowina"
+    },
+    "countryBW": {
+      "message": "Botswana"
+    },
+    "countryBV": {
+      "message": "Bouvet Island"
+    },
+    "countryBR": {
+      "message": "Brazil"
+    },
+    "countryIO": {
+      "message": "British Indian Ocean Territory"
+    },
+    "countryBN": {
+      "message": "Brunei Darussalam"
+    },
+    "countryBG": {
+      "message": "Bulgaria"
+    },
+    "countryBF": {
+      "message": "Burkina Faso"
+    },
+    "countryBI": {
+      "message": "Burundi"
+    },
+    "countryKH": {
+      "message": "Cambodia"
+    },
+    "countryCM": {
+      "message": "Cameroon"
+    },
+    "countryCA": {
+      "message": "Canada"
+    },
+    "countryCV": {
+      "message": "Cape Verde"
+    },
+    "countryKY": {
+      "message": "Cayman Islands"
+    },
+    "countryCF": {
+      "message": "Central African Republic"
+    },
+    "countryTD": {
+      "message": "Chad"
+    },
+    "countryCL": {
+      "message": "Chile"
+    },
+    "countryCN": {
+      "message": "China"
+    },
+    "countryCX": {
+      "message": "Christmas Island"
+    },
+    "countryCC": {
+      "message": "Cocos (Keeling) Islands"
+    },
+    "countryCO": {
+      "message": "Colombia"
+    },
+    "countryKM": {
+      "message": "Comoros"
+    },
+    "countryCG": {
+      "message": "Congo"
+    },
+    "countryCD": {
+      "message": "Congo, the Democratic Republic of the"
+    },
+    "countryCK": {
+      "message": "Cook Islands"
+    },
+    "countryCR": {
+      "message": "Costa Rica"
+    },
+    "countryCI": {
+      "message": "Cote d'Ivoire"
+    },
+    "countryHR": {
+      "message": "Croatia (Hrvatska)"
+    },
+    "countryCU": {
+      "message": "Cuba"
+    },
+    "countryCY": {
+      "message": "Cyprus"
+    },
+    "countryCZ": {
+      "message": "Czech Republic"
+    },
+    "countryDK": {
+      "message": "Denmark"
+    },
+    "countryDJ": {
+      "message": "Djibouti"
+    },
+    "countryDM": {
+      "message": "Dominica"
+    },
+    "countryDO": {
+      "message": "Dominican Republic"
+    },
+    "countryTP": {
+      "message": "East Timor"
+    },
+    "countryEC": {
+      "message": "Ecuador"
+    },
+    "countryEG": {
+      "message": "Egypt"
+    },
+    "countrySV": {
+      "message": "El Salvador"
+    },
+    "countryGQ": {
+      "message": "Equatorial Guinea"
+    },
+    "countryER": {
+      "message": "Eritrea"
+    },
+    "countryEE": {
+      "message": "Estonia"
+    },
+    "countryET": {
+      "message": "Ethiopia"
+    },
+    "countryFK": {
+      "message": "Falkland Islands (Malvinas)"
+    },
+    "countryFO": {
+      "message": "Faroe Islands"
+    },
+    "countryFJ": {
+      "message": "Fiji"
+    },
+    "countryFI": {
+      "message": "Finland"
+    },
+    "countryFR": {
+      "message": "France"
+    },
+    "countryFX": {
+      "message": "France, Metropolitan"
+    },
+    "countryGF": {
+      "message": "French Guiana"
+    },
+    "countryPF": {
+      "message": "French Polynesia"
+    },
+    "countryTF": {
+      "message": "French Southern Territories"
+    },
+    "countryGA": {
+      "message": "Gabon"
+    },
+    "countryGM": {
+      "message": "Gambia"
+    },
+    "countryGE": {
+      "message": "Georgia"
+    },
+    "countryDE": {
+      "message": "Germany"
+    },
+    "countryGH": {
+      "message": "Ghana"
+    },
+    "countryGI": {
+      "message": "Gibraltar"
+    },
+    "countryGR": {
+      "message": "Greece"
+    },
+    "countryGL": {
+      "message": "Greenland"
+    },
+    "countryGD": {
+      "message": "Grenada"
+    },
+    "countryGP": {
+      "message": "Guadeloupe"
+    },
+    "countryGU": {
+      "message": "Guam"
+    },
+    "countryGT": {
+      "message": "Guatemala"
+    },
+    "countryGN": {
+      "message": "Guinea"
+    },
+    "countryGW": {
+      "message": "Guinea-Bissau"
+    },
+    "countryGY": {
+      "message": "Guyana"
+    },
+    "countryHT": {
+      "message": "Haiti"
+    },
+    "countryHM": {
+      "message": "Heard and Mc Donald Islands"
+    },
+    "countryVA": {
+      "message": "Holy See (Vatican City State)"
+    },
+    "countryHN": {
+      "message": "Honduras"
+    },
+    "countryHK": {
+      "message": "Hong Kong"
+    },
+    "countryHU": {
+      "message": "Hungary"
+    },
+    "countryIS": {
+      "message": "Iceland"
+    },
+    "countryIN": {
+      "message": "India"
+    },
+    "countryID": {
+      "message": "Indonesia"
+    },
+    "countryIR": {
+      "message": "Iran (Islamic Republic of)"
+    },
+    "countryIQ": {
+      "message": "Iraq"
+    },
+    "countryIE": {
+      "message": "Ireland"
+    },
+    "countryIL": {
+      "message": "Israel"
+    },
+    "countryIT": {
+      "message": "Italy"
+    },
+    "countryJM": {
+      "message": "Jamaica"
+    },
+    "countryJP": {
+      "message": "Japan"
+    },
+    "countryJO": {
+      "message": "Jordan"
+    },
+    "countryKZ": {
+      "message": "Kazakhstan"
+    },
+    "countryKE": {
+      "message": "Kenya"
+    },
+    "countryKI": {
+      "message": "Kiribati"
+    },
+    "countryKP": {
+      "message": "Korea, Democratic People's Republic of"
+    },
+    "countryKR": {
+      "message": "Korea, Republic of"
+    },
+    "countryKW": {
+      "message": "Kuwait"
+    },
+    "countryKG": {
+      "message": "Kyrgyzstan"
+    },
+    "countryLA": {
+      "message": "Lao People's Democratic Republic"
+    },
+    "countryLV": {
+      "message": "Latvia"
+    },
+    "countryLB": {
+      "message": "Lebanon"
+    },
+    "countryLS": {
+      "message": "Lesotho"
+    },
+    "countryLR": {
+      "message": "Liberia"
+    },
+    "countryLY": {
+      "message": "Libyan Arab Jamahiriya"
+    },
+    "countryLI": {
+      "message": "Liechtenstein"
+    },
+    "countryLT": {
+      "message": "Lithuania"
+    },
+    "countryLU": {
+      "message": "Luxembourg"
+    },
+    "countryMO": {
+      "message": "Macau"
+    },
+    "countryMK": {
+      "message": "Macedonia, The Former Yugoslav Republic of"
+    },
+    "countryMG": {
+      "message": "Madagascar"
+    },
+    "countryMW": {
+      "message": "Malawi"
+    },
+    "countryMY": {
+      "message": "Malaysia"
+    },
+    "countryMV": {
+      "message": "Maldives"
+    },
+    "countryML": {
+      "message": "Mali"
+    },
+    "countryMT": {
+      "message": "Malta"
+    },
+    "countryMH": {
+      "message": "Marshall Islands"
+    },
+    "countryMQ": {
+      "message": "Martinique"
+    },
+    "countryMR": {
+      "message": "Mauritania"
+    },
+    "countryMU": {
+      "message": "Mauritius"
+    },
+    "countryYT": {
+      "message": "Mayotte"
+    },
+    "countryMX": {
+      "message": "Mexico"
+    },
+    "countryFM": {
+      "message": "Micronesia, Federated States of"
+    },
+    "countryMD": {
+      "message": "Moldova, Republic of"
+    },
+    "countryMC": {
+      "message": "Monaco"
+    },
+    "countryMN": {
+      "message": "Mongolia"
+    },
+    "countryMS": {
+      "message": "Montserrat"
+    },
+    "countryMA": {
+      "message": "Morocco"
+    },
+    "countryMZ": {
+      "message": "Mozambique"
+    },
+    "countryMM": {
+      "message": "Myanmar"
+    },
+    "countryNA": {
+      "message": "Namibia"
+    },
+    "countryNR": {
+      "message": "Nauru"
+    },
+    "countryNP": {
+      "message": "Nepal"
+    },
+    "countryNL": {
+      "message": "Netherlands"
+    },
+    "countryAN": {
+      "message": "Netherlands Antilles"
+    },
+    "countryNC": {
+      "message": "New Caledonia"
+    },
+    "countryNZ": {
+      "message": "New Zealand"
+    },
+    "countryNI": {
+      "message": "Nicaragua"
+    },
+    "countryNE": {
+      "message": "Niger"
+    },
+    "countryNG": {
+      "message": "Nigeria"
+    },
+    "countryNU": {
+      "message": "Niue"
+    },
+    "countryNF": {
+      "message": "Norfolk Island"
+    },
+    "countryMP": {
+      "message": "Northern Mariana Islands"
+    },
+    "countryNO": {
+      "message": "Norway"
+    },
+    "countryOM": {
+      "message": "Oman"
+    },
+    "countryPK": {
+      "message": "Pakistan"
+    },
+    "countryPW": {
+      "message": "Palau"
+    },
+    "countryPA": {
+      "message": "Panama"
+    },
+    "countryPG": {
+      "message": "Papua New Guinea"
+    },
+    "countryPY": {
+      "message": "Paraguay"
+    },
+    "countryPE": {
+      "message": "Peru"
+    },
+    "countryPH": {
+      "message": "Philippines"
+    },
+    "countryPN": {
+      "message": "Pitcairn"
+    },
+    "countryPL": {
+      "message": "Poland"
+    },
+    "countryPT": {
+      "message": "Portugal"
+    },
+    "countryPR": {
+      "message": "Puerto Rico"
+    },
+    "countryQA": {
+      "message": "Qatar"
+    },
+    "countryRE": {
+      "message": "Reunion"
+    },
+    "countryRO": {
+      "message": "Romania"
+    },
+    "countryRU": {
+      "message": "Russian Federation"
+    },
+    "countryRW": {
+      "message": "Rwanda"
+    },
+    "countryKN": {
+      "message": "Saint Kitts and Nevis"
+    },
+    "countryLC": {
+      "message": "Saint LUCIA"
+    },
+    "countryVC": {
+      "message": "Saint Vincent and the Grenadines"
+    },
+    "countryWS": {
+      "message": "Samoa"
+    },
+    "countrySM": {
+      "message": "San Marino"
+    },
+    "countryST": {
+      "message": "Sao Tome and Principe"
+    },
+    "countrySA": {
+      "message": "Saudi Arabia"
+    },
+    "countrySN": {
+      "message": "Senegal"
+    },
+    "countrySC": {
+      "message": "Seychelles"
+    },
+    "countrySL": {
+      "message": "Sierra Leone"
+    },
+    "countrySG": {
+      "message": "Singapore"
+    },
+    "countrySK": {
+      "message": "Slovakia (Slovak Republic)"
+    },
+    "countrySI": {
+      "message": "Slovenia"
+    },
+    "countrySB": {
+      "message": "Solomon Islands"
+    },
+    "countrySO": {
+      "message": "Somalia"
+    },
+    "countryZA": {
+      "message": "South Africa"
+    },
+    "countryGS": {
+      "message": "South Georgia and the South Sandwich Islands"
+    },
+    "countrySS": {
+      "message": "South Sudan"
+    },
+    "countryES": {
+      "message": "Spain"
+    },
+    "countryLK": {
+      "message": "Sri Lanka"
+    },
+    "countrySH": {
+      "message": "St. Helena"
+    },
+    "countryPM": {
+      "message": "St. Pierre and Miquelon"
+    },
+    "countrySD": {
+      "message": "Sudan"
+    },
+    "countrySR": {
+      "message": "Suriname"
+    },
+    "countrySJ": {
+      "message": "Svalbard and Jan Mayen Islands"
+    },
+    "countrySZ": {
+      "message": "Swaziland"
+    },
+    "countrySE": {
+      "message": "Sweden"
+    },
+    "countryCH": {
+      "message": "Switzerland"
+    },
+    "countrySY": {
+      "message": "Syrian Arab Republic"
+    },
+    "countryTW": {
+      "message": "Taiwan, Province of China"
+    },
+    "countryTJ": {
+      "message": "Tajikistan"
+    },
+    "countryTZ": {
+      "message": "Tanzania, United Republic of"
+    },
+    "countryTH": {
+      "message": "Thailand"
+    },
+    "countryTG": {
+      "message": "Togo"
+    },
+    "countryTK": {
+      "message": "Tokelau"
+    },
+    "countryTO": {
+      "message": "Tonga"
+    },
+    "countryTT": {
+      "message": "Trinidad and Tobago"
+    },
+    "countryTN": {
+      "message": "Tunisia"
+    },
+    "countryTR": {
+      "message": "Turkey"
+    },
+    "countryTM": {
+      "message": "Turkmenistan"
+    },
+    "countryTC": {
+      "message": "Turks and Caicos Islands"
+    },
+    "countryTV": {
+      "message": "Tuvalu"
+    },
+    "countryUG": {
+      "message": "Uganda"
+    },
+    "countryUA": {
+      "message": "Ukraine"
+    },
+    "countryAE": {
+      "message": "United Arab Emirates"
+    },
+    "countryGB": {
+      "message": "United Kingdom"
+    },
+    "countryUS": {
+      "message": "United States"
+    },
+    "countryUM": {
+      "message": "United States Minor Outlying Islands"
+    },
+    "countryUY": {
+      "message": "Uruguay"
+    },
+    "countryUZ": {
+      "message": "Uzbekistan"
+    },
+    "countryVU": {
+      "message": "Vanuatu"
+    },
+    "countryVE": {
+      "message": "Venezuela"
+    },
+    "countryVN": {
+      "message": "Viet Nam"
+    },
+    "countryVG": {
+      "message": "Virgin Islands (British)"
+    },
+    "countryVI": {
+      "message": "Virgin Islands (U.S.)"
+    },
+    "countryWF": {
+      "message": "Wallis and Futuna Islands"
+    },
+    "countryEH": {
+      "message": "Western Sahara"
+    },
+    "countryYE": {
+      "message": "Yemen"
+    },
+    "countryYU": {
+      "message": "Yugoslavia"
+    },
+    "countryZM": {
+      "message": "Zambia"
+    },
+    "countryZW": {
+      "message": "Zimbabwe"
+    }
+  }
+}
