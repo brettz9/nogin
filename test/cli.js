@@ -262,13 +262,15 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(65000);
+      this.timeout(70000);
       let cliProm;
       const [
         {text, headers}, {json}, {dynamicText},
         {signupText}, {usersText},
         {coverageStatus, coverageText},
-        {postStatus, postText}
+        {postStatus, postText},
+        {updateAccountText},
+        {homeStatus, homeText}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -281,10 +283,12 @@ describe('CLI', function () {
           '--router', pathResolve(__dirname, './fixtures/router.js'),
           '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
           '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
+          '--customRoute', 'en-US=home=/updateAccount',
+          '--customRoute', 'en-US=logout=/log-me-out',
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 45000, async (stdout) => {
+        ], 50000, async (stdout) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
@@ -294,7 +298,7 @@ describe('CLI', function () {
           try {
             const [
               res, staticRes, dynamicRes, signupRes, usersRes,
-              covRes, postRes
+              covRes, postRes, updateAccountRes, homeRes
             ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
               // Within `/test/fixtures`
@@ -315,7 +319,11 @@ describe('CLI', function () {
               // Check bad POST coverage
               fetch(`http://localhost:${testPort}/bad-url`, {
                 method: 'POST'
-              })
+              }),
+              // Check that `/updateAccount` works as `/home` (redirects)
+              fetch(`http://localhost:${testPort}/updateAccount`),
+              // Check that `/home` is no longer available
+              fetch(`http://localhost:${testPort}/home`)
             ]);
             resolve([
               {headers: res.headers, text: await res.text()},
@@ -327,7 +335,9 @@ describe('CLI', function () {
                 coverageStatus: covRes.status,
                 coverageText: await covRes.text()
               },
-              {postStatus: postRes.status, postText: await postRes.text()}
+              {postStatus: postRes.status, postText: await postRes.text()},
+              {updateAccountText: await updateAccountRes.text()},
+              {homeStatus: homeRes.status, homeText: await homeRes.text()}
             ]);
           } catch (err) {
             reject(err);
@@ -342,10 +352,20 @@ describe('CLI', function () {
       expect(covMsg).contains(
         'the page or resource you are searching for is currently unavailable'
       );
+
       const postDoc = (new JSDOM(postText)).window.document;
       const postMsg = postDoc.querySelector('[data-name=four04]').textContent;
       expect(postStatus).to.equal(404);
       expect(postMsg).contains(
+        'the page or resource you are searching for is currently unavailable'
+      );
+
+      expect(updateAccountText).to.contain('Please Login To Your Account');
+
+      const homeDoc = (new JSDOM(homeText)).window.document;
+      const homeMsg = homeDoc.querySelector('[data-name=four04]').textContent;
+      expect(homeStatus).to.equal(404);
+      expect(homeMsg).contains(
         'the page or resource you are searching for is currently unavailable'
       );
 
