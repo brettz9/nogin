@@ -19,26 +19,27 @@ function getOptions () {
 /**
  * @returns {void}
  */
-function noVerb () {
+async function noVerb () {
   const options = getOptions();
   if (!options) {
     return;
   }
 
   try {
-    createServer(options);
+    await createServer(options);
   } catch (err) {
     console.error(err);
   }
 }
 
+(async () => {
 let verb = process.argv[2];
 switch (verb) {
 case 'help':
   verb = process.argv[3];
   if (!verb) {
     process.argv[2] = '--help';
-    noVerb();
+    await noVerb();
     return;
   }
   process.argv[2] = verb;
@@ -76,7 +77,8 @@ case 'add':
   })();
   break;
 default: {
-  noVerb();
+  await noVerb();
   break;
 }
 }
+})();
