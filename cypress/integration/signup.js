@@ -14,7 +14,7 @@ describe('Signup', function () {
     cy.visitURLAndCheckAccessibility('/signup');
   });
 
-  it('Visit Signup and try entering bad data client-side', function () {
+  it.only('Visit Signup and try entering bad data client-side', function () {
     cy.visit('/signup');
     const tooShortUser = 'a';
     cy.get('[data-name="user"]').type(tooShortUser);
