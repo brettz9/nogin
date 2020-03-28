@@ -437,52 +437,54 @@ describe('CLI', function () {
     expect(stripPromisesWarning(stderr)).to.equal('');
   });
 
-  it('help', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      'help'
-    ]);
-    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
-      'nogin [help|(add|create'
-    );
-    expect(stripPromisesWarning(stderr)).to.equal('');
-  });
+  describe('Help', function () {
+    it('help', async function () {
+      this.timeout(20000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        'help'
+      ]);
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        'nogin [help|(add|create'
+      );
+      expect(stripPromisesWarning(stderr)).to.equal('');
+    });
 
-  it('help add', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      'help',
-      'add'
-    ]);
-    expect(stripPromisesWarning(stderr)).to.equal('');
-    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
-      '--userFile path'
-    );
-  });
+    it('help add', async function () {
+      this.timeout(20000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        'help',
+        'add'
+      ]);
+      expect(stripPromisesWarning(stderr)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        '--userFile path'
+      );
+    });
 
-  it('help create (with explicit locale)', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      'help',
-      'create',
-      '--loggerLocale'
-    ]);
-    expect(stripPromisesWarning(stderr)).to.equal('');
-    expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
-      '--userFile path'
-    );
-  });
+    it('help create (with explicit locale)', async function () {
+      this.timeout(20000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        'help',
+        'create',
+        '--loggerLocale'
+      ]);
+      expect(stripPromisesWarning(stderr)).to.equal('');
+      expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
+        '--userFile path'
+      );
+    });
 
-  it('help (bad verb)', async function () {
-    this.timeout(20000);
-    const {stdout, stderr} = await spawnPromise(cliPath, [
-      'help',
-      'noSuchVerb'
-    ]);
-    expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
-    expect(stripPromisesWarning(stderr)).to.contain(
-      'Erred TypeError: Unknown verb noSuchVerb'
-    );
+    it('help (bad verb)', async function () {
+      this.timeout(20000);
+      const {stdout, stderr} = await spawnPromise(cliPath, [
+        'help',
+        'noSuchVerb'
+      ]);
+      expect(stripMongoAndServerListeningMessages(stdout)).to.equal('');
+      expect(stripPromisesWarning(stderr)).to.contain(
+        'Erred TypeError: Unknown verb noSuchVerb'
+      );
+    });
   });
 
   describe('adding', function () {
