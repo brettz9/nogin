@@ -87,7 +87,7 @@ exports.createServer = async function (options) {
     requireName,
     localesBasePath = 'app/server',
     postLoginRedirectPath,
-    customRoutes
+    customRoute
   } = opts;
 
   const dbOpts = DBFactory.getDefaults(opts);
@@ -204,7 +204,7 @@ exports.createServer = async function (options) {
     router,
     localesBasePath,
     postLoginRedirectPath,
-    customRoutes,
+    customRoute,
     opts,
     // User is using instrumenting
     triggerCoverage: JS_DIR !== '/app/public'

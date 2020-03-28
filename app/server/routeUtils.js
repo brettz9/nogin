@@ -134,10 +134,10 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
 const routeMap = new Map();
 
 /**
- * @param {string[]} customRoutes Equal-separated locale=route=path
+ * @param {string[]} customRoute Equal-separated locale=route=path
  * @returns {RouteGetter}
  */
-function routeGetter (customRoutes) {
+function routeGetter (customRoute) {
   /**
    * Keyed by locale, then by route, and set to a path.
    * @typedef {Object<string, Object<string, string>>} CustomRouteObject
@@ -145,7 +145,7 @@ function routeGetter (customRoutes) {
   /**
    * @type {CustomRouteObject}
    */
-  const customRoutesObj = customRoutes.reduce((routes, routeInfo) => {
+  const customRoutesObj = customRoute.reduce((routes, routeInfo) => {
     const [locale, route, path] = routeInfo.split('=');
     if (!routes[locale]) {
       routes[locale] = {};

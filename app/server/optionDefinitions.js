@@ -92,7 +92,7 @@ const optionDefinitions = [
     typeLabel: '{underline path or URL}'
   },
   {
-    name: 'customRoutes', type: String, multiple: true,
+    name: 'customRoute', type: String, multiple: true,
     description: 'A convenience to allow overriding the default route name ' +
       'per locale, e.g., `en-US=home=/updateAccount` would change the ' +
       '`/home` path to `/updateAccount` for the `en-US` locale. This will ' +
@@ -171,9 +171,9 @@ const optionDefinitions = [
       'is enabled).'
   },
   {
-    name: 'countryCodes', type: String, multiple: true,
-    description: 'Two-letter country codes; defaults to codes in ' +
-      '`/app/server/modules/country-codes.json`',
+    name: 'countryCodes', type: String,
+    description: 'Two-letter country codes as JSON array; defaults to ' +
+      'codes in `/app/server/modules/country-codes.json`',
     typeLabel: '{underline country code}'
   },
   {

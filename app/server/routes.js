@@ -48,7 +48,7 @@ module.exports = async function (app, config) {
     router,
     localesBasePath,
     postLoginRedirectPath,
-    customRoutes = [],
+    customRoute = [],
     opts
   } = config;
 
@@ -75,7 +75,7 @@ module.exports = async function (app, config) {
   log('AwaitingI18NAndLogging');
 
   // Throw early if there are problems
-  const getRoutes = routeGetter(customRoutes);
+  const getRoutes = routeGetter(customRoute);
   await checkLocaleRoutes(getRoutes, localesBasePath);
 
   const [globalI18n, errorLogger] = await Promise.all([

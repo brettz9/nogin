@@ -112,7 +112,7 @@ Questions and suggestions for improvement are welcome.
 ## To-dos
 
 1. Get back to **100% coverage**
-    1. `routeUtils.js` and `customRoutes` (including multiple routes for a locale)
+    1. `routeUtils.js` and `customRoute` (including multiple routes for a locale)
 1. Make **error messages of potential concern to privacy** optional (avoid
     allowing testing presence of an email in the system by feedback from
     lost password (detecting existent vs. non-existent email); this option
