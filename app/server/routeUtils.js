@@ -80,7 +80,7 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
    * Ensure locales do not use reserved patterns nor have duplicate
    * names (which could cause circular redirecting).
    */
-  const localePath = join(__dirname, '_locales');
+  const localePath = join(process.cwd(), localesBasePath, '_locales');
   const availableLocales = readdirSync(localePath);
   const setI18n = i18n(localesBasePath);
 

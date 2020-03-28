@@ -85,7 +85,7 @@ exports.createServer = async function (options) {
     fromText,
     fromURL,
     requireName,
-    localesBasePath,
+    localesBasePath = 'app/server',
     postLoginRedirectPath,
     customRoutes
   } = opts;
