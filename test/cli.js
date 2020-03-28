@@ -189,11 +189,13 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(60000);
+      this.timeout(65000);
       let cliProm;
       const [
         {text, headers}, {json}, {dynamicText},
-        {signupText}, {usersText}, {coverageStatus, coverageText}
+        {signupText}, {usersText},
+        {coverageStatus, coverageText},
+        {postStatus, postText}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -209,7 +211,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, async (stdout) => {
+        ], 45000, async (stdout) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
@@ -218,7 +220,8 @@ describe('CLI', function () {
           }
           try {
             const [
-              res, staticRes, dynamicRes, signupRes, usersRes, covRes
+              res, staticRes, dynamicRes, signupRes, usersRes,
+              covRes, postRes
             ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
               // Within `/test/fixtures`
@@ -235,7 +238,11 @@ describe('CLI', function () {
               //   setting up another Cypress instance)
               fetch(`http://localhost:${testPort}/users`),
               // Check static coverage
-              fetch(`http://localhost:${testPort}/coverage`)
+              fetch(`http://localhost:${testPort}/coverage`),
+              // Check bad POST coverage
+              fetch(`http://localhost:${testPort}/bad-url`, {
+                method: 'POST'
+              })
             ]);
             resolve([
               {headers: res.headers, text: await res.text()},
@@ -243,7 +250,11 @@ describe('CLI', function () {
               {dynamicText: await dynamicRes.text()},
               {signupText: await signupRes.text()},
               {usersText: await usersRes.text()},
-              {coverageStatus: covRes.status, coverageText: await covRes.text()}
+              {
+                coverageStatus: covRes.status,
+                coverageText: await covRes.text()
+              },
+              {postStatus: postRes.status, postText: await postRes.text()}
             ]);
           } catch (err) {
             reject(err);
@@ -251,9 +262,17 @@ describe('CLI', function () {
         });
       });
       const coverageDoc = (new JSDOM(coverageText)).window.document;
-      const msg = coverageDoc.querySelector('[data-name=four04]').textContent;
+      const covMsg = coverageDoc.querySelector(
+        '[data-name=four04]'
+      ).textContent;
       expect(coverageStatus).to.equal(404);
-      expect(msg).contains(
+      expect(covMsg).contains(
+        'the page or resource you are searching for is currently unavailable'
+      );
+      const postDoc = (new JSDOM(postText)).window.document;
+      const postMsg = postDoc.querySelector('[data-name=four04]').textContent;
+      expect(postStatus).to.equal(404);
+      expect(postMsg).contains(
         'the page or resource you are searching for is currently unavailable'
       );
 
