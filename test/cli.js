@@ -224,10 +224,14 @@ describe('CLI', function () {
               fetch(`http://localhost:${testPort}/addUsers.json`),
               // Based on `router`
               fetch(`http://localhost:${testPort}/dynamic-route`),
-              // Check countryCodes
+              // Check countryCodes (and lack of `requireName`)
               fetch(`http://localhost:${testPort}/signup`),
-              // Check missing `--showUsers` flag (in main Cypress
-              //   tests, we are enabling it so as to fully test it)
+              // Check missing `--showUsers` flag
+              //   (in main Cypress tests, we are enabling `showUsers`
+              //   and `requireName` so as to fully test them; while
+              //   we would ideally test these in the UI as well,
+              //   a unit test should be adequate given the burden of
+              //   setting up another Cypress instance)
               fetch(`http://localhost:${testPort}/users`)
             ]);
             resolve([
@@ -340,6 +344,9 @@ describe('CLI', function () {
         '<option value="MX">Mexico</option>' +
         '<option value="US">United States</option>'
       );
+      const name = signupDoc.querySelector('[data-name="name"]').outerHTML;
+      expect(name).to.not.contain('minlength');
+
       const usersDoc = (new JSDOM(usersText)).window.document;
       expect(
         usersDoc.querySelector('[data-name=four04]').textContent
