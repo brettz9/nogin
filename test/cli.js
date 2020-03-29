@@ -5,6 +5,7 @@ import {resolve as pathResolve} from 'path';
 
 import {JSDOM} from 'jsdom';
 import fetch from 'node-fetch';
+import delay from 'delay';
 import escStringRegex from 'escape-string-regexp';
 
 import {
@@ -13,6 +14,9 @@ import {
 
 import nodeLogin from '../nogin.js';
 
+import {
+  setEmailConfig, deleteEmails, hasEmail
+} from './utilities/EmailChecker.js';
 import spawnPromise from './utilities/spawnPromise.js';
 
 import addUsersJSON from './fixtures/addUsers.json';
@@ -22,6 +26,12 @@ const {
   NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
   NL_EMAIL_FROM, NS_EMAIL_TIMEOUT
 } = nodeLogin;
+
+setEmailConfig({
+  NL_EMAIL_HOST,
+  NL_EMAIL_USER,
+  NL_EMAIL_PASS
+});
 
 const stripPromisesWarning = (s) => {
   return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
@@ -86,7 +96,6 @@ describe('CLI', function () {
         });
       });
       const {stdout, stderr} = await cliProm;
-      console.log('text', text);
       const doc = (new JSDOM(text)).window.document;
       const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
         return link.outerHTML;
@@ -263,13 +272,17 @@ describe('CLI', function () {
   //  or before another instance of Cypress runs, both of which seem
   //  like unnecessary overhead since we are not testing post-load
   //  behavior/JavaScript.
-  it.only(
+  it(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(80000);
+      this.timeout(280000);
+
+      // SETUP
       // Adding to ensure there is a fresh `signup` below
       await removeAccounts({all: true});
-      let cliProm;
+      await deleteEmails();
+
+      let cliProm, fetching;
       const [
         {text, headers}, {json}, {dynamicText},
         {signupText}, {usersText},
@@ -277,8 +290,7 @@ describe('CLI', function () {
         {badURLPostStatus, badURLPostText},
         {updateAccountText},
         {homeStatus, homeText},
-        {signupPostStatus},
-        {lostPasswordPostStatus}
+        {signupPostStatus}
         // eslint-disable-next-line promise/avoid-new
       ] = await new Promise((resolve, reject) => {
         cliProm = spawnPromise(cliPath, [
@@ -315,16 +327,21 @@ describe('CLI', function () {
           '--NL_EMAIL_PASS',
           NL_EMAIL_PASS,
 
+          // Not sure why not getting coverage error when this was missing
+          '--RATE_LIMIT',
+          1000,
+
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 60000, async (stdout) => {
+        ], 110000, async (stdout) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
-          if (!stdout.includes('Beginning server...')) {
+          if (fetching || !stdout.includes('Beginning server...')) {
             return;
           }
+          fetching = true;
           try {
             const [
               res, staticRes, dynamicRes, signupRes, usersRes,
@@ -371,11 +388,33 @@ describe('CLI', function () {
               })
             ]);
 
-            // So we lost password can be requested
+            // Retrieving emails separately
+            const emailsWillHaveProbablyArrived = 15000;
+            await delay(emailsWillHaveProbablyArrived);
+            const hasAccountActivation = await hasEmail({
+              subject: 'Account Activation',
+              html: [
+                'See you later alligator',
+                'Please click here to activate your account',
+                '<a href=',
+                'activation?c='
+              ]
+            });
+            console.log('HAS-EMAIL-RESULT 1');
+            expect(hasAccountActivation).to.be.true;
+            await deleteEmails();
+            console.log('EMAILS DELETED');
+
+            console.log('signupPostRes.status', signupPostRes.status);
+            console.log('signupPostRes', await signupPostRes.text());
+
+            // So lost password can be requested
             await updateAccounts({
               user: ['bretto'],
+              email: [NL_EMAIL_USER],
               activated: [true]
             })[0];
+
             // Check for custom `composeActivationEmailView`
             const lostPasswordPostRes = await fetch(
               `http://localhost:${testPort}/lost-password`,
@@ -389,6 +428,24 @@ describe('CLI', function () {
                 })
               }
             );
+            const lostPasswordPostStatus = lostPasswordPostRes.status;
+
+            expect(lostPasswordPostStatus).to.equal(200);
+            console.log('STATUS RESULT');
+
+            await delay(emailsWillHaveProbablyArrived);
+            const hasPasswordReset = await hasEmail({
+              subject: 'Password Reset',
+              html: [
+                'See you later alligator',
+                'Click here to reset your password',
+                '<a href=',
+                'reset-password?key='
+              ]
+            });
+            console.log('HAS-EMAIL-RESULT 2');
+            expect(hasPasswordReset).to.be.true;
+
             resolve([
               {headers: res.headers, text: await res.text()},
               {json: await staticRes.json()},
@@ -407,9 +464,6 @@ describe('CLI', function () {
               {homeStatus: homeRes.status, homeText: await homeRes.text()},
               {
                 signupPostStatus: signupPostRes.status
-              },
-              {
-                lostPasswordPostStatus: lostPasswordPostRes.status
               }
             ]);
           } catch (err) {
@@ -418,7 +472,6 @@ describe('CLI', function () {
         });
       });
       const {stdout, stderr} = await cliProm;
-
       const coverageDoc = (new JSDOM(coverageText)).window.document;
       const covMsg = coverageDoc.querySelector(
         '[data-name=four04]'
@@ -428,9 +481,7 @@ describe('CLI', function () {
         'the page or resource you are searching for is currently unavailable'
       );
 
-      console.log('stderr', stderr);
       expect(signupPostStatus).to.equal(200);
-      expect(lostPasswordPostStatus).to.equal(200);
 
       const postDoc = (new JSDOM(badURLPostText)).window.document;
       const postMsg = postDoc.querySelector('[data-name=four04]').textContent;
@@ -448,7 +499,6 @@ describe('CLI', function () {
         'the page or resource you are searching for is currently unavailable'
       );
 
-      console.log('text', text);
       expect(headers.get('x-middleware-gets-options')).to.equal('favicon.ico');
       expect(headers.get('x-middleware-gets-req')).to.equal('/');
       const doc = (new JSDOM(text)).window.document;
@@ -561,6 +611,7 @@ describe('CLI', function () {
         'Awaiting database account connection...\n' +
         'Beginning server...\n'
       );
+      console.log('STDOUT:::', stdout);
       expect(stripPromisesWarning(stderr)).to.equal('');
     }
   );

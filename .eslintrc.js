@@ -21,9 +21,11 @@ module.exports = {
   overrides: [{
     files: ['test/**'],
     extends: [
+      // Disabling for now until merging/releasing:
+      //  https://github.com/fintechstudios/eslint-plugin-chai-as-promised/pull/15
       // Note: Could add this to cypress tests too, using the `chai` global
       //   which is auto-added in that environment
-      'plugin:@fintechstudios/chai-as-promised/recommended'
+      // 'plugin:@fintechstudios/chai-as-promised/recommended'
     ],
     env: {
       mocha: true

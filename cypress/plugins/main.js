@@ -17,11 +17,13 @@ import {spawn} from 'child_process';
 
 import cookieSign from 'cookie-signature';
 
-import Pop3Command from 'node-pop3'; // , {listify}
-import Envelope from 'envelope';
-
 import browserify from '@cypress/browserify-preprocessor';
 import codeCoverageTask from '@cypress/code-coverage/task.js';
+
+import {
+  setEmailConfig, getEmails, deleteEmails, hasEmail,
+  getMostRecentEmail
+} from '../../test/utilities/EmailChecker.js';
 
 import {guid} from '../../app/server/modules/common.js';
 import {
@@ -108,82 +110,20 @@ const exprt = (on, config) => {
     on('task', codeCoverageTask);
   }
 
-  const popActivatedAccount = new Pop3Command({
-    host: NL_EMAIL_HOST,
-    user: NL_EMAIL_USER,
-    password: NL_EMAIL_PASS,
-
-    // Todo: Make configurable
-    port: 995, // 110 is insecure default for POP
-    tls: true
+  setEmailConfig({
+    /**
+     * @type {string}
+     */
+    NL_EMAIL_HOST,
+    /**
+     * @type {string}
+     */
+    NL_EMAIL_USER,
+    /**
+     * @type {string}
+     */
+    NL_EMAIL_PASS
   });
-
-  /**
-   * @returns {Promise<string[]>} Message numbers
-  */
-  async function connectAndGetMessages () {
-    await popActivatedAccount._connect();
-    // Does not get deleted messages, so safe to use results in
-    //  queries like RETR which won't work against deleted
-    const list = await popActivatedAccount.LIST();
-
-    return [
-      ...new Map(list).keys()
-    ];
-  }
-
-  /**
-   * @param {string|number} messageNum
-   * @returns {Promise<EnvelopeMessage>}
-   */
-  async function getEmail (messageNum) {
-    const retrStreamString = await popActivatedAccount.RETR(messageNum);
-    console.log('retrStreamString', retrStreamString);
-    // console.log('retrStreamStringListified', listify(retrStreamString));
-
-    // This is good to do, but may sometimes be problematic for
-    //  a slow connection
-    await popActivatedAccount.DELE(messageNum);
-    console.log('deleted from server');
-    return new Envelope(retrStreamString);
-  }
-
-  /**
-   * Probably only needed in testing, not from command line.
-   * @param {PlainObject} [cfg]
-   * @param {boolean} [cfg.lastItem=false]
-   * @returns {Promise<EnvelopeMessage[]>}
-   */
-  async function getEmails ({lastItem} = {}) {
-    let messageNums = await connectAndGetMessages();
-    if (lastItem) {
-      messageNums = messageNums.slice(-1);
-    }
-
-    const parsedMessages = await Promise.all(
-      messageNums.map((msgNum) => getEmail(msgNum))
-    );
-
-    // Each has numbers as strings for each content-type ("0", "1"),
-    //   and `header`)
-    console.log('parsedMessages', parsedMessages);
-    /*
-    console.log(
-      'parsedMessages[0].header.contentType',
-      parsedMessages[0] && parsedMessages[0].header &&
-        parsedMessages[0].header.contentType
-    );
-    */
-
-    // We might not even want to wait here, but we do for now to get the error.
-    try {
-    /* const quitInfo = */ await popActivatedAccount.QUIT(); // No args
-    } catch (err) {
-      console.log(err);
-    }
-    // console.log(quitInfo);
-    return parsedMessages;
-  }
 
   // Force documentation; see https://github.com/gajus/eslint-plugin-jsdoc/issues/493
   // Documentation is needed here to clarify that these tasks are not being used
@@ -430,15 +370,11 @@ const exprt = (on, config) => {
       return readAccounts(cfg);
     },
 
-    /**
-    * @external EnvelopeMessage
-    * @see https://github.com/jhermsmeier/node-envelope#user-content-parsing-an-email
-    */
-
     // Todo: These email methods should be movable into a Cypress plugin.
 
     /**
-     * Probably only needed in testing, not from command line.
+     * Probably only needed in testing, not from command line API.
+     * @async
      * @returns {Promise<EnvelopeMessage[]|null>}
      */
     getEmails () {
@@ -449,78 +385,32 @@ const exprt = (on, config) => {
     },
 
     /**
+     * @async
      * @returns {Promise<null>} Cypress does not work with `undefined`-resolving
      * tasks; see {@link https://github.com/cypress-io/cypress/issues/6241}.
      */
-    async deleteEmails () {
+    deleteEmails () {
       if (config.env.disableEmailChecking) {
         return null;
       }
-      const messageNums = await connectAndGetMessages();
-
-      console.log('messageNums', messageNums);
-
-      try {
-        await Promise.all(
-          messageNums.map((messageNum) => {
-            return popActivatedAccount.DELE(messageNum);
-          })
-        );
-        console.log('Finished delete commands...');
-
-        // We should probably wait here as we do since the messages
-        //  are only to be deleted after exiting.
-        /* const quitInfo = */ await popActivatedAccount.QUIT(); // No args
-        console.log('Successfully quit after deletion.');
-      } catch (err) {
-        console.log(err);
-      }
-      return null;
+      return deleteEmails();
     },
 
     /**
      * Shouldn't be needed on command line.
+     * @async
      * @param {PlainObject} cfg
      * @param {string} cfg.subject
      * @param {string[]} cfg.html
      * @returns {Promise<boolean>}
      */
-    async hasEmail (cfg) {
+    hasEmail (cfg) {
       if (config.env.disableEmailChecking) {
         // Easier to do this than require the client code to check an
         //  env. variable
         return true;
       }
-      const subjectIsNotString = typeof cfg.subject !== 'string';
-      const htmlIsNotArray = !Array.isArray(cfg.html);
-
-      const parsedMessages = await getEmails();
-      // console.log('parsedMessages', parsedMessages.length, parsedMessages);
-      return parsedMessages.some((msg) => {
-        const html = msg[0][0] && msg[0][0].body;
-        /*
-        console.log(
-          'cfg.subject', cfg.subject, '::', msg.header && msg.header.subject,
-          cfg.subject === msg.header.subject
-        );
-        console.log(
-          'html',
-          html,
-          'cfg.html',
-          cfg.html
-        );
-        */
-        return (
-          (subjectIsNotString ||
-            cfg.subject === msg.header.get('subject')) &&
-          (htmlIsNotArray || cfg.html.every((requiredHTMLString) => {
-            // console.log(
-            //   'html', html, 'requiredHTMLString', requiredHTMLString
-            // );
-            return html.includes(requiredHTMLString);
-          }))
-        );
-      });
+      return hasEmail(cfg);
     },
 
     /**
@@ -530,9 +420,10 @@ const exprt = (on, config) => {
     */
 
     /**
+     * @async
      * @returns {Promise<HTMLAndSubject>}
      */
-    async getMostRecentEmail () {
+    getMostRecentEmail () {
       if (config.env.disableEmailChecking) {
         // Easier to do this than require the client code to check an
         //  env. variable
@@ -540,17 +431,7 @@ const exprt = (on, config) => {
           emailDisabled: true
         };
       }
-
-      // Could be risk of race condition
-      const parsedMessages = await getEmails({lastItem: true});
-      const mostRecentEmail = parsedMessages[0];
-      const {header} = mostRecentEmail;
-      const subject = header.get('subject');
-
-      const msg = mostRecentEmail[0][0];
-      // console.log('parsed msg', msg);
-      const html = msg && msg.body;
-      return {html, subject};
+      return getMostRecentEmail();
     }
   });
 
