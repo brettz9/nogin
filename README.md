@@ -111,8 +111,8 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Make server config to allow **error messages of potential concern
-    to privacy** optional (avoid allowing testing presence of an email
+1. Make server config to **make error messages of potential concern
+    to privacy optional** (avoid allowing testing presence of an email
     in the system by feedback from lost password (detecting existent
     vs. non-existent email); this option
     1. Only complete solution if also **preventing signup/update from
