@@ -111,20 +111,6 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Make server config to **make error messages of potential concern
-    to privacy optional** (avoid allowing testing presence of an email
-    in the system by feedback from lost password (detecting existent
-    vs. non-existent email); this option
-    1. Only complete solution if also **preventing signup/update from
-        complaining about an existing email** (otherwise those pages could
-        be used for detection instead).
-    1. Optional since some sites might wish to enforce unique emails or
-        identity-by-email, or may simply wish to give users full
-        feedback about whether a lost password email was successfully
-        sent or not.
-    1. Note that login would always allow detecting existent vs.
-        non-existent user names (this is just for email detection)
-
 1. Update **docs**
     1. Update **docs above**
     1. **Review CHANGES** to ensure includes all changes (and so docs
@@ -194,6 +180,12 @@ Questions and suggestions for improvement are welcome.
     'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
     'coverage', should not need to be added). Also add breadcrumbs and
     `<link rel=next/prev>`.
+1. Option to **email forgotten username** (as a workaround, the reset
+    password email will send this currently, but not if adding an option to
+    disable the current `uniqueEmails` mode). Alternatively, could
+    **allow login by email.** Don't want to show username for email in UI
+    though for privacy reasons (more serious than just detecting that the
+    user has an account, this would detect what their account was).
 
 ## Lower priorities
 
@@ -207,3 +199,29 @@ Questions and suggestions for improvement are welcome.
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
 1. See about minor **to-dos in code** along the way
+1. Make **email activation (and email) optional** (would mitigate some
+    problems with email detection when current enforcement of unique emails
+    (proposed `uniqueEmails: true`) is enabled as users concerned with
+    privacy could at least avoid an email that could be sniffed)?
+1. Make server config to **make error messages of potential concern
+    to privacy optional** (avoid allowing testing presence of an email
+    in the system by feedback from lost password (detecting existent
+    vs. non-existent email)
+    1. Only complete solution is if also **allowing signup/update
+        to an existing email** (otherwise those pages could
+        be used for detection instead).
+        1. We could also make **emails optional** (beyond activation?)
+        1. While we could make the errors less specific, this can still
+            effectively be sniffed by signing up for different accounts
+            and seeing if they result in some error (they likely shouldn't
+            otherwise)
+        1. In allowing disabling of `uniqueEmails`, require username be
+            provided so will only send reset password for that account
+    1. Info: Optional since many sites might wish to enforce unique emails
+        or identity-by-email, or may simply wish to give users full
+        feedback about whether a lost password email was successfully
+        sent or not.
+    1. Info: Note that login would always allow detecting existent vs.
+        non-existent user names (this is just for email detection)
+    1. More **validation from CLI**, e.g., adding an option or default
+        to report if an email is already in use
