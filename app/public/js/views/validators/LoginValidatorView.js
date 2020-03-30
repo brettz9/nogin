@@ -28,6 +28,8 @@ window.LoginValidatorView = {
 
   messages: {
     LinkToResetPasswordMailed: _('LinkToResetPasswordMailed'),
+    IfExistingLinkToResetPasswordMailed:
+      _('IfExistingLinkToResetPasswordMailed'),
     EmailNotFound: _('EmailNotFound'),
     ProblemTryAgainLater: _('ProblemTryAgainLater')
   }

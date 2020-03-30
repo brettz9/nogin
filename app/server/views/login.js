@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 'use strict';
-module.exports = function ({_, layout, emailPattern, signup}) {
+module.exports = function ({_, layout, emailPattern, uniqueEmails, signup}) {
   return layout({
     content: [
       ['div', {
@@ -63,7 +63,7 @@ module.exports = function ({_, layout, emailPattern, signup}) {
           require('./modals/alert.js')({_})
         ]]
       ]],
-      require('./modals/lost-password.js')({_, emailPattern})
+      require('./modals/lost-password.js')({_, emailPattern, uniqueEmails})
     ],
     scripts: [
       ['script', {

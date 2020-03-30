@@ -118,6 +118,8 @@ Questions and suggestions for improvement are welcome.
     1. Only complete solution if also **preventing signup/update from
         complaining about an existing email** (otherwise those pages could
         be used for detection instead).
+        1. In allowing disabling of `uniqueEmails`, require username be
+            provided so will only send reset password for that account
     1. Optional since some sites might wish to enforce unique emails or
         identity-by-email, or may simply wish to give users full
         feedback about whether a lost password email was successfully
@@ -194,6 +196,12 @@ Questions and suggestions for improvement are welcome.
     'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
     'coverage', should not need to be added). Also add breadcrumbs and
     `<link rel=next/prev>`.
+1. Option to **email forgotten username** (as a workaround in `uniqueEmails`
+    mode (since `uniqueEmails` doesn't need to ask for username), the reset
+    password email will send this though). Alternatively, could
+    **allow login by email.** Don't want to give username for email though
+    for privacy reasons (more serious than just detecting that the user has
+    an account, this would detect what their account was).
 
 ## Lower priorities
 
@@ -207,3 +215,8 @@ Questions and suggestions for improvement are welcome.
     is lighter-weight and we don't need all that jsdom offers; add
     tests within `jamilih` for the integration
 1. See about minor **to-dos in code** along the way
+1. Make **email activation (and email) optional** (would mitigate some
+    problems with email detection when `uniqueEmails` was enabled as users
+    concerned with privacy could at least avoid an email)?
+1. More **validation from CLI**, e.g., adding an option or default to report
+    if an email is already in use

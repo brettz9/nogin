@@ -173,8 +173,8 @@ const exprt = (on, config) => {
      * @param {string} cfg.ip
      * @returns {Promise<string>}
      */
-    async generatePasswordKey ({email, ip}) {
-      const [passwordKey] = await generatePasswordKey({email, ip});
+    async generatePasswordKey ({email, ip, user}) {
+      const [passwordKey] = await generatePasswordKey({email, ip, user});
       return passwordKey;
     },
 

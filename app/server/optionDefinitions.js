@@ -122,6 +122,13 @@ const optionDefinitions = [
     description: 'Whether to require a name from users. Default is `false`.'
   },
   {
+    name: 'uniqueEmails', type: Boolean,
+    description: 'Whether to enforce unique email addresses. Note that ' +
+      'enabling this allows snoopers to effectively detect whether a ' +
+      'given address is associated with an account on your site or not. ' +
+      'Default is `false`'
+  },
+  {
     name: 'staticDir', type: String, multiple: true,
     description: 'Point to absolute path at which to serve static files on ' +
       'the same server. Multiple allowed. Not required. To require serving ' +

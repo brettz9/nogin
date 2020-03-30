@@ -45,6 +45,7 @@ module.exports = async function (app, config) {
     fromText,
     fromURL,
     requireName,
+    uniqueEmails,
     router,
     localesBasePath,
     postLoginRedirectPath,
@@ -137,6 +138,7 @@ module.exports = async function (app, config) {
         res.render('login', {
           ...getLayoutAndTitle({_, title, template: 'login'}),
           emailPattern,
+          uniqueEmails,
           signup
         });
       }
@@ -425,6 +427,7 @@ module.exports = async function (app, config) {
             pass,
             country
           }, {
+            uniqueEmails,
             async changedEmailHandler (acct, user) {
               try {
                 // TODO this promise takes a moment to return, add a loader to
@@ -479,7 +482,7 @@ module.exports = async function (app, config) {
           user,
           pass,
           country
-        })
+        }, {uniqueEmails})
       ]);
       if (status === 'rejected') {
         res.status(400).send(error.message);
@@ -501,26 +504,42 @@ module.exports = async function (app, config) {
      * Password reset.
     */
     async lostPassword (routes, req, res) {
-      const {email} = req.body;
+      const {email, user} = req.body;
       const [
         {value: _}, {status, reason: error, value: account}
         // eslint-disable-next-line node/no-unsupported-features/es-builtins
       ] = await Promise.allSettled([
         setI18n(req, res),
-        am.generatePasswordKey(email, req.ip)
+        am.generatePasswordKey(email, req.ip, user, uniqueEmails)
       ]);
-      if (status === 'rejected') {
+      if (status === 'rejected' &&
+        // If required and unique, can be auto-detected anyways by signups,
+        //  so may as well give precise message (in case user mistyped address)
+        (uniqueEmails ||
+          error.message !== 'email-not-found')
+      ) {
         res.status(400).send(error.message);
         return;
       }
       try {
-        // TODO this promise takes a moment to return, add a loader to
-        //   give user feedback
-        /* const { status, text } = */
-        await ed.dispatchResetPasswordLink(
-          account, composeResetPasswordEmailConfig, _
+        // If rejected, we indicate success to user to avoid their sniffing
+        //   presence of email
+        if (status !== 'rejected') {
+          // TODO this promise takes a moment to return, add a loader to
+          //   give user feedback
+          /* const { status, text } = */
+          await ed.dispatchResetPasswordLink(
+            account, composeResetPasswordEmailConfig, _
+          );
+        }
+        res.status(200).send(
+          uniqueEmails
+            // If unique emails are enabled, since could have email presence
+            //  sniffed anyways, we give a less ambiguous message that the
+            //  email was indeed sent out
+            ? _('OK')
+            : 'IfExistingLinkToResetPasswordMailed'
         );
-        res.status(200).send(_('OK'));
       } catch (_e) {
         logErrorProperties(_e);
         res.status(400).send(_('UnableToDispatchPasswordReset'));

@@ -44,12 +44,13 @@ export const generateLoginKeys = async (options) => {
  */
 export const generatePasswordKey = async (options) => {
   const am = await getAccountManager(options);
-  const {email, ip} = options;
+  const {email, ip, user} = options;
   const emails = Array.isArray(email) ? email : [email];
   const ips = Array.isArray(ip) ? ip : [ip];
+  const users = Array.isArray(user) ? user : [user];
   return Promise.all(
     emails.map(async (eml, i) => {
-      const {passKey} = await am.generatePasswordKey(eml, ips[i]);
+      const {passKey} = await am.generatePasswordKey(eml, ips[i], users[i]);
       return passKey;
     })
   );

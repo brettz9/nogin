@@ -163,13 +163,19 @@ class AccountManager {
   /**
    * @param {string} email
    * @param {string} ipAddress
+   * @param {string} user
+   * @param {boolean} uniqueEmails
    * @returns {Promise<AccountInfo>}
    */
-  async generatePasswordKey (email, ipAddress) {
+  async generatePasswordKey (email, ipAddress, user, uniqueEmails) {
     const passKey = guid();
     let o, e;
     try {
-      o = await this.accounts.findOneAndUpdate({email}, {$set: {
+      o = await this.accounts.findOneAndUpdate({
+        email,
+        // With `uniqueEmails`, no need to ask for (or provide) user
+        ...(uniqueEmails ? null : {user})
+      }, {$set: {
         ip: ipAddress,
         passKey
       }, $unset: {cookie: ''}}, {returnOriginal: false});
@@ -245,7 +251,9 @@ class AccountManager {
    * @todo Would ideally check for multiple erros to report back all issues
    *   at once.
    */
-  async addNewAccount (newData, {allowCustomPassVer = false} = {}) {
+  async addNewAccount (newData, {
+    uniqueEmails = false, allowCustomPassVer = false
+  }) {
     let o;
     try {
       o = await this.accounts.findOne({
@@ -257,15 +265,17 @@ class AccountManager {
       throw new Error('username-taken');
     }
 
-    let _o;
-    try {
-      _o = await this.accounts.findOne({
-        email: newData.email,
-        activated: true
-      });
-    } catch (err) {}
-    if (_o) {
-      throw new Error('email-taken');
+    if (uniqueEmails) {
+      let _o;
+      try {
+        _o = await this.accounts.findOne({
+          email: newData.email,
+          activated: true
+        });
+      } catch (err) {}
+      if (_o) {
+        throw new Error('email-taken');
+      }
     }
 
     const [accountHash, passHash] = await Promise.all([
@@ -351,22 +361,29 @@ class AccountManager {
    * @param {PlainObject} cfg
    * @param {boolean} cfg.forceUpdate
    * @param {ChangedEmailHandler} cfg.changedEmailHandler
+   * @param {boolean} cfg.uniqueEmails
    * @returns {Promise<FindAndModifyWriteOpResult>}
    */
-  async updateAccount (newData, {forceUpdate, changedEmailHandler}) {
+  async updateAccount (newData, {
+    forceUpdate,
+    uniqueEmails,
+    changedEmailHandler
+  }) {
     let _o;
 
-    // Exclude the user's own account (as we don't want an
-    //  `email-taken` error by finding their account).
-    const differentUserWithEmailFilter = {
-      email: newData.email,
-      user: {$ne: newData.user}
-    };
-    try {
-      _o = await this.accounts.findOne(differentUserWithEmailFilter);
-    } catch (err) {}
-    if (_o) {
-      throw new Error('email-taken');
+    if (uniqueEmails) {
+      // Exclude the user's own account (as we don't want an
+      //  `email-taken` error by finding their account).
+      const differentUserWithEmailFilter = {
+        email: newData.email,
+        user: {$ne: newData.user}
+      };
+      try {
+        _o = await this.accounts.findOne(differentUserWithEmailFilter);
+      } catch (err) {}
+      if (_o) {
+        throw new Error('email-taken');
+      }
     }
 
     let oldAccount;

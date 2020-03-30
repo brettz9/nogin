@@ -114,9 +114,18 @@ ajaxFormClientSideValidate(
     success (responseText, status, xhr, $form) {
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();
-      ev.showEmailSuccess(
-        LoginValidatorView.messages.LinkToResetPasswordMailed
-      );
+      switch (responseText) {
+      case 'IfExistingLinkToResetPasswordMailed':
+        ev.showEmailSuccess(
+          LoginValidatorView.messages.IfExistingLinkToResetPasswordMailed
+        );
+        break;
+      default:
+        ev.showEmailSuccess(
+          LoginValidatorView.messages.LinkToResetPasswordMailed
+        );
+        break;
+      }
     },
     error (e) {
       if (e.responseText === 'email-not-found') {

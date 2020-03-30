@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ({_, emailPattern}) {
+module.exports = function ({_, emailPattern, uniqueEmails}) {
   return ['div', {
     id: 'retrieve-password',
     'data-name': 'retrieve-password', class: 'modal fade'
@@ -24,6 +24,19 @@ module.exports = function ({_, emailPattern}) {
         ['div', {class: 'modal-body'}, [
           ['form', {id: 'retrieve-password-form', method: 'post'}, [
             ['div', {class: 'form-group'}, [
+              ...(uniqueEmails
+                ? ''
+                : [
+                  ['label', {for: 'user-lost-pass'}],
+                  ['input', {
+                    autocomplete: 'username',
+                    class: 'form-control required',
+                    required: 'required',
+                    id: 'user-lost-pass',
+                    'data-name': 'user-lost-pass',
+                    name: 'user'
+                  }]
+                ]),
               ['label', {for: 'email-tf'}, [_('PleaseEnterEmail')]],
               ['input', {
                 class: 'form-control required', type: 'email',

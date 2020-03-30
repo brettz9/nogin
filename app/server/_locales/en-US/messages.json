@@ -136,6 +136,9 @@
     "LinkToResetPasswordMailed": {
       "message": "A link to reset your password was emailed to you."
     },
+    "IfExistingLinkToResetPasswordMailed": {
+      "message": "If an account exists, a link to reset your password was emailed to you."
+    },
     "EmailNotFound": {
       "message": "Email not found. Are you sure you entered it correctly?"
     },
