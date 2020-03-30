@@ -111,15 +111,17 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Make **error messages of potential concern to privacy** optional (avoid
-    allowing testing presence of an email in the system by feedback from
-    lost password (detecting existent vs. non-existent email); this option
-    would only make sense though if it also prevented signup/update from
-    complaining about an existing email as otherwise those pages could be
-    used for detection instead. If implemented, this should be optional,
-    as some sites might wish to enforce unique emails or identity-by-email,
-    or may simply wish to give users full feedback about whether a lost
-    password email was successfully sent or not.
+1. Make server config to allow **error messages of potential concern
+    to privacy** optional (avoid allowing testing presence of an email
+    in the system by feedback from lost password (detecting existent
+    vs. non-existent email); this option
+    1. Only complete solution if also **preventing signup/update from
+        complaining about an existing email** (otherwise those pages could
+        be used for detection instead).
+    1. Optional since some sites might wish to enforce unique emails or
+        identity-by-email, or may simply wish to give users full
+        feedback about whether a lost password email was successfully
+        sent or not.
     1. Note that login would always allow detecting existent vs.
         non-existent user names (this is just for email detection)
 
