@@ -18,9 +18,9 @@ share-alike terms are for the fonts themselves, not its CSS (which is under MIT)
 
 # Nogin
 
-![nogin](./readme_includes/nogin.jpg?raw=true)
+*A maintained and expanded fork of <https://github.com/braitsch/node-login>.*
 
-A maintained and expanded fork of <https://github.com/braitsch/node-login>.
+![nogin](./readme_includes/nogin.jpg?raw=true)
 
 The name is a portmanteau of "Node" and "login" and is pronounced "noggin"
 (a colloquial word for "head").
