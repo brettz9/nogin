@@ -8,25 +8,27 @@
     the activation link out (possibly due to a bad email address)
 - Fix: Avoid chance for clashes or unnecessary data by deleting
     unactivated accounts once one is activated.
-- Enhancement: i18nize routes
-- Enhancement: Add option on whether to require name (`requireName`)
-- Enhancement: Allow changing activation email or reset password email
-    template (with alternative JS template modules)
-- Enhancement: Change client-side (email) update message to mention
-    that though otherwise changed, the email change awaits link activation
-- Enhancement: Allow pointing to own locales base path via `localesBasePath`
-    option.
-- Enhancement: Add `postLoginRedirectPath` option for users to redirect
-    by default somewhere other than `/home` (or locale equivalent) after
-    login.
 - Enhancement: Ensure that any `?redirect=` query parameter present in
     the path passed to root (`/` by default) is used for redirecting after
     login.
+- Enhancement: i18nize routes
+- Enhancements (config):
+    - Optional override i18n routes with config
+    - Add `postLoginRedirectPath` option for users to redirect by
+        default somewhere other than `/home` (or locale equivalent) after
+        login.
+    - Add option on whether to require name (`requireName`)
+    - Allow pointing to own locales base path via `localesBasePath` option.
+    - Allow changing activation email or reset password email template
+        (with alternative JS template modules):
+        `composeResetPasswordEmailView` and `composeActivationEmailView`
 - Optimization: Cache i18n functions
+- Messages: Change client-side (email) update message to mention
+    that though otherwise changed, the email change awaits link activation
 - Docs: Update coverage badge per latest coveradge
 - Refactoring: Avoid setting global `fetch` or `document` per updated
     `intl-dom`
-- Testing: Add test to ensure one can indeed to update email after
+- Testing: Add test to ensure one can indeed update email after
     bad link dispatch
 - Testing: Optimize email retrieval when getting most recent email; bump
     timeouts; avoid no longer needed code
@@ -37,11 +39,15 @@
 
 - Security: Add password into activation hash so lesser chance for
     auto-enabling of other users
-- Fix: Ensure all actviation-failed pages are status 400
+- Fix: Ensure all activation-failed pages are status 400
 - Enhancement: Upon email update, dispatch email and require activation;
     ask user for confirmation before doing so (and inform user of
     consequences for confirmation)
-- Enhancement: Add config (on by default) to disable `/users` list page
+- Enhancement (config):
+    - Add `showUsers` config (on by default) to disable `/users` list page
+        as can be a privacy leak if users not intended to be public
+        (may reset back to default in the future if made safely based
+        on privilege levels)
 - Testing: Add manual testing for non-activated account
 - npm: Update devDeps
 
@@ -49,9 +55,9 @@
 
 - Breaking change: Disable dangerous `/reset` page (until such
     time as may reenable as POST API endpoint for privileged users)
-- Fix: Get old values to show on `/home`
-- Fix: Allow user to submit own email again
-- Fix: Reset password dialog sizing and display
+- Fix (regression?): Get old values to show on `/home`
+- Fix (regression): Allow user to update with same email again
+- Fix (regression?): Give reset password dialog proper sizing and display
 - Refactoring: Use `user` from session (in case code is refactored to use
     the client-obtained variable, and there is a forgery)
 - Testing: Resume nodemon
