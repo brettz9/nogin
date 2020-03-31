@@ -109,7 +109,7 @@
     - Add `localScripts` option for using non-CDN copies
     - Add `fromText` and `fromURL` for password reset emails
     - Add `NS_EMAIL_TIMEOUT` option
-- Enhancement: CLI for adding accounts, including exposing `listIndexes`
+- Enhancement: CLI for adding accounts
 - Enhancement: i18n (server-side, client-side, and CLI)
 - Enhancement: Make available as binary (with help/version and
   `update-notifier`)
