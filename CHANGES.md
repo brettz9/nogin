@@ -81,19 +81,17 @@
 ## 1.0.0-beta.1
 
 - Breaking enhancement: Avoid `process.env` (`app.js` accepts CLI now instead)
-- Breaking enhancement: Allow app to pass in own countries list
 - Breaking change: Rename auto-set `pass_ver` to `passVer`
 - Breaking change: Rename `print` page to `users`
 - Breaking refactoring: `EmailDispatcher` and `AccountManager` are now classes;
-  routes accepts config
+  `routes` accepts config
 - Security: Add PBKDF2 hashing (@SCG82)
 - Security: Make "secret" private and configurable; add
   integrity/cross-origin=anonymous for jquery.form and font-awesome
-  (switching to same CDN); add also for github-fork-ribbon-css, but comment
-  out as not in apparent use
+  (switching to same CDN); add also for github-fork-ribbon-css
 - Security: Use signed cookie
 - Security: Pass secret to cookie parser as otherwise potentially problematic
-- Security: Rate-limiting (for DoS)
+- Security: `express-rate-limit`-based rate-limiting (for protection against DoS)
 - Security: Minimize XSS vectors by using safer jQuery methods
 - Security/Fix: Avoid ability for user to update account to an existing email.
 - Fix: Add proper plain text for plain text email
@@ -107,27 +105,23 @@
     - Add `staticDir` and `middleware`
     - Add `router`
     - Add `injectHTML`
+    - Add `countryCodes`
+    - Add `localScripts` option for using non-CDN copies
+    - Add `fromText` and `fromURL` for password reset emails
+    - Add `NS_EMAIL_TIMEOUT` option
+- Enhancement: CLI for adding accounts, including exposing `listIndexes`
 - Enhancement: i18n (server-side, client-side, and CLI)
 - Enhancement: Make available as binary (with help/version and
-  update-notifier)
-- Enhancement: Add `use strict`
-- Enhancement: `localScripts` option for using non-CDN copies
-- Enhancement: Use native form validation
-- Enhancement: Make `fromText` and `fromURL` of password reset emails
-  configurable
+  `update-notifier`)
+- Enhancement: Use browser native form validation
 - Enhancement: Require email link verification code (inspired by
   <https://github.com/braitsch/node-login/pull/11>)
-- Enhancement: CLI for adding accounts
-- Enhancement: Add `NS_EMAIL_TIMEOUT` option
-- Enhancement: Expose `listIndexes` to CLI
-- Fix: Requiring of `account.js`
-- Fix: Pass on CLI args properly
 - Accessibility: Use h1+ headings; labels; roles (passing all
   except for `color-contrast` whose check we are temporarily disabling
   until may have time to fix)
+- Optimization: Add `use strict`
 - Docs: Add Change log for unreleased
 - Docs: Indicate planned to-dos
-- Docs: Some further CLI documentation
 - Docs: CLI
 - Docs: Indicate license types, test results, and coverage as badges
 - Linting (ESLint): Apply eslint-config-ash-nazg
@@ -140,9 +134,12 @@
 - Refactoring: Add scripts to head with `defer`
 - Refactoring: Use variables in place of selectors where possible
 - Linting (ESLint): As per latest ash-nazg
-- Testing: Cypress testing, including axe accessibility testing;
-  add sourcemaps to stylus; coverage
+- Build: Add sourcemaps to stylus
 - Maintenance: Add `.editorconfig`
-- npm: Mongodb and server start scripts
-- npm: Add recommended `package.json` fields; allow Node >= 10.4.0 in `engines`
+- Testing: Cypress testing, including axe accessibility testing and
+    coverage
+- npm: Mongodb and server start scripts; misc. testing and badge
+    generation scripts
+- npm: Add recommended `package.json` fields; specify Node >= 10.4.0 in
+    `engines`
 - npm: Update deps and devDeps

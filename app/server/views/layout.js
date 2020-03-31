@@ -36,6 +36,8 @@ module.exports = ({
             crossorigin: 'anonymous'
           }],
           ['link', {rel: 'stylesheet', href: '/css/style.css'}],
+          // Todo: If keeping, add badge to a demo and make enableable (off
+          //   by default) with option
           ['link', {
             rel: 'stylesheet',
             href: localScripts

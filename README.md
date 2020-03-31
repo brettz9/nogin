@@ -27,26 +27,36 @@ The project name is a portmanteau of "Node" and "login" and is pronounced "noggi
 
 So if you want Node login, use your "nogin"!
 
-**Note: This revised version of node-login is not yet fully ready for
-production use, nor is the documentation below fully up-to-date.**
-
 ### A basic account management system built in Node.js with the following features:
 
-- New User Account Creation
-- Secure Password Reset via Email
-- Ability to Update / Delete Account
-- Session Tracking for Logged-In Users
-- Local Cookie Storage for Returning Users
-- Blowfish-based Scheme Password Encryption
+- New user account creation
+- Secure password reset via email
+- Ability to update / delete account
+- Session tracking for logged-in users
+- Local cookie storage for returning Users
+- PBKDF2-based password encryption
+
+## Improvements over `node-login`
+
+While you can see [CHANGES](./CHANGES.md) (from the beginning) to see
+all of the fixes and enhancements (including security fixes), the essential
+change has been to avoid the necessity of directly modifying source. This
+component has been retooled to allow it to be added as an npm dependency
+and provided command-line arguments which customize the appearance and
+behavior to a high degree--and using a config file or CLI flags rather
+than environmental variables.
 
 ## Installation & Setup
 
-1. Install [Node.js](https://nodejs.org/) & [MongoDB](https://www.mongodb.org/) if you haven't already.
+1. Install [Node.js](https://nodejs.org/) & [MongoDB](https://www.mongodb.org/)
+    if you haven't already. (Note that while we have provided a generic database
+    adapter that could be used to support other databases, MongoDB is the only
+    currently supported database.)
 
 2. Install the package.
 
 ```sh
-npm install -P nogin
+npm install nogin
 ```
 
 3. In a separate shell start MongoDB.
