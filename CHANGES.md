@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 1.0.0-beta.5
 
 - Fix: Ensure that user can signup again if email dispatch fails
 - Fix: Change error messages (both for signup or updating) to indicate
