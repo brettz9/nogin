@@ -22,7 +22,7 @@ share-alike terms are for the fonts themselves, not its CSS (which is under MIT)
 
 ![nogin](./readme_includes/nogin.jpg?raw=true)
 
-The name is a portmanteau of "Node" and "login" and is pronounced "noggin"
+The project name is a portmanteau of "Node" and "login" and is pronounced "noggin"
 (a colloquial word for "head").
 
 So if you want Node login, use your "nogin"!
