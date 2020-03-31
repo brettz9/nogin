@@ -142,14 +142,14 @@ const optionDefinitions = [
   {
     name: 'router', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be' +
+      'have a `module.exports` default function export that will be ' +
       'passed the Express `app` instance and resolvedoptions. Not required.',
     typeLabel: '{underline path}'
   },
   {
     name: 'injectHTML', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be' +
+      'have a `module.exports` default function export that will be ' +
       'passed a config object, including a `template` string indicating ' +
       'the template being built. Must return an object with any of 4 ' +
       'optional methods (`headPre`, `headPost`, `bodyPre`, and/or ' +
