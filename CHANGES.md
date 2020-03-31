@@ -5,7 +5,8 @@
 - Fix: Ensure that user can signup again if email dispatch fails
 - Fix: Change error messages (both for signup or updating) to indicate
     conditions when an email is changed but there is an error sending
-    the activation link out (possibly due to a bad email address)
+    the activation link out (possibly due to a bad email address); was
+    incorrectly reporting that the account had not been changed
 - Fix: Avoid chance for clashes or unnecessary data by deleting
     unactivated accounts once one is activated.
 - Enhancement: Ensure that any `?redirect=` query parameter present in
@@ -13,7 +14,7 @@
     login.
 - Enhancement: i18nize routes
 - Enhancements (config):
-    - Optional override i18n routes with config
+    - Optional override (i18nized) routes with config
     - Add `postLoginRedirectPath` option for users to redirect by
         default somewhere other than `/home` (or locale equivalent) after
         login.
@@ -55,7 +56,7 @@
 
 - Breaking change: Disable dangerous `/reset` page (until such
     time as may reenable as POST API endpoint for privileged users)
-- Fix (regression?): Get old values to show on `/home`
+- Fix (regression): Get old values to show on `/home`
 - Fix (regression): Allow user to update with same email again
 - Fix (regression?): Give reset password dialog proper sizing and display
 - Refactoring: Use `user` from session (in case code is refactored to use
@@ -68,11 +69,11 @@
 ## 1.0.0-beta.2
 
 - Change: Avoid a few login defaults (don't want to encourage using them!)
+- Change: Send error to user on home page if session is lost
 - Fix: Pass on `injectHTML` properly
 - Fix: Display errors on signup
-- Fix: Send error to user on home page if session is lost
 - Fix (regression): Properly handle `Promise.allSettled` values
-- Fix: Disallow empty string for user attempting to visit `/home`
+- Fix: Disallow empty user string for user attempting to visit `/home`
 - Fix: Ensure `passVer` can be passed in from CLI (but not web)
 - Enhancement: Allow `country` as CLI add/remove/etc. verb option
 - Enhancement: Expose `listIndexes` to CLI
@@ -87,6 +88,7 @@
 ## 1.0.0-beta.1
 
 - Breaking enhancement: Avoid `process.env` (`app.js` accepts CLI now instead)
+- Breaking change: Specify Node >= 10.4.0 in `engines`
 - Breaking change: Rename auto-set `pass_ver` to `passVer`
 - Breaking change: Rename `print` page to `users`
 - Breaking refactoring: `EmailDispatcher` and `AccountManager` are now classes;
@@ -104,7 +106,7 @@
 - Update: Use now required Mongodb APIs
 - Update: CDN for bootstrap (CSS and JS), jquery, popper
 - Enhancement: Database abstraction layer
-- Enhancement: Autocomplete hints
+- Autocomplete hints (name, user, email, country, new/current password)
 - Enhancement: More configurabiity, e.g.,
     - Add `stylesheet` and `noBuiltinStylesheets`
     - Add `userJS` and `userJSModule`
@@ -126,7 +128,7 @@
   except for `color-contrast` whose check we are temporarily disabling
   until may have time to fix)
 - Optimization: Add `use strict`
-- Docs: Add Change log for unreleased
+- Docs: Add Change log
 - Docs: Indicate planned to-dos
 - Docs: CLI
 - Docs: Indicate license types, test results, and coverage as badges
@@ -146,6 +148,5 @@
     coverage
 - npm: Mongodb and server start scripts; misc. testing and badge
     generation scripts
-- npm: Add recommended `package.json` fields; specify Node >= 10.4.0 in
-    `engines`
+- npm: Add recommended `package.json` fields
 - npm: Update deps and devDeps

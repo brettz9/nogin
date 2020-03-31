@@ -26,11 +26,11 @@
     ]
   },
   "scripts": {
-    "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production readme_includes/licenses-badge.svg",
-    "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment readme_includes/licenses-badge-dev.svg",
+    "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",
+    "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment doc-includes/licenses-badge-dev.svg",
     "license-badges": "run-p license-badge license-badge-dev",
-    "build-cli-svg": "clp --format=svg --config=app/server/optionDefinitions.js readme_includes/cli.svg",
-    "build-cli-html": "clp --format=html --config=app/server//optionDefinitions.js readme_includes/cli.html",
+    "build-cli-svg": "clp --format=svg --config=app/server/optionDefinitions.js doc-includes/cli.svg",
+    "build-cli-html": "clp --format=html --config=app/server//optionDefinitions.js doc-includes/cli.html",
     "build-cli": "run-p build-cli-svg build-cli-html",
     "cli": "node ./bin/cli.js",
     "help": "node ./bin/cli.js --help",
@@ -109,8 +109,8 @@
     "test-cov-prereport": "run-p -r start-cov cypress:delayed-run",
     "test-cov-prereport-no-unit": "run-p -r start-cov cypress:delayed-run-no-unit",
     "clean-and-instrument": "run-p -c cypress:remove-nyc-output instrument",
-    "coverage-badge": "coveradge --introTemplate \"UI Coverage (Cypress)\" readme_includes/coverage-badge.svg",
-    "test-badge": "mbg --file ./mochawesome.json --badge_output readme_includes/tests-badge.svg",
+    "coverage-badge": "coveradge --introTemplate \"UI Coverage (Cypress)\" doc-includes/coverage-badge.svg",
+    "test-badge": "mbg --file ./mochawesome.json --badge_output doc-includes/tests-badge.svg",
     "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-no-unit": "run-s -c clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full",
     "test": "snyk test && run-p -r start cypress:delayed-run"

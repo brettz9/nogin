@@ -2,17 +2,17 @@
 [![Dependencies](https://img.shields.io/david/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin)
 [![devDependencies](https://img.shields.io/david/dev/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin?type=dev)
 
-[![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/tests-badge.svg?sanitize=true)](readme_includes/tests-badge.svg)
-[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/coverage-badge.svg?sanitize=true)](readme_includes/coverage-badge.svg) (Tested on Firefox and Chrome)
+[![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/tests-badge.svg?sanitize=true)](doc-includes/tests-badge.svg)
+[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg) (Tested on Firefox and Chrome)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/brettz9/nogin/badge.svg)](https://snyk.io/test/github/brettz9/nogin)
 [![Total Alerts](https://img.shields.io/lgtm/alerts/g/brettz9/nogin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/nogin/alerts)
 [![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/brettz9/nogin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/nogin/context:javascript)
 
-[![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/licenses-badge.svg?sanitize=true)](readme_includes/licenses-badge.svg)
+[![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge.svg?sanitize=true)](doc-includes/licenses-badge.svg)
 
 <small>(Note that the more restrictive [font-awesome](https://www.npmjs.com/package/font-awesome)
-share-alike terms are for the fonts themselves, not its CSS (which is under MIT); see also [licenses for dev. deps.](https://raw.githubusercontent.com/brettz9/nogin/master/readme_includes/licenses-badge-dev.svg?sanitize=true).)</small>
+share-alike terms are for the fonts themselves, not its CSS (which is under MIT); see also [licenses for dev. deps.](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge-dev.svg?sanitize=true).)</small>
 
 [![issuehunt-to-marktext](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/r/brettz9/nogin)
 
@@ -20,7 +20,7 @@ share-alike terms are for the fonts themselves, not its CSS (which is under MIT)
 
 *A maintained and expanded fork of <https://github.com/braitsch/node-login>.*
 
-![nogin](./readme_includes/nogin.jpg?raw=true)
+![nogin](./doc-includes/nogin.jpg?raw=true)
 
 The project name is a portmanteau of "Node" and "login" and is pronounced "noggin"
 (a colloquial word for "head").
@@ -87,16 +87,19 @@ export NL_EMAIL_USER='your.email@gmail.com'
 export NL_EMAIL_PASS='1234'
 ```
 
-![nogin](./readme_includes/retrieve-password.jpg?raw=true)
+![nogin](./doc-includes/retrieve-password.jpg?raw=true)
 
 ## Command line usage
 
-[![cli.svg](https://brettz9.github.io/nogin/readme_includes/cli.svg)](cli.svg)
+Note that the CLI API does not perform all validation that the UI does,
+so be sure to include all required fields, etc.
+
+[![cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)](cli.svg)
 
 To view as non-embedded HTML or SVG files (for copy-pasteable commands):
 
-- [cli.html](https://brettz9.github.io/nogin/readme_includes/cli.html)
-- [cli.svg](https://brettz9.github.io/nogin/readme_includes/cli.svg)
+- [cli.html](https://brettz9.github.io/nogin/doc-includes/cli.html)
+- [cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)
 
 ## Programmatic usage
 
@@ -119,8 +122,8 @@ Questions and suggestions for improvement are welcome.
 
 1. Update **docs**
     1. Update **docs above**
-    1. **Review CHANGES** to ensure includes all changes (and so docs
-        are mentioning)
+    1. **Review CHANGES** for migration guide (and for help in
+        overviewing all features)
     1. Document `env` vars in `main.js` plugin file (`env`, `coverage`,
         `disableEmailChecking`; and distinguish from `secret` and
         `NL_EMAIL_HOST`, `NL_EMAIL_USER`, and `NL_EMAIL_PASS`);
