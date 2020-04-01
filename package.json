@@ -20,7 +20,9 @@
       "instrumented/**",
       "cypress/**",
       "test/**",
-      "mochawesome-report/**"
+      "mochawesome-report/**",
+      "rollup.config.js",
+      "node_modules/**"
     ],
     "reporter": [
       "text",
@@ -29,9 +31,10 @@
     ]
   },
   "scripts": {
+    "prepare": "run-s license-badges",
     "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",
     "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment doc-includes/licenses-badge-dev.svg",
-    "license-badges": "run-p license-badge license-badge-dev",
+    "license-badges": "run-s license-badge license-badge-dev",
     "rollup": "rollup -c",
     "build-cli-svg": "clp --format=svg --config=app/server/optionDefinitions.js doc-includes/cli.svg",
     "build-cli-html": "clp --format=html --config=app/server//optionDefinitions.js doc-includes/cli.html",
@@ -55,8 +58,8 @@
     "kill": "npm run stop-mongo",
     "stop-mongo": "kill -2 `pgrep mongo`",
     "mongo:start": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
-    "watch:server-start": "nodemon ./bin/cli.js -- --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --showUsers --requireName --SERVE_COVERAGE",
-    "server:start": "node ./bin/cli.js --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --showUsers --requireName --SERVE_COVERAGE",
+    "watch:server-start": "nodemon ./bin/cli.js -- --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --showUsers --requireName --SERVE_COVERAGE",
+    "server:start": "node ./bin/cli.js --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --showUsers --requireName --SERVE_COVERAGE",
     "watch:server:start-production": "NODE_ENV=production npm run watch:server:start",
     "server:start-production": "NODE_ENV=production npm run server:start",
     "css-stylus": "stylus --sourcemap-inline app/public/css/style.styl",
@@ -68,7 +71,7 @@
     "delayed-unit-only": "run-s delay unit-only",
     "unit-cov": "run-p -r start-cov delayed-unit-only-cov",
     "unit": "run-p -r start delayed-unit-only",
-    "server:start-cov-only": "nyc --all node ./bin/cli.js --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --showUsers --requireName --SERVE_COVERAGE -d instrumented",
+    "server:start-cov-only": "nyc --all node ./bin/cli.js --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --showUsers --requireName --SERVE_COVERAGE -d instrumented",
     "server:start-cov": "run-s css server:start-cov-only",
     "server:delayed-start-cov": "run-s delay server:start-cov",
     "start-cov": "run-p -r mongo:start server:delayed-start-cov",
@@ -184,6 +187,7 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "acorn": "^7.1.1",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-transform-async-to-promises": "^0.8.15",
     "chai": "^4.2.0",
     "command-line-publish": "^0.7.0",
     "cookie-signature": "^1.1.0",

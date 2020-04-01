@@ -4,7 +4,7 @@
 module.exports = ({
   _, content, scripts, title, localScripts,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
-  includePolyfill, useESM,
+  noPolyfill, useESM,
   error,
   triggerCoverage
 }, injectedHTML) => {
@@ -117,27 +117,27 @@ module.exports = ({
           src: '/js/controllers/emptyController.js'
         }]
         : '',
-      includePolyfill
-        // We will currently skip even with `useESM` as that is mostly for
-        //  testing and shouldn't need it
-        ? ['script', {
+      noPolyfill
+        // We will avoid even with `useESM` (which doesn't have an equivalent
+        //  version) as that is mostly for testing and shouldn't need it
+        ? ''
+        : ['script', {
           src: '/js/polyfills/polyfills.iife.min.js'
-        }]
-        : '',
+        }],
       {'#': scripts
         ? (useESM
-          ? scripts.map((script) => {
+          ? scripts.map(([tag, atts]) => {
             // Currently all scripts are controllers
             // istanbul ignore else
-            if (script.src.endsWith('Controller.iife.min.js')) {
-              delete script.defer;
-              script.src = script.src.replace(
+            if (atts.src.endsWith('Controller.iife.min.js')) {
+              delete atts.defer;
+              atts.src = atts.src.replace(
                 /Controller\.iife\.min\.js$/u,
                 'Controller.js'
               );
-              script.type = 'module';
+              atts.type = 'module';
             }
-            return script;
+            return [tag, atts];
           })
           : scripts)
         : []

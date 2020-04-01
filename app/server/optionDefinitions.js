@@ -147,15 +147,15 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
-    name: 'useESM', type: String,
+    name: 'useESM', type: Boolean,
     description: 'Mainly for easier debugging. Whether to use browser ESM ' +
       'source modules where available in place of compiled IIFE code. ' +
       'Defaults to `false`.'
   },
   {
-    name: 'includePolyfill', type: String,
-    description: 'Whether to include the core-js polyfills for ' +
-      'compatibility with older browsers. Defaults to `true`.'
+    name: 'noPolyfill', type: Boolean,
+    description: 'Whether to drop the core-js polyfills for ' +
+      'compatibility with older browsers. Defaults to `false`.'
   },
   {
     name: 'injectHTML', type: String,

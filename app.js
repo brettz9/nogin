@@ -87,7 +87,7 @@ exports.createServer = async function (options) {
     requireName,
     localesBasePath = 'app/server',
     useESM,
-    includePolyfill,
+    noPolyfill,
     postLoginRedirectPath,
     customRoute
   } = opts;
@@ -209,7 +209,7 @@ exports.createServer = async function (options) {
     customRoute,
     cwd,
     useESM,
-    includePolyfill,
+    noPolyfill,
     opts,
     // User is using instrumenting
     triggerCoverage: JS_DIR !== '/app/public'

@@ -533,7 +533,8 @@ describe('CLI', function () {
         'u'
       ));
 
-      const headScripts = [...doc.querySelectorAll('head script')].map(
+      const headScriptsDOM = [...doc.querySelectorAll('head script')];
+      const headScripts = headScriptsDOM.map(
         (script) => {
           return script.outerHTML;
         }
@@ -569,6 +570,15 @@ describe('CLI', function () {
         '<script src="userJS.js"></script>' +
         '<script type="module" src="userJSModule.js"></script>'
       );
+
+      expect(headScriptsDOM.some((headScript) => {
+        return headScript.src === '/js/polyfills/polyfills.iife.min.js';
+      })).to.be.true;
+
+      expect(headScriptsDOM.some((headScript) => {
+        return headScript.type === 'module' &&
+          headScript.src === '/js/controllers/loginController.js';
+      })).to.be.false;
 
       expect(doc.body.firstElementChild.outerHTML).to.equal(
         '<link rel="stylesheet" href="bodyPreContent.css">'

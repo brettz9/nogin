@@ -41,7 +41,7 @@ const layoutAndTitleGetter = (config) => {
     injectHTML,
     localScripts,
     triggerCoverage,
-    includePolyfill,
+    noPolyfill,
     useESM
   } = config;
   /**
@@ -65,7 +65,7 @@ const layoutAndTitleGetter = (config) => {
           userJS,
           userJSModule,
           localScripts,
-          includePolyfill,
+          noPolyfill,
           useESM,
           ...businessLogicArgs
         };

@@ -1,5 +1,14 @@
 # CHANGES for nogin
 
+## ?
+
+- Fix: Add Rollup with Babel (and core-js) to ensure syntax working on
+    older browsers; add options `useESM` and `noPolyfill` for configuring
+- Update: Global setting no longer needed for `intl-dom`
+- Linting: Enforce `no-restricted-globals` with `window`
+- npm: Add `license-badges` to `prepare` script
+- npm: Update devDeps.
+
 ## 1.0.0-beta.5
 
 - Fix: Ensure that user can signup again if email dispatch fails
