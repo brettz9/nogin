@@ -6,7 +6,10 @@
     older browsers; add options `useESM` and `noPolyfill` for configuring
 - Update: Global setting no longer needed for `intl-dom`
 - Linting: Enforce `no-restricted-globals` with `window`
+- Linting: Avoid disabling compat plugin for client-side code
+- Docs: Add migration guide
 - npm: Add `license-badges` to `prepare` script
+- npm: Add `doiuse` for CSS support browserslist detection
 - npm: Update devDeps.
 
 ## 1.0.0-beta.5
