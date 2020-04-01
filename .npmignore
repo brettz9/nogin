@@ -3,6 +3,7 @@ node_modules
 test
 cypress/**
 cypress.env.json
+cypress.json
 
 coverage/**
 .nyc_output
