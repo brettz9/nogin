@@ -4,6 +4,9 @@
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "author": "Brett Zamir",
   "contributors": [],
+  "browserslist": [
+    "cover 100%"
+  ],
   "nyc": {
     "cache": false,
     "exclude": [

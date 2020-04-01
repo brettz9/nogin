@@ -12,6 +12,14 @@ module.exports = {
   },
   settings: {
     polyfills: [
+      // Supplied by core-js
+      'Object.values',
+      'Promise',
+
+      // Would require polyfills for these much older features
+      'console',
+      'Error',
+      'location.href'
     ]
   },
   globals: {
@@ -43,8 +51,6 @@ module.exports = {
   }, {
     files: [
       'cypress/integration/**/*.js',
-      'cypress/plugins/main.js',
-      'cypress/plugins/db-basic-testing-extensions.js',
       'cypress/support/**/*.js',
       'test/*.js'
     ],
@@ -64,6 +70,18 @@ module.exports = {
       'cypress/assertion-before-screenshot': ['error'],
       'cypress/require-data-selectors': ['error'],
       'cypress/no-force': ['error']
+    }
+  }, {
+    files: [
+      'cypress/plugins/main.js',
+      'cypress/plugins/db-basic-testing-extensions.js'
+    ],
+    extends: [
+      'plugin:node/recommended-module'
+    ],
+    rules: {
+      // Browser only
+      'compat/compat': 0
     }
   }, {
     files: [
