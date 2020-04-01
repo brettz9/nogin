@@ -123,6 +123,8 @@ Questions and suggestions for improvement are welcome.
 1. See about removing `font-awesome` dependency (and if so, rebuild
     license badges and remove note above about its license)
 1. Update **docs**
+    1. Review `optionDefinitions` and those in `/bin`
+    1. Mention dep.-install-available npm scripts
     1. Update **docs above**
     1. **Review CHANGES** for migration guide (and for help in
         overviewing all features)

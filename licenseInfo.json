@@ -1,4 +1,6 @@
 {
-  "bundledRootPackages": [],
+  "bundledRootPackages": [
+    "core-js"
+  ],
   "filesByLicense": {}
 }

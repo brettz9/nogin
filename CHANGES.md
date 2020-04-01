@@ -2,12 +2,15 @@
 
 ## ?
 
+- License: Add `core-js` to bundled (MIT)
 - Fix: Add Rollup with Babel (and core-js) to ensure syntax working on
     older browsers; add options `useESM` and `noPolyfill` for configuring
 - Update: Global setting no longer needed for `intl-dom`
 - Linting: Enforce `no-restricted-globals` with `window`
 - Linting: Avoid disabling compat plugin for client-side code
 - Docs: Add migration guide
+- npm: Move `chai-as-promised` to devDeps and `nodemon`/`npm-run-all`
+    to deps.
 - npm: Add `license-badges` to `prepare` script
 - npm: Add `doiuse` for CSS support browserslist detection
 - npm: Update devDeps.
@@ -35,7 +38,7 @@
     - Allow changing activation email or reset password email template
         (with alternative JS template modules):
         `composeResetPasswordEmailView` and `composeActivationEmailView`
-- Optimization: Cache i18n functions
+- Optimization: Cache i18n functions and data
 - Messages: Change client-side (email) update message to mention
     that though otherwise changed, the email change awaits link activation
 - Docs: Update coverage badge per latest coveradge
