@@ -334,7 +334,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 110000, async (stdout) => {
+        ], 180000, async (stdout) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {

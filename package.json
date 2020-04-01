@@ -22,7 +22,8 @@
       "test/**",
       "mochawesome-report/**",
       "rollup.config.js",
-      "node_modules/**"
+      "**/node_modules/**",
+      "app/public/js/polyfills/polyfills.js"
     ],
     "reporter": [
       "text",
