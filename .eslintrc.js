@@ -48,6 +48,13 @@ module.exports = {
       'cypress/support/**/*.js',
       'test/*.js'
     ],
+    settings: {
+      polyfills: [
+        'Promise',
+        'Promise.all',
+        'Promise.resolve'
+      ]
+    },
     extends: [
       'plugin:chai-expect/recommended',
       'plugin:chai-friendly/recommended',
@@ -65,6 +72,15 @@ module.exports = {
     env: {
       node: false,
       browser: true
+    }
+  }, {
+    files: [
+      'app/server/**', 'test/**', 'bin/**', 'app.js',
+      'tools/mochawesome-cli.js'
+    ],
+    rules: {
+      // Browser only
+      'compat/compat': 0
     }
   }, {
     files: [
@@ -96,9 +112,6 @@ module.exports = {
   rules: {
     'import/no-commonjs': 0,
     'import/unambiguous': 0,
-
-    // Browser only
-    'compat/compat': 0,
 
     'no-console': 0
   }
