@@ -1,5 +1,4 @@
 /* globals $, _ */
-'use strict';
 
 /**
 * @typedef {PlainObject} AccountInfoElements
@@ -9,7 +8,7 @@
 * @property {external:jQuery} pass
 */
 
-window.AccountValidatorView = {
+const AccountValidatorView = {
   /**
    * @returns {HTMLFormElement}
    */
@@ -59,3 +58,5 @@ window.AccountValidatorView = {
     }
   }
 };
+
+export default AccountValidatorView;

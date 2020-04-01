@@ -1,6 +1,7 @@
-/* globals ActivatedView, NL_ROUTES */
-'use strict';
-(() => {
+/* globals NL_ROUTES */
+
+import ActivatedView from '../views/activated.js';
+
 const accountActivatedAlertDialog = ActivatedView.accountActivated();
 accountActivatedAlertDialog.modal('show');
 
@@ -12,4 +13,3 @@ okButton.click(function () {
     location.href = NL_ROUTES.root;
   }, 300);
 });
-})();

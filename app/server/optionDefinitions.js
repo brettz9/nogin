@@ -147,6 +147,17 @@ const optionDefinitions = [
     typeLabel: '{underline path}'
   },
   {
+    name: 'useESM', type: String,
+    description: 'Mainly for easier debugging. Whether to use browser ESM ' +
+      'source modules where available in place of compiled IIFE code. ' +
+      'Defaults to `false`.'
+  },
+  {
+    name: 'includePolyfill', type: String,
+    description: 'Whether to include the core-js polyfills for ' +
+      'compatibility with older browsers. Defaults to `true`.'
+  },
+  {
     name: 'injectHTML', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
       'have a `module.exports` default function export that will be ' +

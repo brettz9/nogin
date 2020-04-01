@@ -1,5 +1,4 @@
 /* globals $, _ */
-'use strict';
 
 /**
 * @typedef {PlainObject} EmailInfoElements
@@ -9,7 +8,7 @@
 * @property {external:jQuery} pass
 */
 
-window.EmailValidatorView = {
+const EmailValidatorView = {
   /**
    * @returns {AccountInfoElements}
    */
@@ -34,3 +33,5 @@ window.EmailValidatorView = {
     PleaseEnterValidEmailAddress: _('PleaseEnterValidEmailAddress')
   }
 };
+
+export default EmailValidatorView;

@@ -1,7 +1,9 @@
-/* globals $, _, ConfirmDialog, AlertDialog, populateForm */
-'use strict';
+/* globals $, _ */
 
-(() => {
+import ConfirmDialog from './utilities/ConfirmDialog.js';
+import AlertDialog from './utilities/AlertDialog.js';
+import populateForm from './utilities/populateForm.js';
+
 /**
  * @param {PlainObject} cfg
  * @param {string} [cfg.message]
@@ -19,7 +21,7 @@ function lockedAlert ({type, message, heading}) {
   });
 }
 
-window.HomeView = {
+const HomeView = {
   /**
    * @returns {external:jQuery}
    */
@@ -163,4 +165,5 @@ window.HomeView = {
     return lockedAlert({type, message, heading: 'error'});
   }
 };
-})();
+
+export default HomeView;

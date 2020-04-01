@@ -4,6 +4,7 @@
 module.exports = ({
   _, content, scripts, title, localScripts,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
+  includePolyfill, useESM,
   error,
   triggerCoverage
 }, injectedHTML) => {
@@ -98,9 +99,12 @@ module.exports = ({
         src: '/node_modules/jamilih/dist/jml.js'
       }],
       */
+      // While we could import this within `_lang`, we'd need a separate build
+      //   for each locale
       ['script', {
         src: '/node_modules/intl-dom/dist/index.umd.min.js'
       }],
+      // We don't roll this up as it is both locale-dependent and CLI-flag-dependent
       ['script', {
         src: '/_lang'
       }],
@@ -113,7 +117,31 @@ module.exports = ({
           src: '/js/controllers/emptyController.js'
         }]
         : '',
-      {'#': scripts || []},
+      includePolyfill
+        // We will currently skip even with `useESM` as that is mostly for
+        //  testing and shouldn't need it
+        ? ['script', {
+          src: '/js/polyfills/polyfills.iife.min.js'
+        }]
+        : '',
+      {'#': scripts
+        ? (useESM
+          ? scripts.map((script) => {
+            // Currently all scripts are controllers
+            // istanbul ignore else
+            if (script.src.endsWith('Controller.iife.min.js')) {
+              delete script.defer;
+              script.src = script.src.replace(
+                /Controller\.iife\.min\.js$/u,
+                'Controller.js'
+              );
+              script.type = 'module';
+            }
+            return script;
+          })
+          : scripts)
+        : []
+      },
       userJS
         ? ['script', {
           src: userJS

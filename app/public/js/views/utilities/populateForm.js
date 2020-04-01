@@ -1,7 +1,6 @@
 /* globals $ */
-'use strict';
 
-window.populateForm = (sel, {
+const populateForm = (sel, {
   heading,
   subheading,
   action1,
@@ -14,3 +13,5 @@ window.populateForm = (sel, {
   $(sel + ' [data-name=action2]').text(action2);
   return $(sel);
 };
+
+export default populateForm;

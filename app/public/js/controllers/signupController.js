@@ -1,8 +1,10 @@
-/* globals AccountValidator, ajaxFormClientSideValidate,
-  SignupView, NL_ROUTES */
-'use strict';
+/* globals NL_ROUTES */
 
-(() => {
+import ajaxFormClientSideValidate from
+  '../utilities/ajaxFormClientSideValidate.js';
+import AccountValidator from '../form-validators/AccountValidator.js';
+import SignupView from '../views/signup.js';
+
 const name = SignupView.getName();
 name.focus();
 
@@ -69,4 +71,3 @@ function onCreatedSuccess () {
   });
   accountCreatedAlertDialog.modal('show');
 }
-})();

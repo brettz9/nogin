@@ -1,7 +1,6 @@
 /* globals $ */
-'use strict';
 
-window.ConfirmDialog = {
+const ConfirmDialog = {
   populate ({
     type,
     header,
@@ -32,3 +31,5 @@ window.ConfirmDialog = {
     return confirmDialog.find('.submit');
   }
 };
+
+export default ConfirmDialog;

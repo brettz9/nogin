@@ -1,17 +1,17 @@
-/* globals ResetPasswordValidatorView */
-'use strict';
+import ResetPasswordValidatorView from
+  '../views/validators/ResetPasswordValidatorView.js';
 
 /**
  * Resetting password validation.
  */
-window.ResetPasswordValidator = class ResetPasswordValidator {
+class ResetPasswordValidator {
   /**
    * @param {external:jQuery} pass Password element
    * @returns {boolean}
    */
   static validatePassword (pass) {
     pass.setCustomValidity('');
-    // Todo[cypress@>4.2.0]: Remove this disabling of istanbul to see if fixed
+    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (pass.validity.tooShort) {
@@ -60,4 +60,6 @@ window.ResetPasswordValidator = class ResetPasswordValidator {
     ResetPasswordValidatorView.showSuccess();
     this.alert.fadeIn(500);
   }
-};
+}
+
+export default ResetPasswordValidator;

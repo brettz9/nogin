@@ -1,8 +1,12 @@
-/* globals LoginValidator, EmailValidator, LoginView, LoginValidatorView,
-  ajaxFormClientSideValidate, NL_ROUTES */
-'use strict';
+/* globals NL_ROUTES */
 
-(() => {
+import ajaxFormClientSideValidate from
+  '../utilities/ajaxFormClientSideValidate.js';
+import LoginView from '../views/login.js';
+import LoginValidatorView from '../views/validators/LoginValidatorView.js';
+import LoginValidator from '../form-validators/LoginValidator.js';
+import EmailValidator from '../form-validators/EmailValidator.js';
+
 const loginModal = LoginView.getLoginModal();
 const loginForm = LoginView.getLoginForm();
 const forgotPassword = LoginView.getForgotPassword(loginModal);
@@ -130,4 +134,3 @@ ajaxFormClientSideValidate(
     }
   }
 );
-})();

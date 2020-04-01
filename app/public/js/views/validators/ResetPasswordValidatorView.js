@@ -1,8 +1,7 @@
 /* globals $, _ */
-'use strict';
 
 const modal = $('#set-password');
-window.ResetPasswordValidatorView = {
+const ResetPasswordValidatorView = {
   /**
    * @returns {external:jQuery} `HTMLDivElement`
    */
@@ -40,3 +39,5 @@ window.ResetPasswordValidatorView = {
     ShouldBeMinimumLength: _('ShouldBeMinimumLength')
   }
 };
+
+export default ResetPasswordValidatorView;

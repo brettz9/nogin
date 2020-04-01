@@ -1,7 +1,8 @@
-/* globals $, _, AlertDialog, populateForm */
-'use strict';
+/* globals $, _ */
+import AlertDialog from './utilities/AlertDialog.js';
+import populateForm from './utilities/populateForm.js';
 
-window.SignupView = {
+const SignupView = {
   /**
    * @returns {external:jQuery}
    */
@@ -70,3 +71,5 @@ window.SignupView = {
     });
   }
 };
+
+export default SignupView;

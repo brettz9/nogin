@@ -40,7 +40,9 @@ const layoutAndTitleGetter = (config) => {
     userJSModule,
     injectHTML,
     localScripts,
-    triggerCoverage
+    triggerCoverage,
+    includePolyfill,
+    useESM
   } = config;
   /**
    * @param {LayoutAndTitleArgs} businessLogicArgs
@@ -63,6 +65,8 @@ const layoutAndTitleGetter = (config) => {
           userJS,
           userJSModule,
           localScripts,
+          includePolyfill,
+          useESM,
           ...businessLogicArgs
         };
         return layoutView(

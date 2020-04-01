@@ -1,12 +1,12 @@
-/* globals LoginValidatorView, AlertDialog */
-'use strict';
+import AlertDialog from '../views/utilities/AlertDialog.js';
+import LoginValidatorView from '../views/validators/LoginValidatorView.js';
 
 const {user, pass} = LoginValidatorView.getFormFields();
 
 /**
  * Login validation.
  */
-window.LoginValidator = class LoginValidator {
+const LoginValidator = class LoginValidator {
   /**
    * @returns {boolean}
    */
@@ -45,3 +45,5 @@ window.LoginValidator = class LoginValidator {
     loginErrors.modal('show');
   }
 };
+
+export default LoginValidator;

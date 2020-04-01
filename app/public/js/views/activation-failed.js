@@ -1,6 +1,7 @@
-/* globals $, _, AlertDialog, NodeLoginInitialErrorGlobal */
-'use strict';
-window.ActivationFailedView = {
+/* globals $, _, NodeLoginInitialErrorGlobal */
+import AlertDialog from './utilities/AlertDialog.js';
+
+const ActivationFailedView = {
   /**
    * @returns {external:jQuery} `HTMLDivElement`
    */
@@ -27,3 +28,4 @@ window.ActivationFailedView = {
     return accountActivatedAlertDialog.find('[data-name=ok]');
   }
 };
+export default ActivationFailedView;

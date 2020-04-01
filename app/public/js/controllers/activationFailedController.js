@@ -1,6 +1,7 @@
-/* globals ActivationFailedView, NL_ROUTES */
-'use strict';
-(() => {
+/* globals NL_ROUTES */
+
+import ActivationFailedView from '../views/activation-failed.js';
+
 const accountFailedActivationAlertDialog =
   ActivationFailedView.accountFailedActivation();
 accountFailedActivationAlertDialog.modal('show');
@@ -15,4 +16,3 @@ okButton.click(function () {
     location.href = NL_ROUTES.root;
   }, 300);
 });
-})();

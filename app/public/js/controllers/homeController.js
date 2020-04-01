@@ -1,8 +1,12 @@
-/* globals $, _, AccountValidator, ajaxFormClientSideValidate,
-  HomeView, ConfirmDialog, NL_ROUTES */
-'use strict';
+/* globals $, _, NL_ROUTES */
 
-(() => {
+import ajaxFormClientSideValidate from
+  '../utilities/ajaxFormClientSideValidate.js';
+
+import ConfirmDialog from '../views/utilities/ConfirmDialog.js';
+import HomeView from '../views/home.js';
+import AccountValidator from '../form-validators/AccountValidator.js';
+
 // User name field
 const name = HomeView.getName();
 name.focus();
@@ -228,4 +232,3 @@ function showLockedErrorAlert ({type, message}) {
   HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
   setTimeout(redirectToRoot, 3000);
 }
-})();

@@ -120,7 +120,8 @@ Questions and suggestions for improvement are welcome.
 
 ## To-dos
 
-1. Babelify client-side JS and add `core-js` (`Object.values` and `Promise`)
+1. See about removing `font-awesome` dependency (and if so, rebuild
+    license badges and remove note above about its license)
 1. Update **docs**
     1. Update **docs above**
     1. **Review CHANGES** for migration guide (and for help in

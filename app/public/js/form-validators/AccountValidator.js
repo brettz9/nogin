@@ -1,10 +1,9 @@
-/* globals AccountValidatorView */
-'use strict';
+import AccountValidatorView from '../views/validators/AccountValidatorView.js';
 
 /**
  * Ensures accounts are valid.
  */
-window.AccountValidator = class AccountValidator {
+class AccountValidator {
   /**
    * Sets up properties and methods.
    * @param {PlainObject} cfg
@@ -55,25 +54,25 @@ window.AccountValidator = class AccountValidator {
         field.setCustomValidity('');
       }
     });
-    // Todo[cypress@>4.2.0]: Remove this disabling of istanbul to see if fixed
+    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (name.validity.tooShort) {
       name.setCustomValidity(this.errorMessages.name.PleaseEnterName);
     }
-    // Todo[cypress@>4.2.0]: Remove this disabling of istanbul to see if fixed
+    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (email.validity.patternMismatch) {
       email.setCustomValidity(this.errorMessages.email.PleaseEnterValidEmail);
     }
-    // Todo[cypress@>4.2.0]: Remove this disabling of istanbul to see if fixed
+    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (user.validity.tooShort) {
       user.setCustomValidity(this.errorMessages.user.PleaseChooseUserName);
     }
-    // Todo[cypress@>4.2.0]: Remove this disabling of istanbul to see if fixed
+    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (!this.userIsLoggedIn() && pass.validity.tooShort) {
@@ -84,4 +83,6 @@ window.AccountValidator = class AccountValidator {
     }
     return this.form.reportValidity();
   }
-};
+}
+
+export default AccountValidator;

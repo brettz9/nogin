@@ -1,5 +1,4 @@
-'use strict';
-window.ajaxFormClientSideValidate = (form, {
+const ajaxFormClientSideValidate = (form, {
   validate,
   // `ajaxForm` properties and methods
   url,
@@ -31,3 +30,5 @@ window.ajaxFormClientSideValidate = (form, {
     error
   });
 };
+
+export default ajaxFormClientSideValidate;

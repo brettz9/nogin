@@ -17,22 +17,9 @@ module.exports = function ({
     ],
     scripts: [
       ['script', {
-        src: '/js/utilities/ajaxFormClientSideValidate.js'
-      }],
-      ['script', {
-        src: '/js/views/utilities/AlertDialog.js'
-      }],
-      ['script', {
-        src: '/js/views/utilities/populateForm.js'
-      }],
-      ['script', {
-        src: '/js/views/validators/AccountValidatorView.js', defer: 'defer'
-      }],
-      ['script', {
-        src: '/js/form-validators/AccountValidator.js', defer: 'defer'
-      }],
-      ['script', {src: '/js/views/signup.js', defer: 'defer'}],
-      ['script', {src: '/js/controllers/signupController.js', defer: 'defer'}]
+        src: '/js/controllers/signupController.iife.min.js',
+        defer: 'defer'
+      }]
     ]
   });
 };

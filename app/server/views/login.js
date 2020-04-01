@@ -67,25 +67,9 @@ module.exports = function ({_, layout, emailPattern, signup}) {
     ],
     scripts: [
       ['script', {
-        src: '/js/utilities/ajaxFormClientSideValidate.js'
-      }],
-      ['script', {src: '/js/views/login.js', defer: 'defer'}],
-      ['script', {
-        src: '/js/views/utilities/AlertDialog.js'
-      }],
-      ['script', {
-        src: '/js/views/validators/LoginValidatorView.js', defer: 'defer'
-      }],
-      ['script', {
-        src: '/js/form-validators/LoginValidator.js', defer: 'defer'
-      }],
-      ['script', {
-        src: '/js/views/validators/EmailValidatorView.js', defer: 'defer'
-      }],
-      ['script', {
-        src: '/js/form-validators/EmailValidator.js', defer: 'defer'
-      }],
-      ['script', {src: '/js/controllers/loginController.js', defer: 'defer'}]
+        src: '/js/controllers/loginController.iife.min.js',
+        defer: 'defer'
+      }]
     ]
   });
 };

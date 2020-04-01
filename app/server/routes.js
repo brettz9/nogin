@@ -3,8 +3,6 @@
 const {join, resolve: pathResolve} = require('path');
 
 const express = require('express');
-const fileFetch = require('file-fetch');
-const {JSDOM} = require('jsdom');
 
 const {
   checkLocaleRoutes, routeGetter, layoutAndTitleGetter
@@ -15,10 +13,6 @@ const EmailDispatcher = require('./modules/email-dispatcher.js');
 const getLogger = require('./modules/getLogger.js');
 const i18n = require('./modules/i18n.js');
 const {emailPattern} = require('./modules/patterns.js');
-
-// For intl-dom
-global.fetch = fileFetch;
-global.document = (new JSDOM()).window.document;
 
 // Todo[engine:node@>12.9.0]: Remove `Promise.allSettled` polyfill (or
 //  forego this and don't i18nize server responses (do on client))

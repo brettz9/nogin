@@ -1,8 +1,6 @@
 /* globals $ */
 
-'use strict';
-
-window.ResetPasswordView = {
+const ResetPasswordView = {
   /**
    * @returns {external:jQuery} `HTMLFormElement`
    */
@@ -24,3 +22,5 @@ window.ResetPasswordView = {
     return $('[data-name="reset-password-submit"]');
   }
 };
+
+export default ResetPasswordView;

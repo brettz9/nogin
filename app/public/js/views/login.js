@@ -1,8 +1,6 @@
 /* globals $, _ */
 
-'use strict';
-
-window.LoginView = {
+const LoginView = {
   /**
    * @returns {external:jQuery} `HTMLDivElement`
    */
@@ -114,7 +112,7 @@ window.LoginView = {
   */
   toggleCheckSquare (loginModal) {
     const span = this.getRememberMeButton(loginModal).find('span');
-    // Todo[cypress@>4.2.0]: Remove this disabling of istanbul to see if fixed
+    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (span.hasClass('fa-minus-square')) {
@@ -134,3 +132,5 @@ window.LoginView = {
     this.retrievePasswordCancel(retrievePasswordModal).text('OK');
   }
 };
+
+export default LoginView;

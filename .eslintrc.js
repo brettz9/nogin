@@ -74,7 +74,8 @@ module.exports = {
   }, {
     files: [
       'cypress/plugins/main.js',
-      'cypress/plugins/db-basic-testing-extensions.js'
+      'cypress/plugins/db-basic-testing-extensions.js',
+      'rollup.config.js'
     ],
     extends: [
       'plugin:node/recommended-module'
@@ -91,6 +92,28 @@ module.exports = {
       node: false,
       browser: true
     }
+  }, {
+    files: [
+      'app/public/js/controllers/*.js',
+      'app/public/js/form-validators/**',
+      'app/public/js/polyfills/**',
+      'app/public/js/utilities/**',
+      'app/public/js/views/**'
+    ],
+    extends: [
+      'plugin:node/recommended-module'
+    ],
+    env: {
+      node: false,
+      browser: true
+    }
+  }, {
+    files: [
+      'app/public/js/controllers/emptyController.js'
+    ],
+    extends: [
+      'plugin:node/recommended-script'
+    ]
   }, {
     files: [
       'app/server/**', 'test/**', 'bin/**', 'app.js',
@@ -130,6 +153,9 @@ module.exports = {
   rules: {
     'import/no-commonjs': 0,
     'import/unambiguous': 0,
+
+    // For modules, we shouldn't need `window`
+    'no-restricted-globals': ['error', 'window'],
 
     'no-console': 0
   }

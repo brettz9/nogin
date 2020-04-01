@@ -1,6 +1,7 @@
-/* globals $, _, AlertDialog */
-'use strict';
-window.ActivatedView = {
+/* globals $, _ */
+import AlertDialog from './utilities/AlertDialog.js';
+
+const ActivatedView = {
   /**
    * @returns {external:jQuery} `HTMLDivElement`
    */
@@ -24,3 +25,5 @@ window.ActivatedView = {
     return accountFailedActivationAlertDialog.find('[data-name=ok]');
   }
 };
+
+export default ActivatedView;

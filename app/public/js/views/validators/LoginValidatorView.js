@@ -1,5 +1,4 @@
 /* globals $, _ */
-'use strict';
 
 /**
 * @typedef {PlainObject} LoginInfoElements
@@ -7,7 +6,7 @@
 * @property {external:jQuery} pass
 */
 
-window.LoginValidatorView = {
+const LoginValidatorView = {
   /**
    * @returns {LoginInfoElements}
    */
@@ -32,3 +31,5 @@ window.LoginValidatorView = {
     ProblemTryAgainLater: _('ProblemTryAgainLater')
   }
 };
+
+export default LoginValidatorView;

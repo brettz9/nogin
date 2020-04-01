@@ -1,8 +1,11 @@
-/* globals ResetPasswordValidator, ajaxFormClientSideValidate,
-    ResetPasswordView, NL_ROUTES */
-'use strict';
+/* globals NL_ROUTES */
 
-(() => {
+import ajaxFormClientSideValidate from
+  '../utilities/ajaxFormClientSideValidate.js';
+import ResetPasswordView from '../views/reset-password.js';
+import ResetPasswordValidator from
+  '../form-validators/ResetPasswordValidator.js';
+
 const rv = new ResetPasswordValidator();
 
 const pass = ResetPasswordView.getPassword();
@@ -40,4 +43,3 @@ setPasswordDialog.on('shown.bs.modal', () => {
   pass[0].focus();
 });
 setPasswordDialog.modal('show');
-})();

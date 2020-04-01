@@ -13,11 +13,8 @@ module.exports = function ({_, layout}) {
     ],
     scripts: [
       ['script', {
-        src: '/js/views/utilities/AlertDialog.js'
-      }],
-      ['script', {src: '/js/views/activation-failed.js', defer: 'defer'}],
-      ['script', {
-        src: '/js/controllers/activationFailedController.js', defer: 'defer'
+        src: '/js/controllers/activationFailedController.iife.min.js',
+        defer: 'defer'
       }]
     ]
   });

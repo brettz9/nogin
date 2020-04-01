@@ -1,7 +1,6 @@
 /* globals $ */
-'use strict';
 
-window.AlertDialog = {
+const AlertDialog = {
   /**
    * @param {PlainObject} cfg
    * @param {string} cfg.heading
@@ -26,3 +25,5 @@ window.AlertDialog = {
     return $('[data-name=modal-alert]');
   }
 };
+
+export default AlertDialog;

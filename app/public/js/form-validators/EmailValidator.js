@@ -1,10 +1,9 @@
-/* globals EmailValidatorView */
-'use strict';
+import EmailValidatorView from '../views/validators/EmailValidatorView.js';
 
 /**
  * Validator for email addresses.
  */
-window.EmailValidator = class EmailValidator {
+const EmailValidator = class EmailValidator {
   /**
    * @param {HTMLInputElement} input Email input element
    * @returns {boolean} Whether valid
@@ -60,3 +59,5 @@ window.EmailValidator = class EmailValidator {
     this.retrievePasswordAlert.fadeIn(500);
   }
 };
+
+export default EmailValidator;

@@ -8,18 +8,8 @@ module.exports = function ({_, layout}) {
     ],
     scripts: [
       ['script', {
-        src: '/js/utilities/ajaxFormClientSideValidate.js'
-      }],
-      ['script', {src: '/js/views/reset-password.js', defer: 'defer'}],
-      ['script', {
-        src: '/js/views/validators/ResetPasswordValidatorView.js',
+        src: '/js/controllers/resetPasswordController.iife.min.js',
         defer: 'defer'
-      }],
-      ['script', {
-        src: '/js/form-validators/ResetPasswordValidator.js', defer: 'defer'
-      }],
-      ['script', {
-        src: '/js/controllers/resetPasswordController.js', defer: 'defer'
       }]
     ]
   });
