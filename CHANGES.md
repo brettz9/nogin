@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 1.0.0-rc.1
 
 - Breaking change: Avoid defaults for `NL_EMAIL_HOST` and `NL_SITE_URL`.
 - License: Add `core-js` to bundled (MIT)
