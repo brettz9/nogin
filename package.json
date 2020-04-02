@@ -9,6 +9,7 @@
   ],
   "nyc": {
     "cache": false,
+    "excludeAfterRemap": true,
     "exclude": [
       ".eslintrc.js",
       ".ncurc.js",
@@ -22,8 +23,9 @@
       "test/**",
       "mochawesome-report/**",
       "rollup.config.js",
-      "**/node_modules/**",
-      "app/public/js/polyfills/polyfills.js"
+      "node_modules/**",
+      "docs/**",
+      "app/public/js/polyfills/**"
     ],
     "reporter": [
       "text",
