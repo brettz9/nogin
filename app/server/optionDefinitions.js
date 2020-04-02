@@ -127,7 +127,7 @@ const optionDefinitions = [
     description: 'Point to absolute path at which to serve static files on ' +
       'the same server. Multiple allowed. Not required. To require serving ' +
       'within a particular non-root path, use `router` with Express\' ' +
-      '`app.use()`. See https://expressjs.com/en/api.html#app.use',
+      '`app.get()` or `app.post`. See https://expressjs.com/en/api.html',
     typeLabel: '{underline absolute path}'
   },
   {
@@ -144,7 +144,7 @@ const optionDefinitions = [
     name: 'router', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
       'have a `module.exports` default function export that will be ' +
-      'passed the Express `app` instance and resolvedoptions. Not required.',
+      'passed the Express `app` instance and resolved options. Not required.',
     typeLabel: '{underline path}'
   },
   {
@@ -178,11 +178,6 @@ const optionDefinitions = [
     typeLabel: '{underline config path}'
   },
   {
-    name: 'noLogging', alias: 'l', type: Boolean,
-    description: 'Whether to disable logging; defaults to `false` (logging ' +
-      'is enabled).'
-  },
-  {
     name: 'countryCodes', type: String,
     description: 'Two-letter country codes as JSON array; defaults to ' +
       'codes in `/app/server/modules/country-codes.json`',
@@ -208,7 +203,8 @@ const optionDefinitions = [
   {
     name: 'noBuiltinStylesheets', type: Boolean,
     description: 'Whether to suppress addition of built-in stylesheets, ' +
-      'Bootstrap, and gh-fork-ribbon.css'
+      'Bootstrap, and gh-fork-ribbon.css. Defaults to `false`, i.e., ' +
+      'built-in stylesheets are applied.'
   },
   {
     name: 'userJS', type: String,

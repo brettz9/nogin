@@ -8,10 +8,13 @@
     older browsers; add options `useESM` and `noPolyfill` for configuring
 - Update: Global setting no longer needed for `intl-dom`
 - Enhancement: i18nize query params (redirect, key, c)
+- Enhancement (CLI): Make `noLogging` available for other verbs (at
+    least might use with add/update)
 - Linting: Enforce `no-restricted-globals` with `window`
 - Linting: Avoid disabling compat plugin for client-side code
 - Docs: Add migration guide
 - Docs: Update CLI help
+- Docs: Add jsdoc
 - npm: Move `chai-as-promised` to devDeps and `nodemon`/`npm-run-all`
     to deps.
 - npm: Add `license-badges` to `prepare` script

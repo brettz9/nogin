@@ -38,7 +38,21 @@ class AccountManager {
       await this.adapter.connect();
       this.accounts = await this.adapter.getAccounts();
       // index fields 'user' & 'email' for faster new account validation
-      await this.accounts.createIndex({user: 1, email: 1});
+      await this.accounts.createIndex({
+        user: 1,
+        email: 1
+        // Todo: May wish to enable these as well:
+        /*
+        activated: 1,
+        cookie: 1,
+        ip: 1,
+        passKey: 1,
+        activationCode: 1,
+        unactivatedEmail: 1,
+        activationRequestDate: 1,
+        _id: 1
+        */
+      });
     } catch (err) {
       // Not clear on how to check; we're just rethrowing here for
       //   now anyways

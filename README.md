@@ -66,51 +66,40 @@ flags rather than environmental variables.
 npm install nogin
 ```
 
-3. In a separate shell start MongoDB.
+3. Use `run-p` (which is made available by the `nogin` dependency, `npm-run-all`)
+    along with two of your own `package.json` scripts, one of which to start
+    the mongo database, and the other to start the nogin server (note that
+    `nodemon` is also provided as a dependency, so you could add that to
+    the `nogin` call to watch for changes to `nogin` files):
+
+```json
+{
+    "scripts": {
+        "mongo": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
+        "server": "nogin --localScripts --config nogin.js",
+        "start": "run-p -r mongo server"
+    }
+}
+```
+
+(The `-r` flag indicates that an error in one script will lead both to exit.)
+
+Alternatively, you can start MongoDB in its own separate shell:
 
 ```sh
 mongod
 ```
 
-4. From within the nogin directory start the server.
+...and from within the nogin directory in another terminal, start the server:
 
 ```sh
-node app
+nogin --localScripts --config nogin.js
 ```
 
-5. Open a browser window and navigate to: [http://localhost:3000](http://localhost:3000)
-
-## Password Retrieval
-
-To enable the password retrieval feature, it is recommended that you create
-environment variables for your credentials instead of hard coding them into
-the [email dispatcher module](https://github.com/brettz9/nogin/blob/master/app/server/modules/email-dispatcher.js).
-
-To do this on OSX you can simply add them to your `.profile` or `.bashrc` file.
-
-```sh
-export NL_EMAIL_HOST='smtp.example.name'
-export NL_EMAIL_USER='your.email@example.name'
-export NL_EMAIL_PASS='1234'
-```
+5. Once the script mentions it is listening (on port 3000 by default), open
+    a browser window and navigate to: [http://localhost:3000](http://localhost:3000)
 
 ![nogin](./doc-includes/retrieve-password.jpg?raw=true)
-
-## Command line usage
-
-Note that the CLI API does not perform all validation that the UI does,
-so be sure to include all required fields, etc.
-
-[![cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)](cli.svg)
-
-To view as non-embedded HTML or SVG files (for copy-pasteable commands):
-
-- [cli.html](https://brettz9.github.io/nogin/doc-includes/cli.html)
-- [cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)
-
-## Programmatic usage
-
-- TODO
 
 ## Steps for getting port that may block Mongo DB
 
@@ -119,26 +108,202 @@ MongoDB may end up with a process that interferes with starting a new instance.
 On the Mac, you can follow these steps to resolve:
 
 1. Get the port `sudo lsof -i :27017`
-2. Then kill by `kill PID` with PID as the result of step 1 (or if necessary `kill -2 PID`).
+2. Then kill by `kill PID` with PID as the result of step 1 (or if
+    necessary `kill -2 PID`).
+
+## Command line usage
+
+[![cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)](cli.svg)
+
+To view as non-embedded HTML or SVG files (for copy-pasteable commands):
+
+- [cli.html](https://brettz9.github.io/nogin/doc-includes/cli.html)
+- [cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)
+
+### Command line summary
+
+#### Server flags (without verbs)
+
+When no verbs are added (only flags are supplied), you can see the above
+for a detailed description of the available flags. We group and summarize
+these here (all strings unless indicated). See also "Flags available
+regardless of "verb"" as those also apply as server flags.
+
+##### Use in place of command line flags (CLI flags will take precedence)**
+
+- `-c`/`--config` - (Defaults to `<cwd>/nogin.json`; may also be a JS file.)
+- `--cwd` (Defaults to `process.cwd()`.)
+
+##### Required fields (no defaults)
+
+You can also look at `nogin-sample.js` for how to set these values within
+your own `nogin.js` config file.
+
+- `--secret`
+- `--NL_EMAIL_USER`
+- `--NL_EMAIL_PASS`
+- `--NL_EMAIL_HOST`
+- `--NL_EMAIL_FROM`
+- `--NL_SITE_URL`
+- `--fromText`
+- `--fromURL`
+
+##### Security
+
+- `--RATE_LIMIT` (A number defaulting to 100 for a rate limit.)
+
+##### Tweaks for general administration
+
+- `--NS_EMAIL_TIMEOUT` (number of milliseconds, defaulting to 5000)
+- `--PORT` (number, defaulting to 3000)
+- `-a`/`--adapter` (Defaults to "mongodb", the only current option.)
+
+##### Tweaks for user-facing behavior
+
+- `--requireName` (Default is `false`.)
+- `--countryCodes` (Two-letter country codes as JSON array; defaults to
+  codes in `/app/server/modules/country-codes.json`.)
+
+##### Customizing locales
+
+- `--localesBasePath` (Defaults to `app/server`; use if need to redefine
+    locale values.)
+
+##### Customizing HTML
+
+These should normally not changing, but can be changed to tweak the HTML that
+is rendered in emails or on the server.
+
+- `--composeResetPasswordEmailView` (Defaults to `/app/server/views/composeResetPasswordEmail.js`)
+- `--composeActivationEmailView` (Defaults to `/app/server/views/composeActivationEmail.js`)
+- `--injectHTML` (No extra HTML is injected by default)
+- `--favicon` (String path; defaults to blank.)
+
+##### Customizing stylesheets
+
+- `--stylesheet` (String path; defaults to no extra stylesheets being used.)
+- `--noBuiltinStylesheets` (Boolean, defaults to `false`)
+
+##### Customizing JavaScript
+
+- `--localScripts` (Boolean, defaults to `false`)
+- `--userJS` (None by default)
+- `--userJSModule` (None by default)
+
+These should primarily only be used with testing:
+
+- `--useESM` (Boolean, defaults to `false`.)
+- `--noPolyfill` (Boolean, defaults to `false`.)
+
+##### Customizing routes
+
+This is for changing the names or behavior of existing routes. See "Adding routes"
+for supporting additional routes.
+
+- `--postLoginRedirectPath` (Path/URL to which to redirect after login; defaults
+    to `/home` (or locale equivalent.)
+- `--customRoute` (Multiple strings in format `<locale>=<route>=<path>`)
+
+##### Adding routes
+
+- `--showUsers` - `/users` page is not shown by default for privacy of those
+    users. Set to `true` to enable.
+- `-s`/`--SERVE_COVERAGE` (Boolean; defaults to `false`.)
+- `--staticDir` (One or more string paths)
+- `--middleware` (One or more middleware to be required)
+- `--router`
+
+##### Used mainly for internal testing of `nogin`
+
+- `-d`/`--JS_DIR` - (Defaults to `/app/public`; used for pointing to
+    instrumented path.)
+
+#### Verbs
+
+One can also add a verb to `nogin` (e.g., `nogin read`) which performs a
+different behavior from creating a server.
+
+- `help` - Use with one of the verbs below to get help for that command
+- `read`/`view` - View user account(s)
+- `update` - Update user account(s)
+- `add`/`create` - Create new user account(s)
+- `remove`/`delete` - Remove user account(s)
+- `listIndexes` - List indexes of the nogin database
+
+#### Flags available regardless of "verb" (besides `help`)
+
+Defaults in parentheses:
+
+- `--loggerLocale` ("en-US")
+- `--noLogging` (`false`)
+- `-n`/`--DB_NAME` ("nogin")
+- `-t`/`--DB_HOST` ("localhost")
+- `-p`/`--DB_PORT` (27017)
+- `-u`/`--DB_USER`
+- `-x`/`--DB_PASS`
+
+#### Flags reused among verbs "read"/"view", "update", "add"/"create", "remove"/"delete".
+
+These are are all `multiple` (one to be added for each user being viewed/added/etc.).
+
+Unless notes, all types are strings.
+
+- `--user` (as the default option, the flag `--user` can be omitted)
+- `--name`
+- `--email`
+- `--country` (Two digit recognized country code)
+- `--pass`
+- `--passVer` (A number indicating the current schema version; should always be
+    set to "1" currently.)
+- `--date` (A number timestamp for record creation date)
+- `--activated` (A boolean)
+
+These are shared but will primarily only be of interest in internal nogin
+testing:
+
+- `--activationCode`
+- `--unactivatedEmail`
+- `--activationRequestDate` (A number timestamp)
+<!--
+- `--passKey`
+- `--ip`
+- `--cookie`
+- `--_id`
+-->
+
+#### Flags for specific verbs
+
+##### `add`/`create`
+
+Note that the CLI API for the `add` and `update` verbs does not currently
+perform all validation that the UI does, so you will need to have some
+familiarity with nogin internals to be sure to include all required fields.
+
+- `--userFile` - Path to JSON file containing data to populate
+- `--cwd` - Used with `userFile`
+
+##### `remove`/`delete`
+
+- `--all` - Boolean to indicate desire to remove all user records!
+
+## Programmatic docs
+
+1. `npm i` (local install to get devDeps)
+1. `npm run build-docs`
+1. Open `docs/jsdoc/index.html`
 
 ## Contributing
 
 Questions and suggestions for improvement are welcome.
+
+For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
 1. See about removing `font-awesome` dependency (and if so, rebuild
     license badges and remove note above about its license)
 1. Update **docs**
-    1. Review `optionDefinitions` and those in `/bin`
-    1. Mention dep.-install-available npm scripts
-    1. Update **docs above**
-    1. **Review CHANGES** for migration guide (and for help in
-        overviewing all features)
-    1. Document `env` vars in `main.js` plugin file (`env`, `coverage`,
-        `disableEmailChecking`; and distinguish from `secret` and
-        `NL_EMAIL_HOST`, `NL_EMAIL_USER`, and `NL_EMAIL_PASS`);
-        see <https://docs.cypress.io/guides/guides/environment-variables.html#Setting>
+    1. Review `optionDefinitions`
 1. Publish **release**
     1. Inform `node-login` main in relevant PRs
         1. Mention any new behavior for resending activation link (and how

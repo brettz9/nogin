@@ -18,12 +18,32 @@ server-side-templating, there are at least a few gotchas:
 Jamilih might add configuration later to obviate this need, but these
 are the current requirements.
 
-## Email testing
+## Cypress config
 
-In `cypress.env.json` (a `.gitignore`'d file), you can add
-`disableEmailChecking: true` to avoid the more time-consuming tests
-which check wheher an email was received. Note that you will need
-a `nogin.js` file, also a `.gitignore`'d file, with the same format
-as `nogin-sample.js`, though changed to use your own personal testing
-email credentials (so the server has a place to send emails and the
-tests can verify they are received).
+When running Cypress, you wish to point to your own [`--config-file`](https://docs.cypress.io/guides/references/configuration.html#Options)
+in place of our default `cypress.json`, e.g., to set `video: true`,
+so you can get videos of the tests (disabled by default for performance
+reasons). You would also need to change if you are changing from port
+3000 during testing.
+
+### Cypress environmental variables
+
+Although our Cypress setup also copies some values from `nogin.js`
+onto `Cypress.env` (to avoid redundancy, e.g., in getting at
+`NL_EMAIL_HOST`), we have also defined the following as our own
+[Cypress-specific environmental variables](https://docs.cypress.io/guides/guides/environment-variables.html#Setting):
+
+1. `env` - Set to `process.env.NODE_ENV` or failing any to "development".
+    Used for determining login credentials (whether to set a secure cookie).
+    Behaves like Express' `app.get('env')`.
+1. `coverage` - Set to `false` to disable coverage (e.g., for faster
+    performance or to avoid overwriting the latest coverage results).
+1. `disableEmailChecking` - Set to `true` to avoid the (longer duration)
+    email checking tests (seeing whether an email was received).
+
+You can override the defaults for these values by adding your own
+`cypress.env.json` file (a `.gitignore`'d file) Note that for tests,
+you will need a `nogin.js` file, also a `.gitignore`'d file, with the
+same format as `nogin-sample.js`, though changed to use your own
+personal testing email credentials (so the server has a place to send
+emails and the tests can verify they are received).

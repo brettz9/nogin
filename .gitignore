@@ -16,3 +16,5 @@ mochawesome-report
 mochawesome.json
 nogin.json
 nogin.js
+
+docs/jsdoc

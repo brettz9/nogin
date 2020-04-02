@@ -24,3 +24,5 @@ app/public/js/polyfills/polyfills.js
 app/public/js/controllers/*.js
 !app/public/js/controllers/*.iife.min.js*
 rollup.config.js
+
+docs/jsdoc
