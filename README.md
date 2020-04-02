@@ -302,8 +302,6 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 1. See about removing `font-awesome` dependency (and if so, rebuild
     license badges and remove note above about its license)
-1. Update **docs**
-    1. Review `optionDefinitions`
 1. Publish **release**
     1. Inform `node-login` main in relevant PRs
         1. Mention any new behavior for resending activation link (and how
