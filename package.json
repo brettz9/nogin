@@ -84,7 +84,7 @@
     "watch:start": "run-p -r mongo:start-test watch:server-start",
     "start-test": "run-p -r mongo:start-test server:start-test",
     "mongo:start": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
-    "server:start": "node ./bin/cli.js --localScripts --config nogin.js",
+    "server:start": "node ./bin/cli.js --localScripts --SERVE_COVERAGE --config nogin.js",
     "start": "run-p -r mongo:start server:start",
     "cypress:delayed-open-cov": "run-s -c delay cypress:open-cov",
     "cypress:delayed-open": "run-s -c delay cypress:open",

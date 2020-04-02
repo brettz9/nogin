@@ -29,7 +29,7 @@ describe('Home', function () {
       cy.visit('/home');
     });
     it('Make good update (with same user but different email)', function () {
-      this.timeout(30000);
+      this.timeout(80000);
       const startingEmail = 'brettz95@example.name';
       const newEmail = NL_EMAIL_USER;
       cy.get('[data-name="email"]').clear().type(newEmail);
