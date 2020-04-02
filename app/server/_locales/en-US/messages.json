@@ -422,6 +422,15 @@
       "description": "Allows for using `log` and its checks with a raw message.",
       "message": "{message}"
     },
+    "query_redirect": {
+      "message": "redirect"
+    },
+    "query_key": {
+      "message": "key"
+    },
+    "query_c": {
+      "message": "c"
+    },
     "route_root": {
       "message": "/"
     },

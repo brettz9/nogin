@@ -181,7 +181,9 @@ module.exports = async function (app, config) {
           //  all GET requests should be idempotent and validate
           //  credentials
           res.redirect(
-            req.query.redirect || postLoginRedirectPath || routes.home
+            req.query[
+              _('query_redirect')
+            ] || postLoginRedirectPath || routes.home
           );
           return;
         }
@@ -232,24 +234,22 @@ module.exports = async function (app, config) {
     },
 
     async resetPassword (routes, req, res) {
-      let e;
-      const [
-        {value: _}, {status, reason: error, value: o}
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
-      ] = await Promise.allSettled([
-        setI18n(req, res),
-        am.validatePasswordKey(req.query.key, req.ip)
-      ]);
-      // `validatePasswordKey` just looks up database records, so no reason
-      //   to err
-      // istanbul ignore next
-      if (status === 'rejected') {
+      const _ = await setI18n(req, res);
+      let o, e;
+      try {
+        o = await am.validatePasswordKey(req.query[
+          _('query_key')
+        ], req.ip);
+      } catch (error) {
+        // `validatePasswordKey` just looks up database records, so no reason
+        //   to err
+        // istanbul ignore next
         e = error;
       }
       if (e || isNullish(o)) {
         res.redirect(routes.root);
       } else {
-        req.session.passKey = req.query.key;
+        req.session.passKey = req.query[_('query_key')];
         const title = _('ResetPassword');
         res.render('reset-password', {
           ...getLayoutAndTitle({_, title, template: 'reset-password'})
@@ -260,9 +260,9 @@ module.exports = async function (app, config) {
     async activation (routes, req, res) {
       const _ = await setI18n(req, res);
       const title = _('Activation');
-      if (req.query.c) {
+      if (req.query[_('query_c')]) {
         try {
-          await am.activateAccount(req.query.c);
+          await am.activateAccount(req.query[_('query_c')]);
         } catch (e) {
           const message = [
             'activationCodeProvidedInvalid'

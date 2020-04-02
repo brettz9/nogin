@@ -11,7 +11,8 @@ module.exports = function ({
       }),
       ['br', 'br'],
       ['a', {
-        href: `${baseurl}/reset-password?key=${passKey}`
+        // eslint-disable-next-line max-len
+        href: `${baseurl}${_('route_resetPassword')}?${_('query_key')}=${passKey}`
       }, [
         _('ClickToResetPassword')
       ]],

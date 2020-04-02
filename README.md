@@ -82,8 +82,8 @@ the [email dispatcher module](https://github.com/brettz9/nogin/blob/master/app/s
 To do this on OSX you can simply add them to your `.profile` or `.bashrc` file.
 
 ```sh
-export NL_EMAIL_HOST='smtp.gmail.com'
-export NL_EMAIL_USER='your.email@gmail.com'
+export NL_EMAIL_HOST='smtp.example.name'
+export NL_EMAIL_USER='your.email@example.name'
 export NL_EMAIL_PASS='1234'
 ```
 

@@ -19,23 +19,22 @@ const optionDefinitions = [
   // multiple: true, defaultOption: true
   {
     name: 'NL_EMAIL_USER', type: String,
-    description: 'Email user',
+    description: 'Email user. Required; no defaults.',
     typeLabel: '{underline user}'
   },
   {
     name: 'NL_EMAIL_PASS', type: String,
-    description: 'Email password (for `NL_EMAIL_USER`)',
+    description: 'Email password (for `NL_EMAIL_USER`). Required; no defaults.',
     typeLabel: '{underline pass}'
   },
   {
     name: 'NL_EMAIL_HOST', type: String,
-    description: 'Email host; defaults to smtp.gmail.com',
+    description: 'Email host. Required; no defaults.',
     typeLabel: '{underline host}'
   },
   {
     name: 'NL_EMAIL_FROM', alias: 'f', type: String,
-    description: 'Email "from"; defaults to ' +
-      '`Node Login <do-not-reply@gmail.com>`',
+    description: 'Email "from". Required; no defaults.',
     typeLabel: '{underline from}'
   },
   {
@@ -46,7 +45,8 @@ const optionDefinitions = [
   },
   {
     name: 'NL_SITE_URL', type: String,
-    description: 'Email site URL. Defaults to "http://localhost:3000"',
+    description: 'Email site URL. Base URL added within password reset and ' +
+      'activation emails. Required; no defaults.',
     typeLabel: '{underline url}'
   },
   {

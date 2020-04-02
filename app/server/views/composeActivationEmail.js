@@ -11,7 +11,8 @@ module.exports = function ({
       }),
       ['br', 'br'],
       ['a', {
-        href: `${baseurl}/activation?c=${activationCode}`
+        // eslint-disable-next-line max-len
+        href: `${baseurl}${_('route_activation')}?${_('query_c')}=${activationCode}`
       }, [
         _('ClickToActivateAccount')
       ]],
