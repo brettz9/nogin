@@ -17,3 +17,13 @@ server-side-templating, there are at least a few gotchas:
 
 Jamilih might add configuration later to obviate this need, but these
 are the current requirements.
+
+## Email testing
+
+In `cypress.env.json` (a `.gitignore`'d file), you can add
+`disableEmailChecking: true` to avoid the more time-consuming tests
+which check wheher an email was received. Note that you will need
+a `nogin.js` file, also a `.gitignore`'d file, with the same format
+as `nogin-sample.js`, though changed to use your own personal testing
+email credentials (so the server has a place to send emails and the
+tests can verify they are received).
