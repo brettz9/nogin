@@ -58,7 +58,7 @@ const optionDefinitions = [
   ...dbDefinitions,
   {
     name: 'secret', type: String,
-    description: '`cookieParser` secret',
+    description: '`cookieParser` secret. Required; no defaults.',
     typeLabel: '{underline secret}'
   },
   {
@@ -76,15 +76,15 @@ const optionDefinitions = [
   {
     name: 'localesBasePath', type: String,
     description: 'Points to a base path for finding locales. Defaults to ' +
-      '`app/server`.',
+      '`app/server`. Only needed if overriding built-in locales.',
     typeLabel: '{underline path}'
   },
   {
     name: 'postLoginRedirectPath', type: String,
     description: 'Points to a path or URL to which to redirect after users ' +
       'successfully log in. Defaults to `/home` (or locale equivalent). Note ' +
-      'that you are overriding this option, you should provide another means ' +
-      'to your users to visit `/home`, e.g., through the ' +
+      'that if you are overriding this option, you should provide another ' +
+      'means to your users to visit `/home`, e.g., through the ' +
       'accessibility-recommended approach of having a site-wide navigation ' +
       'bar, so as to allow your users to update or delete their accounts. ' +
       'Note that this option will be overridden by any `redirect` query ' +
@@ -95,15 +95,15 @@ const optionDefinitions = [
     name: 'customRoute', type: String, multiple: true,
     description: 'A convenience to allow overriding the default route name ' +
       'per locale, e.g., `en-US=home=/updateAccount` would change the ' +
-      '`/home` path to `/updateAccount` for the `en-US` locale. This will ' +
-      'take precedence over the routes in `localesBasePath`.',
+      '`/home` path to `/updateAccount` for the `en-US` locale. If present, ' +
+      'this will take precedence over the routes in `localesBasePath`.',
     typeLabel: '{underline locale=route=path}'
   },
   {
     name: 'composeResetPasswordEmailView', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be ' +
-      'passed the template options (_, jml, baseurl, name, user, passKey, ' +
+      'have a `module.exports` default function export that ' +
+      'accepts the template options (_, jml, baseurl, name, user, passKey, ' +
       'fromText, fromURL). Defaults to ' +
       '`/app/server/views/composeResetPasswordEmail.js`.',
     typeLabel: '{underline path}'
@@ -111,21 +111,22 @@ const optionDefinitions = [
   {
     name: 'composeActivationEmailView', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be ' +
-      'passed the template options (_, jml, baseurl, name, user, ' +
+      'have a `module.exports` default function export that ' +
+      'accepts the template options (_, jml, baseurl, name, user, ' +
       'activationCode, fromText, fromURL). Defaults to ' +
       '`/app/server/views/composeActivationEmail.js`.',
     typeLabel: '{underline path}'
   },
   {
     name: 'requireName', type: Boolean,
-    description: 'Whether to require a name from users. Default is `false`.'
+    description: 'Whether to require a name (separate from user name, as ' +
+      'in a real name) from users. Default is `false`.'
   },
   {
     name: 'staticDir', type: String, multiple: true,
     description: 'Point to absolute path at which to serve static files on ' +
       'the same server. Multiple allowed. Not required. To require serving ' +
-      'within a particular non-root path, use `router` with Express\'' +
+      'within a particular non-root path, use `router` with Express\' ' +
       '`app.use()`. See https://expressjs.com/en/api.html#app.use',
     typeLabel: '{underline absolute path}'
   },
