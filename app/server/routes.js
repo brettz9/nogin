@@ -2,6 +2,12 @@
 
 const {join, resolve: pathResolve} = require('path');
 
+// Todo[engine:node@>12.9.0]: Remove `Promise.allSettled` polyfill (or
+//  forego this and don't i18nize server responses (do on client) or
+//  cache the locales)
+// eslint-disable-next-line node/no-unsupported-features/es-builtins
+Promise.allSettled = require('promise.allsettled/polyfill')();
+
 const express = require('express');
 
 const {
@@ -13,11 +19,6 @@ const EmailDispatcher = require('./modules/email-dispatcher.js');
 const getLogger = require('./modules/getLogger.js');
 const i18n = require('./modules/i18n.js');
 const {emailPattern} = require('./modules/patterns.js');
-
-// Todo[engine:node@>12.9.0]: Remove `Promise.allSettled` polyfill (or
-//  forego this and don't i18nize server responses (do on client))
-// eslint-disable-next-line node/no-unsupported-features/es-builtins
-Promise.allSettled = require('promise.allsettled/polyfill')();
 
 module.exports = async function (app, config) {
   const getLayoutAndTitle = layoutAndTitleGetter(config);
