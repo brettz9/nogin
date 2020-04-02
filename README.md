@@ -3,7 +3,7 @@
 [![devDependencies](https://img.shields.io/david/dev/brettz9/nogin.svg)](https://david-dm.org/brettz9/nogin?type=dev)
 
 [![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/tests-badge.svg?sanitize=true)](doc-includes/tests-badge.svg)
-[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg) (Tested on Firefox and Chrome)
+[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/brettz9/nogin/badge.svg)](https://snyk.io/test/github/brettz9/nogin)
 [![Total Alerts](https://img.shields.io/lgtm/alerts/g/brettz9/nogin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/brettz9/nogin/alerts)
@@ -39,6 +39,8 @@ So if you want Node login, use your "nogin"!
 - Throrough internationalization (i18n) and fundamental accessibility (a11y)
 - CLI option for managing accounts
 - 100% Cypress UI and CLI Testing Coverage
+- Tested on Chrome and Firefox but with a Babel/core-js Rollup routine that
+    should allow the code to work in other browsers as well.
 
 ## Improvements over `node-login`
 
