@@ -359,7 +359,10 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         not trusting the client-side values of course (could parse
         server-side-supplied schema for expected types); use `json-editor`?
         1. Plugin system to allow asking for and saving additional data
-            per user. May optionally be able to reject submission.
+            per user. May optionally be able to reject submission, but
+            should instead use an authentication strategy plugin, if
+            it is more fundamental to authentication (since this should
+            generally be safely additive).
     1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
         (doesn't use easily breakable SVG text, and could convert to image))
         1. Plugin system for captchas, while potentially allowing saving
