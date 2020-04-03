@@ -318,6 +318,18 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         1. Would presumably need to revive as a [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
     1. Add **passwordless** option
         1. See <http://www.passportjs.org/packages/passport-passwordless/>.
+1. **Login page**
+    1. Security: **CSRF** protection
+    1. Provide **option for integration** within an existing page to avoid need
+        for separate login page (Ajax)
+        1. Adapt server-side redirect functionality to give Ajax feedback to
+            client so it could instead handle forwarding *with* a hash.
+    1. Option to **email forgotten username** (as a workaround, the reset
+        password email will send this currently, but not if adding an option to
+        disable the current `uniqueEmails` mode). Alternatively, could
+        **allow login by email.** Don't want to show username for email in UI
+        though for privacy reasons (more serious than just detecting that the
+        user has an account, this would detect what their account was).
 1. **Users page**
     1. **Ajax pagination**
     1. **Privileges**
@@ -371,18 +383,6 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
             like username, password, etc. Unlike "set up new account"
             plugins, wouldn't need access to user database, but can of
             course have potential to reject submission.
-1. **Login page**
-    1. Security: **CSRF** protection
-    1. Provide **option for integration** within an existing page to avoid need
-        for separate login page (Ajax)
-        1. Adapt server-side redirect functionality to give Ajax feedback to
-            client so it could instead handle forwarding *with* a hash.
-    1. Option to **email forgotten username** (as a workaround, the reset
-        password email will send this currently, but not if adding an option to
-        disable the current `uniqueEmails` mode). Alternatively, could
-        **allow login by email.** Don't want to show username for email in UI
-        though for privacy reasons (more serious than just detecting that the
-        user has an account, this would detect what their account was).
 1. **Other pages**
     1. Method to auto-create accessibility-friendly **navigation bar**, including
         login (root), logout, home, signup, and users (the special pages,
