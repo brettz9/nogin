@@ -369,9 +369,9 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
             plugins, wouldn't need access to user database, but can of
             course have potential to reject submission.
 1. **Login page**
-    1. **Security** CSRF protection
+    1. Security: **CSRF** protection
     1. Provide **option for integration** within an existing page to avoid need
-        for separate login page
+        for separate login page (Ajax)
         1. Adapt server-side redirect functionality to give Ajax feedback to
             client so it could instead handle forwarding *with* a hash.
     1. Option to **email forgotten username** (as a workaround, the reset
