@@ -298,17 +298,20 @@ Questions and suggestions for improvement are welcome.
 
 For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
-## To-dos
+## Short-term to-dos
 
 1. See about removing `font-awesome` dependency (and if so, rebuild
     license badges and remove note above about its license)
+1. Review `doiuse` (`npm run csslint`) older browser CSS support
+    1. Update browser targets when settled on minimum versions (and
+        update .eslintrc.js `settings.polyfills` accordnigly)
 1. Publish **release**
     1. Inform `node-login` main in relevant PRs
         1. Mention any new behavior for resending activation link (and how
             update now causes new activation to be required) at
             <https://github.com/braitsch/node-login/pull/11> when may be done)
 
-## Medium priorities
+## To-dos
 
 1. **Login page**
     1. Security: **CSRF** protection
@@ -384,7 +387,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         'coverage', should not need to be added). Also add breadcrumbs and
         `<link rel=next/prev>`.
 
-## Lower priorities
+## Lower priority to-dos
 
 1. Option to **email forgotten username** (as a workaround, the reset
     password email will send this currently, but not if adding an option to
