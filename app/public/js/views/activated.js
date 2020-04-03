@@ -1,4 +1,4 @@
-/* globals $, _ */
+/* globals $, Nogin */
 import AlertDialog from './utilities/AlertDialog.js';
 
 const ActivatedView = {
@@ -8,8 +8,8 @@ const ActivatedView = {
   accountActivated () {
     // Set up the alert that displays when an account has been activated
     return AlertDialog.populate({
-      heading: _('Activated'),
-      body: _('yourAccountHasBeenActivated', {
+      heading: Nogin._('Activated'),
+      body: Nogin._('yourAccountHasBeenActivated', {
         lb: $('<br/>')[0]
       }),
       keyboard: false,

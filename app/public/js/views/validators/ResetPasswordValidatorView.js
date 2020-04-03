@@ -1,4 +1,6 @@
-/* globals $, _ */
+/* globals $, Nogin */
+
+const {_} = Nogin;
 
 const modal = $('#set-password');
 const ResetPasswordValidatorView = {

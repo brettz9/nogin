@@ -56,7 +56,7 @@ module.exports = ({
       error
         // Use this so that client-side code can add the error to a dialog, etc.
         ? ['script', [
-          'window.NodeLoginInitialErrorGlobal = ' + JSON.stringify(error)
+          'window.NoginInitialErrorGlobal = ' + JSON.stringify(error)
         ]]
         : '',
 

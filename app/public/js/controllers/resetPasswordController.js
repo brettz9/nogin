@@ -1,4 +1,4 @@
-/* globals NL_ROUTES */
+/* globals Nogin */
 
 import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';
@@ -29,7 +29,7 @@ ajaxFormClientSideValidate(
       setPasswordSubmit.prop('disabled', true);
       rv.showSuccess();
       setTimeout(() => {
-        location.href = NL_ROUTES.root;
+        Nogin.redirect('root');
       }, 3000);
     },
     error () {

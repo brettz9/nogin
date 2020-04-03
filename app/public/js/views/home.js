@@ -1,8 +1,10 @@
-/* globals $, _ */
+/* globals $, Nogin */
 
 import ConfirmDialog from './utilities/ConfirmDialog.js';
 import AlertDialog from './utilities/AlertDialog.js';
 import populateForm from './utilities/populateForm.js';
+
+const {_} = Nogin;
 
 /**
  * @param {PlainObject} cfg

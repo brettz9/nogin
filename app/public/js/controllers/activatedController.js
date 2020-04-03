@@ -1,4 +1,4 @@
-/* globals NL_ROUTES */
+/* globals Nogin */
 
 import ActivatedView from '../views/activated.js';
 
@@ -10,6 +10,6 @@ okButton.click(function () {
   // Redirect to homepage on account activation, adding short delay so user
   //   can read alert window
   setTimeout(function () {
-    location.href = NL_ROUTES.root;
+    Nogin.redirect('root');
   }, 300);
 });

@@ -1,4 +1,4 @@
-/* globals $, _ */
+/* globals $, Nogin */
 
 /**
 * @typedef {PlainObject} EmailInfoElements
@@ -30,7 +30,7 @@ const EmailValidatorView = {
   },
 
   messages: {
-    PleaseEnterValidEmailAddress: _('PleaseEnterValidEmailAddress')
+    PleaseEnterValidEmailAddress: Nogin._('PleaseEnterValidEmailAddress')
   }
 };
 

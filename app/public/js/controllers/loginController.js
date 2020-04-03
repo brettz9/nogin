@@ -1,5 +1,6 @@
-/* globals NL_ROUTES */
+/* globals Nogin */
 
+import '../polyfills/console.js';
 import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';
 import LoginView from '../views/login.js';
@@ -81,7 +82,7 @@ ajaxFormClientSideValidate(
       // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
       // istanbul ignore else
       if (status === 'success') {
-        location.href = NL_ROUTES.home;
+        Nogin.redirect('home');
       }
     },
     error (e) {
@@ -114,7 +115,7 @@ ajaxFormClientSideValidate(
         ev.hideEmailAlert();
       }
     },
-    url: NL_ROUTES.lostPassword,
+    url: Nogin.Routes.lostPassword,
     success (responseText, status, xhr, $form) {
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();

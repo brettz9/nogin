@@ -97,6 +97,9 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
 
       const messages = [];
       Object.entries(routes).forEach(([key, message]) => {
+        if (key.startsWith('safe_')) {
+          return;
+        }
         if (messages.includes(message)) {
           throw new Error(
             'Localized route paths must be distinct within a locale'
@@ -176,10 +179,16 @@ function routeGetter (customRoute) {
       'lostPassword', 'resetPassword', 'users', 'delete',
       'reset', 'coverage'
     ].reduce((o, route) => {
+      const i18nRoute = _(`route_${route}`);
       o[route] = (
         customRoutesObj[_.resolvedLocale] &&
         customRoutesObj[_.resolvedLocale][route]
-      ) || _(`route_${route}`);
+      ) || i18nRoute;
+
+      // Add a safe route (since only `customRoutes` should allow URLs)
+      //  so if Firefox 2 is detected, client can redirect to that with
+      //  location.assign() (since `location.href` not supported).
+      o['safe_' + route] = i18nRoute;
       return o;
     }, {});
     routeMap.set(_.resolvedLocale, routeObj);

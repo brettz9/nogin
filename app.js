@@ -89,7 +89,8 @@ exports.createServer = async function (options) {
     useESM,
     noPolyfill,
     postLoginRedirectPath,
-    customRoute
+    customRoute,
+    crossDomainJSRedirects
   } = opts;
 
   const dbOpts = DBFactory.getDefaults(opts);
@@ -207,6 +208,7 @@ exports.createServer = async function (options) {
     localesBasePath,
     postLoginRedirectPath,
     customRoute,
+    crossDomainJSRedirects,
     cwd,
     useESM,
     noPolyfill,

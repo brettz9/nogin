@@ -12,7 +12,7 @@ import {
   removeAccounts, addAccounts, readAccounts, updateAccounts
 } from '../app/server/modules/db-basic.js';
 
-import nodeLogin from '../nogin.js';
+import noginConfig from '../nogin.js';
 
 import {
   setEmailConfig, deleteEmails, hasEmail
@@ -25,7 +25,7 @@ const {
   secret,
   NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
   NL_EMAIL_FROM, NS_EMAIL_TIMEOUT
-} = nodeLogin;
+} = noginConfig;
 
 setEmailConfig({
   NL_EMAIL_HOST,

@@ -44,6 +44,7 @@ module.exports = async function (app, config) {
     localesBasePath,
     postLoginRedirectPath,
     customRoute = [],
+    crossDomainJSRedirects,
     opts,
     cwd
   } = config;
@@ -178,13 +179,20 @@ module.exports = async function (app, config) {
         const _o = await am.autoLogin(o.user, o.pass);
         if (_o) {
           req.session.user = _o;
+          let queryRedirect = req.query[
+            _('query_redirect')
+          ];
           // Using user value should not be a security concern, as
           //  all GET requests should be idempotent and validate
-          //  credentials
+          //  credentials; however, if some XSS uses this, the user
+          //  may think they are still on the same domain after
+          //  the redirect and mistakenly believe it safe to offer
+          //  credentials.
+          if (queryRedirect.includes(':')) {
+            queryRedirect = '';
+          }
           res.redirect(
-            req.query[
-              _('query_redirect')
-            ] || postLoginRedirectPath || routes.home
+            queryRedirect || postLoginRedirectPath || routes.home
           );
           return;
         }
@@ -599,11 +607,33 @@ module.exports = async function (app, config) {
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
-  const wrapResult = (args, routes) => {
+  const wrapResult = (args, routes, userAgent) => {
+    // No need to lint here as linting result in Cypress `lang` test.
+    // Since this file is dynamic, we don't import `IntlDom` despite
+    //  a module being available
     return `
-      /* globals IntlDom */
-      window._ = IntlDom.i18nServer(${JSON.stringify(args)});
-      window.NL_ROUTES = ${JSON.stringify(routes)};
+'use strict';
+/* globals IntlDom */
+window.Nogin = {
+  Routes: ${JSON.stringify(routes)},
+  _: IntlDom.i18nServer(${JSON.stringify(args)}),
+  // Avoid shorthand for compatibility
+  redirect: function (key) {
+    // Use var for compatibility
+    var permittingXDomainRedirects = ${
+  crossDomainJSRedirects &&
+    // `location.href` not supported in Firefox 2 per
+    //   `eslint-plugin-compat`
+    !userAgent.match(/Firefox\/2(?=\D)/u)
+    ? 'true'
+    : 'false'};
+    if (permittingXDomainRedirects) {
+      location.href = this.Routes[key];
+      return;
+    }
+    location.assign(this.Routes['safe' + key]);
+  }
+};
 `;
   };
 
@@ -619,7 +649,8 @@ module.exports = async function (app, config) {
     res.status(200).send(
       wrapResult(
         {resolvedLocale, strings},
-        routes
+        routes,
+        req.get('User-Agent')
       )
     );
   });

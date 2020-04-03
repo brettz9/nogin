@@ -1,4 +1,7 @@
-/* globals $, _, NL_ROUTES */
+/* globals $, Nogin */
+
+import '../polyfills/Error.js';
+import '../polyfills/console.js';
 
 import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';
@@ -22,7 +25,7 @@ ConfirmDialog.getAccountSubmit(deleteAccountConfirmDialog).click(async () => {
     await deleteAccount();
   } catch (err) {
     // Log just in case not internationalized
-    console.error(_('ErrorFormat', {
+    console.error(Nogin._('ErrorFormat', {
       text: err.text,
       statusText:
         // istanbul ignore next
@@ -41,7 +44,7 @@ logoutButton.click(async () => {
     await attemptLogout();
   } catch (err) {
     // Log in case actual error not internationalized
-    console.error(_('ErrorFormat', {
+    console.error(Nogin._('ErrorFormat', {
       text: err.text,
       statusText:
         // istanbul ignore next
@@ -189,7 +192,7 @@ function post (url) {
  */
 async function deleteAccount () {
   deleteAccountConfirmDialog.modal('hide');
-  await post(NL_ROUTES.delete);
+  await post(Nogin.Routes.delete);
   showLockedAlert({type: 'accountDeleted'});
 }
 
@@ -198,7 +201,7 @@ async function deleteAccount () {
  * @returns {Promise<void>}
  */
 async function attemptLogout () {
-  await post(NL_ROUTES.logout);
+  await post(Nogin.Routes.logout);
   showLockedAlert({type: 'loggedOut'});
 }
 
@@ -211,7 +214,7 @@ function showLockedAlert ({type}) {
   const lockedAlertDialog = HomeView.onShowLockedAlert({type});
   lockedAlertDialog.modal('show');
   const redirectToRoot = () => {
-    location.href = NL_ROUTES.root;
+    Nogin.redirect('root');
   };
   HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
   setTimeout(redirectToRoot, 3000);
@@ -227,7 +230,7 @@ function showLockedErrorAlert ({type, message}) {
   const lockedAlertDialog = HomeView.onShowLockedErrorAlert({type, message});
   lockedAlertDialog.modal('show');
   const redirectToRoot = () => {
-    location.href = NL_ROUTES.root;
+    Nogin.redirect('root');
   };
   HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
   setTimeout(redirectToRoot, 3000);

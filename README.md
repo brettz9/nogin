@@ -203,6 +203,7 @@ for supporting additional routes.
 - `--postLoginRedirectPath` (Path/URL to which to redirect after login; defaults
     to `/home` (or locale equivalent.)
 - `--customRoute` (Multiple strings in format `<locale>=<route>=<path>`)
+- `--crossDomainJSRedirects` (Boolean, defaults to `false`.)
 
 ##### Adding routes
 
@@ -302,9 +303,6 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 1. See about removing `font-awesome` dependency (and if so, rebuild
     license badges and remove note above about its license)
-1. Review `doiuse` (`npm run csslint`) older browser CSS support
-    1. Update browser targets when settled on minimum versions (and
-        update .eslintrc.js `settings.polyfills` accordnigly)
 1. Publish **release**
     1. Inform `node-login` main in relevant PRs
         1. Mention any new behavior for resending activation link (and how
@@ -372,6 +370,12 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
             should instead use an authentication strategy plugin, if
             it is more fundamental to authentication (since this should
             generally be safely additive).
+        1. Concept of [SharedStorage](https://github.com/brettz9/SharedStorage)
+            for grabbing local user data (or on a URL) for populating
+            site profiles/preferences (under control of user, so they can
+            manage their data in one place, and let sites update their own
+            copy (or directly utilize the local copy) when online and
+            checking)
     1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
         (doesn't use easily breakable SVG text, and could convert to image))
         1. Plugin system for captchas, while potentially allowing saving

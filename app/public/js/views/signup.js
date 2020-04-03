@@ -1,6 +1,8 @@
-/* globals $, _ */
+/* globals $, Nogin */
 import AlertDialog from './utilities/AlertDialog.js';
 import populateForm from './utilities/populateForm.js';
+
+const {_} = Nogin;
 
 const SignupView = {
   /**

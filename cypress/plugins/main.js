@@ -15,6 +15,7 @@ import fs from 'fs';
 import {dirname} from 'path';
 import {spawn} from 'child_process';
 
+import {CLIEngine} from 'eslint';
 import cookieSign from 'cookie-signature';
 
 import browserify from '@cypress/browserify-preprocessor';
@@ -35,7 +36,7 @@ import {
   generateLoginKeys, generatePasswordKey
 } from './db-basic-testing-extensions.js';
 
-import nodeLoginConfig from '../../nogin.js';
+import noginConfig from '../../nogin.js';
 
 /**
 * @external CypressOn
@@ -68,7 +69,7 @@ const exprt = (on, config) => {
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS
-  } = nodeLoginConfig;
+  } = noginConfig;
 
   /**
    * @param {PlainObject} cfg
@@ -432,6 +433,43 @@ const exprt = (on, config) => {
         };
       }
       return getMostRecentEmail();
+    },
+
+    /**
+    * @external ESLintMessage
+    * @see https://eslint.org/docs/developer-guide/nodejs-api#cliengineexecuteonfiles
+    */
+
+    /**
+     * @param {string} text
+     * @returns {external:ESLintMessage[]}
+     */
+    lint (text) {
+      const cli = new CLIEngine({
+        envs: ['browser'],
+        rules: {
+          // Some rules to disable due to `JSON.stringify`
+          quotes: 0,
+          'comma-spacing': 0,
+          'quote-props': 0,
+          'max-len': 0,
+          'key-spacing': 0,
+
+          // Disable ES6+ rules since this file is not compiled/babelified
+          'no-var': 0,
+          'prefer-const': 0,
+          'object-shorthand': 0,
+
+          // Disable as this is deliberately adding to `window`
+          'no-restricted-globals': 0,
+
+          // location.href (could instead add to settings.polyfills)
+          'compat/compat': 0
+        }
+      });
+      const warnIfIgnored = true;
+      const report = cli.executeOnText(text, 'foo.js', warnIfIgnored);
+      return report.results[0].messages;
     }
   });
 

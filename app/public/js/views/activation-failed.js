@@ -1,4 +1,4 @@
-/* globals $, _, NodeLoginInitialErrorGlobal */
+/* globals $, Nogin, NoginInitialErrorGlobal */
 import AlertDialog from './utilities/AlertDialog.js';
 
 const ActivationFailedView = {
@@ -8,10 +8,10 @@ const ActivationFailedView = {
   accountFailedActivation () {
     // Set up the alert that displays when an account has not been activated.
     return AlertDialog.populate({
-      heading: _('ActivationFailed'),
-      body: _(
+      heading: Nogin._('ActivationFailed'),
+      body: Nogin._(
         // Passed from server so we can set in JS
-        NodeLoginInitialErrorGlobal,
+        NoginInitialErrorGlobal,
         {
           lb: $('<br/>')[0]
         }

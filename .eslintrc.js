@@ -12,14 +12,21 @@ module.exports = {
   },
   settings: {
     polyfills: [
+      // Need to take care these polyfills are loaded in files that use them;
+      //  Ponyfills/shims loaded as needed would be safer than blanket
+      //  whitelisting here, but less semantic and less friendly for future
+      //  migration.
+
       // Supplied by core-js
       'Object.values',
       'Promise',
 
-      // Would require polyfills for these much older features
+      // Supplied by polyfills
       'console',
-      'Error',
-      'location.href'
+      'Error'
+
+      // (Conditionally) used, but served as string from server
+      // 'location.href'
     ]
   },
   globals: {

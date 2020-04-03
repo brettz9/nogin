@@ -1,5 +1,22 @@
 # DEVELOPING for nogin
 
+## Note if adding CI in future
+
+- Need to provide way for `nogin.js` to be created for reading from
+    CLI test and Cyrpess plugin
+
+## Globals
+
+Please note that no globals should be used in client-side code except
+for the following:
+
+- `$` - From jQuery (practically a browser polyfill)
+- `Nogin` - Contains `_` for i18n, `routes` per server config,
+    and a `redirect` method (which takes into account the
+    permissibility/possibility of cross-domain redirects).
+- `NoginInitialErrorGlobal` - If an error is being passed from the
+    server for client-side use.
+
 ## Jamilih
 
 While Jamilih should be pretty intuitive to HTML developers, for

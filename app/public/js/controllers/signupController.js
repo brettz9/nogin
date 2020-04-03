@@ -1,4 +1,4 @@
-/* globals NL_ROUTES */
+/* globals Nogin */
 
 import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';
@@ -12,7 +12,7 @@ const accountForm = SignupView.setAccountSettings();
 
 // redirect to homepage when cancel button is clicked
 const redirectToRoot = () => {
-  location.href = NL_ROUTES.root;
+  Nogin.redirect('root');
 };
 const actionButton = SignupView.getActionForAccountForm(accountForm);
 actionButton.click(redirectToRoot);

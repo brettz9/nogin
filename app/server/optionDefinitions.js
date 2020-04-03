@@ -100,6 +100,13 @@ const optionDefinitions = [
     typeLabel: '{underline locale=route=path}'
   },
   {
+    name: 'crossDomainJSRedirects', type: Boolean,
+    description: 'Whether to allow cross-domain redirects (for some values ' +
+      'set by `customRoute`). Note that the very old Firefox 2 will not ' +
+      'be able to make cross-domain redirects regardless of this setting, so ' +
+      'it will always use the (safe) locale redirect.'
+  },
+  {
     name: 'composeResetPasswordEmailView', type: String,
     description: 'Path to a Node file that will be required. The file must ' +
       'have a `module.exports` default function export that ' +

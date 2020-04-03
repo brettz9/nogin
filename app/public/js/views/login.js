@@ -1,4 +1,4 @@
-/* globals $, _ */
+/* globals $, Nogin */
 
 const LoginView = {
   /**
@@ -103,7 +103,9 @@ const LoginView = {
   * @returns {void}
   */
   setRetrievePasswordCancel (retrievePasswordModal) {
-    return this.retrievePasswordCancel(retrievePasswordModal).text(_('Cancel'));
+    return this.retrievePasswordCancel(retrievePasswordModal).text(
+      Nogin._('Cancel')
+    );
   },
 
   /**
