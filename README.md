@@ -359,14 +359,15 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         not trusting the client-side values of course (could parse
         server-side-supplied schema for expected types); use `json-editor`?
         1. Plugin system to allow asking for and saving additional data
-            per user.
+            per user. May optionally be able to reject submission.
     1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
         (doesn't use easily breakable SVG text, and could convert to image))
         1. Plugin system for captchas, while potentially allowing saving
             to and retrieving from database (e.g., for admin-added list
             of Q&A's), need not be aware of any other co-submitted data
             like username, password, etc. Unlike "set up new account"
-            plugins, wouldn't need access to user database.
+            plugins, wouldn't need access to user database, but can of
+            course have potential to reject submission.
 1. **Login page**
     1. **Security** CSRF protection
     1. Provide **option for integration** within an existing page to avoid need
