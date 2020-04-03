@@ -310,65 +310,74 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## Medium priorities
 
-1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
-    1. **Hierarchical** groups and roles?
-    1. **Multiple group membership** allowing **multiple roles per group**,
-        including **user-customizable roles** in addition to built-in ones
-        such as the "login" privilege; **roles per user (without group)**
-        1. Make a simple version of groups where **groups are auto-created**
-            that map to privileges (e.g., a login group), so can easily add a
-            user to a login group rather than needing to first create the group
-            and add the privilege to that group (these could be the built-in
-            groups, along with a few combined ones like
-            visitor/user/admin/superadmin)
-    1. Anticipate privileges that come automatically based on events (e.g., as
-        with StackExchange)
-    1. **Atomic privileges** (e.g., `view-users` as well as more encompassing
-        `view` privilege)
-    1. **IP addressed-based privileges (or exclusions)**
-    1. **Expiring privileges** (or tied into payment subscription or some
-        other event, auto-renewing or not)
-    1. See **to-dos in code** for methods needing these!
-        1. **Restore `reset`** from GET page to POST on the user (admin) page.
-    1. Use within **authentication**
-    1. Tie into `PaymentRequest` so privilege groups can be tied to
-        payments or subscriptions
-        1. npm package for processing/submitting credit info?
-        1. might restrict access to whole site (though more likely just parts)
-            until payment made
-    1. Need to remember to **handle case of users added before privilege
-        changes**
-    1. Update **docs** for any privilege additions/config
-1. **Ajax pagination of users**
-1. Allow **adding to "Set up new account" fields** (based on a schema?)
-    (to be injected into `app/server/views/account.js`) to be passed to
-    the server (`app/server/routes.js`) and saved in the database along
-    with other fields (check the user-supplied don't overwrite built-ins)
-    and shown on `home` (also built by `account.js`) (unless hidden?);
-    not trusting the client-side values of course (could parse
-    server-side-supplied schema for expected types); use `json-editor`?
-1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
-  (doesn't use easily breakable SVG text, and could convert to image))
-1. **Security** CSRF protection
-1. Provide **option for integration** within an existing page to avoid need
-    for separate login page
-    1. Adapt server-side redirect functionality to give Ajax feedback to
-        client so it could instead handle forwarding *with* a hash.
-1. See about **`passport-next`** integration
-1. **BrowserID** - Implement browser add-on (or work with existing Persona)
-    to use with a server-side validation
-1. Add **passwordless** option
-1. Method to auto-create accessibility-friendly **navigation bar**, including
-    login (root), logout, home, signup, and users (the special pages,
-    'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
-    'coverage', should not need to be added). Also add breadcrumbs and
-    `<link rel=next/prev>`.
-1. Option to **email forgotten username** (as a workaround, the reset
-    password email will send this currently, but not if adding an option to
-    disable the current `uniqueEmails` mode). Alternatively, could
-    **allow login by email.** Don't want to show username for email in UI
-    though for privacy reasons (more serious than just detecting that the
-    user has an account, this would detect what their account was).
+1. **Authentication strategies**
+    1. See about **`passport-next`** integration
+    1. **BrowserID**
+        to use with a server-side validation
+        1. See <https://github.com/jaredhanson/passport-browserid>.
+        1. Would presumably need to revive as a [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
+    1. Add **passwordless** option
+        1. See <http://www.passportjs.org/packages/passport-passwordless/>.
+1. **Users page**
+    1. **Ajax pagination**
+    1. **Privileges**
+        1. Role-based **privileges** (esp. for reset/delete!) with **admin screens**
+        1. **Hierarchical** groups and roles?
+        1. **Multiple group membership** allowing **multiple roles per group**,
+            including **user-customizable roles** in addition to built-in ones
+            such as the "login" privilege; **roles per user (without group)**
+            1. Make a simple version of groups where **groups are auto-created**
+                that map to privileges (e.g., a login group), so can easily add a
+                user to a login group rather than needing to first create the group
+                and add the privilege to that group (these could be the built-in
+                groups, along with a few combined ones like
+                visitor/user/admin/superadmin)
+        1. Anticipate privileges that come automatically based on events (e.g., as
+            with StackExchange)
+        1. **Atomic privileges** (e.g., `view-users` as well as more encompassing
+            `view` privilege)
+        1. **IP addressed-based privileges (or exclusions)**
+        1. **Expiring privileges** (or tied into payment subscription or some
+            other event, auto-renewing or not)
+        1. See **to-dos in code** for methods needing these!
+            1. **Restore `reset`** from GET page to POST on the user (admin) page.
+        1. Use within **authentication**
+        1. Tie into `PaymentRequest` so privilege groups can be tied to
+            payments or subscriptions
+            1. npm package for processing/submitting credit info?
+            1. might restrict access to whole site (though more likely just parts)
+                until payment made
+        1. Need to remember to **handle case of users added before privilege
+            changes**
+        1. Update **docs** for any privilege additions/config
+1. **Signup/Home pages**
+    1. Allow **adding to "Set up new account" fields** (based on a schema?)
+        (to be injected into `app/server/views/account.js`) to be passed to
+        the server (`app/server/routes.js`) and saved in the database along
+        with other fields (check the user-supplied don't overwrite built-ins)
+        and shown on `home` (also built by `account.js`) (unless hidden?);
+        not trusting the client-side values of course (could parse
+        server-side-supplied schema for expected types); use `json-editor`?
+    1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
+        (doesn't use easily breakable SVG text, and could convert to image))
+1. **Login page**
+    1. **Security** CSRF protection
+    1. Provide **option for integration** within an existing page to avoid need
+        for separate login page
+        1. Adapt server-side redirect functionality to give Ajax feedback to
+            client so it could instead handle forwarding *with* a hash.
+1. **Other pages**
+    1. Method to auto-create accessibility-friendly **navigation bar**, including
+        login (root), logout, home, signup, and users (the special pages,
+        'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
+        'coverage', should not need to be added). Also add breadcrumbs and
+        `<link rel=next/prev>`.
+    1. Option to **email forgotten username** (as a workaround, the reset
+        password email will send this currently, but not if adding an option to
+        disable the current `uniqueEmails` mode). Alternatively, could
+        **allow login by email.** Don't want to show username for email in UI
+        though for privacy reasons (more serious than just detecting that the
+        user has an account, this would detect what their account was).
 
 ## Lower priorities
 
