@@ -366,18 +366,18 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         for separate login page
         1. Adapt server-side redirect functionality to give Ajax feedback to
             client so it could instead handle forwarding *with* a hash.
-1. **Other pages**
-    1. Method to auto-create accessibility-friendly **navigation bar**, including
-        login (root), logout, home, signup, and users (the special pages,
-        'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
-        'coverage', should not need to be added). Also add breadcrumbs and
-        `<link rel=next/prev>`.
     1. Option to **email forgotten username** (as a workaround, the reset
         password email will send this currently, but not if adding an option to
         disable the current `uniqueEmails` mode). Alternatively, could
         **allow login by email.** Don't want to show username for email in UI
         though for privacy reasons (more serious than just detecting that the
         user has an account, this would detect what their account was).
+1. **Other pages**
+    1. Method to auto-create accessibility-friendly **navigation bar**, including
+        login (root), logout, home, signup, and users (the special pages,
+        'activation', 'lostPassword', 'resetPassword', 'delete', 'reset',
+        'coverage', should not need to be added). Also add breadcrumbs and
+        `<link rel=next/prev>`.
 
 ## Lower priorities
 
