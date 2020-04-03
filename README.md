@@ -310,6 +310,12 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## Medium priorities
 
+1. **Login page**
+    1. Security: **CSRF** protection
+    1. Provide **option for integration** within an existing page to avoid need
+        for separate login page (Ajax)
+        1. Adapt server-side redirect functionality to give Ajax feedback to
+            client so it could instead handle forwarding *with* a hash.
 1. **Authentication strategies**
     1. See about **`passport-next`** integration
     1. **BrowserID**
@@ -318,18 +324,6 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         1. Would presumably need to revive as a [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
     1. Add **passwordless** option
         1. See <http://www.passportjs.org/packages/passport-passwordless/>.
-1. **Login page**
-    1. Security: **CSRF** protection
-    1. Provide **option for integration** within an existing page to avoid need
-        for separate login page (Ajax)
-        1. Adapt server-side redirect functionality to give Ajax feedback to
-            client so it could instead handle forwarding *with* a hash.
-    1. Option to **email forgotten username** (as a workaround, the reset
-        password email will send this currently, but not if adding an option to
-        disable the current `uniqueEmails` mode). Alternatively, could
-        **allow login by email.** Don't want to show username for email in UI
-        though for privacy reasons (more serious than just detecting that the
-        user has an account, this would detect what their account was).
 1. **Users page**
     1. **Ajax pagination**
     1. **Privileges**
@@ -392,6 +386,12 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## Lower priorities
 
+1. Option to **email forgotten username** (as a workaround, the reset
+    password email will send this currently, but not if adding an option to
+    disable the current `uniqueEmails` mode). Alternatively, could
+    **allow login by email.** Don't want to show username for email in UI
+    though for privacy reasons (more serious than just detecting that the
+    user has an account, this would detect what their account was).
 1. We should already be checking the important items like avoiding existing
     names, but we should be **rejecting bad values of lesser importance on
     the server-side** as we do on the client-side (e.g., non-emails, too
