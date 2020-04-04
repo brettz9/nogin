@@ -5,7 +5,8 @@
 //  e.g., 404 and users
 // See https://github.com/cypress-io/code-coverage#instrument-your-application
 
-// We don't go to trouble of loading no-op polyfill, as this file is not built.
+// We don't go to trouble of loading no-op polyfill for older browsers with
+//  `console`, as this file is not built.
 
 'use strict';
 // istanbul ignore else
