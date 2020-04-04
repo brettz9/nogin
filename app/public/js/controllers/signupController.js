@@ -67,7 +67,7 @@ function onCreatedSuccess () {
   // redirect to homepage on new account creation, add short
   //  delay so user can read alert window
   SignupView.getAccountCreatedOkButton(accountCreatedAlertDialog).click(() => {
-    setTimeout(redirectToRoot, 300);
+    setTimeout(redirectToRoot, 3000);
   });
   accountCreatedAlertDialog.modal('show');
 }

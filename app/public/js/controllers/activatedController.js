@@ -11,5 +11,5 @@ okButton.click(function () {
   //   can read alert window
   setTimeout(function () {
     Nogin.redirect('root');
-  }, 300);
+  }, 3000);
 });
