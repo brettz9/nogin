@@ -4,13 +4,13 @@
 
 - Breaking refactoring: Rename `NL_ROUTES` to `Nogin` global (and put
     `_` global inside)
+- Security: Prevent `?redirect=` from applying cross-domain to avoid
+    impression of being on the same site after login
 - Enhancement: Provide shim/no-op (for Error and console) for very old
     browser support
 - Enhancement: For Firefox 2 support, avoid use of `location.href` by
     default (though necessitating new cross-domain `crossDomainJSRedirects`
     option)
-- Security: Prevent `?redirect=` from applying cross-domain to avoid
-    impression of being on the same site after login
 - Linting: Add linting of server string output to Cypress test
 - Todo
 
