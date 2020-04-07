@@ -16,6 +16,8 @@ module.exports = {
       //  Ponyfills/shims loaded as needed would be safer than blanket
       //  whitelisting here, but less semantic and less friendly for future
       //  migration.
+      // Might use https://github.com/rollup/plugins/tree/master/packages/inject
+      //  which would auto-insert wherever used.
 
       // Supplied by core-js
       'Object.values',
