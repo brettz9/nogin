@@ -53,8 +53,6 @@ onto `Cypress.env` (to avoid redundancy, e.g., in getting at
 1. `env` - Set to `process.env.NODE_ENV` or failing any to "development".
     Used for determining login credentials (whether to set a secure cookie).
     Behaves like Express' `app.get('env')`.
-1. `coverage` - Set to `false` to disable coverage (e.g., for faster
-    performance or to avoid overwriting the latest coverage results).
 1. `disableEmailChecking` - Set to `true` to avoid the (longer duration)
     email checking tests (seeing whether an email was received).
 

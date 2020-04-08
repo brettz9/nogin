@@ -11,7 +11,9 @@
 - Enhancement: For Firefox 2 support, avoid use of `location.href` by
     default (though necessitating new cross-domain `crossDomainJSRedirects`
     option)
+- Update: Per latest `escape-string-regexp` and `@cypress/code-coverage`
 - Linting: Add linting of server string output to Cypress test
+- npm: Update devDeps
 - Todo
 
 ## 1.0.0-rc.1

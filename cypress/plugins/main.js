@@ -102,14 +102,8 @@ const exprt = (on, config) => {
   // eslint-disable-next-line no-process-env
   config.env.env = process.env.NODE_ENV || 'development';
 
-  // Ability to disable coverage as we don't want the good last coverage to
-  //  be overwritten by testing of single files (e.g., with `open`) or to
-  //  require re-running and re-merging, nor to spend extra time when not
-  //  needed.
-  if (config.env.coverage !== false) {
-    // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
-    on('task', codeCoverageTask);
-  }
+  // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
+  codeCoverageTask(on, config);
 
   setEmailConfig({
     /**

@@ -56,15 +56,6 @@ const stripMongoAndServerListeningMessages = (s, port = testPort) => {
     );
 };
 
-const escRegex = (str) => {
-  // Unicode regexp can't have escaped hyphens outside of character classes:
-  //  https://github.com/sindresorhus/escape-string-regexp/issues/20
-  // The following is not a good solution as it could be unescaping items that
-  //  had a sequence of backslashes and it doesn't work for hyphens in
-  //  character classes, but it should be fine for our purposes.
-  return escStringRegex(str).replace(/\\-/gu, '-');
-};
-
 describe('CLI', function () {
   // Was causing errors next to the other `fetch` testing script
   it(
@@ -507,26 +498,26 @@ describe('CLI', function () {
       }).join('');
       const semverNumPattern = '\\d+\\.\\d+\\.\\d+';
       expect(headLinks).to.match(new RegExp(
-        escRegex(
+        escStringRegex(
           '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">'
         ) +
-        escRegex(
+        escStringRegex(
           '<link href="https://stackpath.bootstrapcdn.com/font-awesome/'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">'
         ) +
-        escRegex(
+        escStringRegex(
           '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '/css/bootstrap.min.css" crossorigin="anonymous">'
         ) +
-        escRegex('<link rel="stylesheet" href="/css/style.css">') +
-        escRegex(
+        escStringRegex('<link rel="stylesheet" href="/css/style.css">') +
+        escStringRegex(
           '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '/gh-fork-ribbon.min.css" crossorigin="anonymous">'
         ) +
-        escRegex(
+        escStringRegex(
           '<link rel="stylesheet" href="stylesheet.css">' +
           '<link rel="stylesheet" href="headPostContent.css">'
         ),
@@ -542,25 +533,25 @@ describe('CLI', function () {
 
       const headPreScripts = headScripts.slice(0, 5).join('');
       expect(headPreScripts).to.match(new RegExp(
-        escRegex(
+        escStringRegex(
           '<script src="headPreContent.js"></script>' +
           '<script src="https://code.jquery.com/jquery-'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
-        escRegex(
+        escStringRegex(
           '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '/umd/popper.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
-        escRegex(
+        escStringRegex(
           '<script src="https://stackpath.bootstrapcdn.com/bootstrap/'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '/js/bootstrap.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
-        escRegex(
+        escStringRegex(
           '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/'
-        ) + semverNumPattern + escRegex(
+        ) + semverNumPattern + escStringRegex(
           '/jquery.form.min.js" crossorigin="anonymous" defer=""></script>'
         ),
         'u'
