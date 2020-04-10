@@ -1,5 +1,7 @@
 'use strict';
 
+const safeCompare = require('safe-compare');
+
 const {isNullish, guid} = require('./common.js');
 const {
   saltAndHash, validatePasswordV1
@@ -96,7 +98,7 @@ class AccountManager {
   async autoLogin (user, pass) {
     try {
       const o = await this.accounts.findOne({user, activated: true});
-      return o.pass === pass
+      return safeCompare(o.pass, pass)
         ? o
         // Todo: Could try to provide a coverage case for this,
         //  but it seems very obscure

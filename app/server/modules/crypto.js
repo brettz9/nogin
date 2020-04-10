@@ -1,6 +1,7 @@
 'use strict';
 
 const crypto = require('crypto');
+const safeCompare = require('safe-compare');
 
 /*
   private encryption & validation methods
@@ -65,7 +66,7 @@ const saltAndHash = function (data) {
 const validatePasswordV1 = async function (plainPass, hashedPass) {
   const [salt] = hashedPass.split('$');
   const validHash = await pbkdf2Prom(plainPass, salt);
-  return hashedPass === validHash;
+  return safeCompare(hashedPass, validHash);
 };
 
 exports.saltAndHash = saltAndHash;

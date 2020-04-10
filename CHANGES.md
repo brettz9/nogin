@@ -4,6 +4,7 @@
 
 - Breaking refactoring: Rename `NL_ROUTES` to `Nogin` global (and put
     `_` global inside)
+- Security: Timing safe compare for login checks
 - Security: Prevent `?redirect=` from applying cross-domain to avoid
     impression of being on the same site after login
 - Enhancement: Provide shim/no-op (for Error and console) for very old
