@@ -71,7 +71,8 @@ const layoutAndTitleGetter = (config) => {
         };
         return layoutView(
           cfg,
-          // eslint-disable-next-line global-require, import/no-dynamic-require
+          // eslint-disable-next-line max-len
+          // eslint-disable-next-line node/global-require, import/no-dynamic-require
           injectHTML ? require(injectHTML)(cfg) : {}
         );
       }

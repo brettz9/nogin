@@ -621,7 +621,7 @@ describe('CLI', function () {
     this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
-        // eslint-disable-next-line no-process-env
+        // eslint-disable-next-line node/no-process-env
         ...process.env,
         NODE_ENV: 'production'
       }
@@ -640,7 +640,7 @@ describe('CLI', function () {
     this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
-        // eslint-disable-next-line no-process-env
+        // eslint-disable-next-line node/no-process-env
         ...process.env,
         NODE_ENV: 'production'
       }

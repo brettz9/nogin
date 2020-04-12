@@ -53,7 +53,7 @@ module.exports = async function (app, config) {
 
   const countryCodes = config.countryCodes
     ? JSON.parse(config.countryCodes)
-    // eslint-disable-next-line global-require
+    // eslint-disable-next-line node/global-require
     : require('./modules/country-codes.json');
 
   const composeResetPasswordEmailConfig = {
@@ -106,13 +106,15 @@ module.exports = async function (app, config) {
     composeResetPasswordEmailView:
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'
-        // eslint-disable-next-line global-require, import/no-dynamic-require
+        // eslint-disable-next-line max-len
+        // eslint-disable-next-line node/global-require, import/no-dynamic-require
         ? require(pathResolve(cwd, composeResetPasswordEmailView))
         : undefined,
     composeActivationEmailView:
       composeActivationEmailView &&
         typeof composeActivationEmailView === 'string'
-        // eslint-disable-next-line global-require, import/no-dynamic-require
+        // eslint-disable-next-line max-len
+        // eslint-disable-next-line node/global-require, import/no-dynamic-require
         ? require(pathResolve(cwd, composeActivationEmailView))
         : undefined
   });
@@ -603,7 +605,7 @@ module.exports = async function (app, config) {
     // See https://github.com/cypress-io/code-coverage
 
     // ADD APP
-    // eslint-disable-next-line node/no-unpublished-require, global-require
+    // eslint-disable-next-line node/no-unpublished-require, node/global-require
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
@@ -656,7 +658,7 @@ window.Nogin = {
   });
 
   if (router) {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
+    // eslint-disable-next-line node/global-require, import/no-dynamic-require
     require(router)(app, opts);
   }
 

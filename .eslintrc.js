@@ -3,8 +3,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: [
-    'ash-nazg/sauron',
-    'plugin:node/recommended-script'
+    'ash-nazg/sauron-node-script'
   ],
   env: {
     browser: false,
@@ -38,11 +37,9 @@ module.exports = {
   overrides: [{
     files: ['test/**'],
     extends: [
-      // Disabling for now until merging/releasing:
-      //  https://github.com/fintechstudios/eslint-plugin-chai-as-promised/pull/15
       // Note: Could add this to cypress tests too, using the `chai` global
       //   which is auto-added in that environment
-      // 'plugin:@fintechstudios/chai-as-promised/recommended'
+      'plugin:@fintechstudios/chai-as-promised/recommended'
     ],
     env: {
       mocha: true
@@ -73,7 +70,7 @@ module.exports = {
     extends: [
       'plugin:chai-expect/recommended',
       'plugin:chai-friendly/recommended',
-      'plugin:node/recommended-module'
+      'ash-nazg/sauron-node'
     ],
     rules: {
       'cypress/assertion-before-screenshot': ['error'],
@@ -87,7 +84,7 @@ module.exports = {
       'rollup.config.js'
     ],
     extends: [
-      'plugin:node/recommended-module'
+      'ash-nazg/sauron-node'
     ],
     rules: {
       // Browser only
@@ -110,7 +107,7 @@ module.exports = {
       'app/public/js/views/**'
     ],
     extends: [
-      'plugin:node/recommended-module'
+      'ash-nazg/sauron-node'
     ],
     env: {
       node: false,
@@ -121,7 +118,7 @@ module.exports = {
       'app/public/js/controllers/emptyController.js'
     ],
     extends: [
-      'plugin:node/recommended-script'
+      'ash-nazg/sauron-node-script'
     ]
   }, {
     files: [
@@ -139,7 +136,7 @@ module.exports = {
       'test/utilities/**'
     ],
     extends: [
-      'plugin:node/recommended-module'
+      'ash-nazg/sauron-node'
     ],
     env: {
       node: true
@@ -160,7 +157,7 @@ module.exports = {
     }
   }],
   rules: {
-    'import/no-commonjs': 0,
+    'node/exports-style': 0,
     'import/unambiguous': 0,
 
     // For modules, we shouldn't need `window`

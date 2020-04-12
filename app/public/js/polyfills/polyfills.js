@@ -3,7 +3,7 @@
 //  and shouldn't be needed by modern ESM-supporting browsers anyways)
 
 // app/public/js/controllers/homeController.js
-import 'core-js/stable/promise';
+import 'core-js/stable/promise/index.js';
 
 // app/public/js/form-validators/AccountValidator.js
 import 'core-js/modules/es.object.values.js';

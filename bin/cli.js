@@ -65,7 +65,7 @@ case 'add':
       : 'en-US';
 
     try {
-      // eslint-disable-next-line global-require
+      // eslint-disable-next-line node/global-require
       const manageAccounts = require('./manage-accounts.js');
       await manageAccounts(verb, {loggerLocale});
     } catch (err) {

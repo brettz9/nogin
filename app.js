@@ -45,7 +45,7 @@ exports.createServer = async function (options) {
   let cfg;
   try {
     cfg = config
-    // eslint-disable-next-line global-require, import/no-dynamic-require
+    // eslint-disable-next-line node/global-require, import/no-dynamic-require
       ? require(pathResolve(cwd, config))
       : null;
   } catch (err) {
@@ -130,7 +130,7 @@ exports.createServer = async function (options) {
   }
   if (middleware) {
     middleware.forEach((mw) => {
-      // eslint-disable-next-line import/no-dynamic-require, global-require
+      // eslint-disable-next-line import/no-dynamic-require, node/global-require
       app.use(require(mw)(opts));
     });
   }
