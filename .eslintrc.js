@@ -3,7 +3,8 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: [
-    'ash-nazg/sauron-node-script'
+    'ash-nazg/sauron',
+    'plugin:node/recommended-script'
   ],
   env: {
     browser: false,
@@ -37,15 +38,26 @@ module.exports = {
   overrides: [{
     files: ['test/**'],
     extends: [
+      'ash-nazg/sauron-node',
+      'plugin:node/recommended-script',
       // Note: Could add this to cypress tests too, using the `chai` global
       //   which is auto-added in that environment
       'plugin:@fintechstudios/chai-as-promised/recommended'
     ],
     env: {
+      browser: false,
+      node: true,
       mocha: true
     },
     globals: {
       expect: true
+    },
+    rules: {
+      // Browser only
+      'compat/compat': 0,
+      'import/no-commonjs': 0,
+      'no-console': 0,
+      'node/exports-style': 0
     }
   }, {
     files: [
@@ -70,7 +82,7 @@ module.exports = {
     extends: [
       'plugin:chai-expect/recommended',
       'plugin:chai-friendly/recommended',
-      'ash-nazg/sauron-node'
+      'plugin:node/recommended-module'
     ],
     rules: {
       'cypress/assertion-before-screenshot': ['error'],
@@ -84,11 +96,14 @@ module.exports = {
       'rollup.config.js'
     ],
     extends: [
-      'ash-nazg/sauron-node'
+      'ash-nazg/sauron-node',
+      'plugin:node/recommended-module'
     ],
     rules: {
       // Browser only
-      'compat/compat': 0
+      'compat/compat': 0,
+
+      'no-console': 0
     }
   }, {
     files: [
@@ -107,7 +122,7 @@ module.exports = {
       'app/public/js/views/**'
     ],
     extends: [
-      'ash-nazg/sauron-node'
+      'plugin:node/recommended-module'
     ],
     env: {
       node: false,
@@ -118,16 +133,28 @@ module.exports = {
       'app/public/js/controllers/emptyController.js'
     ],
     extends: [
-      'ash-nazg/sauron-node-script'
+      'plugin:node/recommended-script'
     ]
   }, {
+    env: {
+      browser: false,
+      node: true
+    },
     files: [
-      'app/server/**', 'test/**', 'bin/**', 'app.js',
+      'app/server/**', 'bin/**', 'app.js',
       'tools/mochawesome-cli.js'
+    ],
+    extends: [
+      'ash-nazg/sauron-node',
+      'plugin:node/recommended-script'
     ],
     rules: {
       // Browser only
-      'compat/compat': 0
+      'compat/compat': 0,
+
+      'import/no-commonjs': 0,
+      'no-console': 0,
+      'node/exports-style': 0
     }
   }, {
     files: [
@@ -136,7 +163,7 @@ module.exports = {
       'test/utilities/**'
     ],
     extends: [
-      'ash-nazg/sauron-node'
+      'plugin:node/recommended-module'
     ],
     env: {
       node: true
@@ -157,7 +184,7 @@ module.exports = {
     }
   }],
   rules: {
-    'node/exports-style': 0,
+    'import/no-commonjs': 0,
     'import/unambiguous': 0,
 
     // For modules, we shouldn't need `window`

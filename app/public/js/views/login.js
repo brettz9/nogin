@@ -114,8 +114,8 @@ const LoginView = {
   */
   toggleCheckSquare (loginModal) {
     const span = this.getRememberMeButton(loginModal).find('span');
-    // Todo[cypress@>4.3.0]: Remove this disabling of istanbul to see if fixed
-    //   see https://github.com/cypress-io/cypress/issues/6678
+    // Todo[cypress@>4.5.0]: class checking: remove this disabling of
+    //   istanbul to see if fixed
     // istanbul ignore if
     if (span.hasClass('fa-minus-square')) {
       span.removeClass('fa-minus-square')
