@@ -66,8 +66,7 @@ describe('Programmatic', function () {
       ).to.be.rejectedWith(
         Error,
         // From Node
-        'The "password" argument must be one of type string, ' +
-          'Buffer, TypedArray, or DataView. Received type object'
+        /The "password" argument must be /u
       );
     });
   });
