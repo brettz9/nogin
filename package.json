@@ -130,7 +130,8 @@
     "test-badge": "mbg --file ./mochawesome.json --badge_output doc-includes/tests-badge.svg",
     "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-no-unit": "run-s -c clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full",
-    "test": "snyk test && run-p -r start-test cypress:delayed-run"
+    "snyk": "snyk test",
+    "test": "npm run synk && run-p -r start-test cypress:delayed-run"
   },
   "engines": {
     "node": ">=10.4.0"
