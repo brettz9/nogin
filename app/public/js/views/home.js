@@ -10,6 +10,7 @@ const {_} = Nogin;
  * @param {PlainObject} cfg
  * @param {string} [cfg.message]
  * @param {string} [cfg.type]
+ * @param {"error"|"success"} [cfg.heading]
  * @returns {external:jQuery} `HTMLDivElement`
  */
 function lockedAlert ({type, message, heading}) {
