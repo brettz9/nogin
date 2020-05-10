@@ -14,6 +14,13 @@
     option)
 - Update: Per latest `escape-string-regexp` and `@cypress/code-coverage`
 - Linting: Add linting of server string output to Cypress test
+- Linting: As per latest ash-nazg
+- Docs: Update license badge per latest
+- Testing: Change check to be more Node-version-independent (error message varies)
+- npm: Add separate `synk` script
+- npm: Update deps (intl-dom, patches: express-session, express-rate-limit, jquery, mongodb)
+- npm: Add react/react-dom for mochawesome
+- npm: Update from deprecated rollup-plugin-babel to rollup/plugin-babel
 - npm: Update devDeps
 - Todo
 

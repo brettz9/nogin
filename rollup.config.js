@@ -3,7 +3,7 @@ import {terser} from 'rollup-plugin-terser';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 
 /**
  * @external RollupConfig
@@ -28,7 +28,9 @@ function getRollupObject ({input, minifying} = {}) {
     plugins: [
       nodeResolve(),
       commonjs(),
-      babel()
+      babel({
+        babelHelpers: 'bundled'
+      })
     ]
   };
   if (minifying) {
