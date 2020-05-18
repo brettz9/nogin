@@ -15,6 +15,7 @@
 - Update: Per latest `escape-string-regexp` and `@cypress/code-coverage`
 - Linting: Add linting of server string output to Cypress test
 - Linting: As per latest ash-nazg
+- Linting: Use `--cache`
 - Docs: Update license badge per latest
 - Testing: Change check to be more Node-version-independent (error message varies)
 - npm: Add separate `synk` script

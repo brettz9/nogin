@@ -26,3 +26,4 @@ app/public/js/controllers/*.js
 rollup.config.js
 
 docs/jsdoc
+.eslintcache
