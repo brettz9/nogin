@@ -22,7 +22,7 @@ describe('Users', function () {
       'United States'
     );
     cy.get('[data-name=users] tr:nth-child(1) td:nth-child(5)').contains(
-      /\d{1,2}\/\d{1,2}\/\d{1,2}/u
+      /\w+, \w+ \d{1,2}, \d{4}/u
     );
 
     cy.get('[data-name=users] tr:nth-child(2) td:nth-child(1)').contains('2');
@@ -36,7 +36,7 @@ describe('Users', function () {
       'Iran'
     );
     cy.get('[data-name=users] tr:nth-child(2) td:nth-child(5)').contains(
-      /\d{1,2}\/\d{1,2}\/\d{1,2}/u
+      /\w+, \w+ \d{1,2}, \d{4}/u
     );
 
     cy.get('[data-name=users] tr:nth-child(3) td:nth-child(1)').contains('3');
@@ -50,7 +50,7 @@ describe('Users', function () {
       '[data-name=users] tr:nth-child(3) td:nth-child(4)'
     ).should('be.empty');
     cy.get('[data-name=users] tr:nth-child(3) td:nth-child(5)').contains(
-      /\d{1,2}\/\d{1,2}\/\d{1,2}/u
+      /\w+, \w+ \d{1,2}, \d{4}/u
     );
 
     cy.get('[data-name=users] tbody tr:nth-child(4)').should('not.exist');
