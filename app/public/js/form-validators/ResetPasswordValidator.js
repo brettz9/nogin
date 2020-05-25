@@ -11,7 +11,7 @@ class ResetPasswordValidator {
    */
   static validatePassword (pass) {
     pass.setCustomValidity('');
-    // Todo[cypress@>4.5.0]: validity: remove this disabling of istanbul
+    // Todo[cypress@>4.6.0]: validity: remove this disabling of istanbul
     //   to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if

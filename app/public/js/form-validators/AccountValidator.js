@@ -54,28 +54,28 @@ class AccountValidator {
         field.setCustomValidity('');
       }
     });
-    // Todo[cypress@>4.5.0]: validity: remove this disabling of istanbul
+    // Todo[cypress@>4.6.0]: validity: remove this disabling of istanbul
     //  to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (name.validity.tooShort) {
       name.setCustomValidity(this.errorMessages.name.PleaseEnterName);
     }
-    // Todo[cypress@>4.5.0]: validity: remove this disabling of istanbul
+    // Todo[cypress@>4.6.0]: validity: remove this disabling of istanbul
     //   to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (email.validity.patternMismatch) {
       email.setCustomValidity(this.errorMessages.email.PleaseEnterValidEmail);
     }
-    // Todo[cypress@>4.5.0]: validity: remove this disabling of istanbul
+    // Todo[cypress@>4.6.0]: validity: remove this disabling of istanbul
     //   to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
     if (user.validity.tooShort) {
       user.setCustomValidity(this.errorMessages.user.PleaseChooseUserName);
     }
-    // Todo[cypress@>4.5.0]: validity: remove this disabling of istanbul
+    // Todo[cypress@>4.6.0]: validity: remove this disabling of istanbul
     //   to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if

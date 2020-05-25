@@ -25,14 +25,10 @@ module.exports = {
 
       // Supplied by polyfills
       'console',
-      'Error',
+      'Error'
 
       // (Conditionally) used, but served as string from server
       // 'location.href'
-
-      // Todo [eslint-plugin-compat@>3.6.0]: Temporarily adding for bug in
-      //   compat data (to be fixed in next release)
-      'window'
     ]
   },
   globals: {
