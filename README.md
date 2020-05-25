@@ -300,18 +300,10 @@ Questions and suggestions for improvement are welcome.
 
 For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
-## Short-term to-dos
-
-1. See about removing `font-awesome` dependency (and if so, rebuild
-    license badges and remove note above about its license)
-1. Publish **release**
-    1. Inform `node-login` main in relevant PRs
-        1. Mention any new behavior for resending activation link (and how
-            update now causes new activation to be required) at
-            <https://github.com/braitsch/node-login/pull/11> when may be done)
-
 ## To-dos
 
+1. See about removing **`font-awesome` dependency** (and if so, rebuild
+    license badges and remove note above about its license)
 1. **Login page**
     1. Security: **CSRF** protection
     1. Provide **option for integration** within an existing page to avoid need
