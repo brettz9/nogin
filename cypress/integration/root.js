@@ -358,6 +358,35 @@ describe('Root (Login)', function () {
   );
 
   it(
+    'Visit auto-logging-in root after initial login and with redirect',
+    function () {
+      cy.log(env);
+      // See `hackEnv` on how apparently not working and why we need this hack
+      // const secure = Cypress.env('env') === 'production'
+      const secure = env === 'production';
+      return cy.login({
+        user: 'bretto',
+        // ipv6 read by Express
+        ip: '::ffff:127.0.0.1',
+        secure
+      // Cypress won't run the tests with an `await` here
+      // eslint-disable-next-line promise/prefer-await-to-then
+      }).then((key) => {
+        cy.visit('/?redirect=http://ignore-redirect-with-colons.com');
+        cy.location('pathname', {
+          timeout: 10000
+        }).should('eq', '/home');
+
+        cy.log(key);
+        cy.getCookie('login').should('have.property', 'value', key);
+        cy.getCookie('login').should('have.property', 'secure', secure);
+
+        return cy.getCookie(expressSessionID).should('exist');
+      });
+    }
+  );
+
+  it(
     'Successful `validateLoginKey` but mismatched `autoLogin`',
     function () {
       cy.loginWithSession();
