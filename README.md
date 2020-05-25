@@ -36,6 +36,7 @@ So if you want Node login, use your "nogin"!
 - Session tracking for logged-in users
 - Local cookie storage for returning Users
 - PBKDF2-based password encryption
+- Timing safe login check comparisons
 - Throrough internationalization (i18n) and fundamental accessibility (a11y)
 - CLI option for managing accounts
 - 100% Cypress UI and CLI Testing Coverage
