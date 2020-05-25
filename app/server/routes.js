@@ -190,7 +190,7 @@ module.exports = async function (app, config) {
           //  may think they are still on the same domain after
           //  the redirect and mistakenly believe it safe to offer
           //  credentials.
-          if (queryRedirect.includes(':')) {
+          if (queryRedirect && queryRedirect.includes(':')) {
             queryRedirect = '';
           }
           res.redirect(
