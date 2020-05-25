@@ -168,8 +168,7 @@ describe('Root (Login)', function () {
         user: 'bretto',
         pass: null
       },
-      error: 'The "password" argument must be one of type string, ' +
-        'Buffer, TypedArray, or DataView. Received type object'
+      error: 'The "password" argument must be'
       // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       const passwordToPassClientValidation = 'abc123456';
