@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 1.0.0
 
 - Breaking refactoring: Rename `NL_ROUTES` to `Nogin` global (and put
     `_` global inside)
@@ -17,11 +17,13 @@
 - Linting: As per latest ash-nazg
 - Linting: Use `--cache`
 - Docs: Update license badge per latest
-- Testing: Change check to be more Node-version-independent (error message varies)
+- Testing: Change check to be more Node-version-independent (error message
+    varies)
 - npm: Add separate `synk` script
-- npm: Update deps (intl-dom, patches: express-session, express-rate-limit, jquery, mongodb)
+- npm: Update deps (intl-dom, patches: express-session, express-rate-limit,
+    jquery, mongodb)
 - npm: Add react/react-dom for mochawesome
-- npm: Update from deprecated rollup-plugin-babel to rollup/plugin-babel
+- npm: Update from deprecated `rollup-plugin-babel` to `@rollup/plugin-babel`
 - npm: Update devDeps
 - Todo
 
