@@ -633,7 +633,7 @@ window.Nogin = {
       location.href = this.Routes[key];
       return;
     }
-    location.assign(this.Routes['safe' + key]);
+    location.assign(this.Routes['safe_' + key]);
   }
 };
 `;
