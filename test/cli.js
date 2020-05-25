@@ -258,6 +258,55 @@ describe('CLI', function () {
     });
   });
 
+  // Todo: If setting up additional cypress processes, we
+  //   would ideally test this in UI that it redirects
+  it('crossDomainJSRedirects', async function () {
+    this.timeout(50000);
+    let fetching;
+    let cliProm;
+    // eslint-disable-next-line promise/avoid-new
+    const [langFF2, langFF25] = await new Promise((resolve, reject) => {
+      cliProm = spawnPromise(cliPath, [
+        '--crossDomainJSRedirects',
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 20000, (stdout) => {
+        // if (stdout.includes(
+        //  `Express server listening on port ${testPort}`)
+        // ) {
+        if (fetching || !stdout.includes('Beginning server...')) {
+          return;
+        }
+        fetching = true;
+        resolve(Promise.all([
+          fetch(`http://localhost:${testPort}/_lang`, {
+            headers: {
+              'User-Agent': 'Firefox/2.0'
+            }
+          }),
+          fetch(`http://localhost:${testPort}/_lang`, {
+            headers: {
+              'User-Agent': 'Firefox/25.0'
+            }
+          })
+        ]));
+      });
+    });
+    /* const {stdout, stderr} = */ await cliProm;
+
+    const langFirefox2 = await langFF2.text();
+    const langFirefox25 = await langFF25.text();
+
+    expect(langFirefox2).to.contain(
+      'permittingXDomainRedirects = false'
+    );
+    expect(langFirefox25).to.contain(
+      'permittingXDomainRedirects = true'
+    );
+  });
+
   // While we could make a full-blown UI test out of this, it would
   //  require setting up another server either before Cypress runs,
   //  or before another instance of Cypress runs, both of which seem

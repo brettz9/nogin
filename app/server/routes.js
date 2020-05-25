@@ -626,6 +626,7 @@ window.Nogin = {
   crossDomainJSRedirects &&
     // `location.href` not supported in Firefox 2 per
     //   `eslint-plugin-compat`
+    // However, can't test during UI test: https://github.com/cypress-io/cypress/issues/2100
     !userAgent.match(/Firefox\/2(?=\D)/u)
     ? 'true'
     : 'false'};
