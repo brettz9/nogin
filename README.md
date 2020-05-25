@@ -45,7 +45,8 @@ So if you want Node login, use your "nogin"!
 
 ## Improvements over `node-login`
 
-While you can see [CHANGES](./CHANGES.md) (or the [1.0.0 migration guide](./docs/migration/1.0.0.md))
+While you can see [CHANGES](./CHANGES.md) (or the
+[1.0.0 migration guide](./docs/migration/1.0.0.md))
 to see all of the fixes and enhancements (including security fixes), the
 essential change has been to avoid the necessity of directly modifying
 source. This component has been retooled to allow it to be added as an
@@ -317,7 +318,8 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
     1. **BrowserID**
         to use with a server-side validation
         1. See <https://github.com/jaredhanson/passport-browserid>.
-        1. Would presumably need to revive as a [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
+        1. Would presumably need to revive as a
+            [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
     1. Add **passwordless** option
         1. See <http://www.passportjs.org/packages/passport-passwordless/>.
 1. **Users page**
