@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## ?
+
+- npm: add 3rd party linting script
+- npm: Update devDeps
+
 ## 1.0.0
 
 - Breaking refactoring: Rename `NL_ROUTES` to `Nogin` global (and put

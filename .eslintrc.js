@@ -57,7 +57,10 @@ module.exports = {
       'compat/compat': 0,
       'import/no-commonjs': 0,
       'no-console': 0,
-      'node/exports-style': 0
+      'node/exports-style': 0,
+
+      // Disable for now
+      'eslint-comments/require-description': 0
     }
   }, {
     files: [
@@ -87,7 +90,10 @@ module.exports = {
     rules: {
       'cypress/assertion-before-screenshot': ['error'],
       'cypress/require-data-selectors': ['error'],
-      'cypress/no-force': ['error']
+      'cypress/no-force': ['error'],
+
+      // Disable for now
+      'eslint-comments/require-description': 0
     }
   }, {
     files: [
@@ -103,7 +109,10 @@ module.exports = {
       // Browser only
       'compat/compat': 0,
 
-      'no-console': 0
+      'no-console': 0,
+
+      // Disable for now
+      'eslint-comments/require-description': 0
     }
   }, {
     files: [
@@ -127,6 +136,10 @@ module.exports = {
     env: {
       node: false,
       browser: true
+    },
+    rules: {
+      // Disable for now
+      'eslint-comments/require-description': 0
     }
   }, {
     files: [
@@ -151,6 +164,9 @@ module.exports = {
     rules: {
       // Browser only
       'compat/compat': 0,
+
+      // Disable for now
+      'eslint-comments/require-description': 0,
 
       'import/no-commonjs': 0,
       'no-console': 0,
@@ -186,6 +202,9 @@ module.exports = {
   rules: {
     'import/no-commonjs': 0,
     'import/unambiguous': 0,
+
+    // Disable for now
+    'eslint-comments/require-description': 0,
 
     // For modules, we shouldn't need `window`
     'no-restricted-globals': ['error', 'window'],

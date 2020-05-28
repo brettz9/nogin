@@ -1,0 +1,6 @@
+!node_modules/**
+
+# Wish we could avoid these too
+node_modules/bson/lib/bson/parser/deserializer.js
+node_modules/depd/index.js
+node_modules/es-abstract/GetIntrinsic.js
