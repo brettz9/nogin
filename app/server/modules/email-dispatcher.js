@@ -2,7 +2,7 @@
 
 const {promisify} = require('util');
 
-const emailjs = require('emailjs/email');
+const {SMTPClient} = require('emailjs');
 
 // Todo: Reenable when getting dominum working
 // const jml = require('jamilih/dist/jml-dominum.js').default;
@@ -51,7 +51,7 @@ class EmailDispatcher {
       NL_EMAIL_FROM, NL_SITE_URL
     });
 
-    this.server = emailjs.server.connect({
+    this.smtpClient = new SMTPClient({
       host: NL_EMAIL_HOST,
       user: NL_EMAIL_USER,
       password: NL_EMAIL_PASS,
@@ -59,7 +59,7 @@ class EmailDispatcher {
       // Todo: Make configurable
       ssl: true
     });
-    this.server.send = promisify(this.server.send);
+    this.smtpClient.send = promisify(this.smtpClient.send);
   }
 
   /**
@@ -75,7 +75,7 @@ class EmailDispatcher {
    */
   dispatchResetPasswordLink (account, cfg, _) {
     const attachment = this.composeResetPasswordEmail(account, cfg, _);
-    return this.server.send({
+    return this.smtpClient.send({
       from: this.NL_EMAIL_FROM,
       to: account.email,
       subject: _('PasswordReset'),
@@ -130,7 +130,7 @@ class EmailDispatcher {
    */
   dispatchActivationLink (account, cfg, _) {
     const attachment = this.composeActivationEmail(account, cfg, _);
-    return this.server.send({
+    return this.smtpClient.send({
       from: this.NL_EMAIL_FROM,
       to: account.email,
       subject: _('AccountActivation'),

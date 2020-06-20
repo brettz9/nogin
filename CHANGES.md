@@ -2,8 +2,11 @@
 
 ## ?
 
+- Linting: Updte to-dos (no fix for cypress issue yet)
+- Update: emailjs API
+- Testing: Avoid 3rd party ESLint file in coverage check
 - npm: add 3rd party linting script
-- npm: Update devDeps
+- npm: Update emailjs, jquery-form, mongodb and devDeps.
 
 ## 1.0.0
 
