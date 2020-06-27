@@ -2,11 +2,15 @@
 
 ## ?
 
-- Linting: Updte to-dos (no fix for cypress issue yet)
+- Docs: Update license badge
+- Linting: Update to-dos (no fix for cypress issue yet)
 - Update: emailjs API
 - Testing: Avoid 3rd party ESLint file in coverage check
+- npm: Update `engines` to `10.6.0` as per `ls-engines` check
 - npm: add 3rd party linting script
-- npm: Update emailjs, jquery-form, mongodb and devDeps.
+- npm: Fix sp. in `test` script
+- npm: Update emailjs, jquery-form, mongodb
+- npm: Update devDeps.
 
 ## 1.0.0
 

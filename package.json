@@ -133,10 +133,10 @@
     "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-no-unit": "run-s -c clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full",
     "snyk": "snyk test",
-    "test": "npm run synk && run-p -r start-test cypress:delayed-run"
+    "test": "npm run snyk && run-p -r start-test cypress:delayed-run"
   },
   "engines": {
-    "node": ">=10.4.0"
+    "node": ">=10.6.0"
   },
   "repository": {
     "type": "git",
@@ -197,9 +197,9 @@
     "@cypress/fiddle": "^1.18.2",
     "@fintechstudios/eslint-plugin-chai-as-promised": "^3.0.2",
     "@mysticatea/eslint-plugin": "^13.0.0",
-    "@rollup/plugin-babel": "^5.0.3",
+    "@rollup/plugin-babel": "^5.0.4",
     "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^8.0.1",
+    "@rollup/plugin-node-resolve": "^8.1.0",
     "acorn": "^7.3.1",
     "babel-eslint": "^10.1.0",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
@@ -209,7 +209,7 @@
     "cookie-signature": "^1.1.0",
     "core-js": "^3.6.5",
     "coveradge": "^0.6.0",
-    "cypress": "^4.8.0",
+    "cypress": "^4.9.0",
     "cypress-axe": "^0.8.1",
     "cypress-multi-reporters": "^1.4.0",
     "delay": "^4.3.0",
@@ -218,8 +218,8 @@
     "envelope": "^2.1.0",
     "es-file-traverse": "^0.7.0",
     "escape-string-regexp": "^4.0.0",
-    "eslint": "^7.3.0",
-    "eslint-config-ash-nazg": "^22.5.0",
+    "eslint": "^7.3.1",
+    "eslint-config-ash-nazg": "^22.5.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-array-func": "^3.1.6",
     "eslint-plugin-chai-expect": "^2.1.0",
@@ -229,7 +229,7 @@
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-html": "^6.0.2",
     "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-jsdoc": "^27.1.2",
+    "eslint-plugin-jsdoc": "^28.5.1",
     "eslint-plugin-markdown": "^1.0.2",
     "eslint-plugin-no-unsanitized": "^3.1.2",
     "eslint-plugin-no-use-extend-native": "^0.5.0",
@@ -254,9 +254,9 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.17.1",
+    "rollup": "^2.18.0",
     "rollup-plugin-terser": "^6.1.0",
-    "snyk": "^1.346.0",
+    "snyk": "^1.349.0",
     "stop-only": "^3.1.0",
     "typescript": "^3.9.5"
   }
