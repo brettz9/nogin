@@ -307,6 +307,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
     license badges and remove note above about its license)
 1. **Login page**
     1. Security: **CSRF** protection
+        1. Also see about [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) settings for cookies
     1. Security: See about **helmet** integration for better default
         HTTP headers control
     1. Provide **option for integration** within an existing page to avoid need
