@@ -545,7 +545,7 @@ describe('CLI', function () {
       const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
         return link.outerHTML;
       }).join('');
-      const semverNumPattern = '\\d+\\.\\d+\\.\\d+';
+      const semverNumPattern = '\\d+\\.\\d+\\.\\d+(?:-(?:alpha|beta)\\d+)?';
       expect(headLinks).to.match(new RegExp(
         escStringRegex(
           '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">'
@@ -589,9 +589,9 @@ describe('CLI', function () {
           '.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
         escStringRegex(
-          '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/'
+          '<script src="https://cdn.jsdelivr.net/npm/popper.js@'
         ) + semverNumPattern + escStringRegex(
-          '/umd/popper.min.js" crossorigin="anonymous" defer=""></script>'
+          '/dist/umd/popper.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
         escStringRegex(
           '<script src="https://stackpath.bootstrapcdn.com/bootstrap/'

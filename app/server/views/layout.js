@@ -20,6 +20,7 @@ module.exports = ({
       ...(noBuiltinStylesheets
         ? ['']
         : [
+          // todo[font-awesome@>4.7.0]: Update SHA (and path(s) if necessary)
           ['link', {
             href: localScripts
               ? '/node_modules/font-awesome/css/font-awesome.min.css'
@@ -32,13 +33,14 @@ module.exports = ({
             rel: 'stylesheet',
             href: localScripts
               ? '/node_modules/bootstrap/dist/css/bootstrap.min.css'
-              : 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
-            integrity: 'sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T',
+              : 'https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css',
+            integrity: 'sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I',
             crossorigin: 'anonymous'
           }],
           ['link', {rel: 'stylesheet', href: '/css/style.css'}],
           // Todo: If keeping, add badge to a demo and make enableable (off
           //   by default) with option
+          // todo[github-fork-ribbon-css@>0.2.3]: Update SHA (and path(s) if necessary)
           ['link', {
             rel: 'stylesheet',
             href: localScripts
@@ -60,20 +62,26 @@ module.exports = ({
         ]]
         : '',
 
+      // Has SHAs at https://code.jquery.com/ ;
+      //  see also https://jquery.com/download/
+      // todo[jquery@>3.5.1]: Update SHA (and path(s) if necessary)
       ['script', {
         src: localScripts
           ? '/node_modules/jquery/dist/jquery.min.js'
-          : 'https://code.jquery.com/jquery-3.4.1.min.js',
-        integrity: 'sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=',
+          : 'https://code.jquery.com/jquery-3.5.1.min.js',
+        integrity: 'sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=',
         crossorigin: 'anonymous',
         defer: 'defer'
       }],
-      // Popper is a boostrap dep.; see https://github.com/twbs/bootstrap/blob/master/config.yml#L75
-      // Get src/integrity at https://github.com/twbs/bootstrap/blob/master/config.yml
+      // Popper is a bootstrap dep.; see https://github.com/twbs/bootstrap/blob/main/config.yml
+      // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
+
+      // Todo[bootstrap@>5.0.0-alpha1]: Update SHA (and path(s) if necessary) for
+      //   bootstrap css, bootstrap js, and popper.js
       ['script', {
         src: localScripts
           ? '/node_modules/popper.js/dist/umd/popper.min.js'
-          : 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js',
+          : 'https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js',
         integrity: 'sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo',
         crossorigin: 'anonymous',
         defer: 'defer'
@@ -81,16 +89,18 @@ module.exports = ({
       ['script', {
         src: localScripts
           ? '/node_modules/bootstrap/dist/js/bootstrap.min.js'
-          : 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js',
-        integrity: 'sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM',
+          : 'https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js',
+        integrity: 'sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/',
         crossorigin: 'anonymous',
         defer: 'defer'
       }],
+      // See https://github.com/jquery-form/form for CDN SHA
+      // todo[jquery-form@>4.3.0]: Update SHA (and path(s) if necessary)
       ['script', {
         src: localScripts
           ? '/node_modules/jquery-form/dist/jquery.form.min.js'
-          : 'https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js',
-        integrity: 'sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i',
+          : 'https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js',
+        integrity: 'sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn',
         crossorigin: 'anonymous',
         defer: 'defer'
       }],

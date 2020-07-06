@@ -1,15 +1,20 @@
 # CHANGES for nogin
 
-## ?
+## 1.1.0
 
-- Docs: Update license badge
+- Fix: Update jquery versions and hashes; switch
+    to now preferred bootstrap CDN
+- Docs: Update license and license dev badges
 - Linting: Update to-dos (no fix for cypress issue yet)
+- Linting: Add todos for specific packages/versions that would need
+    SHA/path updating
 - Update: emailjs API
+- Testing: Ensure regex pattern allows for prerelease versions
 - Testing: Avoid 3rd party ESLint file in coverage check
 - npm: Update `engines` to `10.6.0` as per `ls-engines` check
 - npm: add 3rd party linting script
 - npm: Fix sp. in `test` script
-- npm: Update emailjs, jquery-form, mongodb
+- npm: Update bootstrap, emailjs, jquery-form, mongodb
 - npm: Update devDeps.
 
 ## 1.0.0

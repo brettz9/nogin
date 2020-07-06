@@ -2,9 +2,9 @@
 
 module.exports = {
   reject: [
-    // Todo[bootstrap@>4.4.1]: See if updated for css, js, and popper.js at
-    //  https://github.com/twbs/bootstrap/blob/master/config.yml
-    'bootstrap',
+    // Lock in any npm packages here
+    // Todo[bootstrap@>5.0.0-alpha1]: Update if bootstrap updates the version;
+    //  see https://github.com/twbs/bootstrap/blob/master/config.yml
     'popper.js'
   ]
 };
