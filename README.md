@@ -310,6 +310,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         1. Also see about [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) settings for cookies
     1. Security: See about **helmet** integration for better default
         HTTP headers control
+    1. WebSockets with [express-ws](https://github.com/HenningM/express-ws)?
     1. Provide **option for integration** within an existing page to avoid need
         for separate login page (Ajax)
         1. Adapt server-side redirect functionality to give Ajax feedback to
