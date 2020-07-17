@@ -334,7 +334,7 @@ module.exports = async function (app, config) {
         am.getAllRecords()
       ]);
 
-      // Todo[>=1.1.0]: `/users` should always be enabled when there are (read)
+      // Todo[>=2.0.0]: `/users` should always be enabled when there are (read)
       //   privileges.
       if (!showUsers) {
         pageNotFound(_, res);
@@ -573,7 +573,7 @@ module.exports = async function (app, config) {
         res.status(200).send(_('OK'));
       });
     }
-    // Todo[>=1.1.0]: Should be available to UI but require privileges.
+    // Todo[>=2.0.0]: Should be available to UI but require privileges.
     /*
     async reset (routes, req, res) {
       await am.deleteAllAccounts();
