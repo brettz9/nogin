@@ -5,6 +5,7 @@ const {join} = require('path');
 
 const layoutView = require('./views/layout.js');
 const i18n = require('./modules/i18n.js');
+const integrityMap = require('./integrityMap.json');
 
 /**
 * @callback LayoutCallback
@@ -44,6 +45,41 @@ const layoutAndTitleGetter = (config) => {
     noPolyfill,
     useESM
   } = config;
+
+  // Has SHAs at https://code.jquery.com/ ;
+  //  see also https://jquery.com/download/
+  // todo[jquery@>3.5.1]: Update SHA (and path(s) if necessary)
+
+  // See https://github.com/jquery-form/form for CDN SHA
+  // todo[jquery-form@>4.3.0]: Update SHA (and path(s) if necessary)
+
+  // Todo[bootstrap@>5.0.0-alpha1]: Update SHA (and path(s) if necessary) for
+  //   bootstrap css, bootstrap js, and popper.js
+  // Popper is a bootstrap dep.; see https://github.com/twbs/bootstrap/blob/main/config.yml
+  // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
+
+  // todo[font-awesome@>4.7.0]: If not replacing (due to license), update
+  //  SHA (and path(s) if necessary)
+
+  // Todo: If keeping, add badge to a demo and make enableable (off
+  //   by default) with option
+  // todo[github-fork-ribbon-css@>0.2.3]: Update SHA (and path(s) if necessary)
+
+  const securitySourceAttributes = (name, type) => {
+    const base = integrityMap[type][name];
+    const baseObj = {
+      crossorigin: 'anonymous',
+      [type === 'css' ? 'href' : 'src']: base[localScripts ? 'local' : 'remote']
+    };
+    if (localScripts && base.noLocalIntegrity) {
+      return baseObj;
+    }
+    return {
+      ...baseObj,
+      integrity: base.integrity
+    };
+  };
+
   /**
    * @param {LayoutAndTitleArgs} businessLogicArgs
    * @returns {TitleWithLayoutCallback}
@@ -65,6 +101,7 @@ const layoutAndTitleGetter = (config) => {
           userJS,
           userJSModule,
           localScripts,
+          securitySourceAttributes,
           noPolyfill,
           useESM,
           ...businessLogicArgs

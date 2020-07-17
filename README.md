@@ -394,6 +394,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## Lower priority to-dos
 
+1. Allow variant of `localScripts` which uses CDN but generates fallback
 1. Option to **email forgotten username** (as a workaround, the reset
     password email will send this currently, but not if adding an option to
     disable the current `uniqueEmails` mode). Alternatively, could

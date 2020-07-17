@@ -2,11 +2,11 @@
 'use strict';
 
 module.exports = ({
-  _, content, scripts, title, localScripts,
+  _, content, scripts, title,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   noPolyfill, useESM,
   error,
-  triggerCoverage
+  triggerCoverage, securitySourceAttributes
 }, injectedHTML) => {
   return [{$document: {
     $DOCTYPE: {name: 'html'},
@@ -20,36 +20,18 @@ module.exports = ({
       ...(noBuiltinStylesheets
         ? ['']
         : [
-          // todo[font-awesome@>4.7.0]: Update SHA (and path(s) if necessary)
           ['link', {
-            href: localScripts
-              ? '/node_modules/font-awesome/css/font-awesome.min.css'
-              : 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
-            rel: 'stylesheet',
-            integrity: 'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN',
-            crossorigin: 'anonymous'
+            ...securitySourceAttributes('css', 'font-awesome'),
+            rel: 'stylesheet'
           }],
           ['link', {
             rel: 'stylesheet',
-            href: localScripts
-              ? '/node_modules/bootstrap/dist/css/bootstrap.min.css'
-              : 'https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css',
-            integrity: 'sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I',
-            crossorigin: 'anonymous'
+            ...securitySourceAttributes('css', 'bootstrap')
           }],
           ['link', {rel: 'stylesheet', href: '/css/style.css'}],
-          // Todo: If keeping, add badge to a demo and make enableable (off
-          //   by default) with option
-          // todo[github-fork-ribbon-css@>0.2.3]: Update SHA (and path(s) if necessary)
           ['link', {
             rel: 'stylesheet',
-            href: localScripts
-              // No minified version in distribution; filed
-              //  https://github.com/simonwhitaker/github-fork-ribbon-css/issues/70
-              ? '/node_modules/github-fork-ribbon-css/gh-fork-ribbon.css'
-              : 'https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css',
-            integrity: localScripts ? null : 'sha256-PVObJvYe7iXCSBcVkQUFvkV9TQGFh5J/ga8WHkLqHAo=',
-            crossorigin: 'anonymous'
+            ...securitySourceAttributes('css', 'github-fork-ribbon-css')
           }]
         ]),
 
@@ -62,45 +44,20 @@ module.exports = ({
         ]]
         : '',
 
-      // Has SHAs at https://code.jquery.com/ ;
-      //  see also https://jquery.com/download/
-      // todo[jquery@>3.5.1]: Update SHA (and path(s) if necessary)
       ['script', {
-        src: localScripts
-          ? '/node_modules/jquery/dist/jquery.min.js'
-          : 'https://code.jquery.com/jquery-3.5.1.min.js',
-        integrity: 'sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=',
-        crossorigin: 'anonymous',
-        defer: 'defer'
-      }],
-      // Popper is a bootstrap dep.; see https://github.com/twbs/bootstrap/blob/main/config.yml
-      // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
-
-      // Todo[bootstrap@>5.0.0-alpha1]: Update SHA (and path(s) if necessary) for
-      //   bootstrap css, bootstrap js, and popper.js
-      ['script', {
-        src: localScripts
-          ? '/node_modules/popper.js/dist/umd/popper.min.js'
-          : 'https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js',
-        integrity: 'sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo',
-        crossorigin: 'anonymous',
+        ...securitySourceAttributes('script', 'jquery'),
         defer: 'defer'
       }],
       ['script', {
-        src: localScripts
-          ? '/node_modules/bootstrap/dist/js/bootstrap.min.js'
-          : 'https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js',
-        integrity: 'sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/',
-        crossorigin: 'anonymous',
+        ...securitySourceAttributes('script', 'popper.js'),
         defer: 'defer'
       }],
-      // See https://github.com/jquery-form/form for CDN SHA
-      // todo[jquery-form@>4.3.0]: Update SHA (and path(s) if necessary)
       ['script', {
-        src: localScripts
-          ? '/node_modules/jquery-form/dist/jquery.form.min.js'
-          : 'https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js',
-        integrity: 'sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn',
+        ...securitySourceAttributes('script', 'bootstrap'),
+        defer: 'defer'
+      }],
+      ['script', {
+        ...securitySourceAttributes('script', 'jquery-form'),
         crossorigin: 'anonymous',
         defer: 'defer'
       }],
