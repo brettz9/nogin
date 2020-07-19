@@ -1,5 +1,14 @@
 # CHANGES for nogin
 
+## ?
+
+- Refactoring: Move integrity attributes out to utility (toward
+    automating updating of version URLs/integrity SHAs)
+- Docs: Update license badge per latest
+- npm: Remove unwanted nyc call
+- npm: Update jsdom and stylus dependencies
+- npm: Update devDeps.
+
 ## 1.1.0
 
 - Fix: Update jquery versions and hashes; switch

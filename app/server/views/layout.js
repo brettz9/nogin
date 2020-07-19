@@ -21,8 +21,8 @@ module.exports = ({
         ? ['']
         : [
           ['link', {
-            ...securitySourceAttributes('css', 'font-awesome'),
-            rel: 'stylesheet'
+            rel: 'stylesheet',
+            ...securitySourceAttributes('css', 'font-awesome')
           }],
           ['link', {
             rel: 'stylesheet',
@@ -58,7 +58,6 @@ module.exports = ({
       }],
       ['script', {
         ...securitySourceAttributes('script', 'jquery-form'),
-        crossorigin: 'anonymous',
         defer: 'defer'
       }],
       /*

@@ -65,11 +65,12 @@ const layoutAndTitleGetter = (config) => {
   //   by default) with option
   // todo[github-fork-ribbon-css@>0.2.3]: Update SHA (and path(s) if necessary)
 
-  const securitySourceAttributes = (name, type) => {
+  const securitySourceAttributes = (type, name) => {
     const base = integrityMap[type][name];
     const baseObj = {
-      crossorigin: 'anonymous',
-      [type === 'css' ? 'href' : 'src']: base[localScripts ? 'local' : 'remote']
+      [type === 'css' ? 'href' : 'src']:
+        base[localScripts ? 'local' : 'remote'],
+      crossorigin: 'anonymous'
     };
     if (localScripts && base.noLocalIntegrity) {
       return baseObj;

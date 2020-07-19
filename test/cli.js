@@ -551,9 +551,9 @@ describe('CLI', function () {
           '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">'
         ) +
         escStringRegex(
-          '<link href="https://stackpath.bootstrapcdn.com/font-awesome/'
+          '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/'
         ) + semverNumPattern + escStringRegex(
-          '/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">'
+          '/css/font-awesome.min.css" crossorigin="anonymous">'
         ) +
         escStringRegex(
           '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/'
