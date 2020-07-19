@@ -249,7 +249,7 @@
     "mochawesome-merge": "^4.1.0",
     "mochawesome-report-generator": "^5.1.0",
     "node-fetch": "^2.6.0",
-    "node-pop3": "git+https://github.com/brettz9/node-pop3.git#public-methods",
+    "node-pop3": "^0.5.0",
     "nyc": "^15.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
