@@ -68,7 +68,7 @@ const layoutAndTitleGetter = (config) => {
   const securitySourceAttributes = (type, name) => {
     const base = integrityMap[type][name];
     const baseObj = {
-      [type === 'css' ? 'href' : 'src']:
+      [type === 'link' ? 'href' : 'src']:
         base[localScripts ? 'local' : 'remote'],
       crossorigin: 'anonymous'
     };

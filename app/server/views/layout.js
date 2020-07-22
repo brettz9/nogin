@@ -22,16 +22,16 @@ module.exports = ({
         : [
           ['link', {
             rel: 'stylesheet',
-            ...securitySourceAttributes('css', 'font-awesome')
+            ...securitySourceAttributes('link', 'font-awesome')
           }],
           ['link', {
             rel: 'stylesheet',
-            ...securitySourceAttributes('css', 'bootstrap')
+            ...securitySourceAttributes('link', 'bootstrap')
           }],
           ['link', {rel: 'stylesheet', href: '/css/style.css'}],
           ['link', {
             rel: 'stylesheet',
-            ...securitySourceAttributes('css', 'github-fork-ribbon-css')
+            ...securitySourceAttributes('link', 'github-fork-ribbon-css')
           }]
         ]),
 
