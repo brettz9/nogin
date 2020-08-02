@@ -5,8 +5,10 @@
 - Refactoring: Move integrity attributes out to utility (toward
     automating updating of version URLs/integrity SHAs)
 - Docs: Update license badge per latest
+- Linting: As per latest ash-nazg
+- Docs: Update license badge per latest
 - npm: Remove unwanted nyc call
-- npm: Update jsdom and stylus dependencies
+- npm: Update jsdom, mongodb, stylus dependencies
 - npm: Update devDeps.
 
 ## 1.1.0
