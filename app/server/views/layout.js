@@ -22,7 +22,7 @@ module.exports = ({
         : [
           ['link', {
             rel: 'stylesheet',
-            ...securitySourceAttributes('link', 'font-awesome')
+            ...securitySourceAttributes('link', '@fortawesome/fontawesome-free')
           }],
           ['link', {
             rel: 'stylesheet',

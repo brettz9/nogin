@@ -66,7 +66,9 @@ const layoutAndTitleGetter = (config) => {
   // todo[github-fork-ribbon-css@>0.2.3]: Update SHA (and path(s) if necessary)
 
   const securitySourceAttributes = (type, name) => {
-    const base = integrityMap[type][name];
+    const base = integrityMap[type].find(({name: nm}) => {
+      return name === nm;
+    });
     const baseObj = {
       [type === 'link' ? 'href' : 'src']:
         base[localScripts ? 'local' : 'remote'],
