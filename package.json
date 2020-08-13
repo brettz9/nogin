@@ -51,6 +51,7 @@
     "version": "node ./bin/cli.js --version",
     "csslint": "doiuse app/public/css/style.css node_modules/font-awesome/css/font-awesome.min.css node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/github-fork-ribbon-css/gh-fork-ribbon.css",
     "eslint-3rd": "eslint --no-inline-config --ignore-path .3rdparty-eslintignore --no-eslintrc --config .3rdparty-eslintrc.js `es-file-traverse --file ./app.js --node --cjs --ignoreResolutionErrors`",
+    "eslint-arg": "eslint --cache --ext=js,md,html",
     "eslint": "eslint --cache --ext=js,md,html .",
     "lint": "npm run eslint && npm run csslint",
     "start-open-report": "open http://localhost:3000/coverage/lcov-report/",
@@ -133,7 +134,20 @@
     "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-no-unit": "run-s -c clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full",
     "snyk": "snyk test",
+    "install-offline": "npm install --prefer-offline --no-audit",
     "test": "npm run snyk && run-p -r start-test cypress:delayed-run"
+  },
+  "run-if-changed": {
+    "licenseInfo.json": "npm run license-badges",
+    "package-lock.json": "run-s install-offline license-badges build-docs build-cli rollup"
+  },
+  "lint-staged": {
+    "*.{js,md,html}": "npm run eslint-arg --"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "engines": {
     "node": ">=10.6.0"
@@ -152,11 +166,6 @@
   },
   "homepage": "https://github.com/brettz9/nogin",
   "bugs": "https://github.com/brettz9/nogin/issues",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.js": "stop-only --file"
   },
@@ -196,6 +205,7 @@
     "@cypress/code-coverage": "^3.8.1",
     "@cypress/fiddle": "^1.18.2",
     "@fintechstudios/eslint-plugin-chai-as-promised": "^3.0.2",
+    "@hkdobrev/run-if-changed": "^0.3.1",
     "@mysticatea/eslint-plugin": "^13.0.0",
     "@rollup/plugin-babel": "^5.1.0",
     "@rollup/plugin-commonjs": "^14.0.0",
