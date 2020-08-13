@@ -2,13 +2,16 @@
 
 ## ?
 
+- Build: Add `integrity-matters` for auto-updating CDNs
+- Update: Update `popper.js` URL; use updated `fontawesome-free`
 - Refactoring: Move integrity attributes out to utility (toward
     automating updating of version URLs/integrity SHAs)
-- Docs: Update license badge per latest
 - Linting: As per latest ash-nazg
-- Docs: Update license badge per latest
-- npm: Remove unwanted nyc call
-- npm: Update jsdom, mongodb, stylus dependencies
+- Docs: Update license badges per latest
+- Maintenance: Add `husky`, `lint-staged`, `run-if-changed`
+- npm: Remove unwanted `nyc` call
+- npm: Update `jsdom`, `mongodb`, `stylus`, `emailjs` dependencies
+- npm: Change `font-awesome` to current `@fortawesome/fontawesome-free`
 - npm: Update devDeps.
 
 ## 1.1.0
