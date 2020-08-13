@@ -8,9 +8,9 @@
     },
     {
       "name": "@fortawesome/fontawesome-free",
-      "local": "/node_modules/font-awesome/css/font-awesome.min.css",
-      "integrity": "sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN",
-      "remote": "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      "local": "/node_modules/@fortawesome/fontawesome-free/css/font-awesome.min.css",
+      "integrity": "sha384-PRy/NDAXVTUcXlWA3voA+JO/UMtzWgsYuwMxjuu6DfFPgzJpciUiPwgsvp48fl3p",
+      "remote": "https://use.fontawesome.com/releases/v5.14.0/css/fontawesome.css"
     },
     {
       "name": "github-fork-ribbon-css",
@@ -46,8 +46,8 @@
       "name": "popper.js",
       "global": "Popper",
       "local": "/node_modules/popper.js/dist/umd/popper.min.js",
-      "integrity": "sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo",
-      "remote": "https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      "integrity": "sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN",
+      "remote": "https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
     }
   ]
 }

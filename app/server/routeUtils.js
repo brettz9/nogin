@@ -58,7 +58,8 @@ const layoutAndTitleGetter = (config) => {
   // Popper is a bootstrap dep.; see https://github.com/twbs/bootstrap/blob/main/config.yml
   // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
 
-  // todo[font-awesome@>4.7.0]: If not replacing (due to license), update
+  // eslint-disable-next-line max-len
+  // todo[@fortawesome/fontawesome-free@>5.15.0]: If not replacing (due to license), update
   //  SHA (and path(s) if necessary)
 
   // Todo: If keeping, add badge to a demo and make enableable (off

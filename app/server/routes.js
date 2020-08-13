@@ -583,7 +583,7 @@ module.exports = async function (app, config) {
 
   [
     'bootstrap',
-    'font-awesome',
+    '@fortawesome/fontawesome-free',
     'github-fork-ribbon-css',
     'intl-dom',
     'jamilih',

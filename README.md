@@ -11,7 +11,7 @@
 
 [![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge.svg?sanitize=true)](doc-includes/licenses-badge.svg)
 
-<small>(Note that the more restrictive [font-awesome](https://www.npmjs.com/package/font-awesome)
+<small>(Note that the more restrictive [@fortawesome/fontawesome-free](https://www.npmjs.com/package/@fortawesome/fontawesome-free)
 share-alike terms are for the fonts themselves, not its CSS (which is under MIT); see also [licenses for dev. deps.](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge-dev.svg?sanitize=true).)</small>
 
 [![issuehunt-to-marktext](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/r/brettz9/nogin)
@@ -303,8 +303,8 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
-1. See about removing **`font-awesome` dependency** (and if so, rebuild
-    license badges and remove note above about its license)
+1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
+    so, rebuild license badges and remove note above about its license)
 1. **Login page**
     1. Security: **CSRF** protection
         1. Also see about [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) settings for cookies
