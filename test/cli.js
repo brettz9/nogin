@@ -21,6 +21,16 @@ import spawnPromise from './utilities/spawnPromise.js';
 
 import addUsersJSON from './fixtures/addUsers.json';
 
+/* eslint-disable max-len */
+// Would add this to config file but would interfere with other tests
+// 1. `mongod`
+// 2. `mongo`
+// 3. `use nogin`
+// 4. Add `db.createUser({user: "brett", pwd: "123456", roles: [{ role: "readWrite", db: "nogin" }]});`
+/* eslint-enable max-len */
+const DB_USER = 'brett';
+const DB_PASS = '123456';
+
 const {
   secret,
   NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
@@ -698,8 +708,8 @@ describe('CLI', function () {
       '--secret', secret,
       '--PORT', testPort,
       '--config', '',
-      '--DB_USER', 'brett',
-      '--DB_PASS', '123456'
+      '--DB_USER', DB_USER,
+      '--DB_PASS', DB_PASS
     ], 20000);
     expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
       'Beginning routes...\n' +
