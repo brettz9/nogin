@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## ?
+
+- npm: Check `eslint-3rd` with package-lock updates
+- npm: Update `es-file-traverse` devDep.
+
 ## 1.2.0
 
 - Build: Add `integrity-matters` for auto-updating CDNs and checking

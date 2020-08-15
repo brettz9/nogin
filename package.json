@@ -140,7 +140,7 @@
   },
   "run-if-changed": {
     "licenseInfo.json": "npm run license-badges",
-    "package-lock.json": "run-s install-offline license-badges eslint build-docs build-cli rollup"
+    "package-lock.json": "run-s install-offline license-badges eslint eslint-3rd build-docs build-cli rollup"
   },
   "lint-staged": {
     "cypress/**/*.js": "stop-only --file",
@@ -230,7 +230,7 @@
     "delay-cli": "^1.1.0",
     "doiuse": "^4.2.0",
     "envelope": "^2.1.0",
-    "es-file-traverse": "^0.7.0",
+    "es-file-traverse": "^0.8.0",
     "escape-string-regexp": "^4.0.0",
     "eslint": "^7.7.0",
     "eslint-config-ash-nazg": "^22.7.0",
@@ -269,7 +269,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.25.0",
+    "rollup": "^2.26.0",
     "rollup-plugin-terser": "^7.0.0",
     "snyk": "^1.374.0",
     "stop-only": "^3.1.0",
