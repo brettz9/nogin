@@ -2,7 +2,8 @@
 
 ## 1.2.0
 
-- Build: Add `integrity-matters` for auto-updating CDNs
+- Build: Add `integrity-matters` for auto-updating CDNs and checking
+    `integrity`
 - Update: Update `popper.js` URL; use updated `fontawesome-free`
 - Refactoring: Move integrity attributes out to utility (toward
     automating updating of version URLs/integrity SHAs)
@@ -178,7 +179,8 @@
   (switching to same CDN); add also for github-fork-ribbon-css
 - Security: Use signed cookie
 - Security: Pass secret to cookie parser as otherwise potentially problematic
-- Security: `express-rate-limit`-based rate-limiting (for protection against DoS)
+- Security: `express-rate-limit`-based rate-limiting (for protection against
+    DoS)
 - Security: Minimize XSS vectors by using safer jQuery methods
 - Security/Fix: Avoid ability for user to update account to an existing email.
 - Fix: Add proper plain text for plain text email
