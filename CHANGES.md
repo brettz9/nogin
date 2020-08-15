@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 1.2.0
 
 - Build: Add `integrity-matters` for auto-updating CDNs
 - Update: Update `popper.js` URL; use updated `fontawesome-free`
