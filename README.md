@@ -27,6 +27,8 @@ The project name is a portmanteau of "Node" and "login" and is pronounced "noggi
 
 So if you want Node login, use your "nogin"!
 
+![nogin](./doc-includes/retrieve-password.jpg?raw=true)
+
 ### A basic account management system built in Node.js with the following features:
 
 - New user account creation
@@ -100,8 +102,6 @@ nogin --localScripts --config nogin.js
 
 5. Once the script mentions it is listening (on port 3000 by default), open
     a browser window and navigate to: [http://localhost:3000](http://localhost:3000)
-
-![nogin](./doc-includes/retrieve-password.jpg?raw=true)
 
 ## Steps for getting port that may block Mongo DB
 
