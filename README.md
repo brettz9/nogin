@@ -115,7 +115,7 @@ On the Mac, you can follow these steps to resolve:
 
 ## Command line usage
 
-[![cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)](cli.svg)
+[![cli.svg](https://brettz9.github.io/nogin/doc-includes/cli.svg)](./doc-includes/cli.svg)
 
 To view as non-embedded HTML or SVG files (for copy-pasteable commands):
 
