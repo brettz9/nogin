@@ -9,8 +9,8 @@
     {
       "name": "@fortawesome/fontawesome-free",
       "local": "/node_modules/@fortawesome/fontawesome-free/css/font-awesome.min.css",
-      "integrity": "sha384-PRy/NDAXVTUcXlWA3voA+JO/UMtzWgsYuwMxjuu6DfFPgzJpciUiPwgsvp48fl3p",
-      "remote": "https://use.fontawesome.com/releases/v5.14.0/css/fontawesome.css"
+      "integrity": "sha384-ijEtygNrZDKunAWYDdV3wAZWvTHSrGhdUfImfngIba35nhQ03lSNgfTJAKaGFjk2",
+      "remote": "https://use.fontawesome.com/releases/v5.15.1/css/fontawesome.css"
     },
     {
       "name": "github-fork-ribbon-css",

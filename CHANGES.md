@@ -2,6 +2,10 @@
 
 ## ?
 
+- Docs: Update license badges; CLI docs
+- Update: CDN URL
+- Linting: Per latest ash-nazg
+- npm: Update fontawesome (minor), mongodb (patch), nodemon (patch); devDeps.
 - npm: Check `eslint-3rd` with package-lock updates
 - npm: Update `es-file-traverse` devDep.
 
