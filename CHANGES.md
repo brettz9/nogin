@@ -6,6 +6,8 @@
 - Update: CDN URL
 - Linting: Per latest ash-nazg
 - npm: Update fontawesome (minor), mongodb (patch), nodemon (patch); devDeps.
+- npm: Update emailjs (minor), express-rate-limit (minor), mongodb (patch);
+    add axe-core for cypress-axe
 - npm: Check `eslint-3rd` with package-lock updates
 - npm: Update `es-file-traverse` devDep.
 

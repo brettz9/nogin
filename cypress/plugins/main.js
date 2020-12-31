@@ -319,7 +319,7 @@ const exprt = (on, config) => {
      * @returns {Promise<AccountInfo>}
      */
     async simulateOldActivationRequestDate () {
-      const fortyEightHoursAgo = new Date() - 48 * 60 * 60 * 1000;
+      const fortyEightHoursAgo = Date.now() - 48 * 60 * 60 * 1000;
       return (await updateAccounts({
         user: ['bretto'],
         activationRequestDate: [fortyEightHoursAgo]

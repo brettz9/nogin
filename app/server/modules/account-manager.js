@@ -118,7 +118,7 @@ class AccountManager {
    * @returns {Promise<AccountInfo[]>}
    */
   getRecords (acctInfo) {
-    // eslint-disable-next-line unicorn/no-fn-reference-in-iterator
+    // eslint-disable-next-line unicorn/no-array-callback-reference
     return this.accounts.find(acctInfo).toArray();
   }
 
@@ -300,7 +300,7 @@ class AccountManager {
     }
 
     // Append date stamp when record was created
-    newData.date = new Date().getTime();
+    newData.date = Date.now();
 
     await this.accounts.insertOne(newData);
     if (newData.activated) {
@@ -318,7 +318,7 @@ class AccountManager {
    */
   async activateAccount (activationCode) {
     let o;
-    const twentyFourHoursAgo = new Date() - 24 * 60 * 60 * 1000;
+    const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
     const unactivatedConditions = {
       $and: [
         {activationCode},
@@ -414,7 +414,7 @@ class AccountManager {
         ...(addingTemporaryEmail
           ? {
             unactivatedEmail: newData.email,
-            activationRequestDate: new Date().getTime()
+            activationRequestDate: Date.now()
           }
           : forceUpdate
             ? {email, unactivatedEmail, activationRequestDate}

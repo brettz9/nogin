@@ -153,7 +153,7 @@ function post (url) {
   return new Promise((resolve, reject) => {
     $.ajax(url, {type: 'post'}).done(resolve).fail(
       (jqXHR /* , textStatus, errorThrown */) => {
-        const err = new Error();
+        const err = new Error('Ajax POST error');
         err.text = jqXHR.responseText;
         err.responseText = jqXHR.statusText;
         reject(err);
