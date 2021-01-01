@@ -4,7 +4,7 @@
     "url": "http://localhost:3000/__coverage__"
   },
   "projectId": "35quw5",
-  "reporter": "cypress-multi-reporters",
+  "reporter": "mocha-multi-reporters",
   "reporterOptions": {
     "configFile": "mocha-multi-reporters.json"
   },

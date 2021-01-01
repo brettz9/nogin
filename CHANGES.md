@@ -10,6 +10,7 @@
     add axe-core for cypress-axe
 - npm: Check `eslint-3rd` with package-lock updates
 - npm: Update `es-file-traverse` devDep.
+- npm: Use stable `mocha-multi-reporters`
 
 ## 1.2.0
 
