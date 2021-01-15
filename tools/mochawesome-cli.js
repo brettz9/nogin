@@ -35,7 +35,7 @@ const {constants: {
   EVENT_TEST_PENDING
 }} = require('mocha/lib/runner.js');
 
-const {results, stats} = require('../mochawesome.json');
+const {results, stats} = require('../test/mochawesome-results.json');
 
 const runner = new Runner(
   new Suite('', null, true)

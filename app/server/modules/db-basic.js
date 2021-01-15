@@ -68,6 +68,7 @@ async function getAccounts (options, update) {
   }
   const {
     name,
+    user: users,
     email,
     country,
     pass,
@@ -79,7 +80,7 @@ async function getAccounts (options, update) {
     unactivatedEmail,
     activationRequestDate
   } = options;
-  return options.user.map((user, i) => {
+  return users.map((user, i) => {
     if (!update) {
       if (!pass || !pass[i]) {
         throw new TypeError(

@@ -7,6 +7,18 @@ const layoutView = require('./views/layout.js');
 const i18n = require('./modules/i18n.js');
 const integrityMap = require('./integrityMap.json');
 
+const headProps = ['headPre', 'headPost'];
+const bodyProps = ['bodyPre', 'bodyPost'];
+
+/**
+ * @param {string} elem
+ * @param {string} content
+ * @returns {string}
+ */
+function wrap (elem, content) {
+  return `<${elem}>${content}</${elem}>`;
+}
+
 /**
 * @callback LayoutCallback
 * @param {PlainObject} templateArgs
@@ -31,8 +43,9 @@ const integrityMap = require('./integrityMap.json');
 
 /**
  * @param {PlainObject} config
+ * @param {Jamilih} jml
  */
-const layoutAndTitleGetter = (config) => {
+const layoutAndTitleGetter = (config, jml) => {
   const {
     favicon,
     stylesheet,
@@ -106,11 +119,33 @@ const layoutAndTitleGetter = (config) => {
           useESM,
           ...businessLogicArgs
         };
+
+        // eslint-disable-next-line max-len
+        // eslint-disable-next-line node/global-require, import/no-dynamic-require
+        const injectedHTML = injectHTML ? require(injectHTML)(cfg) : {};
+        if (injectHTML) {
+          Object.entries(injectedHTML).forEach(([prop, val]) => {
+            const type = headProps.includes(prop) ? 'head' : 'body';
+            let container = val;
+            if (typeof val === 'string') {
+              container = jml.toJML(
+                wrap(type, val)
+              ).$document.childNodes[0][2];
+              container = type === 'head'
+                // <head|body>:first-child > *
+                ? container[0][1]
+                : container[1][1];
+            }
+            injectedHTML[prop] = container;
+          });
+        }
+        [...headProps, ...bodyProps].forEach((prop) => {
+          injectedHTML[prop] = injectedHTML[prop] || [''];
+        });
+
         return layoutView(
           cfg,
-          // eslint-disable-next-line max-len
-          // eslint-disable-next-line node/global-require, import/no-dynamic-require
-          injectHTML ? require(injectHTML)(cfg) : {}
+          injectedHTML
         );
       }
     };
@@ -163,10 +198,12 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
   );
 };
 
+/* eslint-disable jsdoc/valid-types -- Waiting on update of comment-parser: https://github.com/syavorsky/comment-parser/issues/109 */
 /**
 * @typedef {"root"|"logout"|"home"|"signup"|"activation"|"lostPassword"|
 * "resetPassword"|"users"|"delete"|"reset"|"coverage"} Route
 */
+/* eslint-enable jsdoc/valid-types -- Waiting on update of comment-parser: https://github.com/syavorsky/comment-parser/issues/109 */
 
 /**
 * @typedef {string} Path

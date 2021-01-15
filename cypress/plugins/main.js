@@ -476,9 +476,9 @@ const exprt = (on, config) => {
   // If using Babel, use this instead:
   //   `@cypress/code-coverage/use-babelrc` per https://docs.cypress.io/guides/tooling/code-coverage.html#E2E-and-unit-code-coverage
   on('file:preprocessor', (file) => {
-    const {filePath, shouldWatch} = file; // , outputPath
+    const {filePath, shouldWatch, outputPath} = file; // , outputPath
 
-    console.log('file.outputPath', JSON.stringify(file.outputPath));
+    console.log('file.outputPath', JSON.stringify(outputPath));
 
     console.log(
       'preprocess1', filePath, '::',

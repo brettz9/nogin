@@ -9,6 +9,7 @@ const {join, resolve: pathResolve} = require('path');
 Promise.allSettled = require('promise.allsettled/polyfill')();
 
 const express = require('express');
+const jsdom = require('jamilih/dist/jml-jsdom.js');
 
 const {
   checkLocaleRoutes, routeGetter, layoutAndTitleGetter
@@ -20,8 +21,10 @@ const getLogger = require('./modules/getLogger.js');
 const i18n = require('./modules/i18n.js');
 const {emailPattern} = require('./modules/patterns.js');
 
+const jml = jsdom.default;
+
 module.exports = async function (app, config) {
-  const getLayoutAndTitle = layoutAndTitleGetter(config);
+  const getLayoutAndTitle = layoutAndTitleGetter(config, jml);
   const {
     log,
     loggerLocale = 'en-US',
@@ -627,7 +630,7 @@ window.Nogin = {
     // `location.href` not supported in Firefox 2 per
     //   `eslint-plugin-compat`
     // However, can't test during UI test: https://github.com/cypress-io/cypress/issues/2100
-    !userAgent.match(/Firefox\/2(?=\D)/u)
+    !(/Firefox\/2(?=\D)/u).test(userAgent)
     ? 'true'
     : 'false'};
     if (permittingXDomainRedirects) {

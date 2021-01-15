@@ -57,9 +57,7 @@ case 'add':
     // Avoid reprocessing verb (e.g., treating it as first default value)
     process.argv.splice(2, 1);
 
-    const idx = process.argv.findIndex((item) => {
-      return item === '--loggerLocale';
-    });
+    const idx = process.argv.indexOf('--loggerLocale');
     const loggerLocale = idx > -1
       ? process.argv[idx + 1]
       : 'en-US';

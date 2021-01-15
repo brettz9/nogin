@@ -157,6 +157,7 @@ const HomeView = {
     return lockedAlert({type, heading: 'success'});
   },
 
+  /* eslint-disable jsdoc/require-param, jsdoc/require-param-name, jsdoc/require-param-type, jsdoc/check-param-names -- Waiting on update of comment-parser: https://github.com/syavorsky/comment-parser/issues/109 */
   /**
    * @param {PlainObject} cfg
    * @param {string} [cfg.message]
@@ -165,6 +166,7 @@ const HomeView = {
    * @returns {external:jQuery} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type, message}) {
+    /* eslint-enable jsdoc/require-param, jsdoc/require-param-name, jsdoc/require-param-type, jsdoc/check-param-names -- Waiting on update of comment-parser: https://github.com/syavorsky/comment-parser/issues/109 */
     return lockedAlert({type, message, heading: 'error'});
   }
 };

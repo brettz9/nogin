@@ -172,9 +172,9 @@ const optionDefinitions = [
       'passed a config object, including a `template` string indicating ' +
       'the template being built. Must return an object with any of 4 ' +
       'optional methods (`headPre`, `headPost`, `bodyPre`, and/or ' +
-      '`bodyPost`) which should return an array of Jamilih children to ' +
-      'be appended at the given position (or return an empty array to add ' +
-      'nothing). Not required.',
+      '`bodyPost`) which should either be an HTML string or an array of ' +
+      'Jamilih children to be appended at the given position (or return an ' +
+      'empty array to add nothing). Not required.',
     typeLabel: '{underline path}'
   },
   {

@@ -563,7 +563,7 @@ describe('CLI', function () {
         escStringRegex(
           '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v'
         ) + semverNumPattern + escStringRegex(
-          '/css/font-awesome.css" crossorigin="anonymous">'
+          '/css/fontawesome.css" crossorigin="anonymous">'
         ) +
         escStringRegex(
           '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/'

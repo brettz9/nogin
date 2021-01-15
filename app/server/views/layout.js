@@ -12,7 +12,7 @@ module.exports = ({
     $DOCTYPE: {name: 'html'},
     head: [
       ['title', [title]],
-      ...(injectedHTML.headPre || ['']),
+      ...injectedHTML.headPre,
       ['link', {
         rel: 'shortcut icon', type: 'image/x-icon',
         href: favicon || 'data:image/x-icon;,'
@@ -119,12 +119,12 @@ module.exports = ({
           src: userJSModule
         }]
         : '',
-      ...(injectedHTML.headPost || [''])
+      ...injectedHTML.headPost
     ],
     body: [
-      ...(injectedHTML.bodyPre || ['']),
+      ...injectedHTML.bodyPre,
       {'#': content},
-      ...(injectedHTML.bodyPost || [''])
+      ...injectedHTML.bodyPost
     ]
   }}];
 };
