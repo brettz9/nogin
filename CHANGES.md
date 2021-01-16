@@ -2,9 +2,17 @@
 
 ## ?
 
+### User-facing
+
 - Enhancement: Allow strings for `injectHML`
 - Docs: Update license badges; CLI docs
 - Update: CDN URL
+- npm: Update fontawesome (minor), intl-dom (minor), mongodb (patch),
+    nodemon (patch), emailjs (minor), express-rate-limit (minor),
+    mongodb (patch)
+
+### Dev-facing
+
 - Linting: Per latest ash-nazg
 - Testing: Fix test expectation per recent URL change
 - Testing: Fix Cypress conflict with mochawesome reporter
@@ -13,9 +21,6 @@
 - npm: Check `eslint-3rd` with package-lock updates
 - npm: Use stable `mocha-multi-reporters` devDep.
 - npm: Add `axe-core` for `cypress-axe`
-- npm: Update fontawesome (minor), intl-dom (minor), mongodb (patch),
-    nodemon (patch), emailjs (minor), express-rate-limit (minor),
-    mongodb (patch)
 - npm: Update devDeps.
 
 ## 1.2.0
