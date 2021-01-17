@@ -198,12 +198,10 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
   );
 };
 
-/* eslint-disable jsdoc/valid-types -- Waiting on update of comment-parser: https://github.com/syavorsky/comment-parser/issues/109 */
 /**
 * @typedef {"root"|"logout"|"home"|"signup"|"activation"|"lostPassword"|
 * "resetPassword"|"users"|"delete"|"reset"|"coverage"} Route
 */
-/* eslint-enable jsdoc/valid-types -- Waiting on update of comment-parser: https://github.com/syavorsky/comment-parser/issues/109 */
 
 /**
 * @typedef {string} Path
