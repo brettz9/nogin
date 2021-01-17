@@ -164,7 +164,7 @@ your own `nogin.js` config file.
 
 - `--requireName` (Default is `false`.)
 - `--countryCodes` (Two-letter country codes as JSON array; defaults to
-  codes in `/app/server/modules/country-codes.json`.)
+    codes in `/app/server/modules/country-codes.json`.)
 
 ##### Customizing locales
 
@@ -267,6 +267,7 @@ testing:
 - `--activationCode`
 - `--unactivatedEmail`
 - `--activationRequestDate` (A number timestamp)
+
 <!--
 - `--passKey`
 - `--ip`
