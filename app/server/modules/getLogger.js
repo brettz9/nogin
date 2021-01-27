@@ -1,6 +1,8 @@
 'use strict';
 
-const setI18n = require('./i18n.js')();
+const {i18n} = require('./i18n.js');
+
+const setI18n = i18n();
 
 /**
 * @typedef {PlainObject} LoggerOptions

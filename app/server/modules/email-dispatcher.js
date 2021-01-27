@@ -64,6 +64,7 @@ class EmailDispatcher {
 
   /**
    * @callback Internationalizer
+   * @property {string} resolvedLocale
    * @returns {string|Element}
    */
 
@@ -71,10 +72,11 @@ class EmailDispatcher {
    * @param {UserAccountInfo} account
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
+   * @param {LanguageDirectionSetter} langDir
    * @returns {Promise<string>}
    */
-  dispatchResetPasswordLink (account, cfg, _) {
-    const attachment = this.composeResetPasswordEmail(account, cfg, _);
+  dispatchResetPasswordLink (account, cfg, _, langDir) {
+    const attachment = this.composeResetPasswordEmail(account, cfg, _, langDir);
     return this.smtpClient.send({
       from: this.NL_EMAIL_FROM,
       to: account.email,
@@ -107,15 +109,16 @@ class EmailDispatcher {
    * @param {UserAccountInfo} acctInfo
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
+   * @param {LanguageDirectionSetter} langDir
    * @returns {EmailInfo[]}
    */
   composeResetPasswordEmail (
-    {name, user, passKey}, {fromText, fromURL}, _
+    {name, user, passKey}, {fromText, fromURL}, _, langDir
   ) {
     const baseurl = this.NL_SITE_URL;
 
     const jamilih = this.composeResetPasswordEmailView({
-      _, jml, baseurl, name, user, passKey,
+      _, langDir, jml, baseurl, name, user, passKey,
       fromText, fromURL
     });
     const html = jml.toXML(jamilih);
@@ -126,10 +129,11 @@ class EmailDispatcher {
    * @param {AccountInfo} account
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
+   * @param {LanguageDirectionSetter} langDir
    * @returns {Promise<string>}
    */
-  dispatchActivationLink (account, cfg, _) {
-    const attachment = this.composeActivationEmail(account, cfg, _);
+  dispatchActivationLink (account, cfg, _, langDir) {
+    const attachment = this.composeActivationEmail(account, cfg, _, langDir);
     return this.smtpClient.send({
       from: this.NL_EMAIL_FROM,
       to: account.email,

@@ -1,10 +1,10 @@
 'use strict';
 module.exports = function ({
-  _, jml, baseurl, name, user, activationCode, fromText, fromURL
+  _, langDir, jml, baseurl, name, user, activationCode, fromText, fromURL
 }) {
   return {$document: {
     childNodes: [
-      ['html', {lang: _.resolvedLocale}, [
+      ['html', langDir(_), [
         ['body', [
           _('HiPerson', {name}),
           ['br', 'br'],

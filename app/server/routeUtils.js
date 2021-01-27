@@ -4,7 +4,7 @@ const {readdirSync} = require('fs');
 const {join} = require('path');
 
 const layoutView = require('./views/layout.js');
-const i18n = require('./modules/i18n.js');
+const {i18n, langDir} = require('./modules/i18n.js');
 const integrityMap = require('./integrityMap.json');
 
 const headProps = ['headPre', 'headPost'];
@@ -101,12 +101,14 @@ const layoutAndTitleGetter = (config, jml) => {
     const {_, title} = businessLogicArgs;
     return {
       _,
+      langDir,
       title,
       layout (templateArgs) {
         const cfg = {
           // Though should be trusted anyways, do not let template
           //   arguments override.
           ...templateArgs,
+          langDir,
           triggerCoverage,
           favicon,
           stylesheet,

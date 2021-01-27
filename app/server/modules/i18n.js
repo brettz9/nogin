@@ -5,6 +5,7 @@ const {join} = require('path');
 const {JSDOM} = require('jsdom');
 const {i18n, getMatchingLocale, setFetch, setDocument} = require('intl-dom');
 const fileFetch = require('file-fetch'); // For `intl-dom`
+const rtlDetect = require('rtl-detect');
 
 setFetch(fileFetch);
 setDocument((new JSDOM()).window.document);
@@ -12,7 +13,28 @@ setDocument((new JSDOM()).window.document);
 const localeMaps = {};
 const availableLocales = readdirSync(join(__dirname, '../_locales'));
 
-module.exports = function (localesBasePath = 'app/server') {
+/**
+ * @typedef {PlainObject} LanguageDirection
+ * @property {string} lang
+ * @property {"ltr"|"rtl"} dir
+ */
+
+/**
+ * @function LanguageDirectionSetter
+ * @param {Internationalizer} _
+ * @returns {LanguageDirection}
+ */
+exports.langDir = function (_) {
+  const lang = _.resolvedLocale;
+  // Don't bother to make default of "ltr" explicit
+  const dir = rtlDetect.isRtlLang() ? rtlDetect.getLangDir(lang) : undefined;
+  return {
+    dir,
+    lang
+  };
+};
+
+exports.i18n = function (localesBasePath = 'app/server') {
   return async function (req, res, next = () => { /**/ }) {
     // To reduce memory leaks with our `Map` (which avoids repeated file system
     //   checks), we limit number of locales here, filtering among our existing

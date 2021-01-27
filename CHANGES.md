@@ -4,7 +4,8 @@
 
 ### User-facing
 
-- Fix (i18n/accessibility): Ensure `lang` property set on `html`
+- Fix (i18n/accessibility): Ensure `lang` (and if for RTL languages, the `dir`
+    property) is set on `<html>`
 - Enhancement: Allow strings for `injectHML`
 - Docs: Update license badges; CLI docs
 - Update: CDN URL

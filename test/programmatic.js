@@ -11,7 +11,7 @@ import AccountManager from '../app/server/modules/account-manager.js';
 import DBAbstraction from '../app/server/modules/db-abstraction.js';
 import DBFactory from '../app/server/modules/db-factory.js';
 import cryptoNL from '../app/server/modules/crypto.js';
-import setI18n from '../app/server/modules/i18n.js';
+import {i18n as setI18n} from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
 

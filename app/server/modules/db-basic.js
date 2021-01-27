@@ -15,7 +15,9 @@ const {promisify} = require('util');
 const AccountManager = require('./account-manager.js');
 const DBFactory = require('./db-factory.js');
 const getLogger = require('./getLogger.js');
-const setI18n = require('./i18n.js')();
+const {i18n} = require('./i18n.js');
+
+const setI18n = i18n();
 
 const readFile = promisify(readFileOrig);
 

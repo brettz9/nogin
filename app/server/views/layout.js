@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports = ({
-  _, content, scripts, title,
+  _, langDir, content, scripts, title,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   noPolyfill, useESM,
   error,
@@ -11,7 +11,7 @@ module.exports = ({
   return [{$document: {
     childNodes: [
       {$DOCTYPE: {name: 'html'}},
-      ['html', {lang: _.resolvedLocale}, [
+      ['html', langDir(_), [
         ['head', [
           ['title', [title]],
           ...injectedHTML.headPre,
