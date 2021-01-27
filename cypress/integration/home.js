@@ -443,7 +443,6 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
-          cy.server({enable: false});
           cy.get('[data-name="email"]').clear().type(
             validEmail
           );
@@ -660,8 +659,7 @@ describe('Home', function () {
       cy.getCookie('login').should('exist');
       cy.getCookie(expressSessionID).should('exist');
 
-      cy.server();
-      cy.route({
+      cy.intercept({
         status: 500,
         url: '/logout',
         method: 'POST',

@@ -161,8 +161,7 @@ Cypress.Commands.add(
       // But since the above was not triggered through our HTML form,
       //  we have to stub the server response and retry against it,
       //  in order to see the effect on our client app.
-      cy.server();
-      return cy.route({
+      return cy.intercept({
         method: 'POST',
         url: cfg.routeURL || cfg.url,
         status: 400,
