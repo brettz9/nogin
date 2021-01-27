@@ -304,7 +304,6 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
-1. Conditionally use bootstrap's rtl stylesheet
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)
 1. **Login page**

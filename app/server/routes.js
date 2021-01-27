@@ -18,7 +18,7 @@ const AccountManager = require('./modules/account-manager.js');
 const {isNullish, hasOwn} = require('./modules/common.js');
 const EmailDispatcher = require('./modules/email-dispatcher.js');
 const getLogger = require('./modules/getLogger.js');
-const {i18n, langDir} = require('./modules/i18n.js');
+const {i18n, getLangDir} = require('./modules/i18n.js');
 const {emailPattern} = require('./modules/patterns.js');
 
 const jml = jsdom.default;
@@ -447,7 +447,7 @@ module.exports = async function (app, config) {
                   },
                   composeResetPasswordEmailConfig,
                   _,
-                  langDir
+                  getLangDir(_)
                 );
               } catch (e) {
                 logErrorProperties(e);
@@ -498,7 +498,7 @@ module.exports = async function (app, config) {
         // TODO this promise takes a moment to return, add a loader to
         //   give user feedback
         await ed.dispatchActivationLink(
-          o, composeResetPasswordEmailConfig, _, langDir
+          o, composeResetPasswordEmailConfig, _, getLangDir(_)
         );
       } catch (e) {
         res.status(400).send('DispatchActivationLinkError');
@@ -529,7 +529,7 @@ module.exports = async function (app, config) {
         //   give user feedback
         /* const { status, text } = */
         await ed.dispatchResetPasswordLink(
-          account, composeResetPasswordEmailConfig, _, langDir
+          account, composeResetPasswordEmailConfig, _, getLangDir(_)
         );
         res.status(200).send(_('OK'));
       } catch (_e) {

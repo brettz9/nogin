@@ -24,7 +24,7 @@ const availableLocales = readdirSync(join(__dirname, '../_locales'));
  * @param {Internationalizer} _
  * @returns {LanguageDirection}
  */
-exports.langDir = function (_) {
+exports.getLangDir = function (_) {
   const lang = _.resolvedLocale;
   // Don't bother to make default of "ltr" explicit
   const dir = rtlDetect.isRtlLang() ? rtlDetect.getLangDir(lang) : undefined;

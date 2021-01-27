@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports = ({
-  _, langDir, content, scripts, title,
+  _, langDir, isRtl, content, scripts, title,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   noPolyfill, useESM,
   error,
@@ -11,7 +11,7 @@ module.exports = ({
   return [{$document: {
     childNodes: [
       {$DOCTYPE: {name: 'html'}},
-      ['html', langDir(_), [
+      ['html', langDir, [
         ['head', [
           ['title', [title]],
           ...injectedHTML.headPre,
@@ -28,7 +28,12 @@ module.exports = ({
               }],
               ['link', {
                 rel: 'stylesheet',
-                ...securitySourceAttributes('link', 'bootstrap')
+                ...securitySourceAttributes(
+                  'link',
+                  // Todo[bootstrap@>5.0.0-alpha1]: Per https://github.com/twbs/bootstrap/blob/main/config.yml
+                  //   will apparently start to have a separate RTL CSS file
+                  /* isRtl ? 'bootstrap-rtl' : */ 'bootstrap'
+                )
               }],
               ['link', {rel: 'stylesheet', href: '/css/style.css'}],
               ['link', {

@@ -4,7 +4,7 @@ module.exports = function ({
 }) {
   return {$document: {
     childNodes: [
-      ['html', langDir(_), [
+      ['html', langDir, [
         ['body', [
           _('HiPerson', {name}),
           ['br', 'br'],

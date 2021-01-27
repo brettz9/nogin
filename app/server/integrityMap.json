@@ -7,6 +7,12 @@
       "remote": "https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
     },
     {
+      "name": "bootstrap-rtl",
+      "local": "/node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+      "integrity": "",
+      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.rtl.min.css"
+    },
+    {
       "name": "@fortawesome/fontawesome-free",
       "local": "/node_modules/@fortawesome/fontawesome-free/css/font-awesome.min.css",
       "integrity": "sha384-Hx1dya9ptAdKu2hLNR5C2Cwgm+wCfwD0VMGE6jk5OUxxa9I58YfxOCwEtRog+3wk",

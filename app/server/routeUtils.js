@@ -4,7 +4,7 @@ const {readdirSync} = require('fs');
 const {join} = require('path');
 
 const layoutView = require('./views/layout.js');
-const {i18n, langDir} = require('./modules/i18n.js');
+const {i18n, getLangDir} = require('./modules/i18n.js');
 const integrityMap = require('./integrityMap.json');
 
 const headProps = ['headPre', 'headPost'];
@@ -99,6 +99,8 @@ const layoutAndTitleGetter = (config, jml) => {
    */
   return (businessLogicArgs) => {
     const {_, title} = businessLogicArgs;
+    const langDir = getLangDir(_);
+    const isRtl = Boolean(langDir.dir);
     return {
       _,
       langDir,
@@ -109,6 +111,7 @@ const layoutAndTitleGetter = (config, jml) => {
           //   arguments override.
           ...templateArgs,
           langDir,
+          isRtl,
           triggerCoverage,
           favicon,
           stylesheet,
