@@ -4,6 +4,7 @@
 
 ### User-facing
 
+- Fix (i18n/accessibility): Ensure `lang` property set on `html`
 - Enhancement: Allow strings for `injectHML`
 - Docs: Update license badges; CLI docs
 - Update: CDN URL
@@ -17,6 +18,7 @@
 - Linting: Per latest ash-nazg
 - Testing: Fix test expectation per recent URL change
 - Testing: Rename `mocha-multi-reporters.json` file to avoid conflict
+- Testing: Workaround for axe issue
 - npm: Add `update-cdns` to `run-if-changed` for package-lock; force
     eslint cache removal on package-lock change and add script
 - npm: Change `prepare` to `prepublishOnly`; avoid 3rd-party-linting,
