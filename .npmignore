@@ -10,7 +10,7 @@ coverage/**
 instrumented/**
 
 mochawesome-report/**
-test/mochawesome-results.json
+mochawesome.json
 mocha-multi-reporters.json
 db/**
 .ncurc.js

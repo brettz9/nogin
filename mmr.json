@@ -1,7 +1,6 @@
 {
   "mochawesomeReporterOptions": {
     "reportDir": "cypress/results",
-    "reportFilename": "mw",
     "overwrite": false,
     "html": false,
     "json": true,

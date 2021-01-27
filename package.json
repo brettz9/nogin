@@ -35,7 +35,7 @@
     ]
   },
   "scripts": {
-    "prepublishOnly": "run-s eslint-3rd build-docs license-badges license-badges build-cli",
+    "prepublishOnly": "run-s snyk eslint-3rd build-docs license-badges license-badges build-cli",
     "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",
     "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment doc-includes/licenses-badge-dev.svg",
     "license-badges": "run-s license-badge license-badge-dev",
@@ -77,7 +77,7 @@
     "css-copy": "cp -R ./app/public/css instrumented",
     "css": "run-p css-*",
     "unit-only": "mocha --require=esm --require=chai/register-expect test/*.js --exit",
-    "unit-only-cov": "nyc --all --require=esm --require=chai/register-expect mocha --reporter mochawesome --reporter-options reportDir=cypress/results,reportFilename=mw,html=false,overwrite=true test/*.js --exit",
+    "unit-only-cov": "nyc --all --require=esm --require=chai/register-expect mocha --reporter mochawesome --reporter-options reportDir=cypress/results,html=false,overwrite=true test/*.js --exit",
     "delayed-unit-only-cov": "run-s delay unit-only-cov",
     "delayed-unit-only": "run-s delay unit-only",
     "unit-cov": "run-p -r start-cov delayed-unit-only-cov",
@@ -95,10 +95,10 @@
     "cypress:delayed-open": "run-s -c delay cypress:open",
     "cypress:open-cov": "cypress open --env",
     "cypress:open": "cypress open --env coverage=false",
-    "cypress:marge": "marge test/mochawesome-results.json",
-    "cypress:merge-only": "mochawesome-merge \"cypress/results/mw*.json\" > test/mochawesome-results.json",
+    "cypress:marge": "marge mochawesome.json",
+    "cypress:merge-only": "mochawesome-merge \"cypress/results/mochaw*.json\" > mochawesome.json",
     "cypress:merge": "run-s cypress:merge-only cypress:marge test-badge",
-    "cypress:remove-mochaawesome": "rimraf \"cypress/results/mw*.json\"",
+    "cypress:remove-mochaawesome": "rimraf \"cypress/results/mochaw*.json\"",
     "cypress:remove-nyc-output": "rimraf \".nyc_output/*\"",
     "cypress:run-one": "cypress run --reporter=mocha-multi-reporters --reporter-options configFile=mmr.json --spec=\"cypress/integration/root.js\"",
     "cypress:run-only": "cypress run --reporter=mocha-multi-reporters --reporter-options configFile=mmr.json --spec=\"cypress/integration/*.js\"",
@@ -132,12 +132,12 @@
     "test-cov-prereport-no-unit": "run-p -r start-cov cypress:delayed-run-no-unit",
     "clean-and-instrument": "run-p -c cypress:remove-nyc-output instrument",
     "coverage-badge": "coveradge --introTemplate \"UI Coverage (Cypress)\" doc-includes/coverage-badge.svg",
-    "test-badge": "mbg --file ./test/mochawesome-results.json --badge_output doc-includes/tests-badge.svg",
+    "test-badge": "mbg --file ./mochawesome.json --badge_output doc-includes/tests-badge.svg",
     "test-cov": "run-s -c clean-and-instrument test-cov-prereport report-summary-mocha-full coverage-badge test-badge",
     "test-cov-no-unit": "run-s -c clean-and-instrument test-cov-prereport-no-unit report-summary-mocha-full",
     "snyk": "snyk test",
     "install-offline": "npm install --prefer-offline --no-audit",
-    "test": "npm run snyk && run-p -r start-test cypress:delayed-run"
+    "test": "run-p -r start-test cypress:delayed-run"
   },
   "run-if-changed": {
     "licenseInfo.json": "npm run license-badges",

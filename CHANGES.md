@@ -16,7 +16,6 @@
 - Docs: Update dev license badge per latest
 - Linting: Per latest ash-nazg
 - Testing: Fix test expectation per recent URL change
-- Testing: Fix Cypress conflict with mochawesome reporter
 - Testing: Rename `mocha-multi-reporters.json` file to avoid conflict
 - npm: Add `update-cdns` to `run-if-changed` for package-lock; force
     eslint cache removal on package-lock change and add script

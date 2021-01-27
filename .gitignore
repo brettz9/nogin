@@ -13,7 +13,7 @@ instrumented/**
 db
 
 mochawesome-report
-test/mochawesome-results.json
+mochawesome.json
 nogin.json
 nogin.js
 
