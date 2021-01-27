@@ -9,15 +9,20 @@
 - Update: CDN URL
 - npm: Update fontawesome (minor), intl-dom (minor), mongodb (patch),
     nodemon (patch), emailjs (minor), express-rate-limit (minor),
-    mongodb (patch)
+    mongodb (patch), file-fetch (minor), promise.allsettled (patch)
 
 ### Dev-facing
 
+- Docs: Update dev license badge per latest
 - Linting: Per latest ash-nazg
 - Testing: Fix test expectation per recent URL change
 - Testing: Fix Cypress conflict with mochawesome reporter
+- Testing: Rename `mocha-multi-reporters.json` file to avoid conflict
 - npm: Add `update-cdns` to `run-if-changed` for package-lock; force
     eslint cache removal on package-lock change and add script
+- npm: Change `prepare` to `prepublishOnly`; avoid 3rd-party-linting,
+    badge and doc building on every package lock change, but do check
+    prepublish
 - npm: Check `eslint-3rd` with package-lock updates
 - npm: Use stable `mocha-multi-reporters` devDep.
 - npm: Add `axe-core` for `cypress-axe`
