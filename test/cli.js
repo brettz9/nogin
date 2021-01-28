@@ -599,7 +599,7 @@ describe('CLI', function () {
           '.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
         escStringRegex(
-          '<script src="https://cdn.jsdelivr.net/npm/popper.js@'
+          '<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@'
         ) + semverNumPattern + escStringRegex(
           '/dist/umd/popper.min.js" crossorigin="anonymous" defer=""></script>'
         ) +

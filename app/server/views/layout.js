@@ -30,9 +30,7 @@ module.exports = ({
                 rel: 'stylesheet',
                 ...securitySourceAttributes(
                   'link',
-                  // Todo[bootstrap@>5.0.0-alpha1]: Per https://github.com/twbs/bootstrap/blob/main/config.yml
-                  //   will apparently start to have a separate RTL CSS file
-                  /* isRtl ? 'bootstrap-rtl' : */ 'bootstrap'
+                  isRtl ? 'bootstrap-rtl' : 'bootstrap'
                 )
               }],
               ['link', {rel: 'stylesheet', href: '/css/style.css'}],
@@ -56,7 +54,7 @@ module.exports = ({
             defer: 'defer'
           }],
           ['script', {
-            ...securitySourceAttributes('script', 'popper.js'),
+            ...securitySourceAttributes('script', '@popperjs/core'),
             defer: 'defer'
           }],
           ['script', {

@@ -66,9 +66,10 @@ const layoutAndTitleGetter = (config, jml) => {
   // See https://github.com/jquery-form/form for CDN SHA
   // todo[jquery-form@>4.3.0]: Update SHA (and path(s) if necessary)
 
-  // Todo[bootstrap@>5.0.0-alpha1]: Update SHA (and path(s) if necessary) for
-  //   bootstrap css, bootstrap js, and popper.js
-  // Popper is a bootstrap dep.; see https://github.com/twbs/bootstrap/blob/main/config.yml
+  // Todo[bootstrap@>5.0.0-beta1]: Update SHA (and path(s) if necessary) for
+  //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
+  // @popperjs/core is a bootstrap dep.; see
+  //   https://github.com/twbs/bootstrap/blob/main/config.yml
   // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
 
   // Todo: If keeping, add badge to a demo and make enableable (off

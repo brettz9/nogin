@@ -595,7 +595,7 @@ module.exports = async function (app, config) {
     'jamilih',
     'jquery',
     'jquery-form',
-    'popper.js'
+    '@popperjs/core'
   ].forEach((mod) => {
     const path = '/node_modules/' + mod;
     app.use(
