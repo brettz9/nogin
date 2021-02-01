@@ -14,7 +14,7 @@
     },
     {
       "name": "@fortawesome/fontawesome-free",
-      "local": "/node_modules/@fortawesome/fontawesome-free/css/font-awesome.min.css",
+      "local": "/node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
       "integrity": "sha384-Hx1dya9ptAdKu2hLNR5C2Cwgm+wCfwD0VMGE6jk5OUxxa9I58YfxOCwEtRog+3wk",
       "remote": "https://use.fontawesome.com/releases/v5.15.2/css/fontawesome.css"
     },

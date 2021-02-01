@@ -8,7 +8,7 @@
     property) is set on `<html>`
 - Enhancement: Allow strings for `injectHML`
 - Docs: Update license badges; CLI docs
-- Update: CDN URLs
+- Update: Local path (fontawesome) and CDN URLs
 - npm: Update fontawesome (minor), intl-dom (minor), mongodb (patch),
     nodemon (patch), emailjs (minor), express-rate-limit (minor),
     mongodb (patch), file-fetch (minor), promise.allsettled (patch)
