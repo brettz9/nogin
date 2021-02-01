@@ -28,6 +28,8 @@
 - npm: Check `eslint-3rd` with package-lock updates
 - npm: Use stable `mocha-multi-reporters` devDep.
 - npm: Add `axe-core` for `cypress-axe`
+- npm: Fix `csslint` file path
+- npm: Switch from deprecated `babel-eslint` to `@babel/eslint-parser`
 - npm: Update devDeps.
 
 ## 1.2.0
