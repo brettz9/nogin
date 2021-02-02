@@ -176,6 +176,18 @@ Cypress.Commands.add(
       // But since the above was not triggered through our HTML form,
       //  we have to stub the server response and retry against it,
       //  in order to see the effect on our client app.
+
+      // Todo[cypress@>7]: Once clearing of intercepts is possible,
+      //  replace our `cy.server`/`cy.route` calls per https://github.com/cypress-io/cypress/issues/9302#issuecomment-746403294
+
+      cy.server();
+      return cy.route({
+        method: 'POST',
+        url: cfg.routeURL || cfg.url,
+        status: 400,
+        response: cfg.error
+      });
+      /*
       return cy.intercept({
         method: 'POST',
         url: cfg.routeURL || cfg.url
@@ -183,6 +195,7 @@ Cypress.Commands.add(
         statusCode: 400,
         body: cfg.error
       });
+      */
     });
   }
 );

@@ -443,6 +443,7 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
+          cy.server({enable: false});
           cy.get('[data-name="email"]').clear().type(
             validEmail
           );
@@ -658,14 +659,25 @@ describe('Home', function () {
     it('Should show error upon bad log out', function () {
       cy.getCookie('login').should('exist');
       cy.getCookie(expressSessionID).should('exist');
-
-      cy.intercept({
+      cy.server();
+      cy.route({
+        method: 'POST',
         url: '/logout',
-        method: 'POST'
+        status: 500,
+        response: 'oops'
+      });
+
+      // Todo[cypress@>7]: Once clearing of intercepts is possible,
+      //  replace our `cy.server`/`cy.route` calls per https://github.com/cypress-io/cypress/issues/9302#issuecomment-746403294
+      /*
+      cy.intercept({
+        method: 'POST',
+        url: '/logout'
       }, {
         statusCode: 500,
         body: 'oops'
       });
+      */
 
       cy.get('[data-name="btn-logout"]').click();
 
