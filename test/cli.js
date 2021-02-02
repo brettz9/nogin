@@ -271,7 +271,7 @@ describe('CLI', function () {
   // Todo: If setting up additional cypress processes, we
   //   would ideally test this in UI that it redirects
   it('crossDomainJSRedirects', async function () {
-    this.timeout(50000);
+    this.timeout(70000);
     let fetching;
     let cliProm;
     // eslint-disable-next-line promise/avoid-new
@@ -282,7 +282,7 @@ describe('CLI', function () {
         '--secret', secret,
         '--PORT', testPort,
         '--config', ''
-      ], 20000, (stdout) => {
+      ], 40000, (stdout) => {
         // if (stdout.includes(
         //  `Express server listening on port ${testPort}`)
         // ) {
@@ -325,7 +325,7 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and misc. config',
     async function () {
-      this.timeout(280000);
+      this.timeout(310000);
 
       // SETUP
       // Adding to ensure there is a fresh `signup` below
@@ -384,7 +384,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 180000, async (stdout) => {
+        ], 200000, async (stdout) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
