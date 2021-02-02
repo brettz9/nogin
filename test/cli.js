@@ -71,7 +71,7 @@ describe('CLI', function () {
   it(
     'Null config with non-local scripts and `noBuiltinStylesheets`',
     async function () {
-      this.timeout(60000);
+      this.timeout(110000);
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
       const {text} = await new Promise((resolve, reject) => {
@@ -80,7 +80,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort2,
           '--config', ''
-        ], 40000, async (stdout) => {
+        ], 80000, async (stdout) => {
           // if (stdout.includes(
           //   `Express server listening on port ${testPort2}`)
           // ) {
@@ -334,7 +334,7 @@ describe('CLI', function () {
 
       let cliProm, fetching;
       const [
-        {text, headers}, {json}, {dynamicText},
+        {text, headers}, {textRTL}, {json}, {dynamicText},
         {signupText}, {usersText},
         {coverageStatus, coverageText},
         {badURLPostStatus, badURLPostText},
@@ -394,11 +394,16 @@ describe('CLI', function () {
           fetching = true;
           try {
             const [
-              res, staticRes, dynamicRes, signupRes, usersRes,
+              res, resRTL, staticRes, dynamicRes, signupRes, usersRes,
               covRes, postRes, updateAccountRes, homeRes,
               signupPostRes
             ] = await Promise.all([
               fetch(`http://localhost:${testPort}`),
+              fetch(`http://localhost:${testPort}`, {
+                headers: {
+                  'Accept-Language': 'fa'
+                }
+              }),
               // Within `/test/fixtures`
               fetch(`http://localhost:${testPort}/addUsers.json`),
               // Based on `router`
@@ -498,6 +503,7 @@ describe('CLI', function () {
 
             resolve([
               {headers: res.headers, text: await res.text()},
+              {textRTL: await resRTL.text()},
               {json: await staticRes.json()},
               {dynamicText: await dynamicRes.text()},
               {signupText: await signupRes.text()},
@@ -556,7 +562,8 @@ describe('CLI', function () {
         return link.outerHTML;
       }).join('');
       const semverNumPattern = '\\d+\\.\\d+\\.\\d+(?:-(?:alpha|beta)\\d+)?';
-      expect(headLinks).to.match(new RegExp(
+
+      const regex = new RegExp(
         escStringRegex(
           '<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">'
         ) +
@@ -566,9 +573,9 @@ describe('CLI', function () {
           '/css/fontawesome.css" crossorigin="anonymous">'
         ) +
         escStringRegex(
-          '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/'
+          '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@'
         ) + semverNumPattern + escStringRegex(
-          '/css/bootstrap.min.css" crossorigin="anonymous">'
+          '/dist/css/bootstrap.min.css" crossorigin="anonymous">'
         ) +
         escStringRegex('<link rel="stylesheet" href="/css/style.css">') +
         escStringRegex(
@@ -581,7 +588,21 @@ describe('CLI', function () {
           '<link rel="stylesheet" href="headPostContent.css">'
         ),
         'u'
-      ));
+      );
+      expect(headLinks).to.match(regex);
+
+      const docRTL = (new JSDOM(textRTL)).window.document;
+      const headLinksRTL = [
+        ...docRTL.querySelectorAll('head link')
+      ].map((link) => {
+        return link.outerHTML;
+      }).join('');
+      expect(headLinksRTL).to.match(
+        new RegExp(
+          regex.source.replace('bootstrap.min.css', 'bootstrap.rtl.min.css'),
+          'u'
+        )
+      );
 
       const headScriptsDOM = [...doc.querySelectorAll('head script')];
       const headScripts = headScriptsDOM.map(
@@ -604,9 +625,10 @@ describe('CLI', function () {
           '/dist/umd/popper.min.js" crossorigin="anonymous" defer=""></script>'
         ) +
         escStringRegex(
-          '<script src="https://stackpath.bootstrapcdn.com/bootstrap/'
+          '<script src="https://cdn.jsdelivr.net/npm/bootstrap@'
         ) + semverNumPattern + escStringRegex(
-          '/js/bootstrap.min.js" crossorigin="anonymous" defer=""></script>'
+          '/dist/js/bootstrap.min.js" crossorigin="anonymous" ' +
+            'defer=""></script>'
         ) +
         escStringRegex(
           '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/'
