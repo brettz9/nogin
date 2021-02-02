@@ -37,8 +37,10 @@ forgotPassword.click(() => {
 
   // This isn't always happening automatically
   retrievePasswordCancel.click(() => {
-    // retrievePasswordModal.modal('hide');
-    lostPasswordUsername.focus();
+    retrievePasswordModal.modal('hide');
+    setTimeout(() => {
+      lostPasswordUsername.focus();
+    });
   });
 
   retrievePasswordSubmit.show();

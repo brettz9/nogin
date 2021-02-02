@@ -279,6 +279,10 @@ describe('Root (Login)', function () {
 
   it('Cancel retrieve password dialog', function () {
     cy.get('[data-name="forgot-password"]').click();
+    // Cypress needs us to wait to be able to find the
+    //   dialog to dismiss it
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(500);
     cy.get('[data-name="retrieve-password-cancel"]').click();
     cy.get('[data-name="login"] [data-name="user"]', {
       timeout: 8000
