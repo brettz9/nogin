@@ -660,10 +660,11 @@ describe('Home', function () {
       cy.getCookie(expressSessionID).should('exist');
 
       cy.intercept({
-        status: 500,
         url: '/logout',
-        method: 'POST',
-        response: 'oops'
+        method: 'POST'
+      }, {
+        statusCode: 500,
+        body: 'oops'
       });
 
       cy.get('[data-name="btn-logout"]').click();

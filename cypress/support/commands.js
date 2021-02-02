@@ -178,9 +178,10 @@ Cypress.Commands.add(
       //  in order to see the effect on our client app.
       return cy.intercept({
         method: 'POST',
-        url: cfg.routeURL || cfg.url,
-        status: 400,
-        response: cfg.error
+        url: cfg.routeURL || cfg.url
+      }, {
+        statusCode: 400,
+        body: cfg.error
       });
     });
   }
