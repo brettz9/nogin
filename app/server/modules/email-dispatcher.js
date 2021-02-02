@@ -147,15 +147,16 @@ class EmailDispatcher {
    * @param {AccountInfo} o
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
+   * @param {LanguageDirectionSetter} langDir
    * @returns {EmailInfo[]}
    */
   composeActivationEmail (
-    {name, user, activationCode}, {fromText, fromURL}, _
+    {name, user, activationCode}, {fromText, fromURL}, _, langDir
   ) {
     const baseurl = this.NL_SITE_URL;
 
     const jamilih = this.composeActivationEmailView({
-      _, jml, baseurl, name, user, activationCode,
+      _, langDir, jml, baseurl, name, user, activationCode,
       fromText, fromURL
     });
     const html = jml.toXML(jamilih);
