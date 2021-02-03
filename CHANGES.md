@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## ?
+
+- npm: Update mongodb (patch)
+- npm: Update devDeps.
+
 ## 1.3.0
 
 ### User-facing
