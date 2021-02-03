@@ -335,6 +335,11 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         1. Would presumably need to revive as a
             [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
         1. Browser add-on could also expose global *locally stored* preferences
+    1. Strategy idea: Check host of email domain and insist on `.name` at a
+        reliable host which promises not to give out domains under a minimum
+        fee (as a deterrent for spamming and encouragement for mail address
+        portability); would need to find hosts willing to commit to such a
+        policy.
     1. Add **passwordless** option
         1. See <http://www.passportjs.org/packages/passport-passwordless/>.
 1. **Users page**
