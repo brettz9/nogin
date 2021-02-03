@@ -10,6 +10,8 @@ import ConfirmDialog from '../views/utilities/ConfirmDialog.js';
 import HomeView from '../views/home.js';
 import AccountValidator from '../form-validators/AccountValidator.js';
 
+const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
+
 // User name field
 const name = HomeView.getName();
 name.focus();
@@ -141,7 +143,6 @@ function onUpdateSuccess () {
     ? HomeView.onAccountUpdatedButNotYetEmail()
     : HomeView.onAccountUpdated();
   accountUpdatedAlertDialog.modal('show');
-  HomeView.getAccountUpdatedButton(accountUpdatedAlertDialog).off('click');
 }
 
 /**
@@ -151,7 +152,12 @@ function onUpdateSuccess () {
 function post (url) {
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
-    $.ajax(url, {type: 'post'}).done(resolve).fail(
+    $.ajax(url, {
+      type: 'post',
+      headers: {
+        'X-XSRF-Token': xsrfCookie
+      }
+    }).done(resolve).fail(
       (jqXHR /* , textStatus, errorThrown */) => {
         const err = new Error('Ajax POST error');
         err.text = jqXHR.responseText;

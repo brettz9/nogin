@@ -15,14 +15,18 @@ const AlertDialog = {
     keyboard,
     backdrop
   }) {
-    $('[data-name=modal-alert]').modal({
+    const modal = $('[data-name=modal-alert]').modal({
       show: false, keyboard, backdrop
     });
     $('[data-name=modal-alert] .modal-header [data-name=modal-title]').text(
       heading
     );
     $('[data-name=modal-alert] [data-name=modal-body] p').empty().append(body);
-    return $('[data-name=modal-alert]');
+    $('[data-name=modal-alert] button').click((e) => {
+      e.preventDefault();
+      modal.modal('hide');
+    });
+    return modal;
   }
 };
 

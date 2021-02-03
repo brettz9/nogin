@@ -25,12 +25,7 @@ const routes = require('./app/server/routes.js');
 const getLogger = require('./app/server/modules/getLogger.js');
 const DBFactory = require('./app/server/modules/db-factory.js');
 const jmlEngine = require('./app/server/modules/jmlEngine.js');
-
-const parseCLIJSON = (opts) => {
-  return typeof opts === 'string'
-    ? JSON.parse(opts)
-    : opts;
-};
+const {parseCLIJSON} = require('./app/server/modules/common.js');
 
 /**
  * @param {MainOptionDefinitions} options
@@ -99,8 +94,17 @@ exports.createServer = async function (options) {
     customRoute,
     crossDomainJSRedirects,
     noHelmet,
+    disableXSRF,
     sessionCookieOptions = {
       sameSite: 'lax' // Not concerned about strict for GET access
+    },
+    csurfOptions = {
+      cookie: {
+        // secure: true, // HTTPS-only
+        signed: true,
+        // Better to use `strict` but apparently disallows embedded iframe use
+        sameSite: 'lax'
+      }
     },
     helmetOptions
   } = opts;
@@ -230,8 +234,13 @@ exports.createServer = async function (options) {
     crossDomainJSRedirects,
     cwd,
     useESM,
+    disableXSRF,
+    csurfOptions,
     noPolyfill,
     opts,
+    // If making this customizable, need to set as global for use by
+    //  `app/public/js/utilities/ajaxFormClientSideValidate.js`
+    // csrfKey: 'csrf-token',
     // User is using instrumenting
     triggerCoverage: JS_DIR !== '/app/public'
   });

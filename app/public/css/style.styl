@@ -130,7 +130,7 @@ label, h2.dialog
 
 .modal
   .modal-dialog
-    width 480px
+    width 100%
 
   .form-group
     margin-bottom 0px
@@ -183,3 +183,7 @@ th.users.location
 
 td.users.number
   text-align center
+
+// https://stackoverflow.com/questions/34328357/cant-click-anything-after-i-open-my-bootstrap-modal
+.modal-backdrop
+  z-index: -1

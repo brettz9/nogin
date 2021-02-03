@@ -28,6 +28,7 @@ function setupValidationSubmission () {
   ajaxFormClientSideValidate(
     accountForm,
     {
+      checkXSRF: false,
       validate () {
         av.validateForm();
       },
@@ -46,7 +47,7 @@ function setupValidationSubmission () {
         case 'username-taken':
           av.showInvalidUserName();
           break;
-        default: {
+        default: { // case 'DispatchActivationLinkError': {
           const lockedAlertDialog = SignupView.onShowLockedErrorAlert({
             type: 'DispatchActivationLinkError'
           });

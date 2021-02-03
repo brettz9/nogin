@@ -4,7 +4,7 @@
 module.exports = ({
   _, langDir, isRtl, content, scripts, title,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
-  noPolyfill, useESM,
+  noPolyfill, useESM, csrfToken,
   error,
   triggerCoverage, securitySourceAttributes
 }, injectedHTML) => {
@@ -13,6 +13,16 @@ module.exports = ({
       {$DOCTYPE: {name: 'html'}},
       ['html', langDir, [
         ['head', [
+          ['meta', {charset: 'utf-8'}],
+          ...(csrfToken
+            ? [
+              ['meta', {
+                name: 'csrf-token',
+                content: csrfToken
+              }]
+            ]
+            : ['']
+          ),
           ['title', [title]],
           ...injectedHTML.headPre,
           ['link', {

@@ -619,6 +619,8 @@ describe('Home', function () {
     );
 
     it('Prevent update with empty email', function () {
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(5000);
       cy.get('[data-name="pass"]').clear().type('boo123456');
       cy.get('[data-name="name"]').clear().type('MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);

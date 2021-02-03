@@ -320,6 +320,9 @@
     "DispatchActivationLinkError": {
       "message": "There was an error sending out your activation link.{lb}If you did enter a valid email, the error may have been due to a temporary server problem, so please try again later. If you think you may have entered an invalid email, you may try signing up again."
     },
+    "UnknownError": {
+      "message": "There was an unknown error{lb}Please try again later."
+    },
 
     "ACTIVATION (BUSINESS LOGIC)": true,
     "ActivationCodeRequired": {

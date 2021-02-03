@@ -87,7 +87,9 @@ describe('Reset password', function () {
     });
   });
 
-  it('Visit reset password (after login)', function () {
+  it('Visit reset password (after login) - lost session', function () {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting -- Avoid conflict
+    cy.wait(5000);
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
@@ -125,9 +127,9 @@ describe('Reset password', function () {
     // eslint-disable-next-line promise/prefer-await-to-then
     }).then((key) => {
       cy.log(key);
-      cy.visit('/reset-password?key=' + encodeURIComponent(key));
 
       return cy.simulateServerError({
+        tokenURL: '/reset-password?key=' + encodeURIComponent(key),
         url: '/reset-password',
         routeURL: '/reset-password**',
         body: {

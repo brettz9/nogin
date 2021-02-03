@@ -1,10 +1,19 @@
+/* globals $ */
+
+// Note: This per-request approach suffers from the possibility that the
+//   may subsequently open a page from the site with nogin in another tab
+//   where that page sets a new, different token meta expectation to a
+//   new value and this will thereby become invalid.
+const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
+
 const ajaxFormClientSideValidate = (form, {
   validate,
   // `ajaxForm` properties and methods
   url,
   beforeSubmit,
   success,
-  error
+  error,
+  checkXSRF = true
 }) => {
   // As per problem #3 at https://www.html5rocks.com/en/tutorials/forms/constraintvalidation/#toc-current-implementation-issues ,
   //  we can't do the validation at submit, so we instead add a capturing
@@ -23,7 +32,18 @@ const ajaxFormClientSideValidate = (form, {
     field.checkValidity('');
   }, true);
 
-  return form.ajaxForm({
+  if (checkXSRF && !xsrfCookie) {
+    error({responseText: 'UnknownError'});
+    return;
+  }
+
+  form.ajaxForm({
+    headers: {
+      // `$.ajaxForm` will auto-check for special `meta` tags to add XSRF
+      //   data, but we avoid the extra meta it requires by sending on the
+      //   header.
+      'X-XSRF-Token': xsrfCookie
+    },
     url,
     beforeSubmit,
     success,

@@ -38,7 +38,9 @@ So if you want Node login, use your "nogin"!
 - Session tracking for logged-in users
 - Local cookie storage for returning Users
 - PBKDF2-based password encryption
+- XSRF/CSRF protection
 - helmet integration for HTTP headers control
+- `sameSite` session cookies
 - Timing safe login check comparisons
 - Throrough internationalization (i18n) and fundamental accessibility (a11y)
 - CLI option for managing accounts
@@ -153,8 +155,13 @@ your own `nogin.js` config file.
 
 ##### Security
 
+- `--disableXSRF` (Boolean; defaults to `false`.)
 - `--noHelmet` (Boolean; defaults to `false`.)
 - `--RATE_LIMIT` (A number defaulting to 100 for a rate limit.)
+- `--csurfOptions` (A string, or, in config, an object; defaults to
+    `{cookie: {signed: true, sameSite: "lax"}`; note that if you are on
+    HTTPS, it is recommended to set this to
+    `{cookie: {secure: true, signed: true, sameSite: "lax"}`).
 - `--helmetOptions` (A string, or, in config, an object; defaults to
     `{frameguard: {action: "SAMEORIGIN"}}`). Note that `SAMEORIGIN` is required
     as the `action` to allow `nogin` to be used within your site's iframes.
@@ -318,16 +325,43 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)
 1. **Login page**
-    1. Security: **CSRF** protection
-        1. Also see about [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) settings for cookies
-    1. WebSockets with [express-ws](https://github.com/HenningM/express-ws) and
-        [jquery-form](https://github.com/jquery-form/form/issues/582)?
     1. Provide **option for integration** within an existing page to avoid need
         for separate login page (Ajax)
         1. Adapt server-side redirect functionality to give Ajax feedback to
             client so it could instead handle forwarding *with* a hash.
-    1. **Multiple simultaneous logins** (e.g., to use version control or Cloud
-        Storage and a database managing users and privileges)?
+        1. Consider possibility of an option to **merge with signup page**
+    1. **Multiple simultaneously-shown login choices** (e.g., to use version
+        control or Cloud Storage and a database managing users and privileges)?
+    1. **WebSockets** with [express-ws](https://github.com/HenningM/express-ws)
+        and [jquery-form](https://github.com/jquery-form/form/issues/582)?
+1. **Signup/Home pages**
+    1. Allow **Multiple choices**
+    1. Allow **adding to "Set up new account" fields** (based on a schema?)
+        (to be injected into `app/server/views/account.js`) to be passed to
+        the server (`app/server/routes.js`) and saved in the database along
+        with other fields (check the user-supplied don't overwrite built-ins)
+        and shown on `home` (also built by `account.js`) (unless hidden?);
+        not trusting the client-side values of course (could parse
+        server-side-supplied schema for expected types); use `json-editor`?
+        1. Plugin system to allow asking for and saving additional data
+            per user. May optionally be able to reject submission, but
+            should instead use an authentication strategy plugin, if
+            it is more fundamental to authentication (since this should
+            generally be safely additive).
+        1. Concept of [SharedStorage](https://github.com/brettz9/SharedStorage)
+            for grabbing local user data (or on a URL) for populating
+            site profiles/preferences (under control of user, so they can
+            manage their data in one place, and let sites update their own
+            copy (or directly utilize the local copy) when online and
+            checking)
+    1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
+        (doesn't use easily breakable SVG text, and could convert to image))
+        1. Plugin system for captchas, while potentially allowing saving
+            to and retrieving from database (e.g., for admin-added list
+            of Q&A's), need not be aware of any other co-submitted data
+            like username, password, etc. Unlike "set up new account"
+            plugins, wouldn't need access to user database, but can of
+            course have potential to reject submission.
 1. **Authentication strategies**
     1. See about **`passport-next`** integration
         1. [WebSockets with passport](https://stackoverflow.com/questions/35654099/using-websocket-with-passport/47984698)?
@@ -385,36 +419,9 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
             1. npm package for processing/submitting credit info?
             1. might restrict access to whole site (though more likely just parts)
                 until payment made
-        1. Need to remember to **handle case of users added before privilege
-            changes**
+        1. Need to remember to **handle case of users added before privilege**
+            **changes**
         1. Update **docs** for any privilege additions/config
-1. **Signup/Home pages**
-    1. Allow **adding to "Set up new account" fields** (based on a schema?)
-        (to be injected into `app/server/views/account.js`) to be passed to
-        the server (`app/server/routes.js`) and saved in the database along
-        with other fields (check the user-supplied don't overwrite built-ins)
-        and shown on `home` (also built by `account.js`) (unless hidden?);
-        not trusting the client-side values of course (could parse
-        server-side-supplied schema for expected types); use `json-editor`?
-        1. Plugin system to allow asking for and saving additional data
-            per user. May optionally be able to reject submission, but
-            should instead use an authentication strategy plugin, if
-            it is more fundamental to authentication (since this should
-            generally be safely additive).
-        1. Concept of [SharedStorage](https://github.com/brettz9/SharedStorage)
-            for grabbing local user data (or on a URL) for populating
-            site profiles/preferences (under control of user, so they can
-            manage their data in one place, and let sites update their own
-            copy (or directly utilize the local copy) when online and
-            checking)
-    1. **Captchas** ([svg-captcha](https://www.npmjs.com/package/svg-captcha)
-        (doesn't use easily breakable SVG text, and could convert to image))
-        1. Plugin system for captchas, while potentially allowing saving
-            to and retrieving from database (e.g., for admin-added list
-            of Q&A's), need not be aware of any other co-submitted data
-            like username, password, etc. Unlike "set up new account"
-            plugins, wouldn't need access to user database, but can of
-            course have potential to reject submission.
 1. **Other pages**
     1. Method to auto-create accessibility-friendly **navigation bar**, including
         login (root), logout, home, signup, and users (the special pages,

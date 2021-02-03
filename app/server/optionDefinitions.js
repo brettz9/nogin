@@ -265,6 +265,11 @@ const optionDefinitions = [
     typeLabel: '{underline rate limit}'
   },
   {
+    name: 'disableXSRF', type: Boolean,
+    description: 'Disable Cross-site Resource Forgery checking. This ' +
+      'setting should normally not be used.'
+  },
+  {
     name: 'noHelmet', type: Boolean,
     description: 'Disable helmet use entirely. Off by default.'
   },
@@ -274,6 +279,16 @@ const optionDefinitions = [
       getChalkTemplateEscape(
         '`{frameguard: {action: "SAMEORIGIN"}}`'
       ),
+    typeLabel: '{underline options}'
+  },
+  {
+    name: 'csurfOptions', type: String,
+    description: 'Options to be supplied to csurf. Defaults to ' +
+      getChalkTemplateEscape(
+        '`{cookie: {signed: true, sameSite: "lax"}`'
+      ) +
+      '; you may wish to add `secure: true` to the `cookie` if serving on ' +
+      'HTTPS.',
     typeLabel: '{underline options}'
   },
   {

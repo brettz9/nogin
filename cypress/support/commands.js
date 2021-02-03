@@ -122,6 +122,23 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'getToken',
+  (url = '/') => {
+    cy.visit(url);
+    let token;
+    // eslint-disable-next-line max-len -- Long
+    // eslint-disable-next-line promise/prefer-await-to-then, cypress/require-data-selectors -- Cypress
+    return cy.get('meta[name=csrf-token]').then(($meta) => {
+      token = $meta[0].getAttribute('content');
+      return cy.log(token);
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    }).then(() => {
+      return token;
+    });
+  }
+);
+
+Cypress.Commands.add(
   'loginWithSession',
   ({nondefaultEmail} = {}) => {
     const NL_EMAIL_PASS = Cypress.env('NL_EMAIL_PASS');
@@ -131,16 +148,28 @@ Cypress.Commands.add(
     } else {
       cy.task('addAccount');
     }
+
+    const url = '/';
+
     // Not just login, but get session, so will be shown `/home`
     //   without redirect upon visit
-    return cy.request({
-      url: '/',
-      method: 'POST',
-      timeout: 50000,
-      body: {
-        user: 'bretto',
-        pass: NL_EMAIL_PASS
-      }
+
+    // It is no longer sufficient to make a request now that we have CSRF, and
+    //   we don't want to expose an API to get the token
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    return cy.getToken(url).then((token) => {
+      return cy.request({
+        url,
+        method: 'POST',
+        timeout: 50000,
+        headers: {
+          'X-XSRF-Token': token
+        },
+        body: {
+          user: 'bretto',
+          pass: NL_EMAIL_PASS
+        }
+      });
     });
   }
 );
@@ -155,19 +184,33 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'simulateServerError',
   (cfg) => {
-    // We first trigger coverage on the server, checking that it
-    //  indeed would give the response expected (as HTML doesn't
-    //  seem to support a JSON enctype per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
-    //  then we simulate it here).
-    return cy.request({
-      method: 'POST',
-      timeout: 50000,
-      url: cfg.url,
-      // Don't URL-encode; we want non-string JSON to trigger the error
-      form: false,
-      failOnStatusCode: false,
-      body: cfg.body
+    return (cfg.noToken
+      ? cy.log('no token')
+      : cy.getToken(
+        cfg.tokenURL || cfg.url
+      )
     // eslint-disable-next-line promise/prefer-await-to-then
+    ).then((token) => {
+      // We first trigger coverage on the server, checking that it
+      //  indeed would give the response expected (as HTML doesn't
+      //  seem to support a JSON enctype per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
+      //  then we simulate it here).
+      const reqCfg = {
+        method: 'POST',
+        timeout: 50000,
+        url: cfg.url,
+        // Don't URL-encode; we want non-string JSON to trigger the error
+        form: false,
+        failOnStatusCode: false,
+        body: cfg.body
+      };
+      if (!cfg.noToken) {
+        reqCfg.headers = {
+          'X-XSRF-Token': token
+        };
+      }
+      return cy.request(reqCfg);
+      // eslint-disable-next-line promise/prefer-await-to-then
     }).then((response) => {
       expect(response.status).to.eq(400);
       expect(response.body).to.contain(

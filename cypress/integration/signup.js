@@ -118,6 +118,7 @@ describe('Signup', function () {
     const badEmail = null;
     cy.visit('/signup');
     return cy.simulateServerError({
+      noToken: true,
       url: '/signup',
       body: {
         name: 'MyName',

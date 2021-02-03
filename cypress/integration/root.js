@@ -238,6 +238,7 @@ describe('Root (Login)', function () {
     cy.task('addAccountWithBadEmail');
     const badButExistingEmail = 'badEmail';
     return cy.simulateServerError({
+      tokenURL: '/',
       url: '/lost-password',
       body: {
         email: badButExistingEmail

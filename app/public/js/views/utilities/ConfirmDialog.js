@@ -18,7 +18,9 @@ const ConfirmDialog = {
     $(`${baseSel} [data-name=modal-body] p`).empty().append(
       body
     );
-    $(`${baseSel} .cancel`).text(cancel);
+    $(`${baseSel} .cancel`).text(cancel).click(() => {
+      $(baseSel).modal('hide');
+    });
     $(`${baseSel} .submit`).text(submit);
     return $(baseSel);
   },

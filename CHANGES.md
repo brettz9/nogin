@@ -1,10 +1,25 @@
 # CHANGES for nogin
 
+## ?
+
+### User-facing
+
+- Security enhancement: XSRF protection
+- Fix: Add missing `meta[charset]`
+- Fix: Expand dialog so can be visible
+- Fix: Ensure modal is not covered by backdrop
+- Fix: Ensure modal ok and cancel buttons can be clicked to close themselves
+- npm: Update `emailjs` (minor)
+
+### Dev-facing
+
+- npm: Update devDeps.
+
 ## 2.2.0
 
 ### User-facing
 
-- Security enhancement: Use `sameSite` for session cookies
+- Security enhancement: Allow `sameSite` for session cookies
 - Enhancement: Allow control of `express-session` options (including `cookie`)
 - Fix: Handle missing `passKey` (as with lost session) upon `resetPassword`
 

@@ -10,12 +10,13 @@ Promise.allSettled = require('promise.allsettled/polyfill')();
 
 const express = require('express');
 const jsdom = require('jamilih/dist/jml-jsdom.js');
+const csurf = require('csurf');
 
 const {
   checkLocaleRoutes, routeGetter, layoutAndTitleGetter
 } = require('./routeUtils.js');
 const AccountManager = require('./modules/account-manager.js');
-const {isNullish, hasOwn} = require('./modules/common.js');
+const {isNullish, hasOwn, parseCLIJSON} = require('./modules/common.js');
 const EmailDispatcher = require('./modules/email-dispatcher.js');
 const getLogger = require('./modules/getLogger.js');
 const {i18n, getLangDir} = require('./modules/i18n.js');
@@ -49,7 +50,9 @@ module.exports = async function (app, config) {
     customRoute = [],
     crossDomainJSRedirects,
     opts,
-    cwd
+    cwd,
+    disableXSRF,
+    csurfOptions
   } = config;
 
   const setI18n = i18n(localesBasePath);
@@ -138,7 +141,10 @@ module.exports = async function (app, config) {
         const title = _('PleaseLoginToAccount');
         const {signup} = routes;
         res.render('login', {
-          ...getLayoutAndTitle({_, title, template: 'login'}),
+          ...getLayoutAndTitle({
+            _, title, template: 'login',
+            csrfToken: req.csrfToken()
+          }),
           emailPattern,
           signup
         });
@@ -220,7 +226,10 @@ module.exports = async function (app, config) {
         const title = _('ControlPanel');
         res.render('home', {
           user,
-          ...getLayoutAndTitle({_, title, template: 'home'}),
+          ...getLayoutAndTitle({
+            _, title, template: 'home',
+            csrfToken: req.csrfToken()
+          }),
           countries: getCountries(_),
           emailPattern,
           requireName
@@ -242,7 +251,9 @@ module.exports = async function (app, config) {
           country: '',
           user: ''
         },
-        ...getLayoutAndTitle({_, title, template: 'signup'}),
+        ...getLayoutAndTitle({
+          _, title, template: 'signup'
+        }),
         countries: getCountries(_),
         emailPattern,
         requireName
@@ -267,7 +278,10 @@ module.exports = async function (app, config) {
         req.session.passKey = queryKey;
         const title = _('ResetPassword');
         res.render('reset-password', {
-          ...getLayoutAndTitle({_, title, template: 'reset-password'})
+          ...getLayoutAndTitle({
+            _, title, template: 'reset-password',
+            csrfToken: req.csrfToken()
+          })
         });
       }
     },
@@ -292,7 +306,6 @@ module.exports = async function (app, config) {
 
           // Todo: We could supply the precise message to the user, at
           //  least with a revealable cause
-
           res.status(400).render(
             'activation-failed', {
               ...getLayoutAndTitle({
@@ -348,7 +361,11 @@ module.exports = async function (app, config) {
 
       const title = _('AccountList');
       res.render('users', {
-        ...getLayoutAndTitle({_, title, template: 'users'}),
+        ...getLayoutAndTitle({
+          _, title, template: 'users'
+          // Enable if allowing any modification behaviors
+          // csrfToken: req.csrfToken()
+        }),
         accounts: accounts.map(({name, user, country, date}) => {
           return {
             user,
@@ -709,32 +726,87 @@ window.Nogin = {
     });
   }
 
-  app.post('*', async function (req, res) {
+  // We do not use `req.csrfToken()` on `signup`. While it might be
+  //  a problem with click-jacking (we are using `helmet` to protect
+  //  against this unwanted frame embedding), we don't use this on `login` as
+  //  this should normally not be harmful by itself to get a user
+  //  logged in (though we do check for subsequent actions). Likewise
+  //  for `logout`.
+  const openRoutes = new Set([
+    // Probably best not to allow cross-site even for these less harmful ones
+    // 'logout', 'lostPassword',
+    'signup'
+  ]);
+
+  const i18nAndRoutes = async function (req, res, next, method) {
     const _ = await setI18n(req, res);
     const routes = getRoutes(_);
-    // Note: We don't use separate middleware for this, as we need
-    //  a dynamic route (we could pre-build if examining all locales in
-    //  beginning, but this would need to take into account locales
-    //  reusing the same name).
     const route = getRouteForLocale(routes, _.resolvedLocale, req);
-    if (hasOwn(PostRoutes, route)) {
-      PostRoutes[route](routes, req, res);
+
+    let error;
+    if (!disableXSRF && !openRoutes.has(route)) {
+      console.log('route', method, route);
+      // Note: We don't use separate middleware for this, as we need
+      //  a dynamic route (we could pre-build if examining all locales in
+      //  beginning, but this would need to take into account locales
+      //  reusing the same name).
+      const csrf = csurf(
+        parseCLIJSON(csurfOptions)
+      );
+
+      // Passing `next` here causes problems; we are no longer in middleware,
+      //   so make our own `next`
+      // eslint-disable-next-line max-len -- Long
+      // eslint-disable-next-line promise/prefer-await-to-callbacks -- Middleware
+      csrf(req, res, (err) => {
+        if (err) {
+          error = err;
+        }
+      });
+    }
+
+    return {_, route, routes, error};
+  };
+
+  app.post('*', async function (req, res, next) {
+    const {
+      _, route, routes, error
+    } = await i18nAndRoutes(req, res, next, 'post');
+
+    if (!error && hasOwn(PostRoutes, route)) {
+      await PostRoutes[route](routes, req, res);
       return;
     }
+    console.log('ERRRRROR1', error);
     pageNotFound(_, res);
   });
 
   app.get('*', async function (req, res, next) {
-    const _ = await setI18n(req, res);
-    const routes = getRoutes(_);
-    // Note: We don't use separate middleware for this. See comment
-    //   under `app.post('*')` on why.
-    const route = getRouteForLocale(routes, _.resolvedLocale, req);
+    const {
+      _, route, routes, error
+    } = await i18nAndRoutes(req, res, next, 'get');
 
-    if (hasOwn(GetRoutes, route)) {
-      GetRoutes[route](routes, req, res, next);
+    if (!error && hasOwn(GetRoutes, route)) {
+      await GetRoutes[route](routes, req, res, next);
       return;
     }
+    console.log('ERRRRROR2', error);
     pageNotFound(_, res);
   });
+
+  // To create custom Bad CSRF page:
+  /*
+  // eslint-disable-next-line
+  //   promise/prefer-await-to-callbacks -- Middleware
+  app.use((err, req, res, next) => {
+    if (err.code !== 'EBADCSRFTOKEN') {
+      next(err);
+      return;
+    }
+
+    // handle CSRF token errors here
+    res.status(403);
+    res.send('form tampered with');
+  });
+  */
 };

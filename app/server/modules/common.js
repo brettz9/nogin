@@ -13,6 +13,13 @@ const hasOwn = (obj, prop) => {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 
+const parseCLIJSON = (opts) => {
+  return typeof opts === 'string'
+    ? JSON.parse(opts)
+    : opts;
+};
+
 exports.isNullish = isNullish;
 exports.uuid = uuid;
 exports.hasOwn = hasOwn;
+exports.parseCLIJSON = parseCLIJSON;
