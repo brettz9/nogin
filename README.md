@@ -323,8 +323,10 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         1. Supporting **user choice** of authentication method
             1. Different strategies could optionally offer different schemas for:
                 1. User (Registration and edit user)
-                1. Preferences (Tied to user and possibly of interest across
-                    site/application such as desire for dark mode)
+                1. Preferences (Tied to user but unlike general content, may
+                    possibly of interest across site/application such as desire
+                    for dark mode, and unlike most content, would be private and
+                    not likely of interest in content queries)
                 1. Login (e.g., to auto-add field for captcha)
                 1. Privileges, Privilege Groups, User Groups
     1. **BrowserID**
@@ -332,6 +334,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         1. See <https://github.com/jaredhanson/passport-browserid>.
         1. Would presumably need to revive as a
             [browser add-on](https://github.com/mozilla/browserid_addon/blob/master/addon/lib/main.js)
+        1. Browser add-on could also expose global *locally stored* preferences
     1. Add **passwordless** option
         1. See <http://www.passportjs.org/packages/passport-passwordless/>.
 1. **Users page**
