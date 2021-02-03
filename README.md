@@ -320,7 +320,13 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 1. **Authentication strategies**
     1. See about **`passport-next`** integration
         1. [WebSockets with passport](https://stackoverflow.com/questions/35654099/using-websocket-with-passport/47984698)?
-        1. Supporting **choice** of authentication method
+        1. Supporting **user choice** of authentication method
+            1. Different strategies could optionally offer different schemas for:
+                1. User (Registration and edit user)
+                1. Preferences (Tied to user and possibly of interest across
+                    site/application such as desire for dark mode)
+                1. Login (e.g., to auto-add field for captcha)
+                1. Privileges, Privilege Groups, User Groups
     1. **BrowserID**
         to use with a server-side validation
         1. See <https://github.com/jaredhanson/passport-browserid>.
