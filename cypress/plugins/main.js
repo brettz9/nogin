@@ -468,6 +468,9 @@ const exprt = (on, config) => {
           'max-len': 0,
           'key-spacing': 0,
 
+          // Not looking for safe function form as not bundling this
+          strict: ['error', 'global'],
+
           // Disable ES6+ rules since this file is not compiled/babelified
           'no-var': 0,
           'prefer-const': 0,
