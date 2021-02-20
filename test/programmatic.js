@@ -1,5 +1,6 @@
 import {join} from 'path';
 
+// eslint-disable-next-line no-shadow
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 

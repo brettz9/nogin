@@ -6,8 +6,7 @@ module.exports = {
     requireConfigFile: false
   },
   extends: [
-    'ash-nazg/sauron',
-    'plugin:node/recommended-script'
+    'ash-nazg/sauron-script-overrides'
   ],
   env: {
     browser: false,
@@ -41,8 +40,7 @@ module.exports = {
   overrides: [{
     files: ['test/**'],
     extends: [
-      'ash-nazg/sauron-node',
-      'plugin:node/recommended-script',
+      'ash-nazg/sauron-node-script',
       // Note: Could add this to cypress tests too, using the `chai` global
       //   which is auto-added in that environment
       'plugin:@fintechstudios/chai-as-promised/recommended'
@@ -73,6 +71,12 @@ module.exports = {
       'plugin:cypress/recommended'
     ]
   }, {
+    files: ['**/*.md/*.js'],
+    rules: {
+      'node/no-unsupported-features/es-syntax': 'off',
+      'node/no-unpublished-import': 'off'
+    }
+  }, {
     files: [
       'cypress/integration/**/*.js',
       'cypress/support/**/*.js',
@@ -100,13 +104,19 @@ module.exports = {
     }
   }, {
     files: [
+      'cypress/plugins/index.js'
+    ],
+    extends: [
+      'ash-nazg/sauron-node-script-overrides'
+    ]
+  }, {
+    files: [
       'cypress/plugins/main.js',
       'cypress/plugins/db-basic-testing-extensions.js',
       'rollup.config.js'
     ],
     extends: [
-      'ash-nazg/sauron-node',
-      'plugin:node/recommended-module'
+      'ash-nazg/sauron-node'
     ],
     rules: {
       // Browser only
@@ -149,8 +159,14 @@ module.exports = {
       'app/public/js/controllers/emptyController.js'
     ],
     extends: [
-      'plugin:node/recommended-script'
-    ]
+      'ash-nazg/sauron-node-script'
+    ],
+    rules: {
+      'no-console': 'off'
+    }
+  }, {
+    files: ['nogin.js', 'nogin-sample.js'],
+    extends: ['ash-nazg/sauron-script-overrides', 'ash-nazg/rc-script']
   }, {
     env: {
       browser: false,
@@ -161,8 +177,7 @@ module.exports = {
       'tools/mochawesome-cli.js'
     ],
     extends: [
-      'ash-nazg/sauron-node',
-      'plugin:node/recommended-script'
+      'ash-nazg/sauron-node-script'
     ],
     rules: {
       // Browser only
@@ -190,16 +205,6 @@ module.exports = {
     globals: {
       require: true,
       __dirname: true
-    }
-  }, {
-    files: ['*.md'],
-    rules: {
-      'node/no-unsupported-features/es-syntax': 'off',
-      'node/no-unpublished-import': 'off'
-    },
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module'
     }
   }],
   rules: {

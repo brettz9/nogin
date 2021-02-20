@@ -2,8 +2,17 @@
 
 ## ?
 
+### User-facing
+
 - npm: Update mongodb (patch)
-- npm: Update devDeps.
+- npm: Update express-rate-limit (patch)
+
+### Dev-facing
+
+- Linting: As per latest ash-nazg
+- Testing: Update to strip warning (apparently caused by switch to pnpm)
+- npm: Switch to pnpm
+- npm: Update devDeps. (including ash-nazg peerDep. changes)
 
 ## 1.3.0
 

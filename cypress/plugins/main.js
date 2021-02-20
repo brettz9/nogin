@@ -201,6 +201,25 @@ const exprt = (on, config) => {
     },
 
     /**
+     *
+     * @returns {Promise<AccountInfo>}
+     */
+    async addAnotherAccount () {
+      return (await addAccounts({
+        name: ['Brett'],
+        email: ['brettz9@yahoo.com'],
+        user: ['brettz'],
+        pass: ['123456'],
+        country: ['US'],
+        activationCode: [
+          // eslint-disable-next-line max-len
+          '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
+        ],
+        activated: [true]
+      }))[0];
+    },
+
+    /**
      * Simulates POST to `/signup` and subsequent visit to `/activation?c=`
      * for that account (with the `c` value obtained from the activation email).
      * Sets a different email from `addAccount` initially, however, so can

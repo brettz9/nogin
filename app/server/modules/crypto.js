@@ -20,6 +20,7 @@ function pbkdf2Prom (data, salt) {
   return new Promise((resolve, reject) => {
     crypto.pbkdf2(
       data, salt, iterations, hashLength, hasher,
+      // eslint-disable-next-line promise/prefer-await-to-callbacks
       function (error, derivedKey) {
         // istanbul ignore if
         if (error) {
