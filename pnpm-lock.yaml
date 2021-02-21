@@ -1,9 +1,9 @@
 dependencies:
   '@fortawesome/fontawesome-free': 5.15.2
-  '@popperjs/core': 2.7.2
+  '@popperjs/core': 2.6.0
   array-flat-polyfill: 1.0.1
   body-parser: 1.19.0
-  bootstrap: 5.0.0-beta2_@popperjs+core@2.7.2
+  bootstrap: 5.0.0-beta2_@popperjs+core@2.6.0
   command-line-basics: 0.8.0
   connect-mongo: 3.2.0
   cookie-parser: 1.4.5
@@ -14,7 +14,7 @@ dependencies:
   file-fetch: 1.5.0
   github-fork-ribbon-css: 0.2.3
   intl-dom: 0.10.0
-  jamilih: 0.53.2
+  jamilih: 0.54.0
   jquery: 3.5.1
   jquery-form: 4.3.0
   jsdom: 16.4.0
@@ -50,7 +50,7 @@ devDependencies:
   core-js: 3.9.0
   coveradge: 0.6.0
   cypress: 6.5.0
-  cypress-axe: 0.12.1_axe-core@4.1.2+cypress@6.5.0
+  cypress-axe: 0.12.2_axe-core@4.1.2+cypress@6.5.0
   delay: 5.0.0
   delay-cli: 1.1.0
   doiuse: 4.4.1
@@ -58,7 +58,7 @@ devDependencies:
   es-file-traverse: 0.9.0_d0d9dd224a3d1419662dafe08bab5b4f
   escape-string-regexp: 4.0.0
   eslint: 7.20.0
-  eslint-config-ash-nazg: 29.6.0_dfb63970089c0142956c0f89f6ba5928
+  eslint-config-ash-nazg: 29.6.0_7e47a789f2775039ba828a25a80cef10
   eslint-config-standard: 16.0.2_b9128b9dfce9b0a9c071f37ef4a8d1e9
   eslint-plugin-array-func: 3.1.7_eslint@7.20.0
   eslint-plugin-chai-expect: 2.2.0_eslint@7.20.0
@@ -68,7 +68,7 @@ devDependencies:
   eslint-plugin-eslint-comments: 3.2.0_eslint@7.20.0
   eslint-plugin-html: 6.1.1
   eslint-plugin-import: 2.22.1_eslint@7.20.0
-  eslint-plugin-jsdoc: 32.0.2_eslint@7.20.0
+  eslint-plugin-jsdoc: 32.1.0_eslint@7.20.0
   eslint-plugin-markdown: 2.0.0_eslint@7.20.0
   eslint-plugin-no-unsanitized: 3.1.4_eslint@7.20.0
   eslint-plugin-no-use-extend-native: 0.5.0
@@ -1866,10 +1866,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-CtUBTnzvDrT0NASa8IuGQTxFGgt2vxbLnMYuTA+uDFxOcA4uK4mGFgrhHJtxUZnWHiwemOvKKSY3BMCo7qiAsQ==
-  /@popperjs/core/2.7.2:
+  /@popperjs/core/2.6.0:
     dev: false
     resolution:
-      integrity: sha512-3LC1/M2ZFcmDrSkD1byT/hZzoPehZkDucbDShLnZ+/Gwkr6CAxiQ2kWy1UtJeLGADe58hTWkx22YEHqjPGUKzw==
+      integrity: sha512-cPqjjzuFWNK3BSKLm0abspP0sp/IGOli4p5I5fKFAzdS8fvjdOwDCfZqAaIiXd9lPkOWi3SUUfZof3hEb7J/uw==
   /@rollup/plugin-babel/5.3.0_0312538e2d002ad1be6da4e6ee1d6d9c:
     dependencies:
       '@babel/core': 7.12.17
@@ -2888,9 +2888,9 @@ packages:
     dev: true
     resolution:
       integrity: sha1-aN/1++YMUes3cl6p4+0xDcwed24=
-  /bootstrap/5.0.0-beta2_@popperjs+core@2.7.2:
+  /bootstrap/5.0.0-beta2_@popperjs+core@2.6.0:
     dependencies:
-      '@popperjs/core': 2.7.2
+      '@popperjs/core': 2.6.0
     dev: false
     peerDependencies:
       '@popperjs/core': ^2.6.0
@@ -4131,7 +4131,7 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-mI3zP+qxke95mmE2nddsF635V+o=
-  /cypress-axe/0.12.1_axe-core@4.1.2+cypress@6.5.0:
+  /cypress-axe/0.12.2_axe-core@4.1.2+cypress@6.5.0:
     dependencies:
       axe-core: 4.1.2
       cypress: 6.5.0
@@ -4142,7 +4142,7 @@ packages:
       axe-core: ^3 || ^4
       cypress: ^3 || ^4 || ^5 || ^6
     resolution:
-      integrity: sha512-9qyHhD7AW0eP09cWRWDfl6G/VYCrMrlcU6ov91aPmg8WAuRGXx9Fucqw+CDi9dUm7g+hLzH0fJt96zmPLJ5efw==
+      integrity: sha512-gn+rVJ2JnvUWhBshbZ/8dkJdANaEB96zgtAEClJ7vNvDgmqAYb+HhQpW0GM04EqtIiPhenqUeKNQDoqrquY5+w==
   /cypress/6.5.0:
     dependencies:
       '@cypress/listr-verbose-renderer': 0.4.1
@@ -5036,7 +5036,7 @@ packages:
       source-map: 0.6.1
     resolution:
       integrity: sha512-qFcX0XJkdg+PB3xjZZG/wKSuT1PnQWx57+TVSjIMmILd2yC/6ByYElPwJnslDsuWuSAp4AwJGumarAAmJch5Kw==
-  /eslint-config-ash-nazg/29.6.0_dfb63970089c0142956c0f89f6ba5928:
+  /eslint-config-ash-nazg/29.6.0_7e47a789f2775039ba828a25a80cef10:
     dependencies:
       '@brettz9/eslint-plugin': 1.0.3_eslint@7.20.0
       eslint: 7.20.0
@@ -5046,7 +5046,7 @@ packages:
       eslint-plugin-eslint-comments: 3.2.0_eslint@7.20.0
       eslint-plugin-html: 6.1.1
       eslint-plugin-import: 2.22.1_eslint@7.20.0
-      eslint-plugin-jsdoc: 32.0.2_eslint@7.20.0
+      eslint-plugin-jsdoc: 32.1.0_eslint@7.20.0
       eslint-plugin-markdown: 2.0.0_eslint@7.20.0
       eslint-plugin-no-unsanitized: 3.1.4_eslint@7.20.0
       eslint-plugin-no-use-extend-native: 0.5.0
@@ -5236,7 +5236,7 @@ packages:
       eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0
     resolution:
       integrity: sha512-8K7JjINHOpH64ozkAhpT3sd+FswIZTfMZTjdx052pnWrgRCVfp8op9tbjpAk3DdUeI/Ba4C8OjdC0r90erHEOw==
-  /eslint-plugin-jsdoc/32.0.2_eslint@7.20.0:
+  /eslint-plugin-jsdoc/32.1.0_eslint@7.20.0:
     dependencies:
       comment-parser: 1.1.2
       debug: 4.3.1
@@ -5252,7 +5252,7 @@ packages:
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0
     resolution:
-      integrity: sha512-zMAJAsq02uWVGrmr6TVlJ2nue0wM/94loWb+0Z/aJcX+oELIet+Z1vtSU9xoSkPaOJE1tpI6CkHgUZfVLKTaJg==
+      integrity: sha512-nCdKF8QQvAZ6RsnNoEK4kPF0aD9E6XURdjLx88oIqF+txmPNXAo2rNvu2WwV77R78vnhAGJkeOgmxmYdRRpgaQ==
   /eslint-plugin-markdown/2.0.0_eslint@7.20.0:
     dependencies:
       eslint: 7.20.0
@@ -7303,14 +7303,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-DGcY7JCmmPL9oLQKUW+vOcnlnwhUmcK2upZVAg5htz0sK3/a0sF4n/X01vC5N+vzRxI9tWR92RdW0aDpu/urDA==
-  /jamilih/0.53.2:
+  /jamilih/0.54.0:
     dev: false
     engines:
       node: '>=10'
-    peerDependencies:
-      core-js-bundle: ^3.6.5
     resolution:
-      integrity: sha512-1Y73xJdzdLWi7hbuv5gMlqMYp7B5bkR2clsB5YM6X5zzYrCXItbYyu1dKQ7vwdRLgjcyjmIccSqdc4dpBeh71g==
+      integrity: sha512-x3rfmZhxocBFbowFbi79C+TtLxe3Bes0ypWly/RJvQ69ZkiLAlwX1kkDeDzpCXpwzXvg53FejVSbOveacB7NvQ==
   /jest-worker/26.6.2:
     dependencies:
       '@types/node': 14.14.31
@@ -12777,7 +12775,7 @@ specifiers:
   '@fintechstudios/eslint-plugin-chai-as-promised': ^3.0.2
   '@fortawesome/fontawesome-free': ^5.15.2
   '@hkdobrev/run-if-changed': ^0.3.1
-  '@popperjs/core': ^2.6.0
+  '@popperjs/core': 2.6.0
   '@rollup/plugin-babel': ^5.3.0
   '@rollup/plugin-commonjs': ^17.1.0
   '@rollup/plugin-node-resolve': ^11.2.0
@@ -12786,7 +12784,7 @@ specifiers:
   axe-core: ^4.1.2
   babel-plugin-transform-async-to-promises: ^0.8.15
   body-parser: ^1.19.0
-  bootstrap: ^5.0.0-beta1
+  bootstrap: ^5.0.0-beta2
   chai: ^4.3.0
   chai-as-promised: ^7.1.1
   command-line-basics: ^0.8.0
@@ -12797,7 +12795,7 @@ specifiers:
   core-js: ^3.9.0
   coveradge: ^0.6.0
   cypress: ^6.5.0
-  cypress-axe: ^0.12.1
+  cypress-axe: ^0.12.2
   delay: ^5.0.0
   delay-cli: ^1.1.0
   doiuse: ^4.4.1
@@ -12816,7 +12814,7 @@ specifiers:
   eslint-plugin-eslint-comments: ^3.2.0
   eslint-plugin-html: ^6.1.1
   eslint-plugin-import: ^2.22.1
-  eslint-plugin-jsdoc: ^32.0.2
+  eslint-plugin-jsdoc: ^32.1.0
   eslint-plugin-markdown: ^2.0.0
   eslint-plugin-no-unsanitized: ^3.1.4
   eslint-plugin-no-use-extend-native: ^0.5.0
@@ -12834,7 +12832,7 @@ specifiers:
   husky: '4'
   integrity-matters: ^0.13.1
   intl-dom: ^0.10.0
-  jamilih: ^0.53.2
+  jamilih: ^0.54.0
   jquery: ^3.5.1
   jquery-form: ^4.3.0
   jsdoc: ^3.6.6

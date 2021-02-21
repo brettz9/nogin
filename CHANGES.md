@@ -4,6 +4,10 @@
 
 ### User-facing
 
+- Build: Update integrity map
+- npm: Peg popper version in package.json
+- npm: Update bootstrap (pre)
+- npm: Update jamilih (minor)
 - npm: Update mongodb (patch)
 - npm: Update express-rate-limit (patch)
 
