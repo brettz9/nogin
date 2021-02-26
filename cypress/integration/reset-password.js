@@ -33,7 +33,7 @@ describe('Reset password', function () {
       cy.get('[data-name=enter-new-pass-label]').contains(
         'Please enter your new password'
       );
-      cy.get('[data-name="name"]:invalid').should('have.length', 0);
+      // cy.get('[data-name="name"]:invalid').should('have.length', 0);
 
       const tooShortPassword = 'a';
       cy.get('[data-name="reset-pass"]').type(tooShortPassword);
