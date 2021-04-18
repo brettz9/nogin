@@ -9,7 +9,7 @@ ignore:
   SNYK-JS-JQUERYFORM-574783:
     - jquery-form:
         reason: None given
-        expires: '2021-02-25T23:30:19.151Z'
+        expires: '2021-05-18T00:11:46.710Z'
   SNYK-JS-NODEFETCH-674311:
     - npm-consider > node-fetch:
         reason: None given
