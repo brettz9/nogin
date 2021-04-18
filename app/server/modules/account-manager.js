@@ -2,7 +2,7 @@
 
 const safeCompare = require('safe-compare');
 
-const {isNullish, guid} = require('./common.js');
+const {isNullish, uuid} = require('./common.js');
 const {
   saltAndHash, validatePasswordV1
 } = require('./crypto.js');
@@ -153,10 +153,10 @@ class AccountManager {
   /**
    * @param {string} user
    * @param {string} ipAddress
-   * @returns {Promise<string>} The cookie GUID
+   * @returns {Promise<string>} The cookie uuid
    */
   async generateLoginKey (user, ipAddress) {
-    const cookie = guid();
+    const cookie = uuid();
     await this.accounts.findOneAndUpdate({user}, {$set: {
       ip: ipAddress,
       cookie
@@ -182,7 +182,7 @@ class AccountManager {
    * @returns {Promise<AccountInfo>}
    */
   async generatePasswordKey (email, ipAddress) {
-    const passKey = guid();
+    const passKey = uuid();
     let o, e;
     try {
       o = await this.accounts.findOneAndUpdate({email}, {$set: {

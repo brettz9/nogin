@@ -1,9 +1,10 @@
 # CHANGES for nogin
 
-## ?
+## 1.4.0
 
 ### User-facing
 
+- Security: Use cryptographically secure random value
 - Build: Update integrity map
 - npm: Peg popper version in package.json
 - npm: Update bootstrap (pre)

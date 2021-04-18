@@ -26,7 +26,7 @@ import {
   getMostRecentEmail
 } from '../../test/utilities/EmailChecker.js';
 
-import {guid} from '../../app/server/modules/common.js';
+import {uuid} from '../../app/server/modules/common.js';
 import {
   addAccounts, removeAccounts,
   validUserPassword, readAccounts, updateAccounts
@@ -147,7 +147,7 @@ const exprt = (on, config) => {
      */
     async generateLoginKey ({user, ip, badSecret}) {
       const [cookieValue] = badSecret
-        ? [guid()]
+        ? [uuid()]
         : await generateLoginKeys({
           user,
           ip

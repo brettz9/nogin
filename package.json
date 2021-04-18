@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "author": "Brett Zamir",
   "contributors": [],
@@ -200,7 +200,8 @@
     "promise.allsettled": "^1.0.4",
     "rtl-detect": "^1.0.2",
     "safe-compare": "^1.1.4",
-    "stylus": "^0.54.8"
+    "stylus": "^0.54.8",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.17",

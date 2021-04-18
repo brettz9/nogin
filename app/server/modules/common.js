@@ -1,19 +1,8 @@
 'use strict';
 
-const isNullish = (o) => o === null || o === undefined;
+const {v5: uuid} = require('uuid');
 
-/**
- * @returns {string}
- */
-const guid = function () {
-  /* eslint-disable no-bitwise */
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, (c) => {
-    const r = Math.trunc(Math.random() * 16),
-      v = c === 'x' ? r : r & 0x3 | 0x8;
-    return v.toString(16);
-  });
-  /* eslint-enable no-bitwise */
-};
+const isNullish = (o) => o === null || o === undefined;
 
 /**
  * @param {GenericObject} obj
@@ -25,5 +14,5 @@ const hasOwn = (obj, prop) => {
 };
 
 exports.isNullish = isNullish;
-exports.guid = guid;
+exports.uuid = uuid;
 exports.hasOwn = hasOwn;
