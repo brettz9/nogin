@@ -5,6 +5,7 @@
 ### User-facing
 
 - Security: Use cryptographically secure random value
+- Fix: Allow `countryCodes` to be an array (in the config file)
 - Build: Update integrity map
 - npm: Peg popper version in package.json
 - npm: Update bootstrap (pre)

@@ -55,7 +55,9 @@ module.exports = async function (app, config) {
   const setI18n = i18n(localesBasePath);
 
   const countryCodes = config.countryCodes
-    ? JSON.parse(config.countryCodes)
+    ? Array.isArray(config.countryCodes)
+      ? config.countryCodes
+      : JSON.parse(config.countryCodes)
     // eslint-disable-next-line node/global-require
     : require('./modules/country-codes.json');
 
@@ -417,62 +419,62 @@ module.exports = async function (app, config) {
     async home (routes, req, res) {
       if (isNullish(req.session.user)) {
         res.status(400).send('session-lost');
-      } else {
-        const {name, email, pass, country} = req.body;
-        // We add `id` here to ensure only posting change for user's own
-        //   account, since could otherwise be injecting a different
-        //   user's name here
-        const _ = await setI18n(req, res);
-        let o;
-        try {
-          o = await am.updateAccount({
-            id: req.session.user._id,
-            user: req.session.user.user,
-            name,
-            email,
-            pass,
-            country
-          }, {
-            async changedEmailHandler (acct, user) {
-              try {
-                // TODO this promise takes a moment to return, add a loader to
-                //   give user feedback
-                await ed.dispatchActivationLink(
-                  {
-                    ...acct, // (`name`, `activationCode`)
-                    user,
-                    // Send to updated email (as deliberately not yet saved
-                    //   on `acct`).
-                    email
-                  },
-                  composeResetPasswordEmailConfig,
-                  _,
-                  getLangDir(_)
-                );
-              } catch (e) {
-                logErrorProperties(e);
-                // Cause this `updateAccount` to reject and be handled below
-                throw new Error('problem-dispatching-link');
-              }
-            }
-          });
-        } catch (error) {
-          // We send a code and let the client i18nize
-          // We should probably follow this pattern
-          log('message', {message: error.message});
-          const message = [
-            'email-taken',
-            'session-lost',
-            'problem-dispatching-link'
-          ].includes(error.message)
-            ? error.message
-            : _('ErrorUpdatingAccount');
-          res.status(400).send(message);
-          return;
-        }
-        req.session.user = o.value;
-        res.status(200).send(_('OK'));
+        return;
       }
+      const {name, email, pass, country} = req.body;
+      // We add `id` here to ensure only posting change for user's own
+      //   account, since could otherwise be injecting a different
+      //   user's name here
+      const _ = await setI18n(req, res);
+      let o;
+      try {
+        o = await am.updateAccount({
+          id: req.session.user._id,
+          user: req.session.user.user,
+          name,
+          email,
+          pass,
+          country
+        }, {
+          async changedEmailHandler (acct, user) {
+            try {
+              // TODO this promise takes a moment to return, add a loader to
+              //   give user feedback
+              await ed.dispatchActivationLink(
+                {
+                  ...acct, // (`name`, `activationCode`)
+                  user,
+                  // Send to updated email (as deliberately not yet saved
+                  //   on `acct`).
+                  email
+                },
+                composeResetPasswordEmailConfig,
+                _,
+                getLangDir(_)
+              );
+            } catch (e) {
+              logErrorProperties(e);
+              // Cause this `updateAccount` to reject and be handled below
+              throw new Error('problem-dispatching-link');
+            }
+          }
+        });
+      } catch (error) {
+        // We send a code and let the client i18nize
+        // We should probably follow this pattern
+        log('message', {message: error.message});
+        const message = [
+          'email-taken',
+          'session-lost',
+          'problem-dispatching-link'
+        ].includes(error.message)
+          ? error.message
+          : _('ErrorUpdatingAccount');
+        res.status(400).send(message);
+        return;
+      }
+      req.session.user = o.value;
+      res.status(200).send(_('OK'));
     },
 
     async signup (routes, req, res) {
