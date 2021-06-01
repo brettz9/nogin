@@ -623,7 +623,7 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
 
-      // Todo[cypress@>7.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>8.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
       // eslint-disable-next-line promise/prefer-await-to-then
@@ -643,7 +643,7 @@ describe('Home', function () {
 
       cy.get('[data-name="action2"]').click();
 
-      // Todo[cypress@>7.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>8.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len
@@ -659,17 +659,7 @@ describe('Home', function () {
     it('Should show error upon bad log out', function () {
       cy.getCookie('login').should('exist');
       cy.getCookie(expressSessionID).should('exist');
-      cy.server();
-      cy.route({
-        method: 'POST',
-        url: '/logout',
-        status: 500,
-        response: 'oops'
-      });
 
-      // Todo[cypress@>7]: Once clearing of intercepts is possible,
-      //  replace our `cy.server`/`cy.route` calls per https://github.com/cypress-io/cypress/issues/9302#issuecomment-746403294
-      /*
       cy.intercept({
         method: 'POST',
         url: '/logout'
@@ -677,7 +667,6 @@ describe('Home', function () {
         statusCode: 500,
         body: 'oops'
       });
-      */
 
       cy.get('[data-name="btn-logout"]').click();
 

@@ -6,9 +6,6 @@
  * with `AccountManager` commands.
  */
 
-// Todo[engine:node@>=12.0.0]: Remove flat/flatMap polyfill
-require('array-flat-polyfill');
-
 const {readFile: readFileOrig} = require('fs');
 const {resolve: pathResolve} = require('path');
 const {promisify} = require('util');

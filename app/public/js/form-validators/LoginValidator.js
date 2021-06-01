@@ -6,11 +6,11 @@ const {user, pass} = LoginValidatorView.getFormFields();
 /**
  * Login validation.
  */
-const LoginValidator = class LoginValidator {
+const LoginValidator = {
   /**
    * @returns {boolean}
    */
-  static validateForm () {
+  validateForm () {
     if (user.validity.valueMissing) {
       user.setCustomValidity(
         LoginValidatorView.errorMessages.PleaseEnterValidUserName
@@ -26,14 +26,14 @@ const LoginValidator = class LoginValidator {
       return false;
     }
     return true;
-  }
+  },
 
   /**
   * Bind a simple alert window to this controller to display any errors.
   * @param {string} msg
   * @returns {void}
   */
-  static showLoginError (msg) {
+  showLoginError (msg) {
     const loginErrors = AlertDialog.populate({
       heading: LoginValidatorView.errorMessages.LoginFailure,
       body: msg

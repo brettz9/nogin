@@ -19,12 +19,12 @@ const MongoDB = require('./db-adapters/MongoDB.js');
 /**
  * Creates a specific database type instance.
  */
-class DBFactory {
+const DBFactory = {
   /**
   * @param {DbConfig} options
   * @returns {DbOptions}
   */
-  static getDefaults (options) {
+  getDefaults (options) {
     return {
       DB_NAME: 'nogin',
       DB_HOST: 'localhost',
@@ -32,27 +32,29 @@ class DBFactory {
       adapter: 'mongodb',
       ...options
     };
-  }
+  },
+
   /**
    * @param {"mongodb"} adapter
    * @param {boolean} prod
    * @param {DbConfig} dbConfig
    * @returns {string}
    */
-  static getURL (adapter, prod, dbConfig) {
+  getURL (adapter, prod, dbConfig) {
     switch (adapter) {
     case 'mongodb':
       return MongoDB.getURL(prod, dbConfig);
     default:
       throw new Error(`Unrecognized database adapter "${adapter}"!`);
     }
-  }
+  },
+
   /**
    * @param {"mongodb"} adapter
    * @param {DBConfigObject} config
    * @returns {MongoDB}
    */
-  static createInstance (adapter, config) {
+  createInstance (adapter, config) {
     switch (adapter) {
     case 'mongodb':
       return new MongoDB(config);
@@ -60,6 +62,6 @@ class DBFactory {
       throw new Error(`Unrecognized database adapter "${adapter}"!`);
     }
   }
-}
+};
 
 module.exports = DBFactory;

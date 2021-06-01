@@ -70,7 +70,6 @@ case 'add':
       const errorLogger = await getLogger({loggerLocale, errorLog: true});
       errorLogger('Erred', null, err);
     }
-    // eslint-disable-next-line no-process-exit
     process.exit();
   })();
   break;

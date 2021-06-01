@@ -16,7 +16,7 @@ const bodyParser = require('body-parser');
 //   creating signed cookies (see `routes.js`) (or if we were to use
 //   non-signed cookies and access `req.cookies`).
 const cookieParser = require('cookie-parser');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const stylus = require('stylus');
 const RateLimit = require('express-rate-limit');
 
@@ -160,8 +160,8 @@ exports.createServer = async function (options) {
     // proxy: true, // `undefined` checks `trust proxy` (see below)
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({
-      url: DB_URL,
+    store: MongoStore.create({
+      mongoUrl: DB_URL,
       mongoOptions: {
         useUnifiedTopology: true,
         useNewUrlParser: true
