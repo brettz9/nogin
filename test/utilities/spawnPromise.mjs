@@ -27,7 +27,7 @@ const spawnPromise = (
   if (!killDelay) {
     killDelay = 10000;
   }
-  // eslint-disable-next-line promise/avoid-new
+  // eslint-disable-next-line promise/avoid-new -- Control promisifying
   return new Promise((resolve, reject) => {
     let stderr = '', stdout = '';
     const cli = spawn(

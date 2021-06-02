@@ -1,7 +1,11 @@
 // Use to get complete coverage if any guarding code not actually
 //   reachable via UI; have server-side do too?;
 
-import {resolve as pathResolve} from 'path';
+import {readFile} from 'fs/promises';
+
+import {dirname, resolve as pathResolve} from 'path';
+
+import {fileURLToPath} from 'url';
 
 import {JSDOM} from 'jsdom';
 import fetch from 'node-fetch';
@@ -16,18 +20,22 @@ import noginConfig from '../nogin.js';
 
 import {
   setEmailConfig, deleteEmails, hasEmail
-} from './utilities/EmailChecker.js';
-import spawnPromise from './utilities/spawnPromise.js';
+} from './utilities/EmailChecker.mjs';
+import spawnPromise from './utilities/spawnPromise.mjs';
 
-import addUsersJSON from './fixtures/addUsers.json';
+const addUsersJSON = JSON.parse(await readFile(
+  new URL('./fixtures/addUsers.json', import.meta.url)
+));
 
-/* eslint-disable max-len */
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+/* eslint-disable max-len -- Long */
 // Would add this to config file but would interfere with other tests
 // 1. `mongod`
 // 2. `mongo`
 // 3. `use nogin`
 // 4. Add `db.createUser({user: "brett", pwd: "123456", roles: [{ role: "readWrite", db: "nogin" }]});`
-/* eslint-enable max-len */
+/* eslint-enable max-len -- Long */
 const DB_USER = 'brett';
 const DB_PASS = '123456';
 
@@ -715,7 +723,7 @@ describe('CLI', function () {
     this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
-        // eslint-disable-next-line node/no-process-env
+        // eslint-disable-next-line node/no-process-env -- Testing env.
         ...process.env,
         NODE_ENV: 'production'
       }
@@ -734,7 +742,7 @@ describe('CLI', function () {
     this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
-        // eslint-disable-next-line node/no-process-env
+        // eslint-disable-next-line node/no-process-env -- Testing env.
         ...process.env,
         NODE_ENV: 'production'
       }

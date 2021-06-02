@@ -67,7 +67,8 @@ Cypress.Commands.add('injectAxe2', () => {
   // eslint-disable-next-line max-len -- Long
   // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then -- Testing
   cy.window({log: false}).then((win) => {
-    // eslint-disable-next-line no-undef -- Works despite file being imported
+    // eslint-disable-next-line max-len -- Long
+    // eslint-disable-next-line node/global-require, no-undef -- Works despite file being imported
     const axe = require('axe-core/axe.js');
     const script = win.document.createElement('script');
     // eslint-disable-next-line no-unsanitized/property -- Test environment

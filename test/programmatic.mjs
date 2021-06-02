@@ -1,4 +1,5 @@
-import {join} from 'path';
+import {dirname, join} from 'path';
+import {fileURLToPath} from 'url';
 
 // eslint-disable-next-line no-shadow
 import chai from 'chai';
@@ -15,6 +16,8 @@ import cryptoNL from '../app/server/modules/crypto.js';
 import {i18n as setI18n} from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Add `rejectedWith`, etc.
 chai.use(chaiAsPromised);
@@ -149,7 +152,7 @@ describe('Programmatic', function () {
     // eslint-disable-next-line promise/avoid-new
     return new Promise(function (resolve, reject) {
       // eslint-disable-next-line promise/prefer-await-to-callbacks
-      jmlEngine(join(__dirname, 'fixtures/bad-template.js'), null, (err) => {
+      jmlEngine(join(__dirname, 'fixtures/bad-template.mjs'), null, (err) => {
         expect(err).to.be.an('Error');
         resolve();
       });

@@ -24,7 +24,7 @@ import codeCoverageTask from '@cypress/code-coverage/task.js';
 import {
   setEmailConfig, getEmails, deleteEmails, hasEmail,
   getMostRecentEmail
-} from '../../test/utilities/EmailChecker.js';
+} from '../../test/utilities/EmailChecker.mjs';
 
 import {uuid} from '../../app/server/modules/common.js';
 import {
