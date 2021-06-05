@@ -178,10 +178,16 @@ Cypress.Commands.add(
       //  we have to stub the server response and retry against it,
       //  in order to see the effect on our client app.
 
-      return cy.intercept({
+      const opts = {
         method: 'POST',
         url: cfg.routeURL || cfg.url
-      }, {
+      };
+
+      if (cfg.times) {
+        opts.times = cfg.times;
+      }
+
+      return cy.intercept(opts, {
         statusCode: 400,
         body: cfg.error
       });

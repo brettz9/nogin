@@ -408,6 +408,7 @@ describe('Home', function () {
         const validEmail = 'brettz9@example.name';
         return cy.simulateServerError({
           url: '/home',
+          times: 1,
           body: {
             email: badEmail,
             name: 'MyNewName',
@@ -443,7 +444,6 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
-          cy.server({enable: false});
           cy.get('[data-name="email"]').clear().type(
             validEmail
           );
@@ -463,14 +463,15 @@ describe('Home', function () {
           ).should('be.hidden');
 
           return cy.task('getRecords', {user: ['bretto']});
-          // eslint-disable-next-line promise/prefer-await-to-then
+          // eslint-disable-next-line max-len -- Long
+          // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
         }).then((accts) => {
           const {user, name, country, email, unactivatedEmail} = accts[0];
           expect(user).to.equal('bretto');
           expect(unactivatedEmail).to.equal(validEmail);
           expect(email).to.equal(NL_EMAIL_USER);
           expect(country).to.equal('FR');
-          return expect(name).to.equal('YetAnotherName');
+          expect(name).to.equal('YetAnotherName');
         });
       }
     );
