@@ -10,7 +10,7 @@ const isNullish = (o) => o === null || o === undefined;
  * @returns {boolean}
  */
 const hasOwn = (obj, prop) => {
-  return {}.hasOwnProperty.call(obj, prop);
+  return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 
 exports.isNullish = isNullish;
