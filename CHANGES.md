@@ -8,12 +8,17 @@
 - Fix: Use appropriate `uuid` version for random values (v4)
 - Update: CDNs, husky
 - Update: CLI docs
-- npm: Update deps. (fontawesome-free (patch), popperjs/core (minor), bootstrap (stable patch), connect-mongo (major), express-session (patch), file-fetch (minor), intl-dom (minor), jquery (minory), jsdom (minor), mongodb (patch), rtl-detect (patch))
+- npm: Update deps. (fontawesome-free (patch), popperjs/core (minor),
+    bootstrap (stable patch), connect-mongo (major), express-session (patch),
+    file-fetch (minor), intl-dom (minor), jquery (minory), jsdom (minor),
+    mongodb (patch), rtl-detect (patch))
 
 ### Dev-facing
 
 - Linting: As per latest ash-nazg
 - Testing: Update Cypress API
+- Testing: Overcome problem now with Mocha by switching to "mjs" (Cypress seems
+    to have a problem, so not doing whole project yet)
 - npm: Update devDeps.
 
 ## 1.4.0
