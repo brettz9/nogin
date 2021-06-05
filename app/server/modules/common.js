@@ -1,6 +1,6 @@
 'use strict';
 
-const {v5: uuid} = require('uuid');
+const {v4: uuid} = require('uuid');
 
 const isNullish = (o) => o === null || o === undefined;
 

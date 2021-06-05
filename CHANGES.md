@@ -5,6 +5,7 @@
 ### User-facing
 
 - Breaking change: Update `engines` to require Node >= 12
+- Fix: Use appropriate `uuid` version for random values (v4)
 - Update: CDNs, husky
 - Update: CLI docs
 - npm: Update deps. (fontawesome-free (patch), popperjs/core (minor), bootstrap (stable patch), connect-mongo (major), express-session (patch), file-fetch (minor), intl-dom (minor), jquery (minory), jsdom (minor), mongodb (patch), rtl-detect (patch))
