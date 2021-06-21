@@ -160,7 +160,7 @@ class AccountManager {
     await this.accounts.findOneAndUpdate({user}, {$set: {
       ip: ipAddress,
       cookie
-    }}, {returnOriginal: false});
+    }}, {returnDocument: 'after'});
     return cookie;
   }
 
@@ -188,7 +188,7 @@ class AccountManager {
       o = await this.accounts.findOneAndUpdate({email}, {$set: {
         ip: ipAddress,
         passKey
-      }, $unset: {cookie: ''}}, {returnOriginal: false});
+      }, $unset: {cookie: ''}}, {returnDocument: 'after'});
     } catch (err) {
       // Above should not throw readily
       // istanbul ignore next
@@ -439,7 +439,7 @@ class AccountManager {
       const ret = await this.accounts.findOneAndUpdate(
         filter,
         {$set: o},
-        {upsert: true, returnOriginal: false}
+        {upsert: true, returnDocument: 'after'}
       );
       if (addingTemporaryEmail) {
         await changedEmailHandler(o, user);
@@ -464,7 +464,7 @@ class AccountManager {
     return this.accounts.findOneAndUpdate({passKey}, {
       $set: {pass: hash, passVer},
       $unset: {passKey: ''}
-    }, {upsert: true, returnOriginal: false});
+    }, {upsert: true, returnDocument: 'after'});
   }
 
   /*

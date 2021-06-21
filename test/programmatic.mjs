@@ -152,7 +152,7 @@ describe('Programmatic', function () {
     // eslint-disable-next-line promise/avoid-new
     return new Promise(function (resolve, reject) {
       // eslint-disable-next-line promise/prefer-await-to-callbacks
-      jmlEngine(join(__dirname, 'fixtures/bad-template.mjs'), null, (err) => {
+      jmlEngine(join(__dirname, 'fixtures/bad-template.js'), null, (err) => {
         expect(err).to.be.an('Error');
         resolve();
       });
