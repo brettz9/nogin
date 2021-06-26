@@ -2,18 +2,10 @@
 version: v1.19.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-GLOBPARENT-1016905:
-    - nodemon > chokidar > glob-parent:
-        reason: None given
-        expires: '2021-02-25T23:30:19.151Z'
   SNYK-JS-JQUERYFORM-574783:
     - jquery-form:
         reason: None given
         expires: '2021-07-05T10:40:45.688Z'
-  SNYK-JS-NODEFETCH-674311:
-    - npm-consider > node-fetch:
-        reason: None given
-        expires: '2021-02-25T23:30:19.151Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   SNYK-JS-LODASH-567746:
