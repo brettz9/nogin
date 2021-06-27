@@ -99,6 +99,9 @@ exports.createServer = async function (options) {
     customRoute,
     crossDomainJSRedirects,
     noHelmet,
+    sessionCookieOptions = {
+      sameSite: 'lax' // Not concerned about strict for GET access
+    },
     helmetOptions
   } = opts;
 
@@ -163,25 +166,26 @@ exports.createServer = async function (options) {
     dbOpts.adapter, isProduction, dbOpts
   );
 
-  // Todo: Make configurable as well as allowing `genid`, `name`,
-  //   `rolling`, `unset`?
-  const sess = {
-    cookie: {
-      // Todo: Allow configurability for `domain`, `expires`, `httpOnly`,
-      //        `maxAge`, `path`, `sameSite`; see
-      //        https://www.npmjs.com/package/express-session
-    },
-    secret,
+  // Also allowing `genid`, `name`, `rolling`, `unset`?
+  const sessionOptions = {
     // proxy: true, // `undefined` checks `trust proxy` (see below)
     resave: true,
     saveUninitialized: true,
+    // Not setting the above two is seprecated, so allow just overriding
+    ...(opts.sessionOptions ? parseCLIJSON(opts.sessionOptions) : null)
+  };
+
+  const sess = {
+    secret,
     store: MongoStore.create({
       mongoUrl: DB_URL,
       mongoOptions: {
         useUnifiedTopology: true,
         useNewUrlParser: true
       }
-    })
+    }),
+    cookie: parseCLIJSON(sessionCookieOptions),
+    ...sessionOptions
   };
 
   if (isProduction) {

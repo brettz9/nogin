@@ -158,6 +158,12 @@ your own `nogin.js` config file.
 - `--helmetOptions` (A string, or, in config, an object; defaults to
     `{frameguard: {action: "SAMEORIGIN"}}`). Note that `SAMEORIGIN` is required
     as the `action` to allow `nogin` to be used within your site's iframes.
+- `--sessionOptions` (A string, or, in config, an object; defaults to
+    `{resave: true, saveUninitialized: true}` along with
+    `cookie: sessionCookieOptions`, `secret`, and
+    `store: new MongoStore({url: DB_URL, mongoOptions: '{useUnifiedTopology: true, useNewUrlParser: true}})')`
+- `--sessionCookieOptions` (A string, or, in config, an object; defaults to
+    `{sameSite: 'lax'}`)
 
 ##### Tweaks for general administration
 

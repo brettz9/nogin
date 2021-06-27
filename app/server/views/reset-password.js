@@ -4,7 +4,8 @@
 module.exports = function ({_, layout}) {
   return layout({
     content: [
-      require('./modals/reset-password.js')({_})
+      require('./modals/reset-password.js')({_}),
+      require('./modals/alert.js')({_})
     ],
     scripts: [
       ['script', {

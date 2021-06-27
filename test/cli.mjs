@@ -364,7 +364,7 @@ describe('CLI', function () {
     });
     /* const {stdout, stderr} = */ await cliProm;
 
-    const {headers} = await helmetResp;
+    const {headers} = helmetResp;
 
     expect(headers.get('X-Frame-Options')).to.equal(
       'SAMEORIGIN'
@@ -401,7 +401,7 @@ describe('CLI', function () {
     });
     /* const {stdout, stderr} = */ await cliProm;
 
-    const {headers} = await helmetResp;
+    const {headers} = helmetResp;
 
     expect(headers.get('X-Frame-Options')).to.equal(
       'SAMEORIGIN'
@@ -438,10 +438,80 @@ describe('CLI', function () {
     });
     /* const {stdout, stderr} = */ await cliProm;
 
-    const {headers} = await helmetResp;
+    const {headers} = helmetResp;
 
     expect(headers.has('X-Frame-Options')).to.be.false;
     expect(headers.has('X-Content-Type-Options')).to.be.false;
+  });
+
+  it('sessionOptions', async function () {
+    this.timeout(70000);
+    const name = 'my.sessionid';
+    let fetching;
+    let cliProm;
+    // eslint-disable-next-line promise/avoid-new
+    const resp = await new Promise((resolve, reject) => {
+      cliProm = spawnPromise(cliPath, [
+        '--sessionOptions', JSON.stringify({
+          name
+        }),
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 40000, (stdout) => {
+        // if (stdout.includes(
+        //  `Express server listening on port ${testPort}`)
+        // ) {
+        if (fetching || !stdout.includes('Beginning server...')) {
+          return;
+        }
+        fetching = true;
+        resolve(
+          fetch(`http://localhost:${testPort}/_lang`)
+        );
+      });
+    });
+    /* const {stdout, stderr} = */ await cliProm;
+
+    const {headers} = resp;
+
+    expect(headers.get('Set-Cookie')).to.contain(name);
+    expect(headers.get('Set-Cookie')).to.contain('HttpOnly');
+  });
+
+  it('sessionCookieOptions', async function () {
+    this.timeout(70000);
+    let fetching;
+    let cliProm;
+    // eslint-disable-next-line promise/avoid-new
+    const resp = await new Promise((resolve, reject) => {
+      cliProm = spawnPromise(cliPath, [
+        '--sessionCookieOptions', JSON.stringify({
+          httpOnly: false
+        }),
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 40000, (stdout) => {
+        // if (stdout.includes(
+        //  `Express server listening on port ${testPort}`)
+        // ) {
+        if (fetching || !stdout.includes('Beginning server...')) {
+          return;
+        }
+        fetching = true;
+        resolve(
+          fetch(`http://localhost:${testPort}/_lang`)
+        );
+      });
+    });
+    /* const {stdout, stderr} = */ await cliProm;
+
+    const {headers} = resp;
+
+    expect(headers.get('Set-Cookie')).to.not.contain('HttpOnly');
   });
 
   // While we could make a full-blown UI test out of this, it would

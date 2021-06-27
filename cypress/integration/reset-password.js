@@ -1,3 +1,5 @@
+const expressSessionID = 'connect.sid';
+
 describe('Reset password', function () {
   let NL_EMAIL_USER, NL_EMAIL_PASS;
   before(() => {
@@ -84,6 +86,36 @@ describe('Reset password', function () {
       });
     });
   });
+
+  it('Visit reset password (after login)', function () {
+    return cy.task('generatePasswordKey', {
+      email: NL_EMAIL_USER,
+      // ipv6 read by Express
+      ip: '::ffff:127.0.0.1'
+    // Cypress won't run the tests with an `await` here
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
+    }).then((key) => {
+      cy.log(key);
+      cy.visit('/reset-password?key=' + encodeURIComponent(key));
+      cy.get('[data-name="reset-pass"]').type('new' + NL_EMAIL_PASS);
+
+      // Drop session before submitting
+      cy.clearCookie(expressSessionID);
+
+      cy.get('[data-name="reset-password-submit"]').click();
+
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p', {
+        timeout: 20000
+      }).contains(
+        'Your session has been lost'
+      );
+      cy.location('pathname', {
+        timeout: 10000
+      }).should('eq', '/');
+    });
+  });
+
   it('Provides an error if unable to update password', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,

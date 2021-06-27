@@ -275,6 +275,25 @@ const optionDefinitions = [
         '`{frameguard: {action: "SAMEORIGIN"}}`'
       ),
     typeLabel: '{underline options}'
+  },
+  {
+    name: 'sessionCookieOptions', type: String,
+    description: 'Options to be supplied to `cookie` of `express-session`.' +
+      'Defaults to ' +
+      getChalkTemplateEscape(`{sameSite: 'lax'}`),
+    typeLabel: '{underline options}'
+  },
+  {
+    name: 'sessionOptions', type: String,
+    description: 'Options to be supplied to `express-session`.' +
+      'Defaults to ' +
+      getChalkTemplateEscape(
+        `{resave: true, saveUninitialized: true}` +
+        ' along with `cookie: sessionCookieOptions`, `secret`, and ' +
+        '`store: new MongoStore({url: DB_URL, mongoOptions: ' +
+        '{useUnifiedTopology: true, useNewUrlParser: true}})'
+      ),
+    typeLabel: '{underline options}'
   }
 ];
 

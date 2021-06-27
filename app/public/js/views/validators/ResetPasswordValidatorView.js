@@ -1,4 +1,5 @@
 /* globals $, Nogin */
+import AlertDialog from '../utilities/AlertDialog.js';
 
 const {_} = Nogin;
 
@@ -20,6 +21,14 @@ const ResetPasswordValidatorView = {
   },
 
   /**
+   * @param {external:jQuery} alertDialog
+   * @returns {external:jQuery} `HTMLButtonElement`
+   */
+  getLockedAlertButton (alertDialog) {
+    return alertDialog.find('button');
+  },
+
+  /**
    * @returns {void}
    */
   showSuccess () {
@@ -31,10 +40,21 @@ const ResetPasswordValidatorView = {
   },
 
   /**
+   * @param {"bad-session"|undefined} type
    * @returns {void}
    */
-  showDanger () {
-    this.addAlert(_('SomethingWentWrongPleaseTryAgain'));
+  showDanger (type) {
+    if (type === 'bad-session') {
+      return AlertDialog.populate({
+        heading: _('error'),
+        body: _('SessionLost', {
+          lb: $('<br/>')[0]
+        }),
+        keyboard: false,
+        backdrop: 'static'
+      });
+    }
+    return this.addAlert(_('SomethingWentWrongPleaseTryAgain'));
   },
 
   messages: {

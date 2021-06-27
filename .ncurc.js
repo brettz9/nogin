@@ -4,6 +4,8 @@ module.exports = {
   reject: [
     // Lock in any npm packages here
 
+    // Todo: Waiting on support for at least `.cjs`:
+    //   https://github.com/cypress-io/cypress/issues/16467
     // Switch when ready to transition to ESM
     'command-line-basics',
     'es-file-traverse',

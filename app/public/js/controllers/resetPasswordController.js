@@ -32,8 +32,15 @@ ajaxFormClientSideValidate(
         Nogin.redirect('root');
       }, 3000);
     },
-    error () {
-      rv.showAlert();
+    error (e) {
+      switch (e.responseText) {
+      case 'bad-session':
+        rv.showAlert('bad-session');
+        break;
+      default:
+        rv.showAlert();
+        break;
+      }
     }
   }
 );

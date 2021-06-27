@@ -543,6 +543,13 @@ module.exports = async function (app, config) {
 
     async resetPassword (routes, req, res) {
       const {passKey} = req.session;
+      if (
+        // User might have lost session cookie
+        !passKey
+      ) {
+        res.status(404).send('bad-session');
+        return;
+      }
       const newPass = req.body.pass;
       // destroy the session immediately after retrieving the stored passkey
       req.session.destroy();

@@ -1,3 +1,4 @@
+/* globals Nogin */
 import ResetPasswordValidatorView from
   '../views/validators/ResetPasswordValidatorView.js';
 
@@ -40,10 +41,23 @@ class ResetPasswordValidator {
   }
 
   /**
+   * @param {"bad-session"|undefined} type
    * @returns {void}
    */
-  showAlert () {
-    ResetPasswordValidatorView.showDanger();
+  showAlert (type) {
+    const alertDialog = ResetPasswordValidatorView.showDanger(type);
+    if (alertDialog) {
+      alertDialog.modal('show');
+      const redirectToRoot = () => {
+        Nogin.redirect('root');
+      };
+      ResetPasswordValidatorView.getLockedAlertButton(alertDialog).click(
+        redirectToRoot
+      );
+      setTimeout(redirectToRoot, 3000);
+      return;
+    }
+
     this.alert.show();
   }
 

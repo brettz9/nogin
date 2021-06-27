@@ -16,6 +16,7 @@ import cryptoNL from '../app/server/modules/crypto.js';
 import {i18n as setI18n} from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
+import {createServer} from '../app.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -23,6 +24,30 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 chai.use(chaiAsPromised);
 
 describe('Programmatic', function () {
+  describe('createServer', function () {
+    it('Allows JSON options as objects', async function () {
+      let i = 0;
+      // Todo: Should really test behavior including that our `genid` function
+      //  works (as we're not limited to JSON here), but we do check behaviors
+      //  on the JSON-as-strings already
+      await createServer({
+        PORT: 3001,
+        config: null,
+        sessionOptions: {
+          name: 'my.sessionid',
+          secret: 'boo'
+        },
+        helmetOptions: {
+          noSniff: false
+        },
+        sessionCookieOptions: {
+          genid () {
+            return i++;
+          }
+        }
+      });
+    });
+  });
   describe('addAccounts', function () {
     it('add (erring due to missing pass)', function () {
       return expect(
