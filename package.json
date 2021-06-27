@@ -221,7 +221,7 @@
     "cookie-signature": "^1.1.0",
     "core-js": "^3.15.1",
     "coveradge": "^0.7.0",
-    "cypress": "^7.5.0",
+    "cypress": "^7.6.0",
     "cypress-axe": "^0.12.2",
     "delay": "^5.0.0",
     "delay-cli": "^1.1.0",

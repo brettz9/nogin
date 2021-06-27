@@ -33,7 +33,7 @@ specifiers:
   cookie-signature: ^1.1.0
   core-js: ^3.15.1
   coveradge: ^0.7.0
-  cypress: ^7.5.0
+  cypress: ^7.6.0
   cypress-axe: ^0.12.2
   delay: ^5.0.0
   delay-cli: ^1.1.0
@@ -142,7 +142,7 @@ devDependencies:
   '@babel/register': 7.14.5_@babel+core@7.14.6
   '@brettz9/eslint-plugin': 1.0.3_eslint@7.29.0
   '@cypress/browserify-preprocessor': 3.0.1
-  '@cypress/code-coverage': 3.9.7_cypress@7.5.0
+  '@cypress/code-coverage': 3.9.7_cypress@7.6.0
   '@cypress/fiddle': 1.19.2
   '@fintechstudios/eslint-plugin-chai-as-promised': 3.1.0
   '@hkdobrev/run-if-changed': 0.3.1
@@ -158,8 +158,8 @@ devDependencies:
   cookie-signature: 1.1.0
   core-js: 3.15.1
   coveradge: 0.7.0
-  cypress: 7.5.0
-  cypress-axe: 0.12.2_axe-core@4.2.3+cypress@7.5.0
+  cypress: 7.6.0
+  cypress-axe: 0.12.2_axe-core@4.2.3+cypress@7.6.0
   delay: 5.0.0
   delay-cli: 1.1.0
   doiuse: 4.4.1
@@ -2433,14 +2433,14 @@ packages:
       - supports-color
     dev: true
 
-  /@cypress/code-coverage/3.9.7_cypress@7.5.0:
+  /@cypress/code-coverage/3.9.7_cypress@7.6.0:
     resolution: {integrity: sha512-2oWdlth15NVMYswrLlrU1c5gLrNFCMHp+hXk7py6VH92YI66/TTsCHEipqu/Uu9j6s/KT/kkbA5tKYabsZ8YIQ==}
     peerDependencies:
       cypress: '*'
     dependencies:
       '@cypress/browserify-preprocessor': 3.0.1
       chalk: 4.1.1
-      cypress: 7.5.0
+      cypress: 7.6.0
       dayjs: 1.10.5
       debug: 4.3.1
       execa: 4.1.0
@@ -2468,16 +2468,6 @@ packages:
       - canvas
       - supports-color
       - utf-8-validate
-    dev: true
-
-  /@cypress/listr-verbose-renderer/0.4.1:
-    resolution: {integrity: sha1-p3SS9LEdzHxEajSz4ochr9M8ZCo=}
-    engines: {node: '>=4'}
-    dependencies:
-      chalk: 1.1.3
-      cli-cursor: 1.0.2
-      date-fns: 1.30.1
-      figures: 1.7.0
     dev: true
 
   /@cypress/request/2.88.5:
@@ -3206,7 +3196,7 @@ packages:
   /@types/yauzl/2.9.1:
     resolution: {integrity: sha512-A1b8SU4D10uoPjwb0lnHmmu8wZhR9d+9o2PKBQT2jU5YPTKsxac6M2qGAdY7VcL+dHHhARVUDmeg0rOrcd9EjA==}
     dependencies:
-      '@types/node': 14.14.31
+      '@types/node': 15.12.4
     dev: true
     optional: true
 
@@ -4524,13 +4514,6 @@ packages:
     resolution: {integrity: sha512-y4coMcylgSCdVinjiDBuR8PCC2bLjyGTwEmPb9NHR/QaNU6EUOXcTY/s6VjGMD6ENSEaeQYHCY0GNGS5jfMwPw==}
     engines: {node: '>=6'}
 
-  /cli-cursor/1.0.2:
-    resolution: {integrity: sha1-ZNo/fValRBLll5S9Ytw1KV6PKYc=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      restore-cursor: 1.0.1
-    dev: true
-
   /cli-cursor/3.1.0:
     resolution: {integrity: sha512-I/zHAwsKf9FqGoXM4WWRACob9+SNukZTd94DWF57E4toouRulbCxcUh6RKUEOQlYTHJnzkPMySvPNaaSLNfLZw==}
     engines: {node: '>=8'}
@@ -4553,7 +4536,7 @@ packages:
     engines: {node: 10.* || >= 12.*}
     dependencies:
       object-assign: 4.1.1
-      string-width: 4.2.0
+      string-width: 4.2.2
     optionalDependencies:
       colors: 1.4.0
     dev: true
@@ -5124,7 +5107,7 @@ packages:
       array-find-index: 1.0.2
     dev: true
 
-  /cypress-axe/0.12.2_axe-core@4.2.3+cypress@7.5.0:
+  /cypress-axe/0.12.2_axe-core@4.2.3+cypress@7.6.0:
     resolution: {integrity: sha512-gn+rVJ2JnvUWhBshbZ/8dkJdANaEB96zgtAEClJ7vNvDgmqAYb+HhQpW0GM04EqtIiPhenqUeKNQDoqrquY5+w==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -5132,16 +5115,15 @@ packages:
       cypress: ^3 || ^4 || ^5 || ^6
     dependencies:
       axe-core: 4.2.3
-      cypress: 7.5.0
+      cypress: 7.6.0
     dev: true
 
-  /cypress/7.5.0:
-    resolution: {integrity: sha512-tw3v6nrTJoEzT37+Nf6RK+DvdTfhMb8EJYskZx7oskZ+J9qQ1QHWA4dH8Eoe/Mr/wE47o+7PK6O9tgqhRy6IHg==}
+  /cypress/7.6.0:
+    resolution: {integrity: sha512-tTwQExY28CKt6cY85/2V1uLExcMfpBEBWXt/EcE2ht/Onl9k4lxUS7ul1UnUO5MrYwMIHMdGVh13DxdzXj4Z5w==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@cypress/listr-verbose-renderer': 0.4.1
       '@cypress/request': 2.88.5
       '@cypress/xvfb': 1.2.4
       '@types/node': 14.14.31
@@ -5153,21 +5135,24 @@ packages:
       cachedir: 2.3.0
       chalk: 4.1.1
       check-more-types: 2.24.0
+      cli-cursor: 3.1.0
       cli-table3: 0.6.0
       commander: 5.1.0
       common-tags: 1.8.0
       dayjs: 1.10.5
       debug: 4.3.2_supports-color@8.1.1
+      enquirer: 2.3.6
       eventemitter2: 6.4.3
       execa: 4.1.0
       executable: 4.1.1
       extract-zip: 2.0.1_supports-color@8.1.1
+      figures: 3.2.0
       fs-extra: 9.1.0
       getos: 3.2.1
       is-ci: 3.0.0
       is-installed-globally: 0.4.0
       lazy-ass: 1.6.0
-      listr2: 3.9.0
+      listr2: 3.9.0_enquirer@2.3.6
       lodash: 4.17.21
       log-symbols: 4.1.0
       minimist: 1.2.5
@@ -5180,8 +5165,6 @@ packages:
       untildify: 4.0.0
       url: 0.11.0
       yauzl: 2.10.0
-    transitivePeerDependencies:
-      - enquirer
     dev: true
 
   /d/1.0.1:
@@ -5209,10 +5192,6 @@ packages:
       abab: 2.0.5
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.4.0
-
-  /date-fns/1.30.1:
-    resolution: {integrity: sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==}
-    dev: true
 
   /dateformat/3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
@@ -6569,11 +6548,6 @@ packages:
       pify: 2.3.0
     dev: true
 
-  /exit-hook/1.1.1:
-    resolution: {integrity: sha1-8FyiM7SMBdVP/wd2XfhQfpXAL/g=}
-    engines: {node: '>=0.10.0'}
-    dev: true
-
   /expand-brackets/2.1.4:
     resolution: {integrity: sha1-t3c14xXOMPa27/D4OwQVGiJEliI=}
     engines: {node: '>=0.10.0'}
@@ -6751,14 +6725,6 @@ packages:
     resolution: {integrity: sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=}
     dependencies:
       pend: 1.2.0
-    dev: true
-
-  /figures/1.7.0:
-    resolution: {integrity: sha1-y+Hjr/zxzUS4DK3+0o3Hk6lwHS4=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      escape-string-regexp: 1.0.5
-      object-assign: 4.1.1
     dev: true
 
   /figures/3.2.0:
@@ -8739,21 +8705,6 @@ packages:
       - supports-color
     dev: true
 
-  /listr2/3.9.0:
-    resolution: {integrity: sha512-+JxQt7Vi4WEWgJsxmOEX9lDbCumrb3mrEYIeE1VI7I4lf2rXE4v9pq3RMVNp+a9s6mCgc/IsF0ppHsLrx2BEAw==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      enquirer: '>= 2.3.0 < 3'
-    dependencies:
-      cli-truncate: 2.1.0
-      colorette: 1.2.2
-      log-update: 4.0.0
-      p-map: 4.0.0
-      rxjs: 6.6.7
-      through: 2.3.8
-      wrap-ansi: 7.0.0
-    dev: true
-
   /listr2/3.9.0_enquirer@2.3.6:
     resolution: {integrity: sha512-+JxQt7Vi4WEWgJsxmOEX9lDbCumrb3mrEYIeE1VI7I4lf2rXE4v9pq3RMVNp+a9s6mCgc/IsF0ppHsLrx2BEAw==}
     engines: {node: '>=10.0.0'}
@@ -10006,11 +9957,6 @@ packages:
     dependencies:
       wrappy: 1.0.2
 
-  /onetime/1.1.0:
-    resolution: {integrity: sha1-ofeDj4MUxRbwXs78vEzP4EtO14k=}
-    engines: {node: '>=0.10.0'}
-    dev: true
-
   /onetime/5.1.2:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
@@ -11207,14 +11153,6 @@ packages:
     resolution: {integrity: sha512-xH48u3FTB9VsZw7R+vvgaKeLKzT6jOogbQhEe/jewwnZgzPcnyWui2Av6JpoYZF/91uueC+lqhWqeURw5/qhCw==}
     dependencies:
       lowercase-keys: 2.0.0
-    dev: true
-
-  /restore-cursor/1.0.1:
-    resolution: {integrity: sha1-NGYfRohjJ/7SmRR5FSJS35LapUE=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      exit-hook: 1.1.1
-      onetime: 1.1.0
     dev: true
 
   /restore-cursor/3.1.0:
