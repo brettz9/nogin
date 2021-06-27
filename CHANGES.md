@@ -12,6 +12,7 @@
 ### Dev-facing
 
 - npm: Drop `csslint` from `lint` script
+- npm: Avoid running `build-docs` script for now during `prepublishOnly`
 - npm: Update devDeps.
 
 ## 2.0.0
