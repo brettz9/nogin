@@ -38,6 +38,7 @@ So if you want Node login, use your "nogin"!
 - Session tracking for logged-in users
 - Local cookie storage for returning Users
 - PBKDF2-based password encryption
+- helmet integration for HTTP headers control
 - Timing safe login check comparisons
 - Throrough internationalization (i18n) and fundamental accessibility (a11y)
 - CLI option for managing accounts
@@ -152,7 +153,11 @@ your own `nogin.js` config file.
 
 ##### Security
 
+- `--noHelmet` (Boolean; defaults to `false`.)
 - `--RATE_LIMIT` (A number defaulting to 100 for a rate limit.)
+- `--helmetOptions` (A string, or, in config, an object; defaults to
+    `{frameguard: {action: "SAMEORIGIN"}}`). Note that `SAMEORIGIN` is required
+    as the `action` to allow `nogin` to be used within your site's iframes.
 
 ##### Tweaks for general administration
 
@@ -309,14 +314,14 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 1. **Login page**
     1. Security: **CSRF** protection
         1. Also see about [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) settings for cookies
-    1. Security: See about **helmet** integration for better default
-        HTTP headers control
     1. WebSockets with [express-ws](https://github.com/HenningM/express-ws) and
         [jquery-form](https://github.com/jquery-form/form/issues/582)?
     1. Provide **option for integration** within an existing page to avoid need
         for separate login page (Ajax)
         1. Adapt server-side redirect functionality to give Ajax feedback to
             client so it could instead handle forwarding *with* a hash.
+    1. **Multiple simultaneous logins** (e.g., to use version control or Cloud
+        Storage and a database managing users and privileges)?
 1. **Authentication strategies**
     1. See about **`passport-next`** integration
         1. [WebSockets with passport](https://stackoverflow.com/questions/35654099/using-websocket-with-passport/47984698)?
@@ -327,7 +332,10 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
                     possibly of interest across site/application such as desire
                     for dark mode, and unlike most content, would be private and
                     not likely of interest in content queries)
-                1. Login (e.g., to auto-add field for captcha)
+                1. Login (e.g., to auto-add field for captcha, or
+                    [`CryptoKey`](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey)
+                    and [`CryptoKeyPair`](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair))
+                    generation/selection.
                 1. Privileges, Privilege Groups, User Groups
     1. **BrowserID**
         to use with a server-side validation

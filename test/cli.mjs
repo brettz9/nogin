@@ -338,6 +338,112 @@ describe('CLI', function () {
     );
   });
 
+  it('helmet (defaults)', async function () {
+    this.timeout(70000);
+    let fetching;
+    let cliProm;
+    // eslint-disable-next-line promise/avoid-new
+    const helmetResp = await new Promise((resolve, reject) => {
+      cliProm = spawnPromise(cliPath, [
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 40000, (stdout) => {
+        // if (stdout.includes(
+        //  `Express server listening on port ${testPort}`)
+        // ) {
+        if (fetching || !stdout.includes('Beginning server...')) {
+          return;
+        }
+        fetching = true;
+        resolve(
+          fetch(`http://localhost:${testPort}/_lang`)
+        );
+      });
+    });
+    /* const {stdout, stderr} = */ await cliProm;
+
+    const {headers} = await helmetResp;
+
+    expect(headers.get('X-Frame-Options')).to.equal(
+      'SAMEORIGIN'
+    );
+    expect(headers.get('X-Content-Type-Options')).to.equal(
+      'nosniff'
+    );
+  });
+
+  it('helmet (custom)', async function () {
+    this.timeout(70000);
+    let fetching;
+    let cliProm;
+    // eslint-disable-next-line promise/avoid-new
+    const helmetResp = await new Promise((resolve, reject) => {
+      cliProm = spawnPromise(cliPath, [
+        '--helmetOptions', JSON.stringify('{noSniff: false}'),
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 40000, (stdout) => {
+        // if (stdout.includes(
+        //  `Express server listening on port ${testPort}`)
+        // ) {
+        if (fetching || !stdout.includes('Beginning server...')) {
+          return;
+        }
+        fetching = true;
+        resolve(
+          fetch(`http://localhost:${testPort}/_lang`)
+        );
+      });
+    });
+    /* const {stdout, stderr} = */ await cliProm;
+
+    const {headers} = await helmetResp;
+
+    expect(headers.get('X-Frame-Options')).to.equal(
+      'SAMEORIGIN'
+    );
+    expect(headers.get('X-Content-Type-Options')).to.equal(
+      'nosniff'
+    );
+  });
+
+  it('noHelmet', async function () {
+    this.timeout(70000);
+    let fetching;
+    let cliProm;
+    // eslint-disable-next-line promise/avoid-new
+    const helmetResp = await new Promise((resolve, reject) => {
+      cliProm = spawnPromise(cliPath, [
+        '--noHelmet',
+        '--localScripts',
+        '--secret', secret,
+        '--PORT', testPort,
+        '--config', ''
+      ], 40000, (stdout) => {
+        // if (stdout.includes(
+        //  `Express server listening on port ${testPort}`)
+        // ) {
+        if (fetching || !stdout.includes('Beginning server...')) {
+          return;
+        }
+        fetching = true;
+        resolve(
+          fetch(`http://localhost:${testPort}/_lang`)
+        );
+      });
+    });
+    /* const {stdout, stderr} = */ await cliProm;
+
+    const {headers} = await helmetResp;
+
+    expect(headers.has('X-Frame-Options')).to.be.false;
+    expect(headers.has('X-Content-Type-Options')).to.be.false;
+  });
+
   // While we could make a full-blown UI test out of this, it would
   //  require setting up another server either before Cypress runs,
   //  or before another instance of Cypress runs, both of which seem

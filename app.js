@@ -19,11 +19,18 @@ const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const stylus = require('stylus');
 const RateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const routes = require('./app/server/routes.js');
 const getLogger = require('./app/server/modules/getLogger.js');
 const DBFactory = require('./app/server/modules/db-factory.js');
 const jmlEngine = require('./app/server/modules/jmlEngine.js');
+
+const parseCLIJSON = (opts) => {
+  return typeof opts === 'string'
+    ? JSON.parse(opts)
+    : opts;
+};
 
 /**
  * @param {MainOptionDefinitions} options
@@ -90,7 +97,9 @@ exports.createServer = async function (options) {
     noPolyfill,
     postLoginRedirectPath,
     customRoute,
-    crossDomainJSRedirects
+    crossDomainJSRedirects,
+    noHelmet,
+    helmetOptions
   } = opts;
 
   const dbOpts = DBFactory.getDefaults(opts);
@@ -122,6 +131,12 @@ exports.createServer = async function (options) {
     app.use(express.static(join(__dirname, JS_DIR)));
   }
   app.use(express.static(join(__dirname, '/app/public')));
+
+  if (!noHelmet) {
+    app.use(helmet(
+      parseCLIJSON(helmetOptions)
+    ));
+  }
 
   if (staticDir) {
     staticDir.forEach((sd) => {

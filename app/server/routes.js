@@ -251,11 +251,10 @@ module.exports = async function (app, config) {
 
     async resetPassword (routes, req, res) {
       const _ = await setI18n(req, res);
+      const queryKey = req.query[_('query_key')];
       let o, e;
       try {
-        o = await am.validatePasswordKey(req.query[
-          _('query_key')
-        ], req.ip);
+        o = await am.validatePasswordKey(queryKey, req.ip);
       } catch (error) {
         // `validatePasswordKey` just looks up database records, so no reason
         //   to err
@@ -265,7 +264,7 @@ module.exports = async function (app, config) {
       if (e || isNullish(o)) {
         res.redirect(routes.root);
       } else {
-        req.session.passKey = req.query[_('query_key')];
+        req.session.passKey = queryKey;
         const title = _('ResetPassword');
         res.render('reset-password', {
           ...getLayoutAndTitle({_, title, template: 'reset-password'})
@@ -276,9 +275,10 @@ module.exports = async function (app, config) {
     async activation (routes, req, res) {
       const _ = await setI18n(req, res);
       const title = _('Activation');
-      if (req.query[_('query_c')]) {
+      const code = req.query[_('query_c')];
+      if (code) {
         try {
-          await am.activateAccount(req.query[_('query_c')]);
+          await am.activateAccount(code);
         } catch (e) {
           const message = [
             'activationCodeProvidedInvalid'
@@ -398,6 +398,7 @@ module.exports = async function (app, config) {
       }
 
       req.session.user = o;
+
       if (req.body['remember-me'] === 'false') {
         res.status(200).send(o);
       } else {
@@ -541,8 +542,8 @@ module.exports = async function (app, config) {
     },
 
     async resetPassword (routes, req, res) {
-      const newPass = req.body.pass;
       const {passKey} = req.session;
+      const newPass = req.body.pass;
       // destroy the session immediately after retrieving the stored passkey
       req.session.destroy();
       const [

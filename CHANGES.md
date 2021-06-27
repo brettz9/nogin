@@ -1,5 +1,19 @@
 # CHANGES for nogin
 
+## 2.1.0 (unreleased)
+
+### User-facing
+
+- Security enhancement: Apply helmet (using defaults except to allow same
+    origin frames by default) with `helmetOptions` to configure or
+    `noHelmet` option to disable
+- Update: CDN for bootstrap
+
+### Dev-facing
+
+- npm: Drop `csslint` from `lint` script
+- npm: Update devDeps.
+
 ## 2.0.0
 
 ### User-facing
@@ -25,7 +39,7 @@
 
 ### User-facing
 
-- Security: Use cryptographically secure random value
+- Security enhancement: Use cryptographically secure random value
 - Fix: Allow `countryCodes` to be an array (in the config file)
 - Build: Update integrity map
 - npm: Peg popper version in package.json

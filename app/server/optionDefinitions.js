@@ -12,6 +12,12 @@ const pkg = require('../../package.json');
  * `command-line-usage` into jsdoc (and use here)
  */
 
+const getChalkTemplateEscape = (s) => {
+  return s.replace(/[{}\\]/gu, (ch) => {
+    return `\\\\u${ch.codePointAt().toString(16).padStart(4, '0')}`;
+  });
+};
+
 /**
  * @type {MainOptionDefinitions}
  */
@@ -257,6 +263,18 @@ const optionDefinitions = [
     name: 'RATE_LIMIT', alias: 'r', type: Number,
     description: 'Used for mitigating DoS attacks; defaults to 100',
     typeLabel: '{underline rate limit}'
+  },
+  {
+    name: 'noHelmet', type: Boolean,
+    description: 'Disable helmet use entirely. Off by default.'
+  },
+  {
+    name: 'helmetOptions', type: String,
+    description: 'Options to be supplied to helmet. Defaults to ' +
+      getChalkTemplateEscape(
+        '`{frameguard: {action: "SAMEORIGIN"}}`'
+      ),
+    typeLabel: '{underline options}'
   }
 ];
 
