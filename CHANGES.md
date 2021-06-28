@@ -1,10 +1,16 @@
 # CHANGES for nogin
 
-## ?
+## 2.2.0
+
+### User-facing
 
 - Security enhancement: Use `sameSite` for session cookies
 - Enhancement: Allow control of `express-session` options (including `cookie`)
-- Fix: Handle missing `passKey` upon `resetPassword`
+- Fix: Handle missing `passKey` (as with lost session) upon `resetPassword`
+
+### Dev-facing
+
+- N/A
 
 ## 2.1.0
 
