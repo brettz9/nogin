@@ -9,6 +9,12 @@ describe('Home', function () {
   });
 
   it('Fails with reuse of old token', function () {
+    cy.task('deleteEmails', null, {timeout: 100000});
+    cy.loginWithSession({
+      nondefaultEmail: true
+    });
+    cy.task('addNonActivatedAccount');
+
     const url = '/';
     let tkn;
     // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
