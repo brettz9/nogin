@@ -27,3 +27,6 @@ rollup.config.js
 
 docs/jsdoc
 .eslintcache
+.husky
+pnpm-lock.yaml
+.snyk
