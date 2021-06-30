@@ -22,6 +22,19 @@ describe('Reset password', function () {
     cy.visit('/reset-password');
   });
 
+  it('Reset password attempt fails without CSRF token', function () {
+    return cy.request({
+      url: '/reset-password',
+      method: 'POST',
+      timeout: 50000,
+      failOnStatusCode: false
+      // NO `X-XSRF-Token` HEADER
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    }).then((resp) => {
+      return expect(resp.status).to.equal(404);
+    });
+  });
+
   it('Report errors of insufficiently long passwords', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,

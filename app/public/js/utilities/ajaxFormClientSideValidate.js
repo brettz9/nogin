@@ -1,4 +1,4 @@
-/* globals $ */
+/* globals $, Nogin */
 
 // Note: This per-request approach suffers from the possibility that the
 //   may subsequently open a page from the site with nogin in another tab
@@ -32,7 +32,8 @@ const ajaxFormClientSideValidate = (form, {
     field.checkValidity('');
   }, true);
 
-  if (checkXSRF && !xsrfCookie) {
+  // istanbul ignore if
+  if (checkXSRF && !xsrfCookie && !Nogin.disableXSRF) {
     error({responseText: 'UnknownError'});
     return;
   }

@@ -80,6 +80,23 @@ describe('Root (Login)', function () {
     }).should('eq', '/home');
   });
 
+  it('Login attempt fails without CSRF token', function () {
+    return cy.request({
+      url: '/login',
+      method: 'POST',
+      timeout: 50000,
+      failOnStatusCode: false,
+      // NO `X-XSRF-Token` HEADER
+      body: {
+        user: 'bretto',
+        pass: NL_EMAIL_PASS
+      }
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    }).then((resp) => {
+      return expect(resp.status).to.equal(404);
+    });
+  });
+
   it('Visit root and login with Remember Me button disabled', function () {
     cy.get('[data-name=btn_remember]').click();
     cy.get('[data-name="user"]').type('bretto');

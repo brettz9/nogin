@@ -7,6 +7,50 @@ describe('Home', function () {
       NL_EMAIL_PASS, NL_EMAIL_USER
     } = Cypress.env());
   });
+
+  it('Fails with reuse of old token', function () {
+    const url = '/';
+    let tkn;
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    return cy.getToken(url).then((token) => {
+      tkn = token;
+      return cy.request({
+        url,
+        method: 'POST',
+        timeout: 50000,
+        headers: {
+          'X-XSRF-Token': token
+        },
+        body: {
+          user: 'bretto',
+          pass: NL_EMAIL_PASS
+        }
+      });
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    }).then(() => {
+      cy.visit('/');
+
+      const csurfCookie = '_csrf';
+      cy.clearCookie(csurfCookie);
+
+      return cy.request({
+        url,
+        method: 'POST',
+        timeout: 50000,
+        failOnStatusCode: false,
+        headers: {
+          'X-XSRF-Token': tkn
+        },
+        body: {
+          user: 'bretto',
+          pass: NL_EMAIL_PASS
+        }
+      });
+    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+    }).then((resp) => {
+      return expect(resp.status).to.equal(404);
+    });
+  });
   it(
     'Visit Home and be redirected when no session (no post to `/`, ' +
     '`/home` or GET to auto-login at `/` (from previous-set cookie ' +
@@ -285,6 +329,20 @@ describe('Home', function () {
         return cy.log(accts);
       });
     });
+
+    it('Delete user attempt fails without CSRF token', function () {
+      return cy.request({
+        url: '/delete',
+        method: 'POST',
+        timeout: 50000,
+        failOnStatusCode: false
+        // NO `X-XSRF-Token` HEADER
+      // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
+      }).then((resp) => {
+        return expect(resp.status).to.equal(404);
+      });
+    });
+
     it('Problem with deleting (already-logged out) account', function () {
       // E.g., if user cleared their cookies
       cy.clearCookie('login');

@@ -51,7 +51,7 @@ module.exports = async function (app, config) {
     crossDomainJSRedirects,
     opts,
     cwd,
-    disableXSRF,
+    disableXSRF = false,
     csurfOptions
   } = config;
 
@@ -650,6 +650,7 @@ module.exports = async function (app, config) {
 'use strict';
 /* globals IntlDom */
 window.Nogin = {
+  disableXSRF: ${disableXSRF},
   Routes: ${JSON.stringify(routes)},
   _: IntlDom.i18nServer(${JSON.stringify(args)}),
   // Avoid shorthand for compatibility
@@ -777,7 +778,7 @@ window.Nogin = {
       await PostRoutes[route](routes, req, res);
       return;
     }
-    console.log('ERRRRROR1', error);
+    console.log('ERRRRROR1', error, route);
     pageNotFound(_, res);
   });
 
@@ -790,7 +791,7 @@ window.Nogin = {
       await GetRoutes[route](routes, req, res, next);
       return;
     }
-    console.log('ERRRRROR2', error);
+    console.log('ERRRRROR2', error, route);
     pageNotFound(_, res);
   });
 
