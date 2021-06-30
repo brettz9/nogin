@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 2.3.0
 
 ### User-facing
 
