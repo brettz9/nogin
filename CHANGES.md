@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## 2.4.0
+
+- Security update: Update to version of `jquery-form` without XSS or eval
+    vulnerabilities
+
 ## 2.3.0
 
 ### User-facing

@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "author": "Brett Zamir",
   "contributors": [],
@@ -186,7 +186,7 @@
     "intl-dom": "^0.13.4",
     "jamilih": "^0.54.0",
     "jquery": "^3.6.0",
-    "jquery-form": "^4.3.0",
+    "jquery-form": "https://github.com/brettz9/form#xss",
     "jsdom": "^16.6.0",
     "mongodb": "^3.6.9",
     "nodemon": "^2.0.7",
