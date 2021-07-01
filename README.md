@@ -334,6 +334,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
         control or Cloud Storage and a database managing users and privileges)?
     1. **WebSockets** with [express-ws](https://github.com/HenningM/express-ws)
         and [jquery-form](https://github.com/jquery-form/form/issues/582)?
+    1. Optional **captcha** (see signup below)
 1. **Signup/Home pages**
     1. Allow **Multiple choices**
     1. Allow **adding to "Set up new account" fields** (based on a schema?)
