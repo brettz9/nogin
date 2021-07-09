@@ -37,7 +37,7 @@
  * @returns {void}
  */
 function checkAccessibility () {
-  cy.injectAxe2();
+  cy.injectAxe();
   // Configure aXe and test the page at initial load
   cy.configureAxe({
     // Todo: Reenable this accessibility rule when have time to fix
@@ -61,22 +61,6 @@ function checkAccessibility () {
   });
   cy.checkA11y();
 }
-
-// Workaround for https://github.com/component-driven/cypress-axe/issues/73
-Cypress.Commands.add('injectAxe2', () => {
-  // eslint-disable-next-line max-len -- Long
-  // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then -- Testing
-  cy.window({log: false}).then((win) => {
-    // eslint-disable-next-line max-len -- Long
-    // eslint-disable-next-line node/global-require, no-undef -- Works despite file being imported
-    const axe = require('axe-core/axe.js');
-    const script = win.document.createElement('script');
-    // eslint-disable-next-line no-unsanitized/property -- Test environment
-    script.innerHTML = axe.source;
-    win.document.head.append(script);
-    return undefined;
-  });
-});
 
 // Not currently in use, but can use to only
 //  apply accessibility after visiting a page and

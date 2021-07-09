@@ -1,5 +1,16 @@
 # CHANGES for nogin
 
+## ?
+
+### User-facing
+
+- npm: Update express-rate-limit (minor), mongodb (patch), nodemon (patch)
+
+### Dev-facing
+
+- Testing: Remove no longer needed cypress-axe hack
+- npm: Update devDeps.
+
 ## 2.4.0
 
 - Security update: Update to version of `jquery-form` without XSS or eval
