@@ -34,7 +34,7 @@ exports.getLangDir = function (_) {
   };
 };
 
-exports.i18n = function (localesBasePath = 'app/server') {
+exports.i18n = function (localesBasePath = join(__dirname, '../')) {
   return async function (req, res, next = () => { /**/ }) {
     // To reduce memory leaks with our `Map` (which avoids repeated file system
     //   checks), we limit number of locales here, filtering among our existing

@@ -87,7 +87,7 @@ exports.createServer = async function (options) {
     fromText,
     fromURL,
     requireName,
-    localesBasePath = 'app/server',
+    localesBasePath = join(__dirname, 'app/server'),
     useESM,
     noPolyfill,
     postLoginRedirectPath,

@@ -1,9 +1,10 @@
 # CHANGES for nogin
 
-## ?
+## 2.5.0
 
 ### User-facing
 
+- Fix: Default locales path should be relative to nogin project root, not cwd
 - npm: Update express-rate-limit (minor), mongodb (patch), nodemon (patch)
 
 ### Dev-facing
