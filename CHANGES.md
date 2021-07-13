@@ -1,5 +1,15 @@
 # CHANGES for nogin
 
+## 2.5.1
+
+### User-facing
+
+- Fix: Make router path relative to cwd
+
+### Dev-facing
+
+- N/A
+
 ## 2.5.0
 
 ### User-facing

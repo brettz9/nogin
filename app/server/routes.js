@@ -694,7 +694,7 @@ window.Nogin = {
 
   if (router) {
     // eslint-disable-next-line node/global-require, import/no-dynamic-require
-    require(router)(app, opts);
+    require(pathResolve(cwd, router))(app, opts);
   }
 
   /**
