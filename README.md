@@ -74,7 +74,7 @@ npm install nogin
 ```
 
 3. Install the `peerDependencies`. I recommend installing [install-peerdeps](https://www.npmjs.com/package/install-peerdeps)
-    (`npm i -g install-peerdeps`); then `install-peerdeps -d nogin` will
+    (`npm i -g install-peerdeps`); then `install-peerdeps nogin` will
     auto-install the rest.
 
 4. Use `run-p` (which is made available by the `nogin` dependency, `npm-run-all`)
