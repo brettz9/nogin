@@ -627,7 +627,7 @@ module.exports = async function (app, config) {
     const path = '/node_modules/' + mod;
     app.use(
       path,
-      express.static(join(__dirname, '../..' + path))
+      express.static(join(cwd, path))
     );
   });
 

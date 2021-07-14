@@ -1,5 +1,15 @@
 # CHANGES for nogin
 
+## 2.5.3
+
+### User-facing
+
+- Fix: Set up static `node_modules` paths relative to cwd
+
+### Dev-facing
+
+- N/A
+
 ## 2.5.2
 
 ### User-facing
