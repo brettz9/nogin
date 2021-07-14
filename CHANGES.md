@@ -1,5 +1,16 @@
 # CHANGES for nogin
 
+## 2.5.4
+
+### User-facing
+
+- Fix: Ensure `postLoginRedirectPath` is used for client-side post-login
+    redirect.
+
+### Dev-facing
+
+- N/A
+
 ## 2.5.3
 
 ### User-facing

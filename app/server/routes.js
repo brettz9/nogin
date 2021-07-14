@@ -651,6 +651,7 @@ module.exports = async function (app, config) {
 /* globals IntlDom */
 window.Nogin = {
   disableXSRF: ${disableXSRF},
+  postLoginRedirectPath: ${postLoginRedirectPath},
   Routes: ${JSON.stringify(routes)},
   _: IntlDom.i18nServer(${JSON.stringify(args)}),
   // Avoid shorthand for compatibility
@@ -665,10 +666,14 @@ window.Nogin = {
     ? 'true'
     : 'false'};
     if (permittingXDomainRedirects) {
-      location.href = this.Routes[key];
+      location.href = (key === 'home' && this.postLoginRedirectPath) ||
+        this.Routes[key];
       return;
     }
-    location.assign(this.Routes['safe_' + key]);
+    location.assign(
+      (key === 'home' && this.postLoginRedirectPath) ||
+        this.Routes['safe_' + key]
+    );
   }
 };
 `;
