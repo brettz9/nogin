@@ -105,11 +105,8 @@ specifiers:
   uuid: ^8.3.2
 
 dependencies:
-  '@fortawesome/fontawesome-free': 5.15.3
-  '@popperjs/core': 2.9.2
   array-flat-polyfill: 1.0.1
   body-parser: 1.19.0
-  bootstrap: 5.0.2_@popperjs+core@2.9.2
   command-line-basics: 0.8.0
   connect-mongo: 4.4.1
   cookie-parser: 1.4.5
@@ -119,12 +116,9 @@ dependencies:
   express-rate-limit: 5.3.0
   express-session: 1.17.2
   file-fetch: 1.7.0
-  github-fork-ribbon-css: 0.2.3
   helmet: 4.6.0
   intl-dom: 0.13.4
   jamilih: 0.54.0
-  jquery: 3.6.0
-  jquery-form: github.com/brettz9/form/6f65366180b31c49984469ddb1e409f2664a585b
   jsdom: 16.6.0
   mongodb: 3.6.10
   nodemon: 2.0.12
@@ -147,13 +141,16 @@ devDependencies:
   '@cypress/code-coverage': 3.9.9_cypress@7.7.0
   '@cypress/fiddle': 1.19.2
   '@fintechstudios/eslint-plugin-chai-as-promised': 3.1.0
+  '@fortawesome/fontawesome-free': 5.15.3
   '@hkdobrev/run-if-changed': 0.3.1
+  '@popperjs/core': 2.9.2
   '@rollup/plugin-babel': 5.3.0_@babel+core@7.14.6+rollup@2.53.1
   '@rollup/plugin-commonjs': 19.0.0_rollup@2.53.1
   '@rollup/plugin-node-resolve': 13.0.0_rollup@2.53.1
   acorn: 8.4.1
   axe-core: 4.3.0
   babel-plugin-transform-async-to-promises: 0.8.15
+  bootstrap: 5.0.2_@popperjs+core@2.9.2
   chai: 4.3.4
   chai-as-promised: 7.1.1_chai@4.3.4
   command-line-publish: 1.1.0
@@ -188,8 +185,11 @@ devDependencies:
   eslint-plugin-sonarjs: 0.9.1_eslint@7.30.0
   eslint-plugin-standard: 4.1.0_eslint@7.30.0
   eslint-plugin-unicorn: 34.0.1_eslint@7.30.0
+  github-fork-ribbon-css: 0.2.3
   husky: 7.0.1
   integrity-matters: 0.13.2
+  jquery: 3.6.0
+  jquery-form: github.com/brettz9/form/6f65366180b31c49984469ddb1e409f2664a585b
   jsdoc: 3.6.7
   license-badger: 0.19.0
   lint-staged: 11.0.0
@@ -2389,7 +2389,7 @@ packages:
     resolution: {integrity: sha512-rFnSUN/QOtnOAgqFRooTA3H57JLDm0QEG/jPdk+tLQNL/eWd+Aok8g3qCI+Q1xuDPWpGW/i9JySpJVsq8Q0s9w==}
     engines: {node: '>=6'}
     requiresBuild: true
-    dev: false
+    dev: true
 
   /@hkdobrev/run-if-changed/0.3.1:
     resolution: {integrity: sha512-kxu18zdSoTwYpTuwIw4Zsc/cWa+1c/HayXA290TSD97WKBzodntiqm6pPCoXhGDZu2F6/yg5VChJNSjrfMiTSA==}
@@ -2475,7 +2475,7 @@ packages:
 
   /@popperjs/core/2.9.2:
     resolution: {integrity: sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==}
-    dev: false
+    dev: true
 
   /@rollup/plugin-babel/5.3.0_@babel+core@7.14.6+rollup@2.53.1:
     resolution: {integrity: sha512-9uIC8HZOnVLrLHxayq/PTzw+uS25E14KPUBh5ktF+18Mjo5yK0ToMMx6epY0uEgkjwJw0aBW4x2horYXh8juWw==}
@@ -3765,7 +3765,7 @@ packages:
       '@popperjs/core': ^2.9.2
     dependencies:
       '@popperjs/core': 2.9.2
-    dev: false
+    dev: true
 
   /bottleneck/2.19.5:
     resolution: {integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==}
@@ -6994,7 +6994,7 @@ packages:
 
   /github-fork-ribbon-css/0.2.3:
     resolution: {integrity: sha512-cmGBV4sivRwmnteSOkqMjN2cnP5/J1SU5aDCVYsBWHmDokZ/JjwGEkduCxY9IULHdCPpw1WSk5Cy8N1LF6jOEw==}
-    dev: false
+    dev: true
 
   /glob-parent/3.1.0:
     resolution: {integrity: sha1-nmr2KZ2NO9K9QEMIMr0RPfkGxa4=}
@@ -8112,7 +8112,7 @@ packages:
 
   /jquery/3.6.0:
     resolution: {integrity: sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==}
-    dev: false
+    dev: true
 
   /js-levenshtein/1.1.6:
     resolution: {integrity: sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==}
@@ -13469,4 +13469,4 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       jquery: 3.6.0
-    dev: false
+    dev: true

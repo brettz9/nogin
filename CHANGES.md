@@ -1,5 +1,15 @@
 # CHANGES for nogin
 
+## 2.5.2
+
+### User-facing
+
+- Fix: Specify some `peerDependencies` needed relative to root
+
+### Dev-facing
+
+- N/A
+
 ## 2.5.1
 
 ### User-facing
