@@ -9,7 +9,7 @@
 
 ### Dev-facing
 
-- N/A
+- Refactor: Use builtin async API for sending email
 
 ## 2.5.3
 
