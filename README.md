@@ -73,7 +73,11 @@ flags rather than environmental variables.
 npm install nogin
 ```
 
-3. Use `run-p` (which is made available by the `nogin` dependency, `npm-run-all`)
+3. Install the `peerDependencies`. I recommend installing [install-peerdeps](https://www.npmjs.com/package/install-peerdeps)
+    (`npm i -g install-peerdeps`); then `install-peerdeps -d nogin` will
+    auto-install the rest.
+
+4. Use `run-p` (which is made available by the `nogin` dependency, `npm-run-all`)
     along with two of your own `package.json` scripts, one of which to start
     the mongo database, and the other to start the nogin server (note that
     `nodemon` is also provided as a dependency, so you could add that to
