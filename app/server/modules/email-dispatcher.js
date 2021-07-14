@@ -1,7 +1,5 @@
 'use strict';
 
-const {promisify} = require('util');
-
 const {SMTPClient} = require('emailjs');
 
 // Todo: Reenable when getting dominum working
@@ -59,7 +57,6 @@ class EmailDispatcher {
       // Todo: Make configurable
       ssl: true
     });
-    this.smtpClient.send = promisify(this.smtpClient.send);
   }
 
   /**
@@ -77,7 +74,7 @@ class EmailDispatcher {
    */
   dispatchResetPasswordLink (account, cfg, _, langDir) {
     const attachment = this.composeResetPasswordEmail(account, cfg, _, langDir);
-    return this.smtpClient.send({
+    return this.smtpClient.sendAsync({
       from: this.NL_EMAIL_FROM,
       to: account.email,
       subject: _('PasswordReset'),
@@ -134,7 +131,7 @@ class EmailDispatcher {
    */
   dispatchActivationLink (account, cfg, _, langDir) {
     const attachment = this.composeActivationEmail(account, cfg, _, langDir);
-    return this.smtpClient.send({
+    return this.smtpClient.sendAsync({
       from: this.NL_EMAIL_FROM,
       to: account.email,
       subject: _('AccountActivation'),
