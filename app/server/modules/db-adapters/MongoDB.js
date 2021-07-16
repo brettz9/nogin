@@ -44,10 +44,7 @@ class MongoDB extends DBAbstraction {
 
     // For connect method: https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html#.connect
     // For client object: https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html
-    this.connection = await MongoClient.connect(DB_URL, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true
-    });
+    this.connection = await MongoClient.connect(DB_URL, {});
 
     // For db method: https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html#db
     // For db object: https://mongodb.github.io/node-mongodb-native/3.4/api/Db.html
