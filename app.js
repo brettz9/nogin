@@ -184,8 +184,6 @@ exports.createServer = async function (options) {
     store: MongoStore.create({
       mongoUrl: DB_URL,
       mongoOptions: {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
       }
     }),
     cookie: parseCLIJSON(sessionCookieOptions),
