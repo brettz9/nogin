@@ -196,7 +196,7 @@
     "nodemon": "^2.0.12",
     "npm-run-all": "^4.1.5",
     "promise.allsettled": "^1.0.4",
-    "rtl-detect": "^1.0.3",
+    "rtl-detect": "^1.0.4",
     "safe-compare": "^1.1.4",
     "stylus": "^0.54.8",
     "uuid": "^8.3.2"
@@ -217,10 +217,10 @@
     "@hkdobrev/run-if-changed": "^0.3.1",
     "@popperjs/core": "2.9.2",
     "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-commonjs": "^19.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.2",
     "acorn": "^8.4.1",
-    "axe-core": "^4.3.0",
+    "axe-core": "^4.3.1",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
     "bootstrap": "^5.0.2",
     "chai": "^4.3.4",
@@ -264,7 +264,7 @@
     "jquery-form": "https://github.com/brettz9/form#xss",
     "jsdoc": "^3.6.7",
     "license-badger": "^0.19.0",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^11.0.1",
     "mocha": "^9.0.2",
     "mocha-badge-generator": "^0.9.0",
     "mocha-multi-reporters": "^1.5.1",
@@ -277,9 +277,9 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.53.1",
+    "rollup": "^2.53.2",
     "rollup-plugin-terser": "^7.0.2",
-    "snyk": "^1.658.0",
+    "snyk": "^1.662.0",
     "stop-only": "^3.1.0"
   }
 }
