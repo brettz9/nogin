@@ -1,6 +1,6 @@
 // If we decide to expose this to the non-testing API (CLI, server,
 //   or programmatic) of db-basic, we will need coverage
-import {getAccountManager} from '../../app/server/modules/db-basic.js';
+import {getAccountManager} from '../server/modules/db-basic.js';
 
 /**
 * @typedef {DbConfig} GenerateLoginOptionDefinitions

@@ -1,5 +1,16 @@
 # CHANGES for nogin
 
+## 2.6.0
+
+### User-facing
+
+- Enhancement: Expose `public-test/utils/db-basic-testing-extensions.js` for
+    importing by other nogin-based Cypress tests
+
+### Dev-facing
+
+- npm: Update devDeps, including patched `rtl-detect`
+
 ## 2.5.4
 
 ### User-facing

@@ -161,6 +161,11 @@ module.exports = {
     },
     rules
   }, {
+    files: 'app/public-test-utils/*',
+    extends: [
+      'ash-nazg/sauron-node'
+    ]
+  }, {
     files: [
       'app/public/js/controllers/*.js',
       'app/public/js/form-validators/**',
