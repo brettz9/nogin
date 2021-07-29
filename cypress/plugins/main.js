@@ -34,7 +34,7 @@ import {
 
 import {
   generateLoginKeys, generatePasswordKey
-} from '../../app/public-test-utils/db-basic-testing-extensions.js';
+} from '../../app/public-test-utils/db-basic-testing-extensions.cjs';
 
 import noginConfig from '../../nogin.js';
 
