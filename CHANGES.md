@@ -1,5 +1,12 @@
 # CHANGES for nogin
 
+## 2.6.1
+
+### User-facing
+
+- Fix: Change new tester to CJS file:
+    `public-test/utils/db-basic-testing-extensions.cjs`
+
 ## 2.6.0
 
 ### User-facing

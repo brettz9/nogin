@@ -162,8 +162,11 @@ module.exports = {
     rules
   }, {
     files: 'app/public-test-utils/*',
+    env: {
+      browser: false
+    },
     extends: [
-      'ash-nazg/sauron-node'
+      'ash-nazg/sauron-node-script'
     ]
   }, {
     files: [
