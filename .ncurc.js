@@ -13,7 +13,7 @@ module.exports = {
     // Wait until `connect-mongo` may update too: https://github.com/jdesboeufs/connect-mongo/issues/426
     'mongodb',
 
-    // Todo[bootstrap@>5.0.2]: Update only if bootstrap updates the
+    // Todo[bootstrap@>5.1.0]: Update only if bootstrap updates the
     //  version; see https://github.com/twbs/bootstrap/blob/master/config.yml
     '@popperjs/core'
   ]

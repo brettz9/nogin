@@ -1,5 +1,12 @@
 # CHANGES for nogin
 
+## 2.7.0
+
+- Linting: Update Cypress/bootstrap expectations
+- Update: Update versions in `integrityMap.json`
+- npm: Update jsdom (minor)
+- npm: Update peerDeps/devDeps.
+
 ## 2.6.1
 
 ### User-facing

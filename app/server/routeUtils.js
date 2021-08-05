@@ -66,7 +66,7 @@ const layoutAndTitleGetter = (config, jml) => {
   // See https://github.com/jquery-form/form for CDN SHA
   // todo: Update SHA (and path(s) if necessary) for jquery-form
 
-  // Todo[bootstrap@>5.0.2]: Update SHA (and path(s) if necessary) for
+  // Todo[bootstrap@>5.1.0]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
   //   https://github.com/twbs/bootstrap/blob/main/config.yml
@@ -231,6 +231,7 @@ function routeGetter (customRoute) {
   /**
    * @type {CustomRouteObject}
    */
+  // eslint-disable-next-line unicorn/prefer-object-from-entries -- Nested
   const customRoutesObj = customRoute.reduce((routes, routeInfo) => {
     const [locale, route, path] = routeInfo.split('=');
     if (!routes[locale]) {
@@ -257,6 +258,8 @@ function routeGetter (customRoute) {
       'root', 'logout', 'home', 'signup', 'activation',
       'lostPassword', 'resetPassword', 'users', 'delete',
       'reset', 'coverage'
+    // eslint-disable-next-line max-len -- Long
+    // eslint-disable-next-line unicorn/prefer-object-from-entries -- Setting multiple
     ].reduce((o, route) => {
       const i18nRoute = _(`route_${route}`);
       o[route] = (
