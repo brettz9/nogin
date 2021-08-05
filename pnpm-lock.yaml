@@ -44,7 +44,7 @@ specifiers:
   es-file-traverse: ^0.12.2
   escape-string-regexp: ^5.0.0
   eslint: ^7.32.0
-  eslint-config-ash-nazg: 31.2.0
+  eslint-config-ash-nazg: 31.2.1
   eslint-config-standard: ^16.0.3
   eslint-plugin-array-func: ^3.1.7
   eslint-plugin-chai-expect: ^2.2.0
@@ -166,7 +166,7 @@ devDependencies:
   es-file-traverse: 0.12.2_692e8793b56a041678d85d317b6c7b37
   escape-string-regexp: 5.0.0
   eslint: 7.32.0
-  eslint-config-ash-nazg: 31.2.0_d8ae64f345c9a614f59522f84e80e6b5
+  eslint-config-ash-nazg: 31.2.1_d8ae64f345c9a614f59522f84e80e6b5
   eslint-config-standard: 16.0.3_3062fa9fac81ca2e86f20e6f3c8ea22d
   eslint-plugin-array-func: 3.1.7_eslint@7.32.0
   eslint-plugin-chai-expect: 2.2.0_eslint@7.32.0
@@ -5859,8 +5859,8 @@ packages:
       source-map: 0.6.1
     dev: false
 
-  /eslint-config-ash-nazg/31.2.0_d8ae64f345c9a614f59522f84e80e6b5:
-    resolution: {integrity: sha512-xTDAAKPkB/zTg8kaPGcYNyIrs0wz0xCQ0Jy/g8JhKgoOXxUuc8YYF8m3rgQKR0pCbBN0pcU23c89s2DHACTMKQ==}
+  /eslint-config-ash-nazg/31.2.1_d8ae64f345c9a614f59522f84e80e6b5:
+    resolution: {integrity: sha512-11dnR7j8b/hTDEVurAeYT2V6f3+KCv66T6/kLJkX84TitFnK5VJtuAVbFKddhmyLY3WKJp2ui1I8XfvPqShHCw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       '@brettz9/eslint-plugin': ^1.0.3

@@ -231,7 +231,6 @@ function routeGetter (customRoute) {
   /**
    * @type {CustomRouteObject}
    */
-  // eslint-disable-next-line unicorn/prefer-object-from-entries -- Nested
   const customRoutesObj = customRoute.reduce((routes, routeInfo) => {
     const [locale, route, path] = routeInfo.split('=');
     if (!routes[locale]) {
@@ -258,8 +257,6 @@ function routeGetter (customRoute) {
       'root', 'logout', 'home', 'signup', 'activation',
       'lostPassword', 'resetPassword', 'users', 'delete',
       'reset', 'coverage'
-    // eslint-disable-next-line max-len -- Long
-    // eslint-disable-next-line unicorn/prefer-object-from-entries -- Setting multiple
     ].reduce((o, route) => {
       const i18nRoute = _(`route_${route}`);
       o[route] = (

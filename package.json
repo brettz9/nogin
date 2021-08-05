@@ -238,7 +238,7 @@
     "es-file-traverse": "^0.12.2",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^7.32.0",
-    "eslint-config-ash-nazg": "31.2.0",
+    "eslint-config-ash-nazg": "31.2.1",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-array-func": "^3.1.7",
     "eslint-plugin-chai-expect": "^2.2.0",
