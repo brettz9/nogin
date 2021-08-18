@@ -1,10 +1,26 @@
 # CHANGES for nogin
 
+## ?
+
+### User-facing
+
+- npm: Update `connect-mongo` (minor), `jsdom` (major)
+
+### Dev-facing
+
+- Linting: As per latest ash-nazg
+- npm: Update devDeps.
+
 ## 2.7.0
 
-- Linting: Update Cypress/bootstrap expectations
+### User-facing
+
 - Update: Update versions in `integrityMap.json`
 - npm: Update jsdom (minor)
+
+### Dev-facing
+
+- Linting: Update Cypress/bootstrap expectations
 - npm: Update peerDeps/devDeps.
 
 ## 2.6.1
