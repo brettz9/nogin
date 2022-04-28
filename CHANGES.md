@@ -1,9 +1,10 @@
 # CHANGES for nogin
 
-## ?
+## 3.0.0 (unreleased)
 
 ### User-facing
 
+- BREAKING: Requires Node 14+
 - npm: Update `connect-mongo` (minor), `jsdom` (major)
 
 ### Dev-facing

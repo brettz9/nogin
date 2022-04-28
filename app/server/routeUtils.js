@@ -126,8 +126,7 @@ const layoutAndTitleGetter = (config, jml) => {
           ...businessLogicArgs
         };
 
-        // eslint-disable-next-line max-len
-        // eslint-disable-next-line node/global-require, import/no-dynamic-require
+        // eslint-disable-next-line n/global-require, import/no-dynamic-require
         const injectedHTML = injectHTML ? require(injectHTML)(cfg) : {};
         if (injectHTML) {
           Object.entries(injectedHTML).forEach(([prop, val]) => {

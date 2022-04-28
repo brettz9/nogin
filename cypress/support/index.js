@@ -19,7 +19,6 @@ import './commands.js';
 // Alternatively you can use CommonJS syntax:
 // require('./commands.js')
 
-/* eslint-disable jsdoc/check-examples -- Apparent ESLint bug */
 /**
  * FIDDLE
  * Adds "cy.runExample()" custom command
@@ -32,7 +31,6 @@ import './commands.js';
  * import {testExamples} from '@cypress/fiddle';
  */
 import '@cypress/fiddle';
-/* eslint-enable jsdoc/check-examples -- Apparent ESLint bug */
 
 /**
  * COVERAGE.

@@ -9,7 +9,7 @@ const jsdom = require('jamilih/dist/jml-jsdom.js');
 const jml = jsdom.default;
 
 module.exports = function (filePath, options, callback) {
-  // eslint-disable-next-line node/global-require, import/no-dynamic-require
+  // eslint-disable-next-line n/global-require, import/no-dynamic-require
   const template = require(filePath);
 
   let rendered;

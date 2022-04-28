@@ -13,6 +13,7 @@ module.exports = ({
       {$DOCTYPE: {name: 'html'}},
       ['html', langDir, [
         ['head', [
+          // eslint-disable-next-line unicorn/text-encoding-identifier-case -- Required with hyphen
           ['meta', {charset: 'utf-8'}],
           ...(csrfToken
             ? [

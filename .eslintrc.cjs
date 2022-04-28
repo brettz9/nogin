@@ -3,6 +3,7 @@
 const rules = {
   'import/no-commonjs': 0,
   'import/unambiguous': 0,
+  'max-len': 'error',
 
   // Disable for now
   'eslint-comments/require-description': 0,
@@ -74,7 +75,7 @@ module.exports = {
       'compat/compat': 0,
       'import/no-commonjs': 0,
       'no-console': 0,
-      'node/exports-style': 0,
+      'n/exports-style': 0,
 
       // Disable for now
       'eslint-comments/require-description': 0
@@ -90,8 +91,8 @@ module.exports = {
   }, {
     files: ['**/*.md/*.js'],
     rules: {
-      'node/no-unsupported-features/es-syntax': 'off',
-      'node/no-unpublished-import': 'off'
+      'n/no-unsupported-features/es-syntax': 'off',
+      'n/no-unpublished-import': 'off'
     }
   }, {
     files: [
@@ -222,7 +223,7 @@ module.exports = {
 
       'import/no-commonjs': 0,
       'no-console': 0,
-      'node/exports-style': 0
+      'n/exports-style': 0
     }
   }, {
     files: [

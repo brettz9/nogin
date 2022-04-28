@@ -63,13 +63,14 @@ case 'add':
       : 'en-US';
 
     try {
-      // eslint-disable-next-line node/global-require
+      // eslint-disable-next-line n/global-require
       const manageAccounts = require('./manage-accounts.js');
       await manageAccounts(verb, {loggerLocale});
     } catch (err) {
       const errorLogger = await getLogger({loggerLocale, errorLog: true});
       errorLogger('Erred', null, err);
     }
+    // eslint-disable-next-line n/no-process-exit -- Check if needed
     process.exit();
   })();
   break;

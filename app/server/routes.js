@@ -2,11 +2,8 @@
 
 const {join, resolve: pathResolve} = require('path');
 
-// Todo[engine:node@>12.9.0]: Remove `Promise.allSettled` polyfill (or
-//  forego this and don't i18nize server responses (do on client) or
+// Could forego this and don't i18nize server responses (do on client) or
 //  cache the locales)
-// eslint-disable-next-line node/no-unsupported-features/es-builtins
-Promise.allSettled = require('promise.allsettled/polyfill')();
 
 const express = require('express');
 const jsdom = require('jamilih/dist/jml-jsdom.js');
@@ -61,7 +58,7 @@ module.exports = async function (app, config) {
     ? Array.isArray(config.countryCodes)
       ? config.countryCodes
       : JSON.parse(config.countryCodes)
-    // eslint-disable-next-line node/global-require
+    // eslint-disable-next-line n/global-require
     : require('./modules/country-codes.json');
 
   const composeResetPasswordEmailConfig = {
@@ -114,15 +111,13 @@ module.exports = async function (app, config) {
     composeResetPasswordEmailView:
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'
-        // eslint-disable-next-line max-len
-        // eslint-disable-next-line node/global-require, import/no-dynamic-require
+        // eslint-disable-next-line n/global-require, import/no-dynamic-require
         ? require(pathResolve(cwd, composeResetPasswordEmailView))
         : undefined,
     composeActivationEmailView:
       composeActivationEmailView &&
         typeof composeActivationEmailView === 'string'
-        // eslint-disable-next-line max-len
-        // eslint-disable-next-line node/global-require, import/no-dynamic-require
+        // eslint-disable-next-line n/global-require, import/no-dynamic-require
         ? require(pathResolve(cwd, composeActivationEmailView))
         : undefined
   });
@@ -346,7 +341,6 @@ module.exports = async function (app, config) {
             // istanbul ignore next
             accounts = []
         }
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.getAllRecords()
@@ -499,7 +493,6 @@ module.exports = async function (app, config) {
       const {name, email, user, pass, country} = req.body;
       const [
         {value: _}, {status, reason: error, value: o}
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.addNewAccount({
@@ -535,7 +528,6 @@ module.exports = async function (app, config) {
       const {email} = req.body;
       const [
         {value: _}, {status, reason: error, value: account}
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.generatePasswordKey(email, req.ip)
@@ -572,7 +564,6 @@ module.exports = async function (app, config) {
       req.session.destroy();
       const [
         {value: _}, {value: o}
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.updatePassword(passKey, newPass)
@@ -590,7 +581,6 @@ module.exports = async function (app, config) {
     async delete (routes, req, res) {
       const [
         {value: _}, {status}
-        // eslint-disable-next-line node/no-unsupported-features/es-builtins
       ] = await Promise.allSettled([
         setI18n(req, res),
         req.session.user
@@ -638,7 +628,7 @@ module.exports = async function (app, config) {
     // See https://github.com/cypress-io/code-coverage
 
     // ADD APP
-    // eslint-disable-next-line node/no-unpublished-require, node/global-require
+    // eslint-disable-next-line n/no-unpublished-require, n/global-require
     require('@cypress/code-coverage/middleware/express.js')(app);
   }
 
@@ -698,7 +688,7 @@ window.Nogin = {
   });
 
   if (router) {
-    // eslint-disable-next-line node/global-require, import/no-dynamic-require
+    // eslint-disable-next-line n/global-require, import/no-dynamic-require
     require(pathResolve(cwd, router))(app, opts);
   }
 

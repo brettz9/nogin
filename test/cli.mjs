@@ -24,7 +24,7 @@ import {
 import spawnPromise from './utilities/spawnPromise.mjs';
 
 const addUsersJSON = JSON.parse(await readFile(
-  new URL('./fixtures/addUsers.json', import.meta.url)
+  new URL('fixtures/addUsers.json', import.meta.url)
 ));
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -939,7 +939,7 @@ describe('CLI', function () {
     this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
-        // eslint-disable-next-line node/no-process-env -- Testing env.
+        // eslint-disable-next-line n/no-process-env -- Testing env.
         ...process.env,
         NODE_ENV: 'production'
       }
@@ -958,7 +958,7 @@ describe('CLI', function () {
     this.timeout(40000);
     const {stdout, stderr} = await spawnPromise(cliPath, {
       env: {
-        // eslint-disable-next-line node/no-process-env -- Testing env.
+        // eslint-disable-next-line n/no-process-env -- Testing env.
         ...process.env,
         NODE_ENV: 'production'
       }

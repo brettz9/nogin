@@ -99,7 +99,7 @@ const exprt = (on, config) => {
 
   // We want `process.env` for login credentials
   // Default in the same way as `app.get('env')`
-  // eslint-disable-next-line node/no-process-env
+  // eslint-disable-next-line n/no-process-env
   config.env.env = process.env.NODE_ENV || 'development';
 
   // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
@@ -489,7 +489,7 @@ const exprt = (on, config) => {
     }
   });
 
-  // // eslint-disable-next-line node/global-require
+  // // eslint-disable-next-line n/global-require
   // on('file:preprocessor', require('@cypress/code-coverage/use-babelrc'));
 
   // https://docs.cypress.io/api/plugins/preprocessors-api.html#File-object

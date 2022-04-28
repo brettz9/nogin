@@ -58,7 +58,7 @@ const {getAccountManager} = require('../server/modules/db-basic.js');
   );
 };
 
-/* eslint-disable node/exports-style -- Individual items */
+/* eslint-disable n/exports-style -- Individual items */
 exports.generateLoginKeys = generateLoginKeys;
 exports.generatePasswordKey = generatePasswordKey;
-/* eslint-enable node/exports-style -- Individual items */
+/* eslint-enable n/exports-style -- Individual items */

@@ -122,7 +122,8 @@ describe('Home', function () {
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then(({html, subject, emailDisabled}) => {
         if (emailDisabled) {
-          // eslint-disable-next-line promise/no-return-wrap
+          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
         // A bit of redundancy with `hasEmail`, but we want to get the link too
@@ -138,19 +139,22 @@ describe('Home', function () {
         const {activationCode} = (match || {groups: {}}).groups;
         expect(activationCode).to.be.ok;
         cy.visit('/activation?c=' + encodeURIComponent(activationCode));
-        // eslint-disable-next-line promise/no-return-wrap
+        // eslint-disable-next-line max-len -- Too long
+        // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
         return Promise.resolve(false);
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then((emailDisabled) => {
         if (emailDisabled) {
-          // eslint-disable-next-line promise/no-return-wrap
+          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
         return cy.task('getRecords', {user: ['bretto']});
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then((accts) => {
         if (accts === true) {
-          // eslint-disable-next-line promise/no-return-wrap
+          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
         const {user, name, country, email} = accts[0];
@@ -209,7 +213,8 @@ describe('Home', function () {
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(({html, subject, emailDisabled}) => {
           if (emailDisabled) {
-            // eslint-disable-next-line promise/no-return-wrap
+            // eslint-disable-next-line max-len -- Too long
+            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
           // A bit of redundancy with `hasEmail`, but we want to get
@@ -236,19 +241,22 @@ describe('Home', function () {
           cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
             'The activation code provided was invalid.'
           );
-          // eslint-disable-next-line promise/no-return-wrap
+          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(false);
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then((emailDisabled) => {
           if (emailDisabled) {
-            // eslint-disable-next-line promise/no-return-wrap
+            // eslint-disable-next-line max-len -- Too long
+            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
           return cy.task('getRecords', {user: ['bretto']});
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then((accts) => {
           if (accts === true) {
-            // eslint-disable-next-line promise/no-return-wrap
+            // eslint-disable-next-line max-len -- Too long
+            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
           const {user, name, country, email, unactivatedEmail} = accts[0];

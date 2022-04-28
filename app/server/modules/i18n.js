@@ -41,7 +41,7 @@ exports.i18n = function (localesBasePath = join(__dirname, '../')) {
     //   locales (even though our i18n can handle bad locales)
     const locales = req.acceptsLanguages().map((locale) => {
       return getMatchingLocale({locale, locales: availableLocales});
-    }).filter((locale) => locale);
+    }).filter(Boolean);
 
     const langKey = JSON.stringify(locales);
     let _;
