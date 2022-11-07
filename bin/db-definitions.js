@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = [
+const dbDefinitions = [
   {
     name: 'DB_NAME', alias: 'n', type: String,
     description: 'Database name; defaults to "nogin"',
@@ -8,7 +6,7 @@ module.exports = [
   },
   {
     name: 'DB_HOST', alias: 't', type: String,
-    description: 'Database host; defaults to "localhost"',
+    description: 'Database host; defaults to "127.0.0.1"',
     typeLabel: '{underline host}'
   },
   {
@@ -27,3 +25,5 @@ module.exports = [
     typeLabel: '{underline password}'
   }
 ];
+
+export default dbDefinitions;

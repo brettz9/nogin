@@ -1,6 +1,4 @@
-'use strict';
-
-const MongoDB = require('./db-adapters/MongoDB.js');
+import MongoDB from './db-adapters/MongoDB.js';
 
 /**
 * @typedef {PlainObject} DbConfig
@@ -27,7 +25,7 @@ const DBFactory = {
   getDefaults (options) {
     return {
       DB_NAME: 'nogin',
-      DB_HOST: 'localhost',
+      DB_HOST: '127.0.0.1',
       DB_PORT: 27017,
       adapter: 'mongodb',
       ...options
@@ -64,4 +62,4 @@ const DBFactory = {
   }
 };
 
-module.exports = DBFactory;
+export default DBFactory;

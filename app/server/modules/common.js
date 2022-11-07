@@ -1,6 +1,4 @@
-'use strict';
-
-const {v4: uuid} = require('uuid');
+import {v4 as uuid} from 'uuid';
 
 const isNullish = (o) => o === null || o === undefined;
 
@@ -19,7 +17,4 @@ const parseCLIJSON = (opts) => {
     : opts;
 };
 
-exports.isNullish = isNullish;
-exports.uuid = uuid;
-exports.hasOwn = hasOwn;
-exports.parseCLIJSON = parseCLIJSON;
+export {isNullish, uuid, hasOwn, parseCLIJSON};

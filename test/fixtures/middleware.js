@@ -1,5 +1,4 @@
-'use strict';
-module.exports = function (opts) {
+const middleware = function (opts) {
   return function (req, res, next) {
     // Testing wasn't picking up logging, so we'll set headers
     res.header('x-middleware-gets-options', opts.favicon);
@@ -7,3 +6,5 @@ module.exports = function (opts) {
     next();
   };
 };
+
+export default middleware;

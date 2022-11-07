@@ -1,11 +1,11 @@
-/* eslint-disable n/global-require */
-'use strict';
+import alert from './modals/alert.js';
+import resetPasswordModal from './modals/reset-password.js';
 
-module.exports = function ({_, layout}) {
+const resetPassword = ({_, layout}) => {
   return layout({
     content: [
-      require('./modals/reset-password.js')({_}),
-      require('./modals/alert.js')({_})
+      resetPasswordModal({_}),
+      alert({_})
     ],
     scripts: [
       ['script', {
@@ -15,3 +15,5 @@ module.exports = function ({_, layout}) {
     ]
   });
 };
+
+export default resetPassword;

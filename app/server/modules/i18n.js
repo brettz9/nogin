@@ -1,11 +1,12 @@
-'use strict';
+import {readdirSync} from 'fs';
+import {join} from 'path';
+import {JSDOM} from 'jsdom';
+import {i18n as intl, getMatchingLocale, setFetch, setDocument} from 'intl-dom';
+import fileFetch from 'file-fetch'; // For `intl-dom`
+import rtlDetect from 'rtl-detect';
+import getDirname from './getDirname.js';
 
-const {readdirSync} = require('fs');
-const {join} = require('path');
-const {JSDOM} = require('jsdom');
-const {i18n, getMatchingLocale, setFetch, setDocument} = require('intl-dom');
-const fileFetch = require('file-fetch'); // For `intl-dom`
-const rtlDetect = require('rtl-detect');
+const __dirname = getDirname(import.meta.url);
 
 setFetch(fileFetch);
 setDocument((new JSDOM()).window.document);
@@ -24,7 +25,7 @@ const availableLocales = readdirSync(join(__dirname, '../_locales'));
  * @param {Internationalizer} _
  * @returns {LanguageDirection}
  */
-exports.getLangDir = function (_) {
+const getLangDir = function (_) {
   const lang = _.resolvedLocale;
   // Don't bother to make default of "ltr" explicit
   const dir = rtlDetect.isRtlLang() ? rtlDetect.getLangDir(lang) : undefined;
@@ -34,7 +35,7 @@ exports.getLangDir = function (_) {
   };
 };
 
-exports.i18n = function (localesBasePath = join(__dirname, '../')) {
+const i18n = function (localesBasePath = join(__dirname, '../')) {
   return async function (req, res, next = () => { /**/ }) {
     // To reduce memory leaks with our `Map` (which avoids repeated file system
     //   checks), we limit number of locales here, filtering among our existing
@@ -52,7 +53,7 @@ exports.i18n = function (localesBasePath = join(__dirname, '../')) {
       _ = localeMaps[localesBasePath].get(langKey);
     } else {
       // Todo: Set this on req and genuinely use as middleware
-      _ = await i18n({
+      _ = await intl({
         // Detects locale from `req.headers['accept-language']` and
         //   requires appropriate i18n file; this is for Express;
         //   for non-Express, could use https://github.com/florrain/locale
@@ -72,3 +73,5 @@ exports.i18n = function (localesBasePath = join(__dirname, '../')) {
     return _;
   };
 };
+
+export {getLangDir, i18n};

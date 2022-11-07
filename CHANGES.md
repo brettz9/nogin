@@ -1,16 +1,24 @@
 # CHANGES for nogin
 
-## 3.0.0 (unreleased)
+## 3.0.0
 
 ### User-facing
 
 - BREAKING: Requires Node 14+
-- npm: Update `connect-mongo` (minor), `jsdom` (major)
+- chore: Update `body-parser` (minor), `command-line-basics` (major),
+    `connect-mongo` (minor), `cookie-parser` (patch), `emailjs` (major),
+    `express` (minor), `express-rate-limit` (major), `express-session` (patch),
+    `helmet` (major), `intl-dom` (minor), `jsdom` (major), `mongodb` (major),
+    `nodemon` (patch), `stylus` (minor), `uuid` (major)
+- fix: switches localhost to 127.0.0.1 to avoid conflicts with Node 17+ using
+    ipv6 with localhost by default and not matching mongodb
 
 ### Dev-facing
 
-- Linting: As per latest ash-nazg
-- npm: Update devDeps.
+- feat: switch to ESM
+- test: test grouping
+- chore: As per latest ash-nazg, cypress
+- chore: Update devDeps.
 
 ## 2.7.0
 

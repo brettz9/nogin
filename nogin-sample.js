@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+const nogin = {
   fromText: 'brettz9',
   fromURL: 'https://github.com/brettz9/nogin',
   secret: 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4',
@@ -11,3 +9,5 @@ module.exports = {
   NL_SITE_URL: 'https://example.name',
   NS_EMAIL_TIMEOUT: 50000
 };
+
+export default nogin;

@@ -1,17 +1,15 @@
-'use strict';
-
-const {SMTPClient} = require('emailjs');
+// eslint-disable-next-line import/no-unresolved -- https://github.com/import-js/eslint-plugin-import/issues/2495
+import {SMTPClient} from 'emailjs';
 
 // Todo: Reenable when getting dominum working
-// const jml = require('jamilih/dist/jml-dominum.js').default;
-const jml = require('jamilih/dist/jml-jsdom.js').default;
+// import JML from 'jamilih/dist/jml-dominum.js';
+// const jml = JML.default;
+import {jml} from 'jamilih/dist/jml-jsdom.js';
 
-const composeResetPasswordEmailViewDefault = require(
-  '../views/composeResetPasswordEmail.js'
-);
-const composeActivationEmailViewDefault = require(
-  '../views/composeActivationEmail.js'
-);
+import composeResetPasswordEmailViewDefault from
+  '../views/composeResetPasswordEmail.js';
+import composeActivationEmailViewDefault from
+  '../views/composeActivationEmail.js';
 
 /**
 * @typedef {PlainObject} EmailDispatcherConfig
@@ -161,4 +159,4 @@ class EmailDispatcher {
   }
 }
 
-module.exports = EmailDispatcher;
+export default EmailDispatcher;

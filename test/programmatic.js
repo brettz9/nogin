@@ -12,7 +12,7 @@ import {
 import AccountManager from '../app/server/modules/account-manager.js';
 import DBAbstraction from '../app/server/modules/db-abstraction.js';
 import DBFactory from '../app/server/modules/db-factory.js';
-import cryptoNL from '../app/server/modules/crypto.js';
+import * as cryptoNL from '../app/server/modules/crypto.js';
 import {i18n as setI18n} from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
@@ -48,6 +48,7 @@ describe('Programmatic', function () {
       });
     });
   });
+
   describe('addAccounts', function () {
     it('add (erring due to missing pass)', function () {
       return expect(
@@ -73,6 +74,7 @@ describe('Programmatic', function () {
       );
     });
   });
+
   describe('validUserPassword', function () {
     beforeEach(async () => {
       await removeAccounts({all: true});
@@ -86,6 +88,7 @@ describe('Programmatic', function () {
       });
       console.log('done before');
     });
+
     it('throws with bad password', function () {
       return expect(
         validUserPassword({
@@ -99,6 +102,7 @@ describe('Programmatic', function () {
       );
     });
   });
+
   describe('AccountManager', function () {
     it(
       'AccountManager with bad `adapter` (passed to ' +
@@ -113,6 +117,7 @@ describe('Programmatic', function () {
         );
       }
     );
+
     it('AccountManager with no log', async function () {
       this.timeout(30000);
       const _ = await setI18n({
@@ -126,7 +131,7 @@ describe('Programmatic', function () {
             'mongodb',
             false,
             {
-              DB_HOST: 'localhost',
+              DB_HOST: '127.0.0.1',
               DB_PORT: 27017,
               DB_NAME: 'nogin'
             }
@@ -157,7 +162,7 @@ describe('Programmatic', function () {
             {
               DB_USER: 'bretttest',
               DB_PASS: '123456',
-              DB_HOST: 'localhost',
+              DB_HOST: '127.0.0.1',
               DB_PORT: 27018,
               DB_NAME: 'nogin'
             }

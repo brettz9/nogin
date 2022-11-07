@@ -1,9 +1,8 @@
-/* eslint-disable n/global-require */
-'use strict';
+import formErrors from './modals/form-errors.js';
 
-module.exports = function ({
+const account = ({
   _, user, countries, emailPattern, requireName, title
-}) {
+}) => {
   return [
     // store the `userId` on the client side in a hidden input field
     ['input', {type: 'hidden', id: 'userId', defaultValue: user._id}],
@@ -154,6 +153,8 @@ module.exports = function ({
     ]],
 
     // display form errors in a custom modal window
-    require('./modals/form-errors.js')({_})
+    formErrors({_})
   ];
 };
+
+export default account;

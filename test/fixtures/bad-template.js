@@ -3,4 +3,4 @@ const badTemplate = [
   null
 ];
 
-module.exports = badTemplate;
+export default badTemplate;

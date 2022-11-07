@@ -1,7 +1,6 @@
-'use strict';
-module.exports = function ({
+const composeActivationEmail = ({
   _, langDir, jml, baseurl, name, user, activationCode, fromText, fromURL
-}) {
+}) => {
   return {$document: {
     childNodes: [
       ['html', langDir, [
@@ -30,3 +29,5 @@ module.exports = function ({
     ]
   }};
 };
+
+export default composeActivationEmail;

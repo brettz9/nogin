@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_}) {
+const resetPassword = ({_}) => {
   return ['div', {id: 'set-password', class: 'modal', role: 'main'}, [
     ['div', {
       class: 'modal-dialog', role: 'dialog',
@@ -53,3 +51,5 @@ module.exports = function ({_}) {
     ]]
   ]];
 };
+
+export default resetPassword;

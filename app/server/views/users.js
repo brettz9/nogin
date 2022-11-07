@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_, layout, accounts}) {
+const users = ({_, layout, accounts}) => {
   return layout({
     content: [
       ['div', {
@@ -37,3 +35,5 @@ module.exports = function ({_, layout, accounts}) {
     ]
   });
 };
+
+export default users;

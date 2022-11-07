@@ -1,7 +1,5 @@
-'use strict';
-
-const commonDefinitions = require('./common-definitions.js');
-const dbDefinitions = require('./db-definitions.js');
+import commonDefinitions from './common-definitions.js';
+import dbDefinitions from './db-definitions.js';
 
 /**
  * @typedef {PlainObject<string,PlainObject>} ListIndexesDefinitions
@@ -28,5 +26,4 @@ const cliSections = [
   }
 ];
 
-exports.definitions = optionDefinitions;
-exports.sections = cliSections;
+export {optionDefinitions as definitions, cliSections as sections};

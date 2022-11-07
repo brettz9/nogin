@@ -20,7 +20,7 @@ module.exports = {
     requireConfigFile: false
   },
   extends: [
-    'ash-nazg/sauron-script-overrides'
+    'ash-nazg/sauron-overrides'
   ],
   env: {
     browser: false,
@@ -96,9 +96,9 @@ module.exports = {
     }
   }, {
     files: [
-      'cypress/integration/**/*.js',
+      'cypress/e2e/**/*.js',
       'cypress/support/**/*.js',
-      'test/*.mjs'
+      'test/*.js'
     ],
     settings: {
       polyfills: [
@@ -129,7 +129,7 @@ module.exports = {
     }
   }, {
     files: [
-      'cypress/plugins/index.js'
+      'docs/jsdoc-config.js', '*.cjs'
     ],
     extends: [
       'ash-nazg/sauron-node-script-overrides'
@@ -167,7 +167,7 @@ module.exports = {
       browser: false
     },
     extends: [
-      'ash-nazg/sauron-node-script'
+      'ash-nazg/sauron-node'
     ]
   }, {
     files: [
@@ -201,7 +201,7 @@ module.exports = {
     }
   }, {
     files: ['nogin.js', 'nogin-sample.js'],
-    extends: ['ash-nazg/sauron-script-overrides', 'ash-nazg/rc-script']
+    extends: ['ash-nazg/sauron-overrides', 'ash-nazg/rc']
   }, {
     env: {
       browser: false,
@@ -212,7 +212,7 @@ module.exports = {
       'tools/mochawesome-cli.js'
     ],
     extends: [
-      'ash-nazg/sauron-node-script'
+      'ash-nazg/sauron-node'
     ],
     rules: {
       // Browser only
@@ -227,7 +227,7 @@ module.exports = {
     }
   }, {
     files: [
-      'test/fixtures/bad-template.mjs',
+      'test/fixtures/bad-template.js',
       'test/utilities/**'
     ],
     extends: [

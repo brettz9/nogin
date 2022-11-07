@@ -94,7 +94,6 @@ Cypress.Commands.add(
       user, ip, badSecret
       // eslint-disable-next-line promise/prefer-await-to-then
     }).then((key) => {
-      // eslint-disable-next-line promise/no-nesting
       return cy.setCookie('login', key, {
         secure
       // eslint-disable-next-line promise/prefer-await-to-then

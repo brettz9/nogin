@@ -1,5 +1,3 @@
-'use strict';
-
 // Todo: Internationalize attributes like `aria-label`
 
 /**
@@ -7,31 +5,34 @@
  * @copyright (c) 2013-2018 Stephen Braitsch
 */
 
-const http = require('http');
-const {join, resolve: pathResolve} = require('path');
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
+import http from 'http';
+import {join, resolve as pathResolve} from 'path';
+import express from 'express';
+import session from 'express-session';
+import bodyParser from 'body-parser';
 // Though not needed for `express-session`, `cookie-parser` is needed for
-//   creating signed cookies (see `routes.js`) (or if we were to use
+//   creating signed cookies (see `routeList.js`) (or if we were to use
 //   non-signed cookies and access `req.cookies`).
-const cookieParser = require('cookie-parser');
-const MongoStore = require('connect-mongo');
-const stylus = require('stylus');
-const RateLimit = require('express-rate-limit');
-const helmet = require('helmet');
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
+import stylus from 'stylus';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 
-const routes = require('./app/server/routes.js');
-const getLogger = require('./app/server/modules/getLogger.js');
-const DBFactory = require('./app/server/modules/db-factory.js');
-const jmlEngine = require('./app/server/modules/jmlEngine.js');
-const {parseCLIJSON} = require('./app/server/modules/common.js');
+import routes from './app/server/routeList.js';
+import getLogger from './app/server/modules/getLogger.js';
+import DBFactory from './app/server/modules/db-factory.js';
+import jmlEngine from './app/server/modules/jmlEngine.js';
+import {parseCLIJSON} from './app/server/modules/common.js';
+import getDirname from './app/server/modules/getDirname.js';
+
+const __dirname = getDirname(import.meta.url);
 
 /**
  * @param {MainOptionDefinitions} options
  * @returns {Promise<void>}
  */
-exports.createServer = async function (options) {
+const createServer = async function (options) {
   // We can't add an internationaalized log that we are awaiting the loggers!
   const [log, errorLog] = await Promise.all([
     getLogger(options),
@@ -47,8 +48,8 @@ exports.createServer = async function (options) {
   let cfg;
   try {
     cfg = config
-      // eslint-disable-next-line n/global-require, import/no-dynamic-require
-      ? require(pathResolve(cwd, config))
+      // eslint-disable-next-line no-unsanitized/method -- User path
+      ? (await import(pathResolve(cwd, config))).default
       : null;
   } catch (err) {
     errorLog('noConfigFileDetected', {config});
@@ -112,7 +113,7 @@ exports.createServer = async function (options) {
   const dbOpts = DBFactory.getDefaults(opts);
 
   // Doubles as limiting automated login attempts!
-  const limiter = new RateLimit({
+  const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
     max: RATE_LIMIT
   });
@@ -151,9 +152,13 @@ exports.createServer = async function (options) {
     });
   }
   if (middleware) {
-    middleware.forEach((mw) => {
-      // eslint-disable-next-line n/global-require, import/no-dynamic-require
-      app.use(require(mw)(opts));
+    const middlewareImports = Promise.all(middleware.map(async (mw) => {
+      // eslint-disable-next-line no-unsanitized/method -- User path
+      return await import(mw);
+    }));
+
+    middlewareImports.forEach((imported) => {
+      app.use(imported.default(opts));
     });
   }
 
@@ -252,3 +257,5 @@ exports.createServer = async function (options) {
     log('express_server_listening', {port: String(app.get('port'))});
   });
 };
+
+export {createServer};

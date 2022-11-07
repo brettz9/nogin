@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_, emailPattern}) {
+const lostPassword = ({_, emailPattern}) => {
   return ['div', {
     id: 'retrieve-password',
     'data-name': 'retrieve-password', class: 'modal fade'
@@ -58,3 +56,5 @@ module.exports = function ({_, emailPattern}) {
     ]]
   ]];
 };
+
+export default lostPassword;

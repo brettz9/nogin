@@ -1,18 +1,18 @@
-/* eslint-disable n/global-require */
-'use strict';
+import account from './account.js';
+import alert from './modals/alert.js';
 
-module.exports = function ({
+const signup = ({
   _, layout, emptyUser, countries, emailPattern, requireName, title
-}) {
+}) => {
   return layout({
     content: [
       ['div', {
         role: 'main'
       }, [
-        ...require('./account.js')({
+        ...account({
           _, user: emptyUser, countries, emailPattern, requireName, title
         }),
-        require('./modals/alert.js')({_})
+        alert({_})
       ]]
     ],
     scripts: [
@@ -23,3 +23,5 @@ module.exports = function ({
     ]
   });
 };
+
+export default signup;

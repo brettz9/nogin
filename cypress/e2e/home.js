@@ -263,7 +263,7 @@ describe('Home', function () {
           expect(user).to.equal('bretto');
 
           // Should not have been activated as we were too late, so
-          //  should have oldemail
+          //  should have old email
           expect(email).to.equal(startingEmail);
 
           // It should still have kept the desired email
@@ -698,7 +698,7 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>9.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=12.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
       // eslint-disable-next-line promise/prefer-await-to-then
@@ -718,7 +718,7 @@ describe('Home', function () {
 
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>9.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=12.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len

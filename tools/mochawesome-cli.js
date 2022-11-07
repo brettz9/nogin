@@ -13,17 +13,11 @@
  * "xunit"} [0="spec"] The Mocha reporter to use
  */
 
-'use strict';
+import Suite from 'mocha/lib/suite.js';
+import Test from 'mocha/lib/test.js';
+import Runner from 'mocha/lib/runner.js';
 
-const reporterFile = process.argv[2]
-  ? process.argv[2].replace(/^--/u, '')
-  : 'spec';
-
-// eslint-disable-next-line import/no-dynamic-require
-const MochaReporter = require(`mocha/lib/reporters/${reporterFile}.js`);
-const Suite = require('mocha/lib/suite.js');
-const Test = require('mocha/lib/test.js');
-const Runner = require('mocha/lib/runner.js');
+import {results, stats} from '../mochawesome.json';
 
 const {constants: {
   EVENT_RUN_BEGIN,
@@ -33,9 +27,14 @@ const {constants: {
   EVENT_TEST_FAIL,
   EVENT_TEST_PASS,
   EVENT_TEST_PENDING
-}} = require('mocha/lib/runner.js');
+}} = Runner;
 
-const {results, stats} = require('../mochawesome.json');
+const reporterFile = process.argv[2]
+  ? process.argv[2].replace(/^--/u, '')
+  : 'spec';
+
+// eslint-disable-next-line no-unsanitized/method -- Dynamic CLI script
+const MochaReporter = await import(`mocha/lib/reporters/${reporterFile}.js`);
 
 const runner = new Runner(
   new Suite('', null, true)

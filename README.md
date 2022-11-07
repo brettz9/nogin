@@ -108,7 +108,7 @@ nogin --localScripts --config nogin.js
 ```
 
 5. Once the script mentions it is listening (on port 3000 by default), open
-    a browser window and navigate to: [http://localhost:3000](http://localhost:3000)
+    a browser window and navigate to: [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
 ## Steps for getting port that may block Mongo DB
 
@@ -262,7 +262,7 @@ Defaults in parentheses:
 - `--loggerLocale` ("en-US")
 - `--noLogging` (`false`)
 - `-n`/`--DB_NAME` ("nogin")
-- `-t`/`--DB_HOST` ("localhost")
+- `-t`/`--DB_HOST` ("127.0.0.1")
 - `-p`/`--DB_PORT` (27017)
 - `-u`/`--DB_USER`
 - `-x`/`--DB_PASS`
@@ -326,6 +326,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
+1. Recheck coverage tests
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)
 1. **Login page**
@@ -343,7 +344,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
     1. Allow **Multiple choices**
     1. Allow **adding to "Set up new account" fields** (based on a schema?)
         (to be injected into `app/server/views/account.js`) to be passed to
-        the server (`app/server/routes.js`) and saved in the database along
+        the server (`app/server/routeList.js`) and saved in the database along
         with other fields (check the user-supplied don't overwrite built-ins)
         and shown on `home` (also built by `account.js`) (unless hidden?);
         not trusting the client-side values of course (could parse

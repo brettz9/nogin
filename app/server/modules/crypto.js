@@ -1,7 +1,5 @@
-'use strict';
-
-const crypto = require('crypto');
-const safeCompare = require('safe-compare');
+import crypto from 'crypto';
+import safeCompare from 'safe-compare';
 
 /*
   private encryption & validation methods
@@ -51,7 +49,8 @@ const saltAndHash = function (data) {
       }
       const salt = buf.toString('hex');
       try {
-        resolve(await pbkdf2Prom(data, salt));
+        const resolved = await pbkdf2Prom(data, salt);
+        resolve(resolved);
       } catch (error) {
         reject(error);
       }
@@ -70,5 +69,4 @@ const validatePasswordV1 = async function (plainPass, hashedPass) {
   return safeCompare(hashedPass, validHash);
 };
 
-exports.saltAndHash = saltAndHash;
-exports.validatePasswordV1 = validatePasswordV1;
+export {saltAndHash, validatePasswordV1};

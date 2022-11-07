@@ -1,9 +1,10 @@
-/* eslint-disable n/global-require */
-'use strict';
+import account from './account.js';
+import alert from './modals/alert.js';
+import confirm from './modals/confirm.js';
 
-module.exports = function ({
+const home = ({
   _, layout, user, countries, emailPattern, requireName, title
-}) {
+}) => {
   return layout({
     content: [
       ['nav', {
@@ -36,12 +37,12 @@ module.exports = function ({
       ['div', {
         role: 'main'
       }, [
-        ...require('./account.js')({
+        ...account({
           _, user, countries, emailPattern, title
         }),
-        require('./modals/alert.js')({_}),
-        require('./modals/confirm.js')({_, type: 'deleteAccount'}),
-        require('./modals/confirm.js')({_, type: 'notice'})
+        alert({_}),
+        confirm({_, type: 'deleteAccount'}),
+        confirm({_, type: 'notice'})
       ]]
     ],
     scripts: [
@@ -52,3 +53,5 @@ module.exports = function ({
     ]
   });
 };
+
+export default home;

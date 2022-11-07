@@ -1,11 +1,13 @@
-'use strict';
+import {readdirSync} from 'fs';
+import {readFile} from 'fs/promises';
+import {join} from 'path';
 
-const {readdirSync} = require('fs');
-const {join} = require('path');
+import layoutView from './views/layout.js';
+import {i18n, getLangDir} from './modules/i18n.js';
 
-const layoutView = require('./views/layout.js');
-const {i18n, getLangDir} = require('./modules/i18n.js');
-const integrityMap = require('./integrityMap.json');
+const integrityMap = JSON.parse(
+  await readFile(new URL('integrityMap.json', import.meta.url))
+);
 
 const headProps = ['headPre', 'headPost'];
 const bodyProps = ['bodyPre', 'bodyPost'];
@@ -61,12 +63,15 @@ const layoutAndTitleGetter = (config, jml) => {
 
   // Has SHAs at https://code.jquery.com/ ;
   //  see also https://jquery.com/download/
-  // todo[jquery@>3.6.0]: Update SHA (and path(s) if necessary)
+  // todo[jquery@>3.6.1]: Update SHA (and path(s) if necessary)
 
   // See https://github.com/jquery-form/form for CDN SHA
   // todo: Update SHA (and path(s) if necessary) for jquery-form
 
-  // Todo[bootstrap@>5.1.0]: Update SHA (and path(s) if necessary) for
+  // todo[@fortawesome/fontawesome-free@>6.2.0]: Update SHA (and path(s)
+  //   if necessary)
+
+  // Todo[bootstrap@>5.2.2]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
   //   https://github.com/twbs/bootstrap/blob/main/config.yml
@@ -106,7 +111,7 @@ const layoutAndTitleGetter = (config, jml) => {
       _,
       langDir,
       title,
-      layout (templateArgs) {
+      async layout (templateArgs) {
         const cfg = {
           // Though should be trusted anyways, do not let template
           //   arguments override.
@@ -126,8 +131,10 @@ const layoutAndTitleGetter = (config, jml) => {
           ...businessLogicArgs
         };
 
-        // eslint-disable-next-line n/global-require, import/no-dynamic-require
-        const injectedHTML = injectHTML ? require(injectHTML)(cfg) : {};
+        const injectedHTML = injectHTML
+          // eslint-disable-next-line no-unsanitized/method --- User path
+          ? (await import(injectHTML)).default(cfg)
+          : {};
         if (injectHTML) {
           Object.entries(injectedHTML).forEach(([prop, val]) => {
             const type = headProps.includes(prop) ? 'head' : 'body';
@@ -274,6 +281,4 @@ function routeGetter (customRoute) {
   };
 }
 
-exports.layoutAndTitleGetter = layoutAndTitleGetter;
-exports.checkLocaleRoutes = checkLocaleRoutes;
-exports.routeGetter = routeGetter;
+export {layoutAndTitleGetter, checkLocaleRoutes, routeGetter};

@@ -1,6 +1,4 @@
 /* eslint-disable class-methods-use-this */
-'use strict';
-
 /**
  * Patterned after {@link https://mongodb.github.io/node-mongodb-native/3.4/api/ObjectID.html}.
  * While in MongoDB, this is an object, as its `toString` (and `toHexString`)
@@ -160,4 +158,4 @@ class DBAbstraction {
   }
 }
 
-module.exports = DBAbstraction;
+export default DBAbstraction;

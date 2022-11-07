@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
-'use strict';
 
-module.exports = ({
+const layout = ({
   _, langDir, isRtl, content, scripts, title,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   noPolyfill, useESM, csrfToken,
@@ -146,3 +145,5 @@ module.exports = ({
     ]
   }}];
 };
+
+export default layout;

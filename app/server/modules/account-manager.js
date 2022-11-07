@@ -1,13 +1,12 @@
-'use strict';
+import safeCompare from 'safe-compare';
 
-const safeCompare = require('safe-compare');
+import {isNullish, uuid} from './common.js';
 
-const {isNullish, uuid} = require('./common.js');
-const {
+import DBFactory from './db-factory.js';
+
+import {
   saltAndHash, validatePasswordV1
-} = require('./crypto.js');
-
-const DBFactory = require('./db-factory.js');
+} from './crypto.js';
 
 const passVer = 1;
 
@@ -438,7 +437,10 @@ class AccountManager {
 
       const ret = await this.accounts.findOneAndUpdate(
         filter,
-        {$set: o},
+        {
+          // Strip out `undefined` which now are treated by Mongodb as null
+          $set: JSON.parse(JSON.stringify(o))
+        },
         {upsert: true, returnDocument: 'after'}
       );
       if (addingTemporaryEmail) {
@@ -512,4 +514,4 @@ class AccountManager {
   }
 }
 
-module.exports = AccountManager;
+export default AccountManager;

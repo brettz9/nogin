@@ -1,18 +1,16 @@
-'use strict';
-
 /**
  * @file Utility for running basic database CRUD commands for accounts
  * and setting specific kinds of account data. Wraps credentials/set-up
  * with `AccountManager` commands.
  */
 
-const {readFile: readFileOrig} = require('fs');
-const {resolve: pathResolve} = require('path');
-const {promisify} = require('util');
-const AccountManager = require('./account-manager.js');
-const DBFactory = require('./db-factory.js');
-const getLogger = require('./getLogger.js');
-const {i18n} = require('./i18n.js');
+import {readFile as readFileOrig} from 'fs';
+import {resolve as pathResolve} from 'path';
+import {promisify} from 'util';
+import AccountManager from './account-manager.js';
+import DBFactory from './db-factory.js';
+import getLogger from './getLogger.js';
+import {i18n} from './i18n.js';
 
 const setI18n = i18n();
 
@@ -22,7 +20,7 @@ const readFile = promisify(readFileOrig);
  * @param {DbConfig} options
  * @returns {Promise<AccountManager>}
  */
-const getAccountManager = exports.getAccountManager = async (options) => {
+const getAccountManager = async (options) => {
   const dbOpts = DBFactory.getDefaults(options);
   const {adapter, DB_USER, DB_PASS, DB_NAME} = dbOpts;
 
@@ -65,19 +63,11 @@ async function getAccounts (options, update) {
       return JSON.parse(fileContents);
     });
   }
+
   const {
-    name,
     user: users,
     email,
-    country,
-    pass,
-    passVer,
-    date,
-    activated,
-    // These would mostly just be for testing
-    activationCode,
-    unactivatedEmail,
-    activationRequestDate
+    pass
   } = options;
   return users.map((user, i) => {
     if (!update) {
@@ -94,19 +84,24 @@ async function getAccounts (options, update) {
         );
       }
     }
-    return {
-      user,
-      name: name && name[i],
-      email: email && email[i],
-      country: country && country[i],
-      pass: pass && pass[i],
-      passVer: passVer && passVer[i],
-      date: date && date[i],
-      activated: activated && activated[i],
-      activationCode: activationCode && activationCode[i],
-      unactivatedEmail: unactivatedEmail && unactivatedEmail[i],
-      activationRequestDate: activationRequestDate && activationRequestDate[i]
+
+    const ret = {
+      user
     };
+    [
+      'name', 'email', 'country', 'pass', 'passVer',
+      'date', 'activated',
+      // These would mostly just be for testing
+      'activationCode',
+      'unactivatedEmail', 'activationRequestDate'
+    ].forEach((prop) => {
+      const obj = options[prop];
+      if (obj && obj[i]) {
+        ret[prop] = obj[i];
+      }
+    });
+
+    return ret;
   });
 }
 
@@ -114,7 +109,7 @@ async function getAccounts (options, update) {
  * @param {AddOptionDefinitions} options
  * @returns {Promise<AccountInfo[]>}
  */
-exports.addAccounts = async (options) => {
+const addAccounts = async (options) => {
   const accounts = await getAccounts(options);
   const am = await getAccountManager(options);
   return Promise.all(
@@ -125,7 +120,7 @@ exports.addAccounts = async (options) => {
 };
 
 /**
- * Thismethod differs in that it only searches by `user`
+ * This method differs in that it only searches by `user`
  * and the other params are used to update. This might be
  * refactored to allow searching by multiple values for an
  * update as well as setting multiple other values (whether
@@ -133,7 +128,7 @@ exports.addAccounts = async (options) => {
  * @param {UpdateOptionDefinitions} options
  * @returns {Promise<AccountInfo[]>}
  */
-exports.updateAccounts = async (options) => {
+const updateAccounts = async (options) => {
   const accounts = await getAccounts(options, true);
   const am = await getAccountManager(options);
   return Promise.all(
@@ -168,7 +163,7 @@ function getAccountInfo (options) {
  * @param {RemoveOptionDefinitions} options
  * @returns {Promise<DeleteWriteOpResult>}
  */
-exports.removeAccounts = async (options) => {
+const removeAccounts = async (options) => {
   const am = await getAccountManager(options);
   if (options.all) {
     return am.deleteAllAccounts();
@@ -180,7 +175,7 @@ exports.removeAccounts = async (options) => {
  * @param {ReadOptionDefinitions} [options]
  * @returns {Promise<AccountInfo[]>}
  */
-exports.readAccounts = async (options = {}) => {
+const readAccounts = async (options = {}) => {
   const am = await getAccountManager(options);
   if (options.user) {
     return am.getRecords(getAccountInfo(options));
@@ -199,7 +194,7 @@ exports.readAccounts = async (options = {}) => {
  * @param {ValidateUserPasswordOptionDefinitions} options
  * @returns {Promise<AccountInfo>}
  */
-exports.validUserPassword = async (options) => {
+const validUserPassword = async (options) => {
   const am = await getAccountManager(options);
   const {user, pass} = options;
   return am.manualLogin(user, pass);
@@ -210,7 +205,13 @@ exports.validUserPassword = async (options) => {
  * @param {DbConfig} options
  * @returns {Promise<void>}
  */
-exports.listIndexes = async (options) => {
+const listIndexes = async (options) => {
   const am = await getAccountManager(options);
   return am.listIndexes();
+};
+
+export {
+  getAccountManager,
+  addAccounts, updateAccounts,
+  removeAccounts, readAccounts, validUserPassword, listIndexes
 };

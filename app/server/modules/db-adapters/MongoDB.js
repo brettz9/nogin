@@ -1,7 +1,5 @@
-'use strict';
-
-const {MongoClient, ObjectID} = require('mongodb');
-const DBAbstraction = require('../db-abstraction.js');
+import {MongoClient, ObjectID} from 'mongodb';
+import DBAbstraction from '../db-abstraction.js';
 
 /**
  * Adapter for MongoDB.
@@ -71,4 +69,4 @@ class MongoDB extends DBAbstraction {
   }
 }
 
-module.exports = MongoDB;
+export default MongoDB;

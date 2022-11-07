@@ -1,6 +1,4 @@
-'use strict';
-
-const {i18n} = require('./i18n.js');
+import {i18n} from './i18n.js';
 
 const setI18n = i18n();
 
@@ -51,4 +49,4 @@ const getLogger = async (options) => {
   return logger;
 };
 
-module.exports = getLogger;
+export default getLogger;

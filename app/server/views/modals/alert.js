@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_}) {
+const alert = ({_}) => {
   return ['div', {
     class: 'modal-alert modal fade', 'data-name': 'modal-alert'
   }, [
@@ -22,3 +20,5 @@ module.exports = function ({_}) {
     ]]
   ]];
 };
+
+export default alert;

@@ -1,27 +1,31 @@
-'use strict';
-
-const {join, resolve: pathResolve} = require('path');
+import {readFile} from 'fs/promises';
+import {join, resolve as pathResolve} from 'path';
 
 // Could forego this and don't i18nize server responses (do on client) or
 //  cache the locales)
 
-const express = require('express');
-const jsdom = require('jamilih/dist/jml-jsdom.js');
-const csurf = require('csurf');
+import express from 'express';
+import jsdom from 'jamilih/dist/jml-jsdom.js';
+import csurf from 'csurf';
 
-const {
+import {
   checkLocaleRoutes, routeGetter, layoutAndTitleGetter
-} = require('./routeUtils.js');
-const AccountManager = require('./modules/account-manager.js');
-const {isNullish, hasOwn, parseCLIJSON} = require('./modules/common.js');
-const EmailDispatcher = require('./modules/email-dispatcher.js');
-const getLogger = require('./modules/getLogger.js');
-const {i18n, getLangDir} = require('./modules/i18n.js');
-const {emailPattern} = require('./modules/patterns.js');
+} from './routeUtils.js';
+
+import AccountManager from './modules/account-manager.js';
+import {isNullish, hasOwn, parseCLIJSON} from './modules/common.js';
+import EmailDispatcher from './modules/email-dispatcher.js';
+import getLogger from './modules/getLogger.js';
+import {i18n, getLangDir} from './modules/i18n.js';
+import {emailPattern} from './modules/patterns.js';
+
+import getDirname from './modules/getDirname.js';
+
+const __dirname = getDirname(import.meta.url);
 
 const jml = jsdom.default;
 
-module.exports = async function (app, config) {
+const routeList = async (app, config) => {
   const getLayoutAndTitle = layoutAndTitleGetter(config, jml);
   const {
     log,
@@ -58,8 +62,9 @@ module.exports = async function (app, config) {
     ? Array.isArray(config.countryCodes)
       ? config.countryCodes
       : JSON.parse(config.countryCodes)
-    // eslint-disable-next-line n/global-require
-    : require('./modules/country-codes.json');
+    : JSON.parse(
+      await readFile(new URL('modules/country-codes.json', import.meta.url))
+    );
 
   const composeResetPasswordEmailConfig = {
     fromText, fromURL
@@ -111,14 +116,14 @@ module.exports = async function (app, config) {
     composeResetPasswordEmailView:
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'
-        // eslint-disable-next-line n/global-require, import/no-dynamic-require
-        ? require(pathResolve(cwd, composeResetPasswordEmailView))
+        // eslint-disable-next-line no-unsanitized/method, max-len -- User path
+        ? (await import(pathResolve(cwd, composeResetPasswordEmailView))).default
         : undefined,
     composeActivationEmailView:
       composeActivationEmailView &&
         typeof composeActivationEmailView === 'string'
-        // eslint-disable-next-line n/global-require, import/no-dynamic-require
-        ? require(pathResolve(cwd, composeActivationEmailView))
+        // eslint-disable-next-line no-unsanitized/method -- User path
+        ? (await import(pathResolve(cwd, composeActivationEmailView))).default
         : undefined
   });
 
@@ -346,7 +351,7 @@ module.exports = async function (app, config) {
         am.getAllRecords()
       ]);
 
-      // Todo[>=3.0.0]: `/users` should always be enabled when there are (read)
+      // Todo[>=4.0.0]: `/users` should always be enabled when there are (read)
       //   privileges.
       if (!showUsers) {
         pageNotFound(_, res);
@@ -596,7 +601,7 @@ module.exports = async function (app, config) {
         res.status(200).send(_('OK'));
       });
     }
-    // Todo[>=3.0.0]: Should be available to UI but require privileges.
+    // Todo[>=4.0.0]: Should be available to UI but require privileges.
     /*
     async reset (routes, req, res) {
       await am.deleteAllAccounts();
@@ -628,8 +633,8 @@ module.exports = async function (app, config) {
     // See https://github.com/cypress-io/code-coverage
 
     // ADD APP
-    // eslint-disable-next-line n/no-unpublished-require, n/global-require
-    require('@cypress/code-coverage/middleware/express.js')(app);
+    // eslint-disable-next-line n/no-unpublished-import -- Only for testing
+    (await import('@cypress/code-coverage/middleware/express.js')).default(app);
   }
 
   const wrapResult = (args, routes, userAgent) => {
@@ -638,7 +643,7 @@ module.exports = async function (app, config) {
     //  a module being available
     return `
 'use strict';
-/* globals IntlDom */
+/* globals IntlDom -- Non-ESM */
 window.Nogin = {
   disableXSRF: ${disableXSRF},
   postLoginRedirectPath: ${postLoginRedirectPath},
@@ -688,8 +693,8 @@ window.Nogin = {
   });
 
   if (router) {
-    // eslint-disable-next-line n/global-require, import/no-dynamic-require
-    require(pathResolve(cwd, router))(app, opts);
+    // eslint-disable-next-line no-unsanitized/method -- User path
+    (await import(pathResolve(cwd, router))).default(app, opts);
   }
 
   /**
@@ -806,3 +811,5 @@ window.Nogin = {
   });
   */
 };
+
+export default routeList;

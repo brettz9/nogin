@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = [
+const commonDefinitions = [
   {
     name: 'loggerLocale', type: String,
     description: 'Locale for server log messages; defaults to "en-US".',
@@ -12,3 +10,5 @@ module.exports = [
       'is enabled).'
   }
 ];
+
+export default commonDefinitions;

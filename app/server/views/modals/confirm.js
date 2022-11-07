@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_, type}) {
+const confirm = ({_, type}) => {
   return ['div', {
     class: 'modal-confirm modal fade',
     'data-name': 'modal-confirm',
@@ -37,3 +35,5 @@ module.exports = function ({_, type}) {
     ]]
   ]];
 };
+
+export default confirm;

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_}) {
+const formErrors = ({_}) => {
   return ['div', {class: 'modal-form-errors modal fade'}, [
     ['div', {class: 'modal-dialog', role: 'dialog'}, [
       ['div', {class: 'modal-content'}, [
@@ -30,3 +28,5 @@ module.exports = function ({_}) {
     ]]
   ]];
 };
+
+export default formErrors;

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function ({_, layout}) {
+const four0four = ({_, layout}) => {
   return layout({
     content: [
       ['div', {
@@ -13,3 +11,5 @@ module.exports = function ({_, layout}) {
     ]
   });
 };
+
+export default four0four;

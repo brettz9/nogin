@@ -1,16 +1,18 @@
 #!/usr/bin/env node
-'use strict';
 
-const {cliBasics} = require('command-line-basics');
-const getLogger = require('../app/server/modules/getLogger.js');
+import {cliBasics} from 'command-line-basics';
+import getLogger from '../app/server/modules/getLogger.js';
+import getDirname from '../app/server/modules/getDirname.js';
+import {createServer} from '../app.js';
+import manageAccounts from './manage-accounts.js';
 
-const {createServer} = require('../app.js');
+const __dirname = getDirname(import.meta.url);
 
 /**
- * @returns {MainOptionDefinitions}
+ * @returns {Promise<MainOptionDefinitions>}
  */
-function getOptions () {
-  return cliBasics({
+async function getOptions () {
+  return await cliBasics({
     optionsPath: '../app/server/optionDefinitions.js',
     cwd: __dirname
   });
@@ -20,7 +22,7 @@ function getOptions () {
  * @returns {void}
  */
 async function noVerb () {
-  const options = getOptions();
+  const options = await getOptions();
   if (!options) {
     return;
   }
@@ -32,7 +34,6 @@ async function noVerb () {
   }
 }
 
-(async () => {
 let verb = process.argv[2];
 switch (verb) {
 case 'help':
@@ -40,7 +41,7 @@ case 'help':
   if (!verb) {
     process.argv[2] = '--help';
     await noVerb();
-    return;
+    break;
   }
   process.argv[2] = verb;
   process.argv[3] = '--help';
@@ -52,31 +53,25 @@ case 'delete':
 case 'remove':
 case 'create':
 case 'listIndexes':
-case 'add':
-  (async () => {
-    // Avoid reprocessing verb (e.g., treating it as first default value)
-    process.argv.splice(2, 1);
+case 'add': {
+  // Avoid reprocessing verb (e.g., treating it as first default value)
+  process.argv.splice(2, 1);
 
-    const idx = process.argv.indexOf('--loggerLocale');
-    const loggerLocale = idx > -1
-      ? process.argv[idx + 1]
-      : 'en-US';
+  const idx = process.argv.indexOf('--loggerLocale');
+  const loggerLocale = idx > -1
+    ? process.argv[idx + 1]
+    : 'en-US';
 
-    try {
-      // eslint-disable-next-line n/global-require
-      const manageAccounts = require('./manage-accounts.js');
-      await manageAccounts(verb, {loggerLocale});
-    } catch (err) {
-      const errorLogger = await getLogger({loggerLocale, errorLog: true});
-      errorLogger('Erred', null, err);
-    }
-    // eslint-disable-next-line n/no-process-exit -- Check if needed
-    process.exit();
-  })();
+  try {
+    await manageAccounts(verb, {loggerLocale});
+  } catch (err) {
+    const errorLogger = await getLogger({loggerLocale, errorLog: true});
+    errorLogger('Erred', null, err);
+  }
+  process.exit();
   break;
-default: {
+} default: {
   await noVerb();
   break;
 }
 }
-})();

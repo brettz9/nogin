@@ -9,6 +9,7 @@
 //  `console`, as this file is not built.
 
 'use strict';
+
 // istanbul ignore else
 if (typeof console !== 'undefined' && console.log) {
   console.log('placeholder code');

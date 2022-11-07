@@ -1,9 +1,11 @@
-'use strict';
+import {readFile} from 'fs/promises';
 
-const commonDefinitions = require('../../bin/common-definitions.js');
-const dbDefinitions = require('../../bin/db-definitions.js');
+import commonDefinitions from '../../bin/common-definitions.js';
+import dbDefinitions from '../../bin/db-definitions.js';
 
-const pkg = require('../../package.json');
+const pkg = JSON.parse(
+  await readFile(new URL('../../package.json', import.meta.url))
+);
 
 /**
  * @typedef {PlainObject<string,PlainObject>} MainOptionDefinitions
@@ -326,5 +328,4 @@ const cliSections = [
   }
 ];
 
-exports.definitions = optionDefinitions;
-exports.sections = cliSections;
+export {optionDefinitions as definitions, cliSections as sections};

@@ -1,5 +1,4 @@
-'use strict';
-module.exports = function (cfg) {
+const injectHTML = function (cfg) {
   return {
     headPre: [
       ['script', {src: 'headPreContent.js'}]
@@ -11,3 +10,5 @@ module.exports = function (cfg) {
     ]
   };
 };
+
+export default injectHTML;

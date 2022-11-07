@@ -1,12 +1,11 @@
-'use strict';
-
-const {cliBasics} = require('command-line-basics');
-
-const getLogger = require('../app/server/modules/getLogger.js');
-
-const {
+import {cliBasics} from 'command-line-basics';
+import getLogger from '../app/server/modules/getLogger.js';
+import {
   addAccounts, removeAccounts, readAccounts, updateAccounts, listIndexes
-} = require('../app/server/modules/db-basic.js');
+} from '../app/server/modules/db-basic.js';
+import getDirname from '../app/server/modules/getDirname.js';
+
+const __dirname = getDirname(import.meta.url);
 
 const manageAccounts = async (verb, {loggerLocale}) => {
   const [log, errorLogger] = await Promise.all([
@@ -69,7 +68,7 @@ const manageAccounts = async (verb, {loggerLocale}) => {
     throw new TypeError(`Unknown verb ${verb}`);
   }
 
-  const options = cliBasics({
+  const options = await cliBasics({
     optionsPath: `./manageAccounts-${verb}-optionDefinitions.js`,
     cwd: __dirname
   });
@@ -84,4 +83,4 @@ const manageAccounts = async (verb, {loggerLocale}) => {
   }
 };
 
-module.exports = manageAccounts;
+export default manageAccounts;

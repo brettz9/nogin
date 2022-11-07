@@ -1,14 +1,13 @@
-/* eslint-disable n/global-require */
-'use strict';
+import alert from './modals/alert.js';
 
-module.exports = function ({_, layout}) {
+const activated = ({_, layout}) => {
   return layout({
     content: [
       ['div', {role: 'main'}, [
         ['h1', [
           _('Activation')
         ]],
-        require('./modals/alert.js')({_})
+        alert({_})
       ]]
     ],
     scripts: [
@@ -19,3 +18,5 @@ module.exports = function ({_, layout}) {
     ]
   });
 };
+
+export default activated;

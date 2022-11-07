@@ -1,7 +1,6 @@
-'use strict';
-module.exports = function ({
+const composeResetPasswordEmail = ({
   _, langDir, jml, baseurl, name, user, passKey, fromText, fromURL
-}) {
+}) => {
   return {$document: {
     childNodes: [
       ['html', langDir, [
@@ -30,3 +29,5 @@ module.exports = function ({
     ]
   }};
 };
+
+export default composeResetPasswordEmail;

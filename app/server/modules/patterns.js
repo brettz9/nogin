@@ -1,5 +1,3 @@
-'use strict';
-
 const nonSpecialChars = '[^<>()[\\]\\\\.,;:\\s@"]+';
 const ipv4Address = '\\[\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\]';
 
@@ -25,4 +23,4 @@ const emailPattern = '^(' +
   ')' +
 ')$';
 
-exports.emailPattern = emailPattern;
+export {emailPattern};

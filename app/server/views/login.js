@@ -1,6 +1,7 @@
-/* eslint-disable n/global-require */
-'use strict';
-module.exports = function ({_, layout, emailPattern, signup}) {
+import alert from './modals/alert.js';
+import lostPassword from './modals/lost-password.js';
+
+const login = ({_, layout, emailPattern, signup}) => {
   return layout({
     content: [
       ['div', {
@@ -60,10 +61,10 @@ module.exports = function ({_, layout, emailPattern, signup}) {
               ['a', {href: signup}, [_('CreateAnAccount')]]
             ]]
           ]],
-          require('./modals/alert.js')({_})
+          alert({_})
         ]]
       ]],
-      require('./modals/lost-password.js')({_, emailPattern})
+      lostPassword({_, emailPattern})
     ],
     scripts: [
       ['script', {
@@ -73,3 +74,5 @@ module.exports = function ({_, layout, emailPattern, signup}) {
     ]
   });
 };
+
+export default login;
