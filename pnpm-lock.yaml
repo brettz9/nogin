@@ -96,7 +96,7 @@ specifiers:
   rollup: ^3.2.5
   rtl-detect: ^1.0.4
   safe-compare: ^1.1.4
-  snyk: ^1.1056.0
+  snyk: ^1.1057.0
   stop-only: ^3.1.2
   stylus: ^0.59.0
   uuid: ^9.0.0
@@ -201,7 +201,7 @@ devDependencies:
   react-dom: 18.2.0_react@18.2.0
   rimraf: 3.0.2
   rollup: 3.2.5
-  snyk: 1.1056.0
+  snyk: 1.1057.0
   stop-only: 3.1.2
 
 packages:
@@ -11791,8 +11791,8 @@ packages:
       - supports-color
     dev: true
 
-  /snyk/1.1056.0:
-    resolution: {integrity: sha512-Ny9dHfI6SgNHfh6HbRgtMN0MKUH0QhIcWYbw24t5GM0qejoMSEQSJv9kDzrIQLRd0OBBlZAba5EEPRiSafrxmQ==}
+  /snyk/1.1057.0:
+    resolution: {integrity: sha512-H2wvnvg7N/IgEgw2yP0IDmIUYS4hPyNbvTIqi7yJHxCocvb6MZZJIJbuUwHYhPfRzPgVkiJtnbG6j3xPjA3OTg==}
     engines: {node: '>=12'}
     hasBin: true
     dev: true
