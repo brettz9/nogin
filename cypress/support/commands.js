@@ -122,6 +122,16 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'clearAndType',
+  (sel, content) => {
+    // eslint-disable-next-line cypress/require-data-selectors -- Dynamic
+    cy.get(sel).clear();
+    // eslint-disable-next-line cypress/require-data-selectors -- Dynamic
+    cy.get(sel).type(content);
+  }
+);
+
+Cypress.Commands.add(
   'loginWithSession',
   ({nondefaultEmail} = {}) => {
     const NL_EMAIL_PASS = Cypress.env('NL_EMAIL_PASS');

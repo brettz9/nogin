@@ -19,7 +19,7 @@ describe('Signup', function () {
     const tooShortUser = 'a';
     cy.get('[data-name="user"]').type(tooShortUser);
     cy.get('[data-name="action2"]').click();
-    // todo[cypress@>=12.0.0]: `:invalid`: see if fixed:
+    // todo[cypress@>=13.0.0]: `:invalid`: see if fixed:
     //   https://github.com/cypress-io/cypress/issues/6678
     cy.get('[data-name="user"]:invalid').should('have.length', 1);
     const tooShortName = 'b';
@@ -43,7 +43,7 @@ describe('Signup', function () {
     cy.get('[data-name="email"]').type(nonEmail);
     cy.get('[data-name="email"]:invalid').should('have.length', 1);
 
-    cy.get('[data-name="email"]').clear().type('me@example.name');
+    cy.clearAndType('[data-name="email"]', 'me@example.name');
     cy.get('[data-name="pass"]').type('boo123456');
     cy.get('[data-name="pass-confirm"]').type('boo123456');
     cy.get('[data-name="name"]').type('MyName');
@@ -82,7 +82,7 @@ describe('Signup', function () {
     cy.get('[data-name="email"]').type(nonEmail);
     cy.get('[data-name="email"]:invalid').should('have.length', 1);
 
-    cy.get('[data-name="email"]').clear().type('me@example.name');
+    cy.clearAndType('[data-name="email"]', 'me@example.name');
     cy.get('[data-name="pass"]').type('boo123456');
     cy.get('[data-name="pass-confirm"]').type('boo123456');
     cy.get('[data-name="name"]').type('MyName');
@@ -217,7 +217,7 @@ describe('Signup', function () {
 
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
 
-      cy.get('[data-name="email"]').clear().type('me@example.name');
+      cy.clearAndType('[data-name="email"]', 'me@example.name');
       cy.get('[data-name="pass"]').type('boo123456');
       cy.get('[data-name="pass-confirm"]').type('boo123456');
       cy.get('[data-name="name"]').type('MyName');

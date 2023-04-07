@@ -63,15 +63,15 @@ const layoutAndTitleGetter = (config, jml) => {
 
   // Has SHAs at https://code.jquery.com/ ;
   //  see also https://jquery.com/download/
-  // todo[jquery@>3.6.1]: Update SHA (and path(s) if necessary)
+  // todo[jquery@>3.6.4]: Update SHA (and path(s) if necessary)
 
   // See https://github.com/jquery-form/form for CDN SHA
   // todo: Update SHA (and path(s) if necessary) for jquery-form
 
-  // todo[@fortawesome/fontawesome-free@>6.2.0]: Update SHA (and path(s)
+  // todo[@fortawesome/fontawesome-free@>6.4.0]: Update SHA (and path(s)
   //   if necessary)
 
-  // Todo[bootstrap@>5.2.2]: Update SHA (and path(s) if necessary) for
+  // Todo[bootstrap@>5.2.3]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
   //   https://github.com/twbs/bootstrap/blob/main/config.yml

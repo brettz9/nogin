@@ -82,9 +82,9 @@ describe('Home', function () {
       this.timeout(80000);
       const startingEmail = 'brettz95@example.name';
       const newEmail = NL_EMAIL_USER;
-      cy.get('[data-name="email"]').clear().type(newEmail);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.clearAndType('[data-name="email"]', newEmail);
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="country"]').select('FR');
       cy.get('[data-name="action2"]').click();
@@ -173,9 +173,9 @@ describe('Home', function () {
         this.timeout(100000);
         const startingEmail = 'brettz95@example.name';
         const newEmail = NL_EMAIL_USER;
-        cy.get('[data-name="email"]').clear().type(newEmail);
-        cy.get('[data-name="pass"]').clear().type('boo123456');
-        cy.get('[data-name="name"]').clear().type('MyNewName');
+        cy.clearAndType('[data-name="email"]', newEmail);
+        cy.clearAndType('[data-name="pass"]', 'boo123456');
+        cy.clearAndType('[data-name="name"]', 'MyNewName');
         cy.get('[data-name="name"]:invalid').should('have.length', 0);
         cy.get('[data-name="country"]').select('FR');
         cy.get('[data-name="action2"]').click();
@@ -402,9 +402,9 @@ describe('Home', function () {
 
     it('Allows canceling of submission after changed email', function () {
       const emailOfAnotherUser = 'me@example.name';
-      cy.get('[data-name="email"]').clear().type(emailOfAnotherUser);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.clearAndType('[data-name="email"]', emailOfAnotherUser);
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
       cy.get(
@@ -422,13 +422,13 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
 
       const nonEmail = 'nonEmail';
-      cy.get('[data-name="email"]').clear().type(nonEmail);
+      cy.clearAndType('[data-name="email"]', nonEmail);
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
 
       const emailOfAnotherUser = 'me@example.name';
-      cy.get('[data-name="email"]').clear().type(emailOfAnotherUser);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.clearAndType('[data-name="email"]', emailOfAnotherUser);
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
       cy.get(
@@ -491,11 +491,11 @@ describe('Home', function () {
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
           const goodEmailToPassClientValidation = NL_EMAIL_USER;
-          cy.get('[data-name="email"]').clear().type(
-            goodEmailToPassClientValidation
+          cy.clearAndType(
+            '[data-name="email"]', goodEmailToPassClientValidation
           );
-          cy.get('[data-name="pass"]').clear().type(NL_EMAIL_PASS);
-          cy.get('[data-name="name"]').clear().type('MyNewName');
+          cy.clearAndType('[data-name="pass"]', NL_EMAIL_PASS);
+          cy.clearAndType('[data-name="name"]', 'MyNewName');
           cy.get('[data-name="action2"]').click();
 
           cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
@@ -516,11 +516,12 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
-          cy.get('[data-name="email"]').clear().type(
+          cy.clearAndType(
+            '[data-name="email"]',
             validEmail
           );
-          cy.get('[data-name="pass"]').clear().type(NL_EMAIL_PASS);
-          cy.get('[data-name="name"]').clear().type('YetAnotherName');
+          cy.clearAndType('[data-name="pass"]', NL_EMAIL_PASS);
+          cy.clearAndType('[data-name="name"]', 'YetAnotherName');
           cy.get('[data-name="action2"]').click();
           // Cypress needs us to wait to be able to find the
           //   dialog to dismiss it (at least when visually viewing tests)
@@ -559,12 +560,13 @@ describe('Home', function () {
         error: 'Error Updating Account'
       // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
-        cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
+        cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
         const goodPasswordToPassClientValidation = 'boo123456';
-        cy.get('[data-name="pass"]').clear().type(
+        cy.clearAndType(
+          '[data-name="pass"]',
           goodPasswordToPassClientValidation
         );
-        cy.get('[data-name="name"]').clear().type('MyNewName');
+        cy.clearAndType('[data-name="name"]', 'MyNewName');
         cy.get('[data-name="action2"]').click();
 
         cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
@@ -584,9 +586,9 @@ describe('Home', function () {
       cy.clearCookie('login');
       cy.clearCookie(expressSessionID);
 
-      cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
       cy.get('[data-name="action2"]').click();
 
       cy.get('[data-name=modal-alert] [data-name=modal-body] p', {
@@ -615,9 +617,9 @@ describe('Home', function () {
       // If we use the exploiter's own email, will get error of the email
       //  already existing, and as we aren't testing new emails here,
       //   we just use the targeted user's existing email
-      cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
 
       // eslint-disable-next-line max-len
       // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
@@ -666,9 +668,9 @@ describe('Home', function () {
         const passwordNotAutoAdded = '';
         cy.get('[data-name="pass"]').should('have.value', passwordNotAutoAdded);
 
-        cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
-        cy.get('[data-name="pass"]').clear().type('boo123456');
-        cy.get('[data-name="name"]').clear().type('MyNewName');
+        cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
+        cy.clearAndType('[data-name="pass"]', 'boo123456');
+        cy.clearAndType('[data-name="name"]', 'MyNewName');
         cy.get('[data-name="country"]').select('');
         cy.get('[data-name="name"]:invalid').should('have.length', 0);
         cy.get('[data-name="action2"]').click();
@@ -693,12 +695,12 @@ describe('Home', function () {
     it('Prevent update with empty email', function () {
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(5000);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type('MyNewName');
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=12.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=13.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
       // eslint-disable-next-line promise/prefer-await-to-then
@@ -712,13 +714,13 @@ describe('Home', function () {
 
     it('Attempt bad client-side input', function () {
       const tooShortOfAName = 'a';
-      cy.get('[data-name="email"]').clear().type(NL_EMAIL_USER);
-      cy.get('[data-name="pass"]').clear().type('boo123456');
-      cy.get('[data-name="name"]').clear().type(tooShortOfAName).blur();
+      cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', tooShortOfAName).blur();
 
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=12.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=13.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len
