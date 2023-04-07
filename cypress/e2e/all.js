@@ -1,0 +1,9 @@
+import './404.js';
+import './activation.js';
+import './coverage.js';
+import './home.js';
+import './lang.js';
+import './reset-password.js';
+import './root.js';
+import './signup.js';
+import './users.js';
