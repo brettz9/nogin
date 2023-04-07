@@ -1,5 +1,7 @@
-import {MongoClient, ObjectID} from 'mongodb';
+import mongodb from 'mongodb';
 import DBAbstraction from '../db-abstraction.js';
+
+const {MongoClient, ObjectID} = mongodb;
 
 /**
  * Adapter for MongoDB.
