@@ -4,7 +4,7 @@ import {SMTPClient} from 'emailjs';
 // Todo: Reenable when getting dominum working
 // import JML from 'jamilih/dist/jml-dominum.js';
 // const jml = JML.default;
-import {jml} from 'jamilih/dist/jml-jsdom.js';
+import {jml} from 'jamilih/src/jml-jsdom.js';
 
 import composeResetPasswordEmailViewDefault from
   '../views/composeResetPasswordEmail.js';

@@ -2,9 +2,7 @@
 // Todo: Reenable dominum when getting it working
 // const jml = require('jamilih/dist/jml-dominum.js').default;
 // const jml = dominum.default;
-import jsdom from 'jamilih/dist/jml-jsdom.js';
-
-const jml = jsdom.default;
+import {jml} from 'jamilih/src/jml-jsdom.js';
 
 const jmlEngine = async (filePath, options, callback) => {
   // eslint-disable-next-line no-unsanitized/method -- Could supply import

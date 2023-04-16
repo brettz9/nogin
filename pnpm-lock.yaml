@@ -41,8 +41,8 @@ dependencies:
     specifier: ^0.17.0
     version: 0.17.0
   jamilih:
-    specifier: ^0.54.0
-    version: 0.54.0
+    specifier: ^0.55.2
+    version: 0.55.2
   jsdom:
     specifier: ^21.1.1
     version: 21.1.1
@@ -5704,7 +5704,7 @@ packages:
   /dom-serializer@1.2.0:
     resolution: {integrity: sha512-n6kZFH/KlCrqs/1GHMOd5i2fd/beQHuehKdWvNNffbGHTr/almdhuVvTVFb3V7fglz+nC50fFusu3lY33h12pA==}
     dependencies:
-      domelementtype: 2.2.0
+      domelementtype: 2.3.0
       domhandler: 4.3.1
       entities: 2.2.0
     dev: true
@@ -8717,8 +8717,8 @@ packages:
       rgb-hex: 2.1.0
     dev: true
 
-  /jamilih@0.54.0:
-    resolution: {integrity: sha512-x3rfmZhxocBFbowFbi79C+TtLxe3Bes0ypWly/RJvQ69ZkiLAlwX1kkDeDzpCXpwzXvg53FejVSbOveacB7NvQ==}
+  /jamilih@0.55.2:
+    resolution: {integrity: sha512-VU7zy6DJeICbcJ+iZLkZ+DW/+ln7nwqhmWLqPLowtqyCe4zh4L1Ft0RDLBdwFpVTvzhUVojNDO8IYX5NgUjIPw==}
     engines: {node: '>=10'}
     dev: false
 

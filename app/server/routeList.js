@@ -5,7 +5,7 @@ import {join, resolve as pathResolve} from 'path';
 //  cache the locales)
 
 import express from 'express';
-import jsdom from 'jamilih/dist/jml-jsdom.js';
+import {jml} from 'jamilih/src/jml-jsdom.js';
 import csurf from 'csurf';
 
 import {
@@ -22,8 +22,6 @@ import {emailPattern} from './modules/patterns.js';
 import getDirname from './modules/getDirname.js';
 
 const __dirname = getDirname(import.meta.url);
-
-const jml = jsdom.default;
 
 const routeList = async (app, config) => {
   const getLayoutAndTitle = layoutAndTitleGetter(config, jml);

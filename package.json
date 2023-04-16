@@ -199,7 +199,7 @@
     "file-fetch": "^1.7.0",
     "helmet": "^6.1.5",
     "intl-dom": "^0.17.0",
-    "jamilih": "^0.54.0",
+    "jamilih": "^0.55.2",
     "jsdom": "^21.1.1",
     "mongodb": "^5.2.0",
     "nodemon": "^2.0.22",
