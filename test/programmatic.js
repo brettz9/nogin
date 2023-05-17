@@ -2,7 +2,7 @@ import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
 
 // eslint-disable-next-line no-shadow
-import chai from 'chai';
+import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import {
@@ -93,6 +93,7 @@ describe('Programmatic', function () {
       return expect(
         validUserPassword({
           user: 'brett',
+          // @ts-expect-error Testing bad argument
           pass: null
         })
       ).to.be.rejectedWith(
@@ -109,8 +110,10 @@ describe('Programmatic', function () {
         '`DBFactory.createInstance`)',
       function () {
         expect(() => {
-          // eslint-disable-next-line no-new
-          new AccountManager('badAdapter');
+          /* eslint-disable no-new -- Testing */
+          // @ts-expect-error Testing bad argument
+          new AccountManager('badAdapter', {});
+          /* eslint-enable no-new -- Testing */
         }).to.throw(
           Error,
           'Unrecognized database adapter "badAdapter"!'
@@ -120,7 +123,8 @@ describe('Programmatic', function () {
 
     it('AccountManager with no log', async function () {
       this.timeout(30000);
-      const _ = await setI18n({
+      const _ = await setI18n()({
+        // @ts-expect-error Why isn't the first overload accepted?
         acceptsLanguages: () => ['en-US']
       });
       let erred = false;
@@ -180,25 +184,40 @@ describe('Programmatic', function () {
 
   it('jmlEngine (erring)', function () {
     // eslint-disable-next-line promise/avoid-new
-    return new Promise(function (resolve, reject) {
-      // eslint-disable-next-line promise/prefer-await-to-callbacks
-      jmlEngine(join(__dirname, 'fixtures/bad-template.js'), null, (err) => {
-        expect(err).to.be.an('Error');
-        resolve();
-      });
-    });
+    return new Promise(
+      (
+        /** @type {(val?: any) => void} */
+        resolve,
+        reject
+      ) => {
+        // eslint-disable-next-line promise/prefer-await-to-callbacks
+        jmlEngine(join(__dirname, 'fixtures/bad-template.js'), {}, (err) => {
+          expect(err).to.be.an('Error');
+          resolve();
+        });
+      }
+    );
   });
 
   it('DBAbstraction', function () {
     expect(() => {
-      DBAbstraction.getURL();
+      DBAbstraction.getURL(true, {
+        DB_USER: 'xyz',
+        DB_PASS: 'abc',
+        DB_HOST: '127.0.0.1',
+        DB_PORT: 1234,
+        DB_NAME: 'sth'
+      });
     }).to.throw(Error, 'Abstract method');
 
     expect(() => {
-      DBAbstraction.getObjectId();
+      DBAbstraction.getObjectId(52);
     }).to.throw(Error, 'Abstract method');
 
-    const dbAbstract = new DBAbstraction({});
+    const dbAbstract = new DBAbstraction(
+      // @ts-expect-error Just for testing
+      {}
+    );
 
     expect(() => {
       dbAbstract.connect();
@@ -211,6 +230,7 @@ describe('Programmatic', function () {
 
   it('crypto (nogin)', function () {
     return expect(
+      // @ts-expect-error Testing bad argument
       cryptoNL.saltAndHash(null)
     ).to.be.rejectedWith(Error);
   });

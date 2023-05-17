@@ -1,35 +1,40 @@
-import MongoDB from './db-adapters/MongoDB.js';
+import {MongoDB} from './db-adapters/MongoDB.js';
 
 /**
-* @typedef {PlainObject} DbConfig
-* @property {string} DB_USER
-* @property {string} DB_PASS
-* @property {string} DB_HOST
-* @property {Integer} DB_PORT
-* @property {string} DB_NAME
-*/
+ * @typedef {number} Integer
+ */
 
 /**
-* @typedef {DbConfig} DbOptions
-* @property {"mongodb"} adapter
-*/
+ * @typedef {object} DbConfig
+ * @property {string} [DB_USER]
+ * @property {string} [DB_PASS]
+ * @property {string} [DB_HOST]
+ * @property {Integer} [DB_PORT]
+ * @property {string} [DB_NAME]
+ */
+
+/**
+ * @typedef {Required<DbConfig> & {
+ *   adapter: "mongodb"
+ * }} DbOptions
+ */
 
 /**
  * Creates a specific database type instance.
  */
 const DBFactory = {
   /**
-  * @param {DbConfig} options
-  * @returns {DbOptions}
-  */
+   * @param {Partial<DbConfig>} options
+   * @returns {DbOptions}
+   */
   getDefaults (options) {
-    return {
+    return /** @type {DbOptions} */ ({
       DB_NAME: 'nogin',
       DB_HOST: '127.0.0.1',
       DB_PORT: 27017,
       adapter: 'mongodb',
       ...options
-    };
+    });
   },
 
   /**
@@ -49,7 +54,7 @@ const DBFactory = {
 
   /**
    * @param {"mongodb"} adapter
-   * @param {DBConfigObject} config
+   * @param {import('./db-abstraction.js').DBConfigObject} config
    * @returns {MongoDB}
    */
   createInstance (adapter, config) {

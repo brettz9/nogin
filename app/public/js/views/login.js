@@ -2,23 +2,30 @@
 
 const LoginView = {
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {JQuery} `HTMLDivElement`
    */
   getInputForInitialFocus () {
     return $('input:text:visible:first');
   },
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {JQuery} `HTMLDivElement`
    */
   getLoginModal () {
     return $('#login');
   },
 
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('../views/utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   retrievePasswordModal () {
-    const retrievePasswordModal = $('#retrieve-password');
+    const retrievePasswordModal =
+      /**
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
+        $('#retrieve-password')
+      );
     retrievePasswordModal.modal({
       show: false, keyboard: true, backdrop: true
     });
@@ -26,70 +33,84 @@ const LoginView = {
   },
 
   /**
-   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLFormElement`
+   * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm} `HTMLFormElement`
    */
   retrievePasswordForm (retrievePasswordModal) {
-    return retrievePasswordModal.find('#retrieve-password-form');
+    return (
+      /**
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       * JQueryWithAjaxForm}
+       */
+      (retrievePasswordModal.find('#retrieve-password-form'))
+    );
   },
 
   /**
-   * @returns {external:jQuery} `HTMLFormElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm
+   * } `HTMLFormElement`
    */
   getLoginForm () {
-    return $('[data-name=login] form');
+    return (
+      /**
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       *   JQueryWithAjaxForm}
+       */ ($('[data-name=login] form'))
+    );
   },
 
   /**
-   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLButtonElement`
+   * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
    */
   retrievePasswordSubmit (retrievePasswordModal) {
     return retrievePasswordModal.find('[data-name=retrieve-password-submit]');
   },
 
   /**
-   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLButtonElement`
+   * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
    */
   retrievePasswordCancel (retrievePasswordModal) {
     return retrievePasswordModal.find('[data-name=retrieve-password-cancel]');
   },
 
   /**
-   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLInputElement`
+   * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {JQuery} `HTMLInputElement`
    */
   retrieveLostPasswordEmail (retrievePasswordModal) {
     return retrievePasswordModal.find('[data-name="email"]');
   },
 
   /**
-   * @param {external:jQuery} loginModal `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLInputElement`
+   * @param {JQuery} loginModal `HTMLDivElement`
+   * @returns {JQuery} `HTMLInputElement`
    */
   getLostPasswordUsername (loginModal) {
     return loginModal.find('[data-name="user"]');
   },
 
   /**
-   * @param {external:jQuery} loginModal
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @param {JQuery} loginModal
+   * @returns {JQuery} `HTMLDivElement`
    */
   getForgotPassword (loginModal) {
     return loginModal.find('[data-name="forgot-password"]');
   },
 
   /**
-  * @param {external:jQuery} loginModal
-  * @returns {external:jQuery} `HTMLButtonElement`
+  * @param {JQuery} loginModal
+  * @returns {JQuery} `HTMLButtonElement`
   */
   getRememberMeButton (loginModal) {
     return loginModal.find('button.remember-me');
   },
 
   /**
-  * @param {external:jQuery} loginModal
+  * @param {JQuery} loginModal
   * @returns {boolean}
   */
   isRememberMeChecked (loginModal) {
@@ -99,17 +120,17 @@ const LoginView = {
   },
 
   /**
-  * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
-  * @returns {void}
+  * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+  * @returns {JQuery}
   */
   setRetrievePasswordCancel (retrievePasswordModal) {
     return this.retrievePasswordCancel(retrievePasswordModal).text(
-      Nogin._('Cancel')
+      /** @type {string} */ (Nogin._('Cancel'))
     );
   },
 
   /**
-  * @param {external:jQuery} loginModal
+  * @param {JQuery} loginModal
   * @returns {void}
   */
   toggleCheckSquare (loginModal) {
@@ -127,7 +148,7 @@ const LoginView = {
   },
 
   /**
-   * @param {external:jQuery} retrievePasswordModal `HTMLDivElement`
+   * @param {JQuery} retrievePasswordModal `HTMLDivElement`
    * @returns {void}
    */
   switchConfirmToAlert (retrievePasswordModal) {

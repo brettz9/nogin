@@ -1,3 +1,8 @@
+/**
+ * @param {{
+ *   _: import('intl-dom').I18NCallback
+ * }} cfg
+ */
 const alert = ({_}) => {
   return ['div', {
     class: 'modal-alert modal fade', 'data-name': 'modal-alert'

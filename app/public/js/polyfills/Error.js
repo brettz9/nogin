@@ -4,5 +4,6 @@ if (typeof Error === 'undefined') {
   /**
    * Error polyfill.
    */
+  // @ts-expect-error Ok for browser
   window.Error = class Error {};
 }

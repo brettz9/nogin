@@ -1,7 +1,7 @@
 import mongodb from 'mongodb';
 import DBAbstraction from '../db-abstraction.js';
 
-const {MongoClient, ObjectID} = mongodb;
+const {MongoClient, ObjectId} = mongodb;
 
 /**
  * Adapter for MongoDB.
@@ -9,7 +9,7 @@ const {MongoClient, ObjectID} = mongodb;
 class MongoDB extends DBAbstraction {
   /**
    * @param {boolean} prod
-   * @param {DbConfig} dbConfig
+   * @param {import('../db-factory.js').DbConfig} dbConfig
    * @returns {string}
    */
   static getURL (prod, {
@@ -28,26 +28,23 @@ class MongoDB extends DBAbstraction {
 
   /**
    * @see https://mongodb.github.io/node-mongodb-native/3.4/api/ObjectID.html
-   * @param {string} id Can be a 24 byte hex string, 12 byte binary
+   * @param {string} [id] Can be a 24 byte hex string, 12 byte binary
    * string or a Number.
-   * @returns {ObjectID}
+   * @returns {import('mongodb').ObjectId}
    */
   static getObjectId (id) {
-    return new ObjectID(id);
+    return new ObjectId(id);
   }
 
   /**
-   * @returns {Promise<ConnectionObject>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html}.
+   * @returns {Promise<void>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html}.
    */
   async connect () {
     const {DB_NAME, DB_URL} = this.config;
 
     // For connect method: https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html#.connect
     // For client object: https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html
-    this.connection = await MongoClient.connect(DB_URL, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true
-    });
+    this.connection = await MongoClient.connect(DB_URL);
 
     // For db method: https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html#db
     // For db object: https://mongodb.github.io/node-mongodb-native/3.4/api/Db.html
@@ -55,14 +52,16 @@ class MongoDB extends DBAbstraction {
   }
 
   /**
-   * @returns {Promise<CollectionObject>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+   * @returns {Promise<import('mongodb').Collection>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
    */
   async getAccounts () {
     const {DB_NAME, log} = this.config;
 
     // For collection method: See https://mongodb.github.io/node-mongodb-native/3.4/api/Db.html#collection
     // For collection object: https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html
-    const accounts = await this.db.collection('accounts');
+    const accounts = await /** @type {import('mongodb').Db} */ (
+      this.db
+    ).collection('accounts');
 
     if (log) {
       log('ConnectedToDatabase', {adapter: 'mongodb', DB_NAME});
@@ -72,3 +71,5 @@ class MongoDB extends DBAbstraction {
 }
 
 export default MongoDB;
+
+export {MongoDB};

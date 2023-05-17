@@ -2,12 +2,29 @@ import commonDefinitions from './common-definitions.js';
 import dbDefinitions from './db-definitions.js';
 
 /**
- * @typedef {PlainObject<string,PlainObject>} UpdateOptionDefinitions
- * @todo Indicate specific properties (auto-generate?)
+ * @typedef {import('./common-definitions.js').CommonDefinitions &
+ *   import('./db-definitions.js').DbDefinitions & {
+ *   user?: string[],
+ *   name?: string[],
+ *   email?: string[],
+ *   country?: string[],
+ *   pass?: string[],
+ *   passVer?: number[],
+ *   date?: number[],
+ *   activated?: boolean[],
+ *   activationCode?: string[],
+ *   unactivatedEmail?: string[],
+ *   activationRequestDate?: number[],
+ *   passKey?: string[],
+ *   ip?: string[],
+ *   cookie?: string[],
+ *   _id?: string[]
+ * }} UpdateOptionDefinitions
  */
 
 /**
- * @type {UpdateOptionDefinitions}
+ * @type {import('command-line-usage').
+ *   OptionDefinition[]}
  */
 const optionDefinitions = [
   // multiple: true, defaultOption: true

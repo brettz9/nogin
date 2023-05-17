@@ -1,9 +1,17 @@
 import alert from './modals/alert.js';
 import lostPassword from './modals/lost-password.js';
 
+/**
+ * @param {{
+ *   _: import('intl-dom').I18NCallback,
+ *   layout: import('../routeUtils.js').LayoutCallback,
+ *   emailPattern: string,
+ *   signup: string
+ * }} cfg
+ */
 const login = ({_, layout, emailPattern, signup}) => {
   return layout({
-    content: [
+    content: /** @type {import('jamilih').JamilihChildren} */ ([
       ['div', {
         id: 'login', class: 'center-vertical', role: 'main',
         'data-name': 'login'
@@ -65,7 +73,7 @@ const login = ({_, layout, emailPattern, signup}) => {
         ]]
       ]],
       lostPassword({_, emailPattern})
-    ],
+    ]),
     scripts: [
       ['script', {
         src: '/js/controllers/loginController.iife.min.js',

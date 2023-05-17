@@ -7,6 +7,9 @@ import {dirname, resolve as pathResolve} from 'path';
 
 import {fileURLToPath} from 'url';
 
+// eslint-disable-next-line no-shadow -- Needed
+import {expect} from 'chai';
+
 import {JSDOM} from 'jsdom';
 
 // Todo[engine:node@>16]: Remove `node-fetch` when globally available
@@ -27,9 +30,12 @@ import {
 } from './utilities/EmailChecker.js';
 import spawnPromise from './utilities/spawnPromise.js';
 
-const addUsersJSON = JSON.parse(await readFile(
-  new URL('fixtures/addUsers.json', import.meta.url)
-));
+const addUsersJSON = JSON.parse(
+  // @ts-expect-error It's ok
+  await readFile(
+    new URL('fixtures/addUsers.json', import.meta.url)
+  )
+);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -55,6 +61,10 @@ setEmailConfig({
   NL_EMAIL_PASS
 });
 
+/**
+ * @param {string} s
+ * @returns {string}
+ */
 const stripPromisesWarning = (s) => {
   return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
 };
@@ -68,12 +78,16 @@ const stripMongoWarning = (s) => {
   return s.replace(/\(node.*?\) Warning: Accessing non-existent property 'MongoError' of module exports inside circular dependency\n\(Use `node --trace-warnings \.\.\.` to show where the warning was created\)\n/u, '');
 };
 
+/**
+ * @param {string} s
+ * @returns {string}
+ */
 const stripWarnings = (s) => {
   return stripMongoWarning(stripPromisesWarning(s));
 };
 
 /**
-* @typedef {PlainObject} SpawnResults
+* @typedef {object} SpawnResults
 * @property {string} stdout
 * @property {string} stderr
 */
@@ -82,6 +96,15 @@ const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = 1234;
 const testPort2 = 1234;
 
+/**
+ * @typedef {number} Integer
+ */
+
+/**
+ * @param {string} s
+ * @param {Integer} port
+ * @returns {string}
+ */
 const stripMongoAndServerListeningMessages = (s, port = testPort) => {
   // Todo: Replace this with suppressing db output?
   return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '')
@@ -98,6 +121,7 @@ describe('CLI', function () {
       'Null config with non-local scripts and `noBuiltinStylesheets`',
       async function () {
         this.timeout(110000);
+        /** @type {Promise<SpawnResults>} */
         let cliProm;
         // eslint-disable-next-line promise/avoid-new
         const {text} = await new Promise((resolve, reject) => {
@@ -122,6 +146,7 @@ describe('CLI', function () {
             }
           });
         });
+        // @ts-expect-error It's ok
         const {stdout, stderr} = await cliProm;
         const doc = (new JSDOM(text)).window.document;
         const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
@@ -237,7 +262,10 @@ describe('CLI', function () {
         await removeAccounts({all: true});
         await deleteEmails();
 
-        let cliProm, fetching;
+        /** @type {Promise<SpawnResults>} */
+        let cliProm;
+        /** @type {boolean} */
+        let fetching;
         const [
           {text, headers}, {textRTL}, {json}, {dynamicText},
           {signupText}, {usersText},
@@ -325,11 +353,12 @@ describe('CLI', function () {
             }
           });
         });
+        // @ts-expect-error It's ok
         const {stdout, stderr} = await cliProm;
         const coverageDoc = (new JSDOM(coverageText)).window.document;
         const covMsg = coverageDoc.querySelector(
           '[data-name=four04]'
-        ).textContent;
+        )?.textContent;
         expect(coverageStatus).to.equal(404);
         expect(covMsg).contains(
           'the page or resource you are searching for is currently unavailable'
@@ -338,7 +367,9 @@ describe('CLI', function () {
         expect(updateAccountText).to.contain('Please Login To Your Account');
 
         const homeDoc = (new JSDOM(homeText)).window.document;
-        const homeMsg = homeDoc.querySelector('[data-name=four04]').textContent;
+        const homeMsg = homeDoc.querySelector(
+          '[data-name=four04]'
+        )?.textContent;
         expect(homeStatus).to.equal(404);
         expect(homeMsg).contains(
           'the page or resource you are searching for is currently unavailable'
@@ -395,7 +426,9 @@ describe('CLI', function () {
           )
         );
 
-        const headScriptsDOM = [...doc.querySelectorAll('head script')];
+        const headScriptsDOM = /** @type {HTMLScriptElement[]} */ (
+          [...doc.querySelectorAll('head script')]
+        );
         const headScripts = headScriptsDOM.map(
           (script) => {
             return script.outerHTML;
@@ -444,10 +477,10 @@ describe('CLI', function () {
             headScript.src === '/js/controllers/loginController.js';
         })).to.be.false;
 
-        expect(doc.body.firstElementChild.outerHTML).to.equal(
+        expect(doc.body.firstElementChild?.outerHTML).to.equal(
           '<link rel="stylesheet" href="bodyPreContent.css">'
         );
-        expect(doc.body.lastElementChild.outerHTML).to.equal(
+        expect(doc.body.lastElementChild?.outerHTML).to.equal(
           '<script src="bodyPostContent.js"></script>'
         );
 
@@ -469,12 +502,12 @@ describe('CLI', function () {
           '<option value="MX">Mexico</option>' +
           '<option value="US">United States</option>'
         );
-        const name = signupDoc.querySelector('[data-name="name"]').outerHTML;
+        const name = signupDoc.querySelector('[data-name="name"]')?.outerHTML;
         expect(name).to.not.contain('minlength');
 
         const usersDoc = (new JSDOM(usersText)).window.document;
         expect(
-          usersDoc.querySelector('[data-name=four04]').textContent
+          usersDoc.querySelector('[data-name=four04]')?.textContent
         ).to.contain(
           'the page or resource you are searching for is currently unavailable'
         );
@@ -570,6 +603,7 @@ describe('CLI', function () {
   describe('Helmet', function () {
     it('helmet (defaults)', async function () {
       this.timeout(70000);
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
@@ -606,6 +640,7 @@ describe('CLI', function () {
 
     it('helmet (custom)', async function () {
       this.timeout(70000);
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
@@ -643,6 +678,7 @@ describe('CLI', function () {
 
     it('noHelmet', async function () {
       this.timeout(70000);
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
@@ -679,6 +715,7 @@ describe('CLI', function () {
     it('sessionOptions', async function () {
       this.timeout(70000);
       const name = 'my.sessionid';
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
@@ -714,6 +751,7 @@ describe('CLI', function () {
 
     it('sessionCookieOptions', async function () {
       this.timeout(70000);
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
@@ -752,6 +790,7 @@ describe('CLI', function () {
     //   would ideally test this in UI that it redirects
     it('crossDomainJSRedirects', async function () {
       this.timeout(70000);
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
@@ -805,6 +844,7 @@ describe('CLI', function () {
       await removeAccounts({all: true});
       await deleteEmails();
 
+      /** @type {boolean} */
       let fetching;
       let cliProm;
       const [
@@ -897,7 +937,7 @@ describe('CLI', function () {
             user: ['bretto'],
             email: [NL_EMAIL_USER],
             activated: [true]
-          })[0];
+          });
 
           // Check for custom `composeActivationEmailView`
           const lostPasswordPostRes = await fetch(
@@ -944,7 +984,7 @@ describe('CLI', function () {
       /* const {stdout, stderr} = */ await cliProm;
 
       const postDoc = (new JSDOM(badURLPostText)).window.document;
-      const postMsg = postDoc.querySelector('[data-name=four04]').textContent;
+      const postMsg = postDoc.querySelector('[data-name=four04]')?.textContent;
       expect(badURLPostStatus).to.equal(404);
       expect(postMsg).contains(
         'the page or resource you are searching for is currently unavailable'

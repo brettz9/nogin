@@ -1,5 +1,15 @@
 import formErrors from './modals/form-errors.js';
 
+/**
+ * @param {{
+ *   _: import('intl-dom').I18NCallback<string>,
+ *   title: string,
+ *   user: import('../modules/account-manager.js').AccountInfo
+ *   countries: import('../routeList.js').CountryInfo[],
+ *   emailPattern: string,
+ *   requireName?: boolean
+ * }} cfg
+ */
 const account = ({
   _, user, countries, emailPattern, requireName, title
 }) => {

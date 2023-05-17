@@ -15,7 +15,7 @@ const EmailValidator = class EmailValidator {
         EmailValidatorView.messages.PleaseEnterValidEmailAddress
       );
     }
-    return input.form.reportValidity();
+    return /** @type {HTMLFormElement} */ (input.form).reportValidity();
   }
 
   /**

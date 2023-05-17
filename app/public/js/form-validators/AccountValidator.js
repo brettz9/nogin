@@ -6,8 +6,8 @@ import AccountValidatorView from '../views/validators/AccountValidatorView.js';
 class AccountValidator {
   /**
    * Sets up properties and methods.
-   * @param {PlainObject} cfg
-   * @param {boolean} cfg.signup
+   * @param {object} [cfg={}]
+   * @param {boolean} [cfg.signup]
    */
   constructor ({signup} = {}) {
     // build array maps of the form inputs & control groups
@@ -18,9 +18,13 @@ class AccountValidator {
     this.userId = AccountValidatorView.getUserId();
     this.errorMessages = AccountValidatorView.errorMessages;
 
+    /**
+     * @param {string} s
+     * @returns {boolean}
+     */
     this.userIsLoggedIn = (s) => {
       // if user is logged in and hasn't changed their password, return ok
-      return this.userId.val() && s === '';
+      return Boolean(this.userId.val()) && s === '';
     };
   }
 
@@ -79,7 +83,7 @@ class AccountValidator {
     //   to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
     // istanbul ignore if
-    if (!this.userIsLoggedIn() && pass.validity.tooShort) {
+    if (!this.userIsLoggedIn(pass.value) && pass.validity.tooShort) {
       pass.setCustomValidity(this.errorMessages.pass.PasswordMinimumLength);
     }
     if (this.signup && pass.value !== passConfirm.value) {

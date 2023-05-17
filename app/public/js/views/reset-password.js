@@ -2,21 +2,27 @@
 
 const ResetPasswordView = {
   /**
-   * @returns {external:jQuery} `HTMLFormElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm} `HTMLFormElement`
    */
   getSetPasswordForm () {
-    return $('#set-password-form');
+    return (
+      /**
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       *   JQueryWithAjaxForm}
+       */ ($('#set-password-form'))
+    );
   },
 
   /**
-   * @returns {external:jQuery} `HTMLInputElement`
+   * @returns {JQuery} `HTMLInputElement`
    */
   getPassword () {
     return $('[data-name="reset-pass"]');
   },
 
   /**
-   * @returns {external:jQuery} `HTMLButtonElement`
+   * @returns {JQuery} `HTMLButtonElement`
    */
   getSetPasswordSubmit () {
     return $('[data-name="reset-password-submit"]');

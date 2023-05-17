@@ -2,12 +2,14 @@ import commonDefinitions from './common-definitions.js';
 import dbDefinitions from './db-definitions.js';
 
 /**
- * @typedef {PlainObject<string,PlainObject>} ListIndexesDefinitions
- * @todo Indicate specific properties (auto-generate?)
+ * @typedef {import('./common-definitions.js').CommonDefinitions &
+ *   import('./db-definitions.js').DbDefinitions
+ * } ListIndexesDefinitions
  */
 
 /**
- * @type {ListIndexesDefinitions}
+ * @type {import('command-line-usage').
+ *   OptionDefinition[]}
  */
 const optionDefinitions = [
   // multiple: true, defaultOption: true

@@ -1,3 +1,9 @@
+/**
+ * @param {{
+*   _: import('intl-dom').I18NCallback,
+*   emailPattern: string
+* }} cfg
+*/
 const lostPassword = ({_, emailPattern}) => {
   return ['div', {
     id: 'retrieve-password',

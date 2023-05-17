@@ -6,68 +6,71 @@ const {_} = Nogin;
 
 const SignupView = {
   /**
-   * @returns {external:jQuery}
+   * @returns {JQuery}
    */
   getName () {
     return $('#name-tf');
   },
 
   /**
-   * @param {external:jQuery} accountCreatedAlertDialog `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLFormElement`
+   * @param {JQuery} accountCreatedAlertDialog `HTMLDivElement`
+   * @returns {JQuery} `HTMLFormElement`
    */
   getAccountCreatedOkButton (accountCreatedAlertDialog) {
     return accountCreatedAlertDialog.find('[data-name=ok]');
   },
 
   /**
-   * @param {external:jQuery} accountForm `HTMLFormElement`
-   * @returns {external:jQuery}
+   * @param {JQuery} accountForm `HTMLFormElement`
+   * @returns {JQuery}
    */
   getActionForAccountForm (accountForm) {
     return accountForm.find('[data-name=action1]');
   },
 
   /**
-   * @returns {external:jQuery} `HTMLFormElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm} `HTMLFormElement`
    */
   setAccountSettings () {
     // Customize the account signup form
     const accountForm = populateForm('[data-name=account-form]', {
-      heading: _('Signup'),
-      subheading: _('PleaseTellUsAboutYourself'),
-      action1: _('Cancel'),
-      action2: _('Submit')
+      heading: /** @type {string} */ (_('Signup')),
+      subheading: /** @type {string} */ (_('PleaseTellUsAboutYourself')),
+      action1: /** @type {string} */ (_('Cancel')),
+      action2: /** @type {string} */ (_('Submit'))
     });
     return accountForm;
   },
 
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   accountCreated () {
     // Setup the alert that displays when an account is successfully created
     return AlertDialog.populate({
-      heading: _('AccountCreatedSignup'),
-      body: _('PleaseCheckEmailForVerificationLink', {
+      heading: /** @type {string} */ (_('AccountCreatedSignup')),
+      body: /** @type {Element} */ (_('PleaseCheckEmailForVerificationLink', {
         lb: $('<br/>')[0]
-      }),
+      })),
       keyboard: false,
       backdrop: 'static'
     });
   },
 
   /**
-   * @param {PlainObject} cfg
-   * @param {"DispatchActivationLinkError"} [cfg.type]
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @param {object} cfg
+   * @param {"DispatchActivationLinkError"} cfg.type
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type}) {
     return AlertDialog.populate({
-      heading: _('error'),
-      body: _(type, {
+      heading: /** @type {string} */ (_('error')),
+      body: /** @type {Element} */ (_(type, {
         lb: $('<br/>')[0]
-      }),
+      })),
       keyboard: false,
       backdrop: 'static'
     });

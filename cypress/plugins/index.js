@@ -49,8 +49,8 @@ import noginConfig from '../../nogin.js';
 */
 
 /**
- * @param {external:CypressOn} on See {@link https://docs.cypress.io/api/plugins/writing-a-plugin.html#on}
- * @param {Plainobject} config See {@link https://docs.cypress.io/guides/references/configuration.html#Command-Line}
+ * @param {CypressOn} on See {@link https://docs.cypress.io/api/plugins/writing-a-plugin.html#on}
+ * @param {object} config See {@link https://docs.cypress.io/guides/references/configuration.html#Command-Line}
  * @returns {void}
  */
 const exprt = (on, config) => {
@@ -72,7 +72,7 @@ const exprt = (on, config) => {
   } = noginConfig;
 
   /**
-   * @param {PlainObject} cfg
+   * @param {object} cfg
    * @param {string} cfg.cookieValue
    * @param {string} [cfg.badSecret]
    * @returns {string}
@@ -137,7 +137,7 @@ const exprt = (on, config) => {
      * Used in `root.js` test to ensure that user gets auto-logged in
      * after an initial log-in (and that the cookie is still set after
      * the user is redirected to `/home`).
-     * @param {PlainObject} cfg
+     * @param {object} cfg
      * @param {string|string[]} cfg.user
      * @param {string|string[]} cfg.ip
      * @param {string} [cfg.badSecret] For testing a forgery attempt
@@ -182,7 +182,7 @@ const exprt = (on, config) => {
     /**
      * Simulates POST to `/signup` and subsequent visit to `/activation?c=`
      * for that account (with the `c` value obtained from the activation email).
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addAccount () {
       return (await addAccounts({
@@ -201,7 +201,7 @@ const exprt = (on, config) => {
 
     /**
      *
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addAnotherAccount () {
       return (await addAccounts({
@@ -223,7 +223,7 @@ const exprt = (on, config) => {
      * for that account (with the `c` value obtained from the activation email).
      * Sets a different email from `addAccount` initially, however, so can
      * change to it and then check it.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addNondefaultAccount () {
       return (await addAccounts({
@@ -243,7 +243,7 @@ const exprt = (on, config) => {
     /**
      * Used so we can get coverage of failed `dispatchResetPasswordLink` on call
      * to `/lost-password`.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addAccountWithBadEmail () {
       return (await addAccounts({
@@ -258,7 +258,7 @@ const exprt = (on, config) => {
 
     /**
      * Simulates POST to `/signup`.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addNonActivatedAccount () {
       return (await addAccounts({
@@ -273,7 +273,7 @@ const exprt = (on, config) => {
 
     /**
      * Simulates POST to `/signup`.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addExtraNonActivatedAccount () {
       return (await addAccounts({
@@ -288,7 +288,7 @@ const exprt = (on, config) => {
 
     /**
      * Simulates POST to `/signup`.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addExtraActivatedAccount () {
       return (await addAccounts({
@@ -303,7 +303,7 @@ const exprt = (on, config) => {
 
     /**
      * Allows checking `passVer` validity.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addAccountWithBadPassVersion () {
       return (await addAccounts({
@@ -321,7 +321,7 @@ const exprt = (on, config) => {
      * Like a POST to `/home`, but with the ability to unset
      *   the `activated` status. (Used for causing an
      *   `autoLogin` fail).
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async updateAccountToInactive () {
       return (await updateAccounts({
@@ -334,7 +334,7 @@ const exprt = (on, config) => {
      * Like a POST to `/home`, but with the ability to unset
      *   the `activated` status. (Used for causing an
      *   `autoLogin` fail).
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async simulateOldActivationRequestDate () {
       const fortyEightHoursAgo = Date.now() - 48 * 60 * 60 * 1000;
@@ -347,7 +347,7 @@ const exprt = (on, config) => {
     /**
      * Ensure we get coverage of empty string default for name
      * and country.
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async addAccountWithMissingNameAndCountry () {
       return (await addAccounts({
@@ -361,10 +361,10 @@ const exprt = (on, config) => {
     },
 
     /**
-     * @param {PlainObject} cfg
+     * @param {object} cfg
      * @param {string} cfg.user
      * @param {string} cfg.pass
-     * @returns {Promise<AccountInfo>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     validUserPassword ({user, pass}) {
       return validUserPassword({
@@ -374,7 +374,7 @@ const exprt = (on, config) => {
 
     /**
      * @param {?ReadOptionDefinitions} cfg
-     * @returns {Promise<AccountInfo[]>}
+     * @returns {Promise<import('./account-manager.js').AccountInfo[]>}
      */
     getRecords (cfg) {
       // Not as a default param, as `task` serializes to JSONable
@@ -412,7 +412,7 @@ const exprt = (on, config) => {
     /**
      * Shouldn't be needed on command line.
      * @async
-     * @param {PlainObject} cfg
+     * @param {object} cfg
      * @param {string} cfg.subject
      * @param {string[]} cfg.html
      * @returns {Promise<boolean>}
@@ -427,14 +427,10 @@ const exprt = (on, config) => {
     },
 
     /**
-    * @typedef {PlainObject} HTMLAndSubject
-    * @property {string} html
-    * @property {string} subject
-    */
-
-    /**
      * @async
-     * @returns {Promise<HTMLAndSubject>}
+     * @returns {Promise<
+     *   import('../../test/utilities/EmailChecker.js').HTMLAndSubject
+     * >}
      */
     getMostRecentEmail () {
       if (config.env.disableEmailChecking) {
@@ -454,7 +450,7 @@ const exprt = (on, config) => {
 
     /**
      * @param {string} text
-     * @returns {Promise<external:ESLintMessage[]>}
+     * @returns {Promise<ESLintMessage[]>}
      */
     async lint (text) {
       const cli = new ESLint({

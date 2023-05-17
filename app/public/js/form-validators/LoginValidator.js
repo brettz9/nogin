@@ -13,16 +13,20 @@ const LoginValidator = {
   validateForm () {
     if (user.validity.valueMissing) {
       user.setCustomValidity(
-        LoginValidatorView.errorMessages.PleaseEnterValidUserName
+        /** @type {string} */ (
+          LoginValidatorView.errorMessages.PleaseEnterValidUserName
+        )
       );
-      user.form.reportValidity();
+      /** @type {HTMLFormElement} */ (user.form).reportValidity();
       return false;
     }
     if (pass.validity.valueMissing) {
       pass.setCustomValidity(
-        LoginValidatorView.errorMessages.PleaseEnterValidPassword
+        /** @type {string} */ (
+          LoginValidatorView.errorMessages.PleaseEnterValidPassword
+        )
       );
-      pass.form.reportValidity();
+      /** @type {HTMLFormElement} */ (pass.form).reportValidity();
       return false;
     }
     return true;
@@ -30,7 +34,7 @@ const LoginValidator = {
 
   /**
   * Bind a simple alert window to this controller to display any errors.
-  * @param {string} msg
+  * @param {"MismatchUserDataFormat"} [msg]
   * @returns {void}
   */
   showLoginError (msg) {

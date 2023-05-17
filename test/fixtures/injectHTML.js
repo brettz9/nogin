@@ -1,4 +1,4 @@
-const injectHTML = function (cfg) {
+const injectHTML = function (/* cfg */) {
   return {
     headPre: [
       ['script', {src: 'headPreContent.js'}]

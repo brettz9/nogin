@@ -1,3 +1,9 @@
+/**
+ * @param {{
+ *   _: import('intl-dom').I18NCallback,
+ *   type: string
+ * }} cfg
+ */
 const confirm = ({_, type}) => {
   return ['div', {
     class: 'modal-confirm modal fade',

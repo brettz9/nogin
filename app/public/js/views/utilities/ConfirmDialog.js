@@ -1,6 +1,16 @@
 /* globals $ */
 
 const ConfirmDialog = {
+  /**
+   * @param {{
+   *   type: string,
+   *   header: string,
+   *   body: string|Element,
+   *   cancel: string,
+   *   submit: string
+   * }} cfg
+   * @returns {import('./AlertDialog.js').JQueryWithModal}
+   */
   populate ({
     type,
     header,
@@ -9,7 +19,8 @@ const ConfirmDialog = {
     submit
   }) {
     const baseSel = `[data-confirm-type="${type}"][data-name=modal-confirm]`;
-    $(baseSel).modal({
+    /** @type {import('./AlertDialog.js').JQueryWithModal} */ (
+      $(baseSel)).modal({
       show: false, keyboard: true, backdrop: true
     });
     $(`${baseSel} .modal-header [data-name=modal-title]`).text(
@@ -18,16 +29,20 @@ const ConfirmDialog = {
     $(`${baseSel} [data-name=modal-body] p`).empty().append(
       body
     );
-    $(`${baseSel} .cancel`).text(cancel).click(() => {
-      $(baseSel).modal('hide');
+    $(`${baseSel} .cancel`).text(cancel).on('click', () => {
+      /** @type {import('./AlertDialog.js').JQueryWithModal} */ (
+        $(baseSel)
+      ).modal('hide');
     });
     $(`${baseSel} .submit`).text(submit);
-    return $(baseSel);
+    return /** @type {import('./AlertDialog.js').JQueryWithModal} */ (
+      $(baseSel)
+    );
   },
 
   /**
-   * @param {external:jQuery} confirmDialog
-   * @returns {external:jQuery}
+   * @param {JQuery} confirmDialog
+   * @returns {JQuery}
    */
   getAccountSubmit (confirmDialog) {
     return confirmDialog.find('.submit');

@@ -12,12 +12,19 @@ import DBFactory from './db-factory.js';
 import getLogger from './getLogger.js';
 import {i18n} from './i18n.js';
 
+/**
+ * @typedef {"name"|"email"|"country"|"pass"|"passVer"|
+ *   "date"|"activated"|"activationCode"|"unactivatedEmail"|
+ *   "activationRequestDate"} OtherAccountProperty
+ */
+
 const setI18n = i18n();
 
 const readFile = promisify(readFileOrig);
 
 /**
- * @param {DbConfig} options
+ * @param {import('./db-factory.js').DbConfig &
+ *  import('../../../bin/common-definitions.js').CommonDefinitions} options
  * @returns {Promise<AccountManager>}
  */
 const getAccountManager = async (options) => {
@@ -26,13 +33,16 @@ const getAccountManager = async (options) => {
 
   const DB_URL = DBFactory.getURL(
     adapter,
-    DB_USER || DB_PASS,
+    Boolean(DB_USER || DB_PASS),
     dbOpts
   );
 
   const [_, log] = await Promise.all([
     setI18n({
-      acceptsLanguages: () => [options.loggerLocale || 'en-US']
+      // @ts-expect-error Why doesn't this work with first overload?
+      acceptsLanguages: () => [
+        options.loggerLocale || 'en-US'
+      ]
     }),
     getLogger(options)
   ]);
@@ -46,12 +56,15 @@ const getAccountManager = async (options) => {
 };
 
 /**
- * @param {AddOptionDefinitions|UpdateOptionDefinitions} options
- * @param {boolean} update
- * @returns {Promise<AccountInfo[]>}
+ * @param {import('../../../bin/manageAccounts-add-optionDefinitions.js').
+ *   AddOptionDefinitions|
+ * import('../../../bin/manageAccounts-update-optionDefinitions.js').
+ *   UpdateOptionDefinitions} options
+ * @param {boolean} [update]
+ * @returns {Promise<import('./account-manager.js').AccountInfo[]>}
  */
 async function getAccounts (options, update) {
-  if (options.userFile) {
+  if ('userFile' in options && options.userFile) {
     return (await Promise.all(
       options.userFile.map((uf) => {
         return readFile(
@@ -69,7 +82,7 @@ async function getAccounts (options, update) {
     email,
     pass
   } = options;
-  return users.map((user, i) => {
+  return /** @type {string[]} */ (users).map((user, i) => {
     if (!update) {
       if (!pass || !pass[i]) {
         throw new TypeError(
@@ -85,6 +98,7 @@ async function getAccounts (options, update) {
       }
     }
 
+    /** @type {Partial<import('./account-manager.js').AccountInfo>} */
     const ret = {
       user
     };
@@ -94,20 +108,28 @@ async function getAccounts (options, update) {
       // These would mostly just be for testing
       'activationCode',
       'unactivatedEmail', 'activationRequestDate'
-    ].forEach((prop) => {
+    ].forEach((pr) => {
+      const prop =
+        /**
+         * @type {OtherAccountProperty}
+         */ (pr);
       const obj = options[prop];
       if (obj && obj[i]) {
+        // @ts-expect-error Why is this problematic?
         ret[prop] = obj[i];
       }
     });
 
-    return ret;
+    return /** @type {import('./account-manager.js').AccountInfo} */ (
+      ret
+    );
   });
 }
 
 /**
- * @param {AddOptionDefinitions} options
- * @returns {Promise<AccountInfo[]>}
+ * @param {import('../../../bin/manageAccounts-add-optionDefinitions.js').
+ *   AddOptionDefinitions} options
+ * @returns {Promise<import('./account-manager.js').AccountInfo[]>}
  */
 const addAccounts = async (options) => {
   const accounts = await getAccounts(options);
@@ -125,8 +147,9 @@ const addAccounts = async (options) => {
  * refactored to allow searching by multiple values for an
  * update as well as setting multiple other values (whether
  * for the same fields or not).
- * @param {UpdateOptionDefinitions} options
- * @returns {Promise<AccountInfo[]>}
+ * @param {import('../../../bin/manageAccounts-update-optionDefinitions.js').
+ *   UpdateOptionDefinitions} options
+ * @returns {Promise<import('./account-manager.js').AccountInfo[]>}
  */
 const updateAccounts = async (options) => {
   const accounts = await getAccounts(options, true);
@@ -140,10 +163,18 @@ const updateAccounts = async (options) => {
 };
 
 /**
- * @param {RemoveOptionDefinitions|ReadOptionDefinitions} options
- * @returns {AccountInfoFilter}
+ * @param {import('../../../bin/manageAccounts-remove-optionDefinitions.js').
+ *   RemoveOptionDefinitions|
+ * import('../../../bin/manageAccounts-read-optionDefinitions.js').
+ *   ReadOptionDefinitions} options
+ * @returns {import('./account-manager.js').AccountInfoFilter}
  */
 function getAccountInfo (options) {
+  /**
+   * @type {{
+   *   [key: string]: {$in: string[]|number[]|boolean[]|undefined}
+   * }}
+   */
   const info = {};
   [
     'user', 'name', 'email', 'country', 'pass', 'passVer', 'date',
@@ -151,17 +182,26 @@ function getAccountInfo (options) {
     'activationCode', 'unactivatedEmail', 'activationRequestDate'
     // Todo: Add 'passKey', 'ip', 'cookie', and '_id' (here and in
     //  `getAccounts` and `AccountInfoFilter` typedef)?
-  ].forEach((prop) => {
+  ].forEach((pr) => {
+    const prop =
+      /**
+       * @type {"user"|OtherAccountProperty}
+       */ (pr);
     if (options[prop]) {
       info[prop] = {$in: options[prop]};
     }
   });
-  return info;
+  return /** @type {import('./account-manager.js').AccountInfoFilter} */ (
+    info
+  );
 }
 
 /**
- * @param {RemoveOptionDefinitions} options
- * @returns {Promise<DeleteWriteOpResult>}
+ * @param {import('../../../bin/manageAccounts-remove-optionDefinitions.js').
+ *   RemoveOptionDefinitions & {
+ *   all?: boolean
+ * }} options
+ * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
  */
 const removeAccounts = async (options) => {
   const am = await getAccountManager(options);
@@ -172,8 +212,9 @@ const removeAccounts = async (options) => {
 };
 
 /**
- * @param {ReadOptionDefinitions} [options]
- * @returns {Promise<AccountInfo[]>}
+ * @param {import('../../../bin/manageAccounts-read-optionDefinitions.js').
+ *   ReadOptionDefinitions} [options]
+ * @returns {Promise<Partial<import('./account-manager.js').AccountInfo>[]>}
  */
 const readAccounts = async (options = {}) => {
   const am = await getAccountManager(options);
@@ -184,15 +225,17 @@ const readAccounts = async (options = {}) => {
 };
 
 /**
-* @typedef {DbConfig} ValidateUserPasswordOptionDefinitions
-* @param {string} user
-* @param {string} pass
-*/
+ * @typedef {import('./db-factory.js').
+ *  DbConfig & {
+ *   user: string,
+ *   pass: string
+ * }} ValidateUserPasswordOptionDefinitions
+ */
 
 /**
  * Could be a use for this on CLI, but less likely.
  * @param {ValidateUserPasswordOptionDefinitions} options
- * @returns {Promise<AccountInfo>}
+ * @returns {Promise<Partial<import('./account-manager.js').AccountInfo>>}
  */
 const validUserPassword = async (options) => {
   const am = await getAccountManager(options);
@@ -202,7 +245,7 @@ const validUserPassword = async (options) => {
 
 /**
  * Logs indexes.
- * @param {DbConfig} options
+ * @param {import('./db-factory.js').DbConfig} options
  * @returns {Promise<void>}
  */
 const listIndexes = async (options) => {

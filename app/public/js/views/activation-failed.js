@@ -3,26 +3,28 @@ import AlertDialog from './utilities/AlertDialog.js';
 
 const ActivationFailedView = {
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {JQuery & {
+   *   modal: (showOrHide: "show"|"hide") => void
+   * }} `HTMLDivElement`
    */
   accountFailedActivation () {
     // Set up the alert that displays when an account has not been activated.
     return AlertDialog.populate({
-      heading: Nogin._('ActivationFailed'),
-      body: Nogin._(
+      heading: /** @type {string} */ (Nogin._('ActivationFailed')),
+      body: /** @type {Element} */ (Nogin._(
         // Passed from server so we can set in JS
         NoginInitialErrorGlobal,
         {
           lb: $('<br/>')[0]
         }
-      ),
+      )),
       keyboard: false,
       backdrop: 'static'
     });
   },
   /**
-   * @param {external:jQuery} accountActivatedAlertDialog `HTMLDivElement`
-   * @returns {external:jQuery} `HTMLButtonElement`
+   * @param {JQuery} accountActivatedAlertDialog `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
    */
   getOKButton (accountActivatedAlertDialog) {
     return accountActivatedAlertDialog.find('[data-name=ok]');

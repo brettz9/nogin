@@ -9,7 +9,7 @@ accountFailedActivationAlertDialog.modal('show');
 const okButton = ActivationFailedView.getOKButton(
   accountFailedActivationAlertDialog
 );
-okButton.click(function () {
+okButton.on('click', function () {
   // Redirect to homepage on account failure, adding short delay so user
   //   can read alert window
   setTimeout(function () {

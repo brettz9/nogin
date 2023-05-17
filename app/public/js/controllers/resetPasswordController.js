@@ -19,7 +19,10 @@ ajaxFormClientSideValidate(
   {
     validate () {
       rv.hideAlert();
-      ResetPasswordValidator.validatePassword(pass[0]);
+      ResetPasswordValidator.validatePassword(
+        /** @type {HTMLInputElement} */
+        (pass[0])
+      );
     },
     beforeSubmit (formData, jqForm, options) {
       rv.hideAlert();

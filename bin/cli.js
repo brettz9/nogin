@@ -9,17 +9,21 @@ import manageAccounts from './manage-accounts.js';
 const __dirname = getDirname(import.meta.url);
 
 /**
- * @returns {Promise<MainOptionDefinitions>}
+ * @returns {Promise<
+ *   import('../app/server/optionDefinitions.js').MainOptionDefinitions>}
  */
 async function getOptions () {
-  return await cliBasics({
-    optionsPath: '../app/server/optionDefinitions.js',
-    cwd: __dirname
-  });
+  // eslint-disable-next-line max-len -- Long
+  return /** @type {import('../app/server/optionDefinitions.js').MainOptionDefinitions} */ (
+    await cliBasics({
+      optionsPath: '../app/server/optionDefinitions.js',
+      cwd: __dirname
+    })
+  );
 }
 
 /**
- * @returns {void}
+ * @returns {Promise<void>}
  */
 async function noVerb () {
   const options = await getOptions();
@@ -34,10 +38,18 @@ async function noVerb () {
   }
 }
 
-let verb = process.argv[2];
+let verb =
+  /**
+   * @type {import('./manage-accounts.js').ManageAccountVerb|"help"}
+   */ (process.argv[2]);
 switch (verb) {
 case 'help':
-  verb = process.argv[3];
+  verb =
+    /**
+     * @type {import('./manage-accounts.js').ManageAccountVerb|"help"}
+     */ (
+      process.argv[3]
+    );
   if (!verb) {
     process.argv[2] = '--help';
     await noVerb();
@@ -63,10 +75,15 @@ case 'add': {
     : 'en-US';
 
   try {
-    await manageAccounts(verb, {loggerLocale});
+    await manageAccounts(
+      /** @type {import('./manage-accounts.js').ManageAccountVerb} */ (
+        verb
+      ),
+      {loggerLocale}
+    );
   } catch (err) {
     const errorLogger = await getLogger({loggerLocale, errorLog: true});
-    errorLogger('Erred', null, err);
+    errorLogger('Erred', null, /** @type {Error} */ (err));
   }
   process.exit();
   break;

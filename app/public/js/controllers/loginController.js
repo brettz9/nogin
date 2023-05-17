@@ -27,16 +27,16 @@ const retrievePasswordSubmit = LoginView.retrievePasswordSubmit(
 );
 
 // bind event listeners to button clicks
-retrievePasswordSubmit.click(() => {
+retrievePasswordSubmit.on('click', () => {
   retrievePasswordForm.submit();
 });
-forgotPassword.click(() => {
+forgotPassword.on('click', () => {
   const retrievePasswordCancel = LoginView.setRetrievePasswordCancel(
     retrievePasswordModal
   );
 
   // This isn't always happening automatically
-  retrievePasswordCancel.click(() => {
+  retrievePasswordCancel.on('click', () => {
     retrievePasswordModal.modal('hide');
     setTimeout(() => {
       lostPasswordUsername.focus();
@@ -101,7 +101,7 @@ ajaxFormClientSideValidate(
 );
 
 LoginView.getInputForInitialFocus().focus();
-rememberMeButton.click(function () {
+rememberMeButton.on('click', () => {
   LoginView.toggleCheckSquare(loginModal);
 });
 
@@ -112,7 +112,9 @@ ajaxFormClientSideValidate(
   retrievePasswordForm,
   {
     validate () {
-      const emailInput = retrievePasswordEmail[0];
+      const emailInput = /** @type {HTMLInputElement} */ (
+        retrievePasswordEmail[0]
+      );
       if (EmailValidator.validateEmail(emailInput)) {
         ev.hideEmailAlert();
       }
@@ -122,17 +124,23 @@ ajaxFormClientSideValidate(
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();
       ev.showEmailSuccess(
-        LoginValidatorView.messages.LinkToResetPasswordMailed
+        /** @type {string} */ (
+          LoginValidatorView.messages.LinkToResetPasswordMailed
+        )
       );
     },
     error (e) {
       if (e.responseText === 'email-not-found') {
-        ev.showEmailAlert(LoginValidatorView.messages.EmailNotFound);
+        ev.showEmailAlert(
+          /** @type {string} */ (LoginValidatorView.messages.EmailNotFound)
+        );
       } else {
         console.log(e);
         LoginView.switchConfirmToAlert(retrievePasswordModal);
         retrievePasswordSubmit.hide();
-        ev.showEmailAlert(LoginValidatorView.messages.ProblemTryAgainLater);
+        ev.showEmailAlert(/** @type {string} */ (
+          LoginValidatorView.messages.ProblemTryAgainLater
+        ));
       }
     }
   }

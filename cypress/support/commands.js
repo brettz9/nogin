@@ -74,7 +74,7 @@ Cypress.Commands.add(
   'visitURLAndCheckAccessibility',
   /**
    * @param {string} url
-   * @param {external:CypressVisitOptions} options
+   * @param {CypressVisitOptions} options
    * @returns {void}
    */
   (url, options) => {

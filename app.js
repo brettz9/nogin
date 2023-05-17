@@ -5,7 +5,7 @@
  * @copyright (c) 2013-2018 Stephen Braitsch
 */
 
-import http from 'http';
+import * as http from 'http';
 import {join, resolve as pathResolve} from 'path';
 import express from 'express';
 import session from 'express-session';
@@ -26,10 +26,60 @@ import jmlEngine from './app/server/modules/jmlEngine.js';
 import {parseCLIJSON} from './app/server/modules/common.js';
 import getDirname from './app/server/modules/getDirname.js';
 
+/**
+ * These are a subset of the CLI options.
+ * @typedef {{
+ *   loggerLocale: string,
+ *   NL_EMAIL_USER: string,
+ *   NL_EMAIL_PASS: string,
+ *   NL_EMAIL_HOST: string,
+ *   NL_EMAIL_FROM: string,
+ *   NS_EMAIL_TIMEOUT: number,
+ *   NL_SITE_URL: string,
+ *   cwd: string,
+ *   localesBasePath: string,
+ *   postLoginRedirectPath: string,
+ *   customRoute: string[],
+ *   crossDomainJSRedirects: boolean,
+ *   composeResetPasswordEmailView: string,
+ *   composeActivationEmailView: string,
+ *   requireName: boolean,
+ *   router: string,
+ *   useESM: boolean,
+ *   noPolyfill: boolean,
+ *   injectHTML: string,
+ *   countryCodes: string,
+ *   favicon: string,
+ *   stylesheet: string,
+ *   noBuiltinStylesheets: boolean,
+ *   userJS: string,
+ *   userJSModule: string,
+ *   localScripts: boolean,
+ *   fromText: string,
+ *   fromURL: string,
+ *   SERVE_COVERAGE: boolean,
+ *   showUsers: boolean,
+ *   disableXSRF: boolean,
+ *   csurfOptions: string
+ * }} RouteConfigFromOptions
+ */
+
+/**
+ * @typedef {RouteConfigFromOptions & {
+ *   log: import('./app/server/modules/getLogger.js').Logger,
+ *   DB_URL: string,
+ *   opts: import('./app/server/optionDefinitions.js').MainOptionDefinitions,
+ *   dbOpts: import('./app/server/modules/db-factory.js').DbOptions,
+ *   triggerCoverage: boolean
+ * }} RouteConfig
+ */
+
 const __dirname = getDirname(import.meta.url);
 
 /**
- * @param {MainOptionDefinitions} options
+ * @param {Partial<import('./app/server/optionDefinitions.js').
+ *   MainOptionDefinitions>
+ * } options
  * @returns {Promise<void>}
  */
 const createServer = async function (options) {
@@ -52,11 +102,18 @@ const createServer = async function (options) {
       ? (await import(pathResolve(cwd, config))).default
       : null;
   } catch (err) {
-    errorLog('noConfigFileDetected', {config});
+    errorLog('noConfigFileDetected', {
+      // eslint-disable-next-line object-shorthand -- TS
+      config: /** @type {string} */ (config)
+    });
     return;
   }
 
-  const opts = {...cfg, ...options, config: null};
+  const opts =
+    /**
+     * @type {import('./app/server/optionDefinitions.js').
+     *   MainOptionDefinitions}
+     */ ({...cfg, ...options, config: null});
   const {
     loggerLocale,
     NL_EMAIL_HOST,
@@ -66,7 +123,6 @@ const createServer = async function (options) {
     NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
     secret,
-    countries,
     PORT = 3000,
     JS_DIR = '/app/public',
     staticDir,
@@ -152,11 +208,15 @@ const createServer = async function (options) {
     });
   }
   if (middleware) {
-    const middlewareImports = Promise.all(middleware.map(async (mw) => {
+    const middlewareImports = await Promise.all(middleware.map(async (mw) => {
       // eslint-disable-next-line no-unsanitized/method -- User path
       return await import(mw);
     }));
 
+    /**
+     * @type {({default: (opts: import('./app/server/optionDefinitions.js').
+     *   MainOptionDefinitions) => import('express').Application})[]}
+     */
     middlewareImports.forEach((imported) => {
       app.use(imported.default(opts));
     });
@@ -172,7 +232,12 @@ const createServer = async function (options) {
   }
 
   const DB_URL = DBFactory.getURL(
-    dbOpts.adapter, isProduction, dbOpts
+    /** @type {"mongodb"} */ (dbOpts.adapter),
+    isProduction,
+    /**
+     * @type {import('./app/server/modules/db-factory.js').
+     *   DbConfig}
+     */ (dbOpts)
   );
 
   // Also allowing `genid`, `name`, `rolling`, `unset`?
@@ -187,11 +252,7 @@ const createServer = async function (options) {
   const sess = {
     secret,
     store: MongoStore.create({
-      mongoUrl: DB_URL,
-      mongoOptions: {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-      }
+      mongoUrl: DB_URL
     }),
     cookie: parseCLIJSON(sessionCookieOptions),
     ...sessionOptions
@@ -205,10 +266,10 @@ const createServer = async function (options) {
   app.use(session(sess));
 
   log('BeginningRoutes');
-  await routes(app, {
+
+  await routes(app, /** @type {RouteConfig} */ ({
     log,
     loggerLocale,
-    countries,
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
     NL_EMAIL_PASS,
@@ -248,7 +309,7 @@ const createServer = async function (options) {
     // csrfKey: 'csrf-token',
     // User is using instrumenting
     triggerCoverage: JS_DIR !== '/app/public'
-  });
+  }));
 
   log('BeginningServer');
   http.createServer(app).listen(app.get('port'), () => {

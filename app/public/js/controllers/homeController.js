@@ -10,6 +10,14 @@ import ConfirmDialog from '../views/utilities/ConfirmDialog.js';
 import HomeView from '../views/home.js';
 import AccountValidator from '../form-validators/AccountValidator.js';
 
+/**
+ * @typedef {Error & {
+ *   text: string,
+ *   responseText: string,
+ *   statusText?: string
+ * }} AjaxPostError
+ */
+
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
 
 // User name field
@@ -22,10 +30,14 @@ user.attr('disabled', 'disabled');
 
 // handle account deletion
 const deleteAccountConfirmDialog = HomeView.setDeleteAccount();
-ConfirmDialog.getAccountSubmit(deleteAccountConfirmDialog).click(async () => {
+ConfirmDialog.getAccountSubmit(
+  deleteAccountConfirmDialog
+).on('click', async () => {
   try {
     await deleteAccount();
-  } catch (err) {
+  } catch (er) {
+    const err = /** @type {AjaxPostError} */ (er);
+
     // Log just in case not internationalized
     console.error(Nogin._('ErrorFormat', {
       text: err.text,
@@ -41,10 +53,11 @@ ConfirmDialog.getAccountSubmit(deleteAccountConfirmDialog).click(async () => {
 
 const logoutButton = HomeView.getLogoutButton();
 // handle user logout
-logoutButton.click(async () => {
+logoutButton.on('click', async () => {
   try {
     await attemptLogout();
-  } catch (err) {
+  } catch (er) {
+    const err = /** @type {AjaxPostError} */ (er);
     // Log in case actual error not internationalized
     console.error(Nogin._('ErrorFormat', {
       text: err.text,
@@ -59,7 +72,7 @@ logoutButton.click(async () => {
 
 // confirm account deletion
 const accountForm = HomeView.setAccountSettings();
-HomeView.getDeleteAccountAction(accountForm).click(() => {
+HomeView.getDeleteAccountAction(accountForm).on('click', () => {
   deleteAccountConfirmDialog.modal('show');
 });
 setupValidationSubmission();
@@ -69,7 +82,8 @@ setupValidationSubmission();
  */
 function emailHasChanged () {
   const email = HomeView.getEmail();
-  return email[0].value !== email[0].defaultValue;
+  const emailElem = /** @type {HTMLInputElement} */ (email[0]);
+  return emailElem.value !== emailElem.defaultValue;
 }
 
 /**
@@ -90,7 +104,9 @@ function setupValidationSubmission () {
       type: 'AppearsChangingEmail'
     });
     emailChangeConfirmDialog.modal('show');
-    ConfirmDialog.getAccountSubmit(emailChangeConfirmDialog).click(() => {
+    ConfirmDialog.getAccountSubmit(
+      emailChangeConfirmDialog
+    ).on('click', () => {
       confirmed = true;
       accountForm.submit();
       emailChangeConfirmDialog.modal('hide');
@@ -103,7 +119,7 @@ function setupValidationSubmission () {
     beforeSubmit (formData, jqForm, options) {
       // Push the disabled username field onto the form data array
       formData.push({
-        name: 'user', value: user.val()
+        name: 'user', value: /** @type {string} */ (user.val())
       });
       return true;
     },
@@ -159,7 +175,9 @@ function post (url) {
       }
     }).done(resolve).fail(
       (jqXHR /* , textStatus, errorThrown */) => {
-        const err = new Error('Ajax POST error');
+        const err = /** @type {AjaxPostError} */ (
+          new Error('Ajax POST error')
+        );
         err.text = jqXHR.responseText;
         err.responseText = jqXHR.statusText;
         reject(err);
@@ -212,7 +230,7 @@ async function attemptLogout () {
 }
 
 /**
- * @param {PlainObject} cfg
+ * @param {object} cfg
  * @param {"accountDeleted"|"loggedOut"} cfg.type
  * @returns {void}
  */
@@ -222,14 +240,17 @@ function showLockedAlert ({type}) {
   const redirectToRoot = () => {
     Nogin.redirect('root');
   };
-  HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
+  HomeView.getLockedAlertButton(
+    lockedAlertDialog
+  ).on('click', redirectToRoot);
   setTimeout(redirectToRoot, 3000);
 }
 
 /**
- * @param {PlainObject} cfg
- * @param {"ErrorLoggingOut"} cfg.type
- * @param {string} cfg.message
+ * @param {object} cfg
+ * @param {"ErrorLoggingOut"|"SessionLost"|"ProblemDispatchingLink"|
+ *   "FailureSubmittingUserInfo"} [cfg.type]
+ * @param {string} [cfg.message]
  * @returns {void}
 */
 function showLockedErrorAlert ({type, message}) {
@@ -238,6 +259,8 @@ function showLockedErrorAlert ({type, message}) {
   const redirectToRoot = () => {
     Nogin.redirect('root');
   };
-  HomeView.getLockedAlertButton(lockedAlertDialog).click(redirectToRoot);
+  HomeView.getLockedAlertButton(
+    lockedAlertDialog
+  ).on('click', redirectToRoot);
   setTimeout(redirectToRoot, 3000);
 }

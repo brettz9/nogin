@@ -15,7 +15,7 @@ const redirectToRoot = () => {
   Nogin.redirect('root');
 };
 const actionButton = SignupView.getActionForAccountForm(accountForm);
-actionButton.click(redirectToRoot);
+actionButton.on('click', redirectToRoot);
 
 setupValidationSubmission();
 
@@ -67,7 +67,9 @@ function onCreatedSuccess () {
   const accountCreatedAlertDialog = SignupView.accountCreated();
   // redirect to homepage on new account creation, add short
   //  delay so user can read alert window
-  SignupView.getAccountCreatedOkButton(accountCreatedAlertDialog).click(() => {
+  SignupView.getAccountCreatedOkButton(
+    accountCreatedAlertDialog
+  ).on('click', () => {
     setTimeout(redirectToRoot, 3000);
   });
   accountCreatedAlertDialog.modal('show');

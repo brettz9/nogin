@@ -7,6 +7,16 @@ import getDirname from '../app/server/modules/getDirname.js';
 
 const __dirname = getDirname(import.meta.url);
 
+/**
+ * @typedef {"view"|"read"|"delete"|"remove"|"update"|"listIndexes"|
+ *   "create"|"add"} ManageAccountVerb
+ */
+
+/**
+ * @param {ManageAccountVerb} verb
+ * @param {import('../app/server/modules/getLogger.js').LoggerOptions} cfg
+ * @returns {Promise<void>}
+ */
 const manageAccounts = async (verb, {loggerLocale}) => {
   const [log, errorLogger] = await Promise.all([
     getLogger({loggerLocale}),
@@ -17,6 +27,11 @@ const manageAccounts = async (verb, {loggerLocale}) => {
   case 'view':
   case 'read':
     verb = 'read';
+    /**
+     * @param {import('./manageAccounts-read-optionDefinitions.js').
+     *   ReadOptionDefinitions} options
+     * @returns {Promise<void>}
+     */
     method = async (options) => {
       const accts = await readAccounts(options);
       accts.forEach((acct) => {
@@ -29,12 +44,22 @@ const manageAccounts = async (verb, {loggerLocale}) => {
   case 'delete':
   case 'remove':
     verb = 'remove';
+    /**
+     * @param {import('./manageAccounts-remove-optionDefinitions.js').
+     *   RemoveOptionDefinitions} options
+     * @returns {Promise<void>}
+     */
     method = async (options) => {
       const {deletedCount} = await removeAccounts(options);
       log('RemovedAccounts', {deletedCount});
     };
     break;
   case 'update':
+    /**
+     * @param {import('./manageAccounts-update-optionDefinitions.js').
+     *   UpdateOptionDefinitions} options
+     * @returns {Promise<void>}
+     */
     method = async (options) => {
       const accts = await updateAccounts(options);
       log('UpdatedAccounts', {
@@ -46,6 +71,11 @@ const manageAccounts = async (verb, {loggerLocale}) => {
     };
     break;
   case 'listIndexes':
+    /**
+     * @param {import('../app/server/modules/db-factory.js').
+     *   DbConfig} options
+     * @returns {Promise<void>}
+     */
     method = async (options) => {
       await listIndexes(options);
     };
@@ -53,6 +83,11 @@ const manageAccounts = async (verb, {loggerLocale}) => {
   case 'create':
   case 'add': {
     verb = 'add';
+    /**
+     * @param {import('./manageAccounts-add-optionDefinitions.js').
+     *   AddOptionDefinitions} options
+     * @returns {Promise<void>}
+     */
     method = async (options) => {
       const accts = await addAccounts(options);
       log('AddedAccounts', {
@@ -75,10 +110,13 @@ const manageAccounts = async (verb, {loggerLocale}) => {
   if (!options) {
     return;
   }
+  /**
+   * @typedef {any} AnyOptions
+   */
   try {
-    await method(options);
+    await method(/** @type {AnyOptions} */ (options));
   } catch (err) {
-    errorLogger('Erred', null, err);
+    errorLogger('Erred', null, /** @type {Error} */ (err));
     // return;
   }
 };

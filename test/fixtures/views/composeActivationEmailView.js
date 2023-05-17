@@ -1,3 +1,18 @@
+/**
+ *
+ * @param {{
+ *   _: import('intl-dom').I18NCallback,
+ *   langDir: import('../../../app/server/modules/i18n.js').LanguageDirection,
+ *   jml: import('jamilih').jml,
+ *   baseurl: string,
+ *   name: string,
+ *   user: string,
+ *   activationCode: string,
+ *   fromText: string,
+ *   fromURL: string
+ * }} cfg
+ * @returns {import('jamilih').JamilihDoc}
+ */
 const composeActivationEmailView = ({
   _, langDir, jml, baseurl, name, user, activationCode, fromText, fromURL
 }) => {

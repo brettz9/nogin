@@ -1,3 +1,8 @@
+/**
+ * @param {{
+*   _: import('intl-dom').I18NCallback
+* }} cfg
+*/
 const resetPassword = ({_}) => {
   return ['div', {id: 'set-password', class: 'modal', role: 'main'}, [
     ['div', {

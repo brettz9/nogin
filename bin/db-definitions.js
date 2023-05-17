@@ -1,3 +1,17 @@
+/**
+ * @typedef {number} Integer
+ */
+
+/**
+ * @typedef {{
+ *   DB_NAME?: string,
+ *   DB_HOST?: string,
+ *   DB_PORT?: Integer,
+ *   DB_USER?: string,
+ *   DB_PASS?: string,
+ * }} DbDefinitions
+ */
+
 const dbDefinitions = [
   {
     name: 'DB_NAME', alias: 'n', type: String,

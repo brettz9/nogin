@@ -1,3 +1,19 @@
+/**
+ *
+ * @typedef {(cfg: {
+ *   _: import('../modules/email-dispatcher.js').Internationalizer,
+ *   langDir: {dir: "rtl"|"ltr"|undefined, lang: string},
+ *   jml: import('jamilih').jml,
+ *   baseurl: string,
+ *   name: string,
+ *   user: string,
+ *   passKey: string,
+ *   fromText: string,
+ *   fromURL: string
+ * }) => import('jamilih').JamilihDoc} ComposeResetPasswordEmail
+ */
+
+/** @type {ComposeResetPasswordEmail} */
 const composeResetPasswordEmail = ({
   _, langDir, jml, baseurl, name, user, passKey, fromText, fromURL
 }) => {

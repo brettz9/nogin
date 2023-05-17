@@ -3,10 +3,11 @@
 import {getAccountManager} from '../server/modules/db-basic.js';
 
 /**
-* @typedef {DbConfig} GenerateLoginOptionDefinitions
-* @property {string|string[]} user
-* @property {string|string[]} ip
-*/
+ * @typedef {import('../server/modules/db-factory.js').DbConfig & {
+ *   user: string|string[],
+ *   ip: string|string[]
+ * }} GenerateLoginOptionDefinitions
+ */
 
 /**
  * Don't see a real need now to expose this on CLI (in
@@ -29,10 +30,12 @@ import {getAccountManager} from '../server/modules/db-basic.js';
 };
 
 /**
-* @typedef {DbConfig} GeneratePasswordOptionDefinitions
-* @property {string|string[]} email
-* @property {string|string[]} ip
-*/
+ * @typedef {import('../server/modules/db-factory.js').
+ *   DbConfig & {
+ *   email: string|string[],
+ *   ip: string|string[]
+ * }} GeneratePasswordOptionDefinitions
+ */
 
 /**
  * Don't see a real need now to expose this on CLI (in
@@ -50,7 +53,7 @@ import {getAccountManager} from '../server/modules/db-basic.js';
   return Promise.all(
     emails.map(async (eml, i) => {
       const {passKey} = await am.generatePasswordKey(eml, ips[i]);
-      return passKey;
+      return /** @type {string} */ (passKey);
     })
   );
 };

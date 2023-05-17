@@ -3,13 +3,23 @@
 import Pop3Command from 'node-pop3'; // , {listify}
 import Envelope from 'envelope';
 
+/**
+ * @typedef {object} HTMLAndSubject
+ * @property {string} html
+ * @property {string} subject
+ */
+
+/** @type {Pop3Command} */
 let popActivatedAccount,
+  /** @type {string} */
   NL_EMAIL_HOST,
+  /** @type {string} */
   NL_EMAIL_USER,
+  /** @type {string} */
   NL_EMAIL_PASS;
 
 /**
- * @param {PlainObject} cfg
+ * @param {object} cfg
  * @param {string} cfg.NL_EMAIL_HOST
  * @param {string} cfg.NL_EMAIL_USER
  * @param {string} cfg.NL_EMAIL_PASS
@@ -44,7 +54,7 @@ async function connectAndGetMessages () {
   console.log('list', list);
 
   return [
-    ...new Map(list).keys()
+    ...new Map(/** @type {[string, string][]} */ (list)).keys()
   ];
 }
 
@@ -54,8 +64,8 @@ async function connectAndGetMessages () {
 */
 
 /**
- * @param {string|number} messageNum
- * @returns {Promise<EnvelopeMessage>}
+ * @param {number} messageNum
+ * @returns {Promise<import('envelope')>}
  */
 async function getEmail (messageNum) {
   const retrStreamString = await popActivatedAccount.RETR(messageNum);
@@ -71,9 +81,9 @@ async function getEmail (messageNum) {
 
 /**
  * Probably only needed in testing, not from command line API.
- * @param {PlainObject} [cfg]
+ * @param {object} [cfg]
  * @param {boolean} [cfg.lastItem=false]
- * @returns {Promise<EnvelopeMessage[]>}
+ * @returns {Promise<import('envelope')[]>}
  */
 export async function getEmails ({lastItem} = {}) {
   let messageNums = await connectAndGetMessages();
@@ -83,7 +93,7 @@ export async function getEmails ({lastItem} = {}) {
 
   console.log('getting messageNums', messageNums);
   const parsedMessages = await Promise.all(
-    messageNums.map((msgNum) => getEmail(msgNum))
+    messageNums.map((msgNum) => getEmail(Number(msgNum)))
   );
 
   // Each has numbers as strings for each content-type ("0", "1"),
@@ -120,7 +130,7 @@ export async function deleteEmails () {
   try {
     await Promise.all(
       messageNums.map((messageNum) => {
-        return popActivatedAccount.DELE(messageNum);
+        return popActivatedAccount.DELE(Number(messageNum));
       })
     );
     console.log('Finished delete commands...');
@@ -138,7 +148,7 @@ export async function deleteEmails () {
 /**
  * Shouldn't be needed on command line.
  * @async
- * @param {PlainObject} cfg
+ * @param {object} cfg
  * @param {string} cfg.subject
  * @param {string[]} cfg.html
  * @returns {Promise<boolean>}
@@ -150,8 +160,8 @@ export async function hasEmail (cfg) {
 }
 
 /**
- * @param {EnvelopeMessage[]} parsedMessages
- * @param {PlainObject} cfg
+ * @param {import('envelope')[]} parsedMessages
+ * @param {object} cfg
  * @param {string} cfg.subject
  * @param {string[]} cfg.html
  * @returns {boolean}

@@ -1,3 +1,9 @@
+/**
+ * @typedef {{
+ *   loggerLocale?: string,
+ *   noLogging?: boolean
+ * }} CommonDefinitions
+ */
 const commonDefinitions = [
   {
     name: 'loggerLocale', type: String,

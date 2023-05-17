@@ -12,13 +12,22 @@ import composeActivationEmailViewDefault from
   '../views/composeActivationEmail.js';
 
 /**
-* @typedef {PlainObject} EmailDispatcherConfig
+* @typedef {object} EmailDispatcherConfig
 * @property {string} NL_EMAIL_HOST
 * @property {string} NL_EMAIL_USER E.g., your-email-address@example.name
 * @property {string} NL_EMAIL_PASS E.g., 1234
 * @property {string} NL_EMAIL_FROM
 * @property {string} NL_SITE_URL
+* @property {number} NS_EMAIL_TIMEOUT
+* @property {import('../views/composeResetPasswordEmail.js').
+*   ComposeResetPasswordEmail} composeResetPasswordEmailView
+* @property {import('../views/composeActivationEmail.js').
+*   ComposeActivationEmail} composeActivationEmailView
 */
+
+/**
+ * @typedef {import('intl-dom').I18NCallback<string>} Internationalizer
+ */
 
 /**
  * Class to send emails.
@@ -39,12 +48,13 @@ class EmailDispatcher {
       composeResetPasswordEmailView = composeResetPasswordEmailViewDefault,
       composeActivationEmailView = composeActivationEmailViewDefault
     } = config;
+    this.NL_SITE_URL = NL_SITE_URL;
+    this.NL_EMAIL_FROM = NL_EMAIL_FROM;
+    this.composeResetPasswordEmailView = composeResetPasswordEmailView;
+    this.composeActivationEmailView = composeActivationEmailView;
     Object.assign(this, {
-      composeResetPasswordEmailView,
-      composeActivationEmailView,
       NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
-      NS_EMAIL_TIMEOUT,
-      NL_EMAIL_FROM, NL_SITE_URL
+      NS_EMAIL_TIMEOUT
     });
 
     this.smtpClient = new SMTPClient({
@@ -58,44 +68,39 @@ class EmailDispatcher {
   }
 
   /**
-   * @callback Internationalizer
-   * @property {string} resolvedLocale
-   * @returns {string|Element}
-   */
-
-  /**
    * @param {UserAccountInfo} account
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
-   * @param {LanguageDirectionSetter} langDir
-   * @returns {Promise<string>}
+   * @param {import('./i18n.js').LanguageDirection} langDir
+   * @returns {Promise<import('emailjs').Message>}
    */
   dispatchResetPasswordLink (account, cfg, _, langDir) {
     const attachment = this.composeResetPasswordEmail(account, cfg, _, langDir);
     return this.smtpClient.sendAsync({
       from: this.NL_EMAIL_FROM,
       to: account.email,
-      subject: _('PasswordReset'),
+      subject: /** @type {string} */ (_('PasswordReset')),
       text: attachment[0].data,
       attachment
     });
   }
 
   /**
-  * @typedef {GenericArray} EmailInfo
+  * @typedef {object} EmailInfo
   * @property {string} data
   * @property {boolean} alternative
   */
 
   /**
-   * @typedef {PlainObject} UserAccountInfo
+   * @typedef {object} UserAccountInfo
    * @property {string} name
    * @property {string} user
    * @property {string} passKey
+   * @property {string} email
    */
 
   /**
-   * @typedef {PlainObject} FromEmailConfig
+   * @typedef {object} FromEmailConfig
    * @property {string} fromText
    * @property {string} fromURL
    */
@@ -104,7 +109,7 @@ class EmailDispatcher {
    * @param {UserAccountInfo} acctInfo
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
-   * @param {LanguageDirectionSetter} langDir
+   * @param {import('./i18n.js').LanguageDirection} langDir
    * @returns {EmailInfo[]}
    */
   composeResetPasswordEmail (
@@ -121,28 +126,36 @@ class EmailDispatcher {
   }
 
   /**
-   * @param {AccountInfo} account
+   * @param {Partial<import('./account-manager.js').AccountInfo> & {
+   *   name: string,
+   *   user: string,
+   *   activationCode: string
+   * }} account
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
-   * @param {LanguageDirectionSetter} langDir
-   * @returns {Promise<string>}
+   * @param {import('./i18n.js').LanguageDirection} langDir
+   * @returns {Promise<import('emailjs').Message>}
    */
   dispatchActivationLink (account, cfg, _, langDir) {
     const attachment = this.composeActivationEmail(account, cfg, _, langDir);
     return this.smtpClient.sendAsync({
       from: this.NL_EMAIL_FROM,
-      to: account.email,
-      subject: _('AccountActivation'),
+      to: /** @type {string} */ (account.email),
+      subject: /** @type {string} */ (_('AccountActivation')),
       text: attachment[0].data,
       attachment
     });
   }
 
   /**
-   * @param {AccountInfo} o
+   * @param {Partial<import('./account-manager.js').AccountInfo> & {
+   *   name: string,
+   *   user: string,
+   *   activationCode: string
+   * }} o
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
-   * @param {LanguageDirectionSetter} langDir
+   * @param {import('./i18n.js').LanguageDirection} langDir
    * @returns {EmailInfo[]}
    */
   composeActivationEmail (

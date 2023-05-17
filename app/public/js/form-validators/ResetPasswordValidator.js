@@ -7,7 +7,7 @@ import ResetPasswordValidatorView from
  */
 class ResetPasswordValidator {
   /**
-   * @param {external:jQuery} pass Password element
+   * @param {HTMLInputElement} pass Password element
    * @returns {boolean}
    */
   static validatePassword (pass) {
@@ -18,10 +18,12 @@ class ResetPasswordValidator {
     // istanbul ignore if
     if (pass.validity.tooShort) {
       pass.setCustomValidity(
-        ResetPasswordValidatorView.messages.ShouldBeMinimumLength
+        /** @type {string} */ (
+          ResetPasswordValidatorView.messages.ShouldBeMinimumLength
+        )
       );
     }
-    return pass.form.reportValidity();
+    return /** @type {HTMLFormElement} */ (pass.form).reportValidity();
   }
 
   /**
@@ -34,14 +36,14 @@ class ResetPasswordValidator {
   }
 
   /**
-   * @returns {external:jQuery}
+   * @returns {import('../views/utilities/AlertDialog.js').JQueryWithModal}
    */
   getPasswordDialog () {
     return this.modal;
   }
 
   /**
-   * @param {"bad-session"|undefined} type
+   * @param {"bad-session"|undefined} [type]
    * @returns {void}
    */
   showAlert (type) {
@@ -51,7 +53,8 @@ class ResetPasswordValidator {
       const redirectToRoot = () => {
         Nogin.redirect('root');
       };
-      ResetPasswordValidatorView.getLockedAlertButton(alertDialog).click(
+      ResetPasswordValidatorView.getLockedAlertButton(alertDialog).on(
+        'click',
         redirectToRoot
       );
       setTimeout(redirectToRoot, 3000);

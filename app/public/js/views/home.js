@@ -7,16 +7,17 @@ import populateForm from './utilities/populateForm.js';
 const {_} = Nogin;
 
 /**
- * @param {PlainObject} cfg
+ * @param {object} cfg
  * @param {string} [cfg.message]
  * @param {string} [cfg.type]
- * @param {"error"|"success"} [cfg.heading]
- * @returns {external:jQuery} `HTMLDivElement`
+ * @param {"error"|"success"} cfg.heading
+ * @returns {import('./utilities/AlertDialog.js').
+ *   JQueryWithModal} `HTMLDivElement`
  */
 function lockedAlert ({type, message, heading}) {
   return AlertDialog.populate({
-    heading: _(heading),
-    body: message || _(type, {
+    heading: /** @type {string} */ (_(heading)),
+    body: message || _(/** @type {string} */ (type), {
       lb: $('<br/>')[0]
     }),
     keyboard: false,
@@ -26,98 +27,103 @@ function lockedAlert ({type, message, heading}) {
 
 const HomeView = {
   /**
-   * @returns {external:jQuery}
+   * @returns {JQuery}
    */
   getLogoutButton () {
     return $('[data-name=btn-logout]');
   },
   /**
-   * @returns {external:jQuery}
+   * @returns {JQuery}
    */
   getName () {
     return $('[data-name="name"]');
   },
 
   /**
-   * @returns {external:jQuery}
+   * @returns {JQuery}
    */
   getEmail () {
     return $('[data-name="email"]');
   },
 
   /**
-   * @param {external:jQuery} accountForm
-   * @returns {external:jQuery}
+   * @param {JQuery} accountForm
+   * @returns {JQuery}
    */
   getDeleteAccountAction (accountForm) {
     return accountForm.find('[data-name=action1]');
   },
 
   /**
-   * @param {external:jQuery} lockedAlertDialog
-   * @returns {external:jQuery} `HTMLButtonElement`
+   * @param {JQuery} lockedAlertDialog
+   * @returns {JQuery} `HTMLButtonElement`
    */
   getLockedAlertButton (lockedAlertDialog) {
     return lockedAlertDialog.find('button');
   },
 
   /**
-   * @param {external:jQuery} accountUpdatedAlertDialog
-   * @returns {external:jQuery} `HTMLButtonElement`
+   * @param {JQuery} accountUpdatedAlertDialog
+   * @returns {JQuery} `HTMLButtonElement`
    */
   getAccountUpdatedButton (accountUpdatedAlertDialog) {
     return accountUpdatedAlertDialog.find('button');
   },
 
   /**
-   * @returns {external:jQuery}
+   * @returns {JQuery}
    */
   getUser () {
     return $('[data-name="user"]');
   },
 
   /**
-   * @param {PlainObject} cfg
+   * @param {object} cfg
    * @param {"AppearsChangingEmail"} cfg.type
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
   */
   onShowConfirmation ({type}) {
     return ConfirmDialog.populate({
       type: 'notice',
-      header: _('notice'),
-      body: _(type, {
+      header: /** @type {string} */ (_('notice')),
+      body: /** @type {Element} */ (_(type, {
         lb: $('<br/>')[0]
-      }),
-      cancel: _('cancel'),
-      submit: _('confirm')
+      })),
+      cancel: /** @type {string} */ (_('cancel')),
+      submit: /** @type {string} */ (_('confirm'))
     });
   },
 
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   setDeleteAccount () {
     // setup the confirm window that displays when the user chooses to
     //  delete their account
     const deleteAccountConfirmDialog = ConfirmDialog.populate({
       type: 'deleteAccount',
-      header: _('deleteAccount'),
-      body: _('sureWantDeleteAccount'),
-      cancel: _('cancel'),
-      submit: _('delete')
+      header: /** @type {string} */ (_('deleteAccount')),
+      body: /** @type {string} */ (_('sureWantDeleteAccount')),
+      cancel: /** @type {string} */ (_('cancel')),
+      submit: /** @type {string} */ (_('delete'))
     });
     deleteAccountConfirmDialog.find('.submit').addClass('btn-danger');
-    return deleteAccountConfirmDialog;
+    return /** @type {import('./utilities/AlertDialog.js').JQueryWithModal} */ (
+      deleteAccountConfirmDialog
+    );
   },
   /**
-   * @returns {external:jQuery} `HTMLFormElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm} `HTMLFormElement`
    */
   setAccountSettings () {
     const accountForm = populateForm('[data-name=account-form]', {
-      heading: _('accountSettings'),
-      subheading: _('hereAreCurrentSettings'),
-      action1: _('deleteText'),
-      action2: _('updateText')
+      heading: /** @type {string} */ (_('accountSettings')),
+      subheading: /** @type {string} */ (_('hereAreCurrentSettings')),
+      action1: /** @type {string} */ (_('deleteText')),
+      action2: /** @type {string} */ (_('updateText'))
     });
     accountForm.find('[data-name=action1]')
       .removeClass('btn-outline-dark')
@@ -125,11 +131,12 @@ const HomeView = {
     return accountForm;
   },
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   onAccountUpdated () {
     return AlertDialog.populate({
-      heading: _('success'),
+      heading: /** @type {string} */ (_('success')),
       body: _('yourAccountHasBeenUpdated'),
       keyboard: true,
       backdrop: true
@@ -137,11 +144,12 @@ const HomeView = {
   },
 
   /**
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   onAccountUpdatedButNotYetEmail () {
     return AlertDialog.populate({
-      heading: _('success'),
+      heading: /** @type {string} */ (_('success')),
       body: _('yourAccountHasBeenUpdatedButEmail'),
       keyboard: true,
       backdrop: true
@@ -149,20 +157,22 @@ const HomeView = {
   },
 
   /**
-   * @param {PlainObject} cfg
+   * @param {object} cfg
    * @param {"accountDeleted"|"loggedOut"} cfg.type
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   onShowLockedAlert ({type}) {
     return lockedAlert({type, heading: 'success'});
   },
 
   /**
-   * @param {PlainObject} cfg
+   * @param {object} cfg
    * @param {string} [cfg.message]
    * @param {"ErrorLoggingOut"|"FailureSubmittingUserInfo"|
    * "SessionLost"|"ProblemDispatchingLink"} [cfg.type]
-   * @returns {external:jQuery} `HTMLDivElement`
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
    */
   onShowLockedErrorAlert ({type, message}) {
     return lockedAlert({type, message, heading: 'error'});

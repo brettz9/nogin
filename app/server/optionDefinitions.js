@@ -4,25 +4,80 @@ import commonDefinitions from '../../bin/common-definitions.js';
 import dbDefinitions from '../../bin/db-definitions.js';
 
 const pkg = JSON.parse(
+  // @ts-expect-error It's ok
   await readFile(new URL('../../package.json', import.meta.url))
 );
 
 /**
- * @typedef {PlainObject<string,PlainObject>} MainOptionDefinitions
- * @todo Indicate specific properties; small repo to convert; see
- * https://github.com/jsdoc/jsdoc/issues/1750
- * `command-line-usage` into jsdoc (and use here)
+ * @typedef {{
+ *   loggerLocale: string,
+ *   noLogging: boolean,
+ *   DB_NAME: string,
+ *   DB_HOST: string,
+ *   DB_PORT: number,
+ *   DB_USER: string,
+ *   DB_PASS: string,
+ *   NL_EMAIL_USER: string,
+ *   NL_EMAIL_PASS: string,
+ *   NL_EMAIL_HOST: string,
+ *   NL_EMAIL_FROM: string,
+ *   NS_EMAIL_TIMEOUT: number,
+ *   NL_SITE_URL: string,
+ *   PORT: number,
+ *   secret: string,
+ *   cwd: string,
+ *   JS_DIR: string,
+ *   localesBasePath: string,
+ *   postLoginRedirectPath: string,
+ *   customRoute: string[],
+ *   crossDomainJSRedirects: boolean,
+ *   composeResetPasswordEmailView: string,
+ *   composeActivationEmailView: string,
+ *   requireName: boolean,
+ *   staticDir: string[],
+ *   middleware: string[],
+ *   router: string,
+ *   useESM: boolean,
+ *   noPolyfill: boolean,
+ *   injectHTML: string,
+ *   config: string|null,
+ *   countryCodes: string,
+ *   adapter: string,
+ *   favicon: string,
+ *   stylesheet: string,
+ *   noBuiltinStylesheets: boolean,
+ *   userJS: string,
+ *   userJSModule: string,
+ *   localScripts: boolean,
+ *   fromText: string,
+ *   fromURL: string,
+ *   SERVE_COVERAGE: boolean,
+ *   showUsers: boolean,
+ *   RATE_LIMIT: number,
+ *   disableXSRF: boolean,
+ *   noHelmet: boolean,
+ *   helmetOptions: string|{noSniff: boolean},
+ *   csurfOptions: string,
+ *   sessionCookieOptions: string|{
+ *     genid: () => number
+ *   },
+ *   sessionOptions: string|{name: string, secret: string}
+ * }} MainOptionDefinitions
  */
 
+/**
+ * @param {string} s
+ * @returns {string}
+ */
 const getChalkTemplateEscape = (s) => {
-  return s.replace(/[{}\\]/gu, (ch) => {
-    return `\\\\u${ch.codePointAt().toString(16).padStart(4, '0')}`;
+  return s.replaceAll(/[{}\\]/gu, (ch) => {
+    return `\\\\u${
+      /** @type {number} */ (ch.codePointAt(0)).toString(16).padStart(4, '0')
+    }`;
   });
 };
 
-/**
- * @type {MainOptionDefinitions}
- */
+/** @type {import('command-line-usage').OptionDefinition[]} */
 const optionDefinitions = [
   // multiple: true, defaultOption: true
   {
@@ -314,6 +369,12 @@ const optionDefinitions = [
   }
 ];
 
+/**
+ * @type {[
+ *   import('command-line-usage').Content,
+ *   import('command-line-usage').OptionList
+ * ]}
+ */
 const cliSections = [
   {
     // Add italics: `{italic textToItalicize}`

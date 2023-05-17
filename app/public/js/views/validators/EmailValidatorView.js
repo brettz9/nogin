@@ -1,22 +1,33 @@
 /* globals $, Nogin */
 
 /**
-* @typedef {PlainObject} EmailInfoElements
-* @property {external:jQuery} name
-* @property {external:jQuery} email
-* @property {external:jQuery} user
-* @property {external:jQuery} pass
+* @typedef {object} EmailInfoElements
+* @property {JQuery} name
+* @property {JQuery} email
+* @property {JQuery} user
+* @property {JQuery} pass
 */
 
 const EmailValidatorView = {
   /**
-   * @returns {AccountInfoElements}
+   * @returns {{
+   *   retrievePasswordModal: JQuery,
+   *   retrievePasswordAlert: JQuery,
+   *   retrievePasswordForm: JQuery & {
+   *     resetForm: () => void
+   *   }
+   * }}
    */
   getFormFields () {
     return {
       retrievePasswordModal: $('#retrieve-password'),
       retrievePasswordAlert: $('#retrieve-password [data-name=alert]'),
-      retrievePasswordForm: $('#retrieve-password #retrieve-password-form')
+      retrievePasswordForm:
+      /**
+       * @type {JQuery & {
+       *   resetForm: () => void
+       * }}
+       */ ($('#retrieve-password #retrieve-password-form'))
     };
   },
 
@@ -30,7 +41,9 @@ const EmailValidatorView = {
   },
 
   messages: {
-    PleaseEnterValidEmailAddress: Nogin._('PleaseEnterValidEmailAddress')
+    PleaseEnterValidEmailAddress: /** @type {string} */ (
+      Nogin._('PleaseEnterValidEmailAddress')
+    )
   }
 };
 

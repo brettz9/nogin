@@ -65,8 +65,7 @@ module.exports = {
       mocha: true
     },
     globals: {
-      module: true,
-      expect: true
+      module: true
     },
     rules: {
       ...rules,

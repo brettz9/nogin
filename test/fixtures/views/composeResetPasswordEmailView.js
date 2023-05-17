@@ -1,3 +1,18 @@
+/**
+ *
+ * @param {{
+*   _: import('intl-dom').I18NCallback,
+*   langDir: import('../../../app/server/modules/i18n.js').LanguageDirection,
+*   jml: import('jamilih').jml,
+*   baseurl: string,
+*   name: string,
+*   user: string,
+*   passKey: string,
+*   fromText: string,
+*   fromURL: string
+* }} cfg
+* @returns {import('jamilih').JamilihDoc}
+*/
 const composeResetPasswordEmailView = ({
   _, langDir, jml, baseurl, name, user, passKey, fromText, fromURL
 }) => {

@@ -23,6 +23,27 @@ import getDirname from './modules/getDirname.js';
 
 const __dirname = getDirname(import.meta.url);
 
+/**
+ * @typedef {{
+ *   name: string,
+ *   user: string,
+ *   country: string,
+ *   date: string
+ * }} UserAccount
+ */
+
+/**
+ * @typedef {{
+ *   code: string
+ *   name: string
+ * }} CountryInfo
+ */
+
+/**
+ * @param {import('express').Application} app
+ * @param {import('../../app.js').RouteConfig} config
+ * @returns {Promise<void>}
+ */
 const routeList = async (app, config) => {
   const getLayoutAndTitle = layoutAndTitleGetter(config, jml);
   const {
@@ -56,18 +77,23 @@ const routeList = async (app, config) => {
 
   const setI18n = i18n(localesBasePath);
 
-  const countryCodes = config.countryCodes
+  const countryCodes = /** @type {string[]} */ (config.countryCodes
     ? Array.isArray(config.countryCodes)
       ? config.countryCodes
       : JSON.parse(config.countryCodes)
     : JSON.parse(
+      // @ts-expect-error It's ok
       await readFile(new URL('modules/country-codes.json', import.meta.url))
-    );
+    ));
 
   const composeResetPasswordEmailConfig = {
     fromText, fromURL
   };
 
+  /**
+   * @param {import('intl-dom').I18NCallback<string>} _
+   * @returns {CountryInfo[]}
+   */
   const getCountries = (_) => {
     return countryCodes.map((code) => {
       return {
@@ -85,11 +111,16 @@ const routeList = async (app, config) => {
 
   const [globalI18n, errorLogger] = await Promise.all([
     setI18n({
+      // @ts-expect-error Why not accepting empty overload here?
       acceptsLanguages: () => [loggerLocale]
     }),
     getLogger({loggerLocale, errorLog: true})
   ]);
 
+  /**
+   * @param {Error} e
+   * @returns {void}
+   */
   const logErrorProperties = (e) => {
     errorLogger('ServerError', null, e);
     for (const [k, val] of Object.entries(e)) {
@@ -126,9 +157,13 @@ const routeList = async (app, config) => {
   });
 
   const GetRoutes = {
-    /*
-      Login and Logout
-    */
+    /**
+     * Login and Logout.
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async root (routes, req, res) {
       const _ = await setI18n(req, res);
 
@@ -187,12 +222,21 @@ const routeList = async (app, config) => {
         //         just above (e.g., the password or user has since
         //         changed), causing the potential for the passwords
         //         to no longer match.
-        const _o = await am.autoLogin(o.user, o.pass);
+        const _o = await am.autoLogin(
+          /** @type {string} */ (o.user),
+          /** @type {string} */ (o.pass)
+        );
         if (_o) {
-          req.session.user = _o;
-          let queryRedirect = req.query[
+          /**
+           * @type {import('express-session').Session & {
+           *   user: Partial<import('./modules/account-manager.js').AccountInfo>
+           * }}
+           */ (
+            req.session
+          ).user = _o;
+          let queryRedirect = /** @type {string} */ (req.query[
             _('query_redirect')
-          ];
+          ]);
           // Using user value should not be a security concern, as
           //  all GET requests should be idempotent and validate
           //  credentials; however, if some XSS uses this, the user
@@ -211,12 +255,16 @@ const routeList = async (app, config) => {
       login();
     },
 
-    /*
+    /**
      * Control panel.
-    */
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async home (routes, req, res) {
       // Disallow empty string also
-      if (!req.session.user) {
+      if (!('user' in req.session) || !req.session.user) {
         res.redirect(routes.root);
       } else {
         const _ = await setI18n(req, res);
@@ -235,9 +283,13 @@ const routeList = async (app, config) => {
       }
     },
 
-    /*
-      new accounts
-    */
+    /**
+     * New accounts.
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async signup (routes, req, res) {
       const _ = await setI18n(req, res);
       const title = _('Signup');
@@ -258,9 +310,15 @@ const routeList = async (app, config) => {
       });
     },
 
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async resetPassword (routes, req, res) {
       const _ = await setI18n(req, res);
-      const queryKey = req.query[_('query_key')];
+      const queryKey = /** @type {string} */ (req.query[_('query_key')]);
       let o, e;
       try {
         o = await am.validatePasswordKey(queryKey, req.ip);
@@ -273,7 +331,11 @@ const routeList = async (app, config) => {
       if (e || isNullish(o)) {
         res.redirect(routes.root);
       } else {
-        req.session.passKey = queryKey;
+        /**
+         * @type {import('express-session').Session & {
+         *   passKey: string
+         * }}
+         */ (req.session).passKey = queryKey;
         const title = _('ResetPassword');
         res.render('reset-password', {
           ...getLayoutAndTitle({
@@ -284,14 +346,21 @@ const routeList = async (app, config) => {
       }
     },
 
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async activation (routes, req, res) {
       const _ = await setI18n(req, res);
       const title = _('Activation');
-      const code = req.query[_('query_c')];
+      const code = /** @type {string} */ (req.query[_('query_c')]);
       if (code) {
         try {
           await am.activateAccount(code);
-        } catch (e) {
+        } catch (err) {
+          const e = /** @type {Error} */ (err);
           const message = [
             'activationCodeProvidedInvalid'
           ].includes(e.message)
@@ -333,21 +402,40 @@ const routeList = async (app, config) => {
       }
     },
 
-    /*
+    /**
      * View, delete & reset accounts (currently view only).
-    */
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async users (routes, req, res) {
       const [
-        {value: _},
-        {
-          value:
-            // istanbul ignore next
-            accounts = []
-        }
+        i18nResult,
+        getAllRecordsResult
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.getAllRecords()
       ]);
+
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
+        return;
+      }
+      const {value: _} = i18nResult;
+
+      if (getAllRecordsResult.status === 'rejected') {
+        res.status(400).send('bad-get-all-records-result');
+        return;
+      }
+
+      const accounts =
+        /**
+        * @type {(import('./modules/account-manager.js').AccountInfo & {
+        *   date: string
+        * })[]}
+        */
+        (getAllRecordsResult.value) ?? [];
 
       // Todo[>=4.0.0]: `/users` should always be enabled when there are (read)
       //   privileges.
@@ -363,19 +451,37 @@ const routeList = async (app, config) => {
           // Enable if allowing any modification behaviors
           // csrfToken: req.csrfToken()
         }),
-        accounts: accounts.map(({name, user, country, date}) => {
-          return {
-            user,
-            name: name || '',
-            country: country ? _('country' + country) : '',
-            date: new Intl.DateTimeFormat(
-              _.resolvedLocale, {dateStyle: 'full'}
-            ).format(date)
-          };
-        })
+        accounts: accounts.map(
+          /**
+           * @param {{
+           *   name: string,
+           *   user: string,
+           *   country: string,
+           *   date: Date
+           * }} cfg
+           * @returns {UserAccount}
+           */
+          ({name, user, country, date}) => {
+            return {
+              user,
+              name: name || '',
+              country: country ? _('country' + country) : '',
+              date: new Intl.DateTimeFormat(
+                _.resolvedLocale, {dateStyle: 'full'}
+              ).format(date)
+            };
+          }
+        )
       });
     },
 
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @param {import('express').NextFunction} next
+     * @returns {Promise<void>}
+     */
     async coverage (routes, req, res, next) {
       if (SERVE_COVERAGE) {
         // Tried just this, but apparently must be used with `app.use`
@@ -394,11 +500,18 @@ const routeList = async (app, config) => {
   };
 
   const PostRoutes = {
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async root (routes, req, res) {
       let o;
       try {
         o = await am.manualLogin(req.body.user, req.body.pass);
-      } catch (err) {
+      } catch (er) {
+        const err = /** @type {Error} */ (er);
         const _ = await setI18n(req, res);
         const message = [
           'user-not-found',
@@ -411,12 +524,19 @@ const routeList = async (app, config) => {
         return;
       }
 
-      req.session.user = o;
+      /**
+       * @type {import('express-session').Session & {
+       *   user: Partial<import('./modules/account-manager.js').AccountInfo>
+       * }}
+       */ (req.session).user = o;
 
       if (req.body['remember-me'] === 'false') {
         res.status(200).send(o);
       } else {
-        const key = await am.generateLoginKey(o.user, req.ip);
+        const key = await am.generateLoginKey(
+          /** @type {string} */ (o.user),
+          req.ip
+        );
         // Is there value in signing this key? The unsigned value
         //  seems of no special value (unlike a password)
         // `signed` requires `cookie-parser` with express
@@ -425,14 +545,26 @@ const routeList = async (app, config) => {
       }
     },
 
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async logout (routes, req, res) {
       res.clearCookie('login');
       const _ = await setI18n(req, res);
       req.session.destroy((e) => { res.status(200).send(_('OK')); });
     },
 
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async home (routes, req, res) {
-      if (isNullish(req.session.user)) {
+      if (!('user' in req.session) || isNullish(req.session.user)) {
         res.status(400).send('session-lost');
         return;
       }
@@ -443,9 +575,14 @@ const routeList = async (app, config) => {
       const _ = await setI18n(req, res);
       let o;
       try {
+        const sess = /**
+         * @type {import('express-session').Session & {
+         *   user: import('./modules/account-manager.js').AccountInfo
+         * }}
+         */ (req.session);
         o = await am.updateAccount({
-          id: req.session.user._id,
-          user: req.session.user.user,
+          id: sess.user._id,
+          user: sess.user.user,
           name,
           email,
           pass,
@@ -457,7 +594,16 @@ const routeList = async (app, config) => {
               //   give user feedback
               await ed.dispatchActivationLink(
                 {
-                  ...acct, // (`name`, `activationCode`)
+                  ...(
+                    /**
+                     * @type {import('./modules/account-manager.js').
+                     *   AccountInfo & {
+                     *   activationCode: string
+                     * }}
+                     */ (
+                      acct
+                    )
+                  ), // (`name`, `activationCode`)
                   user,
                   // Send to updated email (as deliberately not yet saved
                   //   on `acct`).
@@ -468,13 +614,14 @@ const routeList = async (app, config) => {
                 getLangDir(_)
               );
             } catch (e) {
-              logErrorProperties(e);
+              logErrorProperties(/** @type {Error} */ (e));
               // Cause this `updateAccount` to reject and be handled below
               throw new Error('problem-dispatching-link');
             }
           }
         });
-      } catch (error) {
+      } catch (er) {
+        const error = /** @type {Error} */ (er);
         // We send a code and let the client i18nize
         // We should probably follow this pattern
         log('message', {message: error.message});
@@ -492,10 +639,16 @@ const routeList = async (app, config) => {
       res.status(200).send(_('OK'));
     },
 
+    /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
     async signup (routes, req, res) {
       const {name, email, user, pass, country} = req.body;
       const [
-        {value: _}, {status, reason: error, value: o}
+        i18nResult, addNewAccountResult
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.addNewAccount({
@@ -506,71 +659,120 @@ const routeList = async (app, config) => {
           country
         })
       ]);
-      if (status === 'rejected') {
-        res.status(400).send(error.message);
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
         return;
       }
+      const {value: _} = i18nResult;
+      if (addNewAccountResult.status === 'rejected') {
+        res.status(400).send(addNewAccountResult.reason.message);
+        return;
+      }
+      const {value: o} = addNewAccountResult;
       try {
         // TODO this promise takes a moment to return, add a loader to
         //   give user feedback
         await ed.dispatchActivationLink(
-          o, composeResetPasswordEmailConfig, _, getLangDir(_)
+          o,
+          composeResetPasswordEmailConfig,
+          _,
+          getLangDir(_)
         );
       } catch (e) {
         res.status(400).send('DispatchActivationLinkError');
-        logErrorProperties(e);
+        logErrorProperties(/** @type {Error} */ (e));
         return;
       }
       res.status(200).send(_('OK'));
     },
 
-    /*
+    /**
      * Password reset.
-    */
-    async lostPassword (routes, req, res) {
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async lostPassword (_routes, req, res) {
       const {email} = req.body;
       const [
-        {value: _}, {status, reason: error, value: account}
+        i18nResult, generatePasswordKeyResult
       ] = await Promise.allSettled([
         setI18n(req, res),
         am.generatePasswordKey(email, req.ip)
       ]);
-      if (status === 'rejected') {
-        res.status(400).send(error.message);
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
         return;
       }
+      const {value: _} = i18nResult;
+      if (generatePasswordKeyResult.status === 'rejected') {
+        res.status(400).send(generatePasswordKeyResult.reason.message);
+        return;
+      }
+      const {value: account} = generatePasswordKeyResult;
       try {
         // TODO this promise takes a moment to return, add a loader to
         //   give user feedback
         /* const { status, text } = */
         await ed.dispatchResetPasswordLink(
-          account, composeResetPasswordEmailConfig, _, getLangDir(_)
+          /**
+           * @type {Partial<import('./modules/account-manager.js').
+           *   AccountInfo> & {
+           *   name: string,
+           *   user: string,
+           *   passKey: string,
+           *   email: string
+           * }}
+           */
+          (account),
+          composeResetPasswordEmailConfig,
+          _,
+          getLangDir(_)
         );
         res.status(200).send(_('OK'));
       } catch (_e) {
-        logErrorProperties(_e);
+        logErrorProperties(/** @type {Error} */ (_e));
         res.status(400).send(_('UnableToDispatchPasswordReset'));
       }
     },
 
-    async resetPassword (routes, req, res) {
-      const {passKey} = req.session;
+    /**
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async resetPassword (_routes, req, res) {
       if (
         // User might have lost session cookie
-        !passKey
+        !('passKey' in req.session) || !req.session.passKey
       ) {
         res.status(404).send('bad-session');
         return;
       }
+      const {passKey} = req.session;
       const newPass = req.body.pass;
       // destroy the session immediately after retrieving the stored passkey
-      req.session.destroy();
+      req.session.destroy(() => {
+        //
+      });
       const [
-        {value: _}, {value: o}
+        i18nResult, updatePasswordResult
       ] = await Promise.allSettled([
         setI18n(req, res),
-        am.updatePassword(passKey, newPass)
+        am.updatePassword(/** @type {string} */ (passKey), newPass)
       ]);
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
+        return;
+      }
+      const {value: _} = i18nResult;
+      if (updatePasswordResult.status === 'rejected') {
+        res.status(400).send(_('UnableToUpdatePassword'));
+        return;
+      }
+      const {value: o} = updatePasswordResult;
       if (o) {
         res.status(200).send(_('OK'));
       } else {
@@ -578,18 +780,34 @@ const routeList = async (app, config) => {
       }
     },
 
-    /*
+    /**
      * Should be safe as express-session stores session object server-side.
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
      */
-    async delete (routes, req, res) {
+    async delete (_routes, req, res) {
+      const sess =
+        /**
+        * @type {import('express-session').Session & {
+        *   user: Partial<import('./modules/account-manager.js').AccountInfo>
+        * }}
+        */
+        (req.session);
       const [
-        {value: _}, {status}
+        i18nResult, {status}
       ] = await Promise.allSettled([
         setI18n(req, res),
-        req.session.user
-          ? am.deleteAccountById(req.session.user._id)
+        sess.user
+          ? am.deleteAccountById(/** @type {string} */ (sess.user._id))
           : Promise.reject(new Error('Missing session user'))
       ]);
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
+        return;
+      }
+      const {value: _} = i18nResult;
       if (status === 'rejected') {
         res.status(400).send(_('RecordNotFound'));
         return;
@@ -627,14 +845,22 @@ const routeList = async (app, config) => {
   // Following to exclude as will always be present when
   //   instrumented; see https://github.com/cypress-io/code-coverage#instrument-backend-code
   // istanbul ignore else
-  if (global.__coverage__) {
+  if (typeof __coverage__ !== 'undefined') {
     // See https://github.com/cypress-io/code-coverage
 
     // ADD APP
-    // eslint-disable-next-line n/no-unpublished-import -- Only for testing
+    /* eslint-disable n/no-unpublished-import -- Only for testing */
+    // @ts-expect-error Not bothering
     (await import('@cypress/code-coverage/middleware/express.js')).default(app);
+    /* eslint-enable n/no-unpublished-import -- Only for testing */
   }
 
+  /**
+   * @param {import('intl-dom').I18NCallback} args
+   * @param {import('./routeUtils.js').Routes} routes
+   * @param {string} userAgent
+   * @returns {string}
+   */
   const wrapResult = (args, routes, userAgent) => {
     // No need to lint here as linting result in Cypress `lang` test.
     // Since this file is dynamic, we don't import `IntlDom` despite
@@ -678,14 +904,13 @@ window.Nogin = {
     res.type('.js');
 
     const _ = await setI18n(req, res);
-    const {resolvedLocale, strings} = _;
     const routes = getRoutes(_);
 
     res.status(200).send(
       wrapResult(
-        {resolvedLocale, strings},
+        _,
         routes,
-        req.get('User-Agent')
+        /** @type {string} */ (req.get('User-Agent'))
       )
     );
   });
@@ -697,15 +922,15 @@ window.Nogin = {
 
   /**
    * Reverse detect the locale key from the locale value.
-   * @param {Routes} routes
+   * @param {import('./routeUtils.js').Routes} routes
    * @param {string} locale
-   * @param {Request} req
+   * @param {import('express').Request} req
    * @returns {string} The route code; empty string if not found
    */
   function getRouteForLocale (routes, locale, req) {
     const pathBeforeSlashes = /\/[^/]*/u;
     const {pathname} = new URL(req.url, `http://${req.headers.host}`);
-    const path = pathname.match(pathBeforeSlashes)[0];
+    const path = pathname.match(pathBeforeSlashes)?.[0];
 
     const routeObj = Object.entries(routes).find(([, message]) => {
       return message === path;
@@ -714,8 +939,8 @@ window.Nogin = {
   }
 
   /**
-   * @param {Internationalizer} _
-   * @param {Response} res
+   * @param {import('./modules/email-dispatcher.js').Internationalizer} _
+   * @param {import('express').Response} res
    * @returns {void}
    */
   function pageNotFound (_, res) {
@@ -737,7 +962,19 @@ window.Nogin = {
     'signup'
   ]);
 
-  const i18nAndRoutes = async function (req, res, next, method) {
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} _next
+   * @param {"get"|"post"} method
+   * @returns {Promise<{
+   *   _: import('intl-dom').I18NCallback<string>,
+   *   route: string,
+   *   routes: import('./routeUtils.js').Routes,
+   *   error: Error|undefined
+   * }>}
+   */
+  const i18nAndRoutes = async function (req, res, _next, method) {
     const _ = await setI18n(req, res);
     const routes = getRoutes(_);
     const route = getRouteForLocale(routes, _.resolvedLocale, req);
@@ -773,7 +1010,10 @@ window.Nogin = {
     } = await i18nAndRoutes(req, res, next, 'post');
 
     if (!error && hasOwn(PostRoutes, route)) {
-      await PostRoutes[route](routes, req, res);
+      await PostRoutes[
+        /** @type {keyof PostRoutes} */
+        (route)
+      ](routes, req, res);
       return;
     }
     console.log('ERRRRROR1', error, route);
@@ -786,7 +1026,10 @@ window.Nogin = {
     } = await i18nAndRoutes(req, res, next, 'get');
 
     if (!error && hasOwn(GetRoutes, route)) {
-      await GetRoutes[route](routes, req, res, next);
+      await GetRoutes[
+        /** @type {keyof GetRoutes} */
+        (route)
+      ](routes, req, res, next);
       return;
     }
     console.log('ERRRRROR2', error, route);

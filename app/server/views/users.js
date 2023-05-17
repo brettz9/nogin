@@ -1,3 +1,10 @@
+/**
+ * @param {{
+*   _: import('intl-dom').I18NCallback,
+*   layout: import('../routeUtils.js').LayoutCallback
+*   accounts: import('../routeList.js').UserAccount[]
+* }} cfg
+*/
 const users = ({_, layout, accounts}) => {
   return layout({
     content: [
@@ -19,17 +26,19 @@ const users = ({_, layout, accounts}) => {
               ['th', [_('AccountCreated')]]
             ]]
           ]],
-          ['tbody', accounts.map((
-            {name, user, country, date}, i
-          ) => {
-            return ['tr', [
-              ['td', {class: 'users number'}, [i + 1]],
-              ['td', [name]],
-              ['td', [user]],
-              ['td', [country]],
-              ['td', [date]]
-            ]];
-          })]
+          ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
+            accounts.map((
+              {name, user, country, date}, i
+            ) => {
+              return ['tr', [
+                ['td', {class: 'users number'}, [i + 1]],
+                ['td', [name]],
+                ['td', [user]],
+                ['td', [country]],
+                ['td', [date]]
+              ]];
+            })
+          )]
         ]]
       ]]
     ]

@@ -7,15 +7,15 @@ import {babel} from '@rollup/plugin-babel';
 
 /**
  * @external RollupConfig
- * @type {PlainObject}
+ * @type {object}
  * @see {@link https://rollupjs.org/guide/en#big-list-of-options}
  */
 
 /**
- * @param {PlainObject} config
+ * @param {object} config
  * @param {string} config.input
  * @param {boolean} [config.minifying=false]
- * @returns {external:RollupConfig}
+ * @returns {RollupConfig}
  */
 function getRollupObject ({input, minifying} = {}) {
   const nonMinified = {

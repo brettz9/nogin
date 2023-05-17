@@ -6,6 +6,38 @@
 //   new value and this will thereby become invalid.
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
 
+/**
+ * @typedef {{
+ *   headers?: {[key: string]: string|undefined},
+ *   url?: string,
+ *   beforeSubmit?: (
+ *     arr: {name: string, value: string|boolean}[],
+ *     $form: any,
+ *     options: any
+ *   ) => boolean|void,
+ *   success: (
+ *     responseText: string, status: string, xhr: any, $form: JQuery
+ *   ) => void,
+ *   error: (cfg: {
+ *     responseText: string
+ *   }) => void,
+ * }} AjaxFormConfig
+ */
+
+/**
+ * @typedef {JQuery & {
+ *   ajaxForm: (cfg: AjaxFormConfig) => void
+ * }} JQueryWithAjaxForm
+ */
+
+/**
+ * @param {JQueryWithAjaxForm} form
+ * @param {AjaxFormConfig & {
+ *   validate: (e: Event) => void,
+ *   checkXSRF?: boolean
+ * }} cfg
+ * @returns {void}
+ */
 const ajaxFormClientSideValidate = (form, {
   validate,
   // `ajaxForm` properties and methods
@@ -27,9 +59,10 @@ const ajaxFormClientSideValidate = (form, {
     validate(e);
   }, true);
 
-  form[0].addEventListener('input', ({target: field}) => {
+  form[0].addEventListener('input', ({target}) => {
+    const field = /** @type {HTMLInputElement} */ (target);
     field.setCustomValidity('');
-    field.checkValidity('');
+    field.checkValidity();
   }, true);
 
   // istanbul ignore if

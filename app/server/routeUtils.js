@@ -5,7 +5,51 @@ import {join} from 'path';
 import layoutView from './views/layout.js';
 import {i18n, getLangDir} from './modules/i18n.js';
 
+/**
+ * @typedef {string} Path
+ */
+/**
+ * @typedef {Object<Route, Path>} Routes
+ */
+/**
+ * @callback RouteGetter
+ * @param {import('./modules/email-dispatcher.js').Internationalizer} _
+ * @returns {Routes}
+ */
+
+/**
+ * @callback SecuritySourceAttributes
+ * @param {"link"|"script"} type
+ * @param {string} name
+ * @returns {{
+ *   crossorigin: string,
+ *   integrity?: string
+ * }}
+ */
+
+/**
+ * @typedef {{
+ *   name: string,
+ *   local: string,
+ *   integrity: string,
+ *   remote: string,
+ * }} LinkScript
+ */
+
+/**
+ * @typedef {{
+ *   link: (LinkScript & {
+ *     noLocalIntegrity?: boolean
+ *   })[],
+ *   script: (LinkScript & {
+ *     global: string
+ *   })[]
+ * }} IntegrityMap
+ */
+
+/** @type {IntegrityMap} */
 const integrityMap = JSON.parse(
+  // @ts-expect-error It's ok
   await readFile(new URL('integrityMap.json', import.meta.url))
 );
 
@@ -20,32 +64,50 @@ const bodyProps = ['bodyPre', 'bodyPost'];
 function wrap (elem, content) {
   return `<${elem}>${content}</${elem}>`;
 }
+/**
+ * @typedef {{
+ *   content: import('jamilih').JamilihChildren,
+ *   scripts?: ([string, import('jamilih').JamilihAttributes])[],
+ * }} TemplateArgs
+ */
 
 /**
-* @callback LayoutCallback
-* @param {PlainObject} templateArgs
-* @returns {JamilihArray}
-*/
+ * @typedef {(
+ *   templateArgs: TemplateArgs
+ * ) => Promise<[import('jamilih').JamilihDoc]>} LayoutCallback
+ */
 
 /**
-* @typedef {PlainObject} TitleWithLayoutCallback
-* @property {Internationalizer} _
-* @property {string} title
-* @property {LayoutCallback} layout
-*/
+ * @typedef {{
+ *   _: import('./modules/email-dispatcher.js').Internationalizer,
+ *   title: string,
+ *   layout: LayoutCallback,
+ *   langDir: import('../server/modules/i18n.js').LanguageDirection
+ * }} TitleWithLayoutCallback
+ */
 
 /**
-* @typedef {PlainObject} LayoutAndTitleArgs
-* @property {Internationalizer} _
-* @property {string} title
-* @property {string} template The template name (made available to
-* `injectHTML` so it can vary the generated HTML per template).
-* @property {string} error
-*/
+ * `template` - The template name (made available to
+ * `injectHTML` so it can vary the generated HTML per template).
+ * @typedef {{
+ *   _: import('./modules/email-dispatcher.js').Internationalizer
+ *   title: string,
+ *   template: string
+ *   error?: string,
+ *   csrfToken?: string
+ * }} LayoutAndTitleArgs
+ */
 
 /**
- * @param {PlainObject} config
- * @param {Jamilih} jml
+ * @callback LayoutAndTitleGetter
+ * @param {LayoutAndTitleArgs} businessLogicArgs
+ * @returns {TitleWithLayoutCallback}
+ */
+
+/**
+ * @param {import('../../app.js').RouteConfig} config
+ * @param {import('jamilih').jml} jml
+ * @returns {LayoutAndTitleGetter}
  */
 const layoutAndTitleGetter = (config, jml) => {
   const {
@@ -63,7 +125,7 @@ const layoutAndTitleGetter = (config, jml) => {
 
   // Has SHAs at https://code.jquery.com/ ;
   //  see also https://jquery.com/download/
-  // todo[jquery@>3.6.4]: Update SHA (and path(s) if necessary)
+  // todo[jquery@>3.7.0]: Update SHA (and path(s) if necessary)
 
   // See https://github.com/jquery-form/form for CDN SHA
   // todo: Update SHA (and path(s) if necessary) for jquery-form
@@ -81,10 +143,20 @@ const layoutAndTitleGetter = (config, jml) => {
   //   by default) with option
   // todo[github-fork-ribbon-css@>0.2.3]: Update SHA (and path(s) if necessary)
 
+  /** @type {SecuritySourceAttributes} */
   const securitySourceAttributes = (type, name) => {
-    const base = integrityMap[type].find(({name: nm}) => {
-      return name === nm;
-    });
+    // @ts-expect-error Why is this problematic?
+    const base = integrityMap[type].find(
+      /**
+       * @param {{
+       *   name: string
+       * }} cfg
+       * @returns {boolean}
+       */
+      ({name: nm}) => {
+        return name === nm;
+      }
+    );
     const baseObj = {
       [type === 'link' ? 'href' : 'src']:
         base[localScripts ? 'local' : 'remote'],
@@ -99,14 +171,12 @@ const layoutAndTitleGetter = (config, jml) => {
     };
   };
 
-  /**
-   * @param {LayoutAndTitleArgs} businessLogicArgs
-   * @returns {TitleWithLayoutCallback}
-   */
+  /** @type {LayoutAndTitleGetter} */
   return (businessLogicArgs) => {
     const {_, title} = businessLogicArgs;
     const langDir = getLangDir(_);
     const isRtl = Boolean(langDir.dir);
+
     return {
       _,
       langDir,
@@ -140,9 +210,14 @@ const layoutAndTitleGetter = (config, jml) => {
             const type = headProps.includes(prop) ? 'head' : 'body';
             let container = val;
             if (typeof val === 'string') {
-              container = jml.toJML(
-                wrap(type, val)
-              ).$document.childNodes[0][2];
+              container = /** @type {import('jamilih').JamilihArray} */ (
+                /** @type {import('jamilih').JamilihChildType[]} */
+                (/** @type {import('jamilih').JamilihDoc} */ (
+                  jml.toJML(
+                    wrap(type, val)
+                  )
+                ).$document.childNodes)[0]
+              )[2];
               container = type === 'head'
                 // <head|body>:first-child > *
                 ? container[0][1]
@@ -164,6 +239,11 @@ const layoutAndTitleGetter = (config, jml) => {
   };
 };
 
+/**
+ * @param {RouteGetter} getRoutes
+ * @param {string} localesBasePath
+ * @returns {Promise<void>}
+ */
 const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
   /**
    * Ensure locales do not use reserved patterns nor have duplicate
@@ -176,10 +256,12 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
   await Promise.all(
     availableLocales.map(async (locale) => {
       const _ = await setI18n({
+        // @ts-expect-error Why not using empty overload?
         acceptsLanguages: () => [locale]
       });
       const routes = getRoutes(_);
 
+      /** @type {string[]} */
       const messages = [];
       Object.entries(routes).forEach(([key, message]) => {
         if (key.startsWith('safe_')) {
@@ -211,17 +293,9 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
 };
 
 /**
-* @typedef {"root"|"logout"|"home"|"signup"|"activation"|"lostPassword"|
-* "resetPassword"|"users"|"delete"|"reset"|"coverage"} Route
-*/
-
-/**
-* @typedef {string} Path
-*/
-
-/**
-* @typedef {Object<Route, Path>} Routes
-*/
+ * @typedef {"root"|"logout"|"home"|"signup"|"activation"|"lostPassword"|
+ * "resetPassword"|"users"|"delete"|"reset"|"coverage"} Route
+ */
 
 const routeMap = new Map();
 
@@ -233,7 +307,7 @@ function routeGetter (customRoute) {
   /**
    * Keyed by locale, then by route, and set to a path.
    * @typedef {Object<string, Object<string, string>>} CustomRouteObject
-  */
+   */
   /**
    * @type {CustomRouteObject}
    */
@@ -244,13 +318,7 @@ function routeGetter (customRoute) {
     }
     routes[locale][route] = path;
     return routes;
-  }, {});
-
-  /**
-   * @callback RouteGetter
-   * @param {Internationalizer} _
-   * @returns {Routes}
-   */
+  }, /** @type {CustomRouteObject} */ ({}));
 
   /**
    * @type {RouteGetter}
@@ -275,7 +343,7 @@ function routeGetter (customRoute) {
       //  location.assign() (since `location.href` not supported).
       o['safe_' + route] = i18nRoute;
       return o;
-    }, {});
+    }, /** @type {{[key: string]: string}} */ ({}));
     routeMap.set(_.resolvedLocale, routeObj);
     return routeObj;
   };

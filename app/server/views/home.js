@@ -2,11 +2,19 @@ import account from './account.js';
 import alert from './modals/alert.js';
 import confirm from './modals/confirm.js';
 
+/**
+ * @param {import('../routeUtils.js').TitleWithLayoutCallback & {
+ *   user: import('../modules/account-manager.js').AccountInfo
+ *   countries: import('../routeList.js').CountryInfo[]
+ *   emailPattern: string,
+ *   requireName: boolean
+ * }} cfg
+ */
 const home = ({
   _, layout, user, countries, emailPattern, requireName, title
 }) => {
   return layout({
-    content: [
+    content: /** @type {import('jamilih').JamilihChildren} */ ([
       ['nav', {
         class: 'navbar navbar-expand navbar-light bg-light',
         role: 'navigation'
@@ -44,7 +52,7 @@ const home = ({
         confirm({_, type: 'deleteAccount'}),
         confirm({_, type: 'notice'})
       ]]
-    ],
+    ]),
     scripts: [
       ['script', {
         src: '/js/controllers/homeController.iife.min.js',

@@ -3,11 +3,24 @@ import {i18n} from './i18n.js';
 const setI18n = i18n();
 
 /**
-* @typedef {PlainObject} LoggerOptions
+* @typedef {object} LoggerOptions
 * @property {string} [loggerLocale="en-US"]
 * @property {boolean} [noLogging=false]
 * @property {boolean} [errorLog=false]
 */
+
+/**
+ * `key`
+ * `substitutions` - Values for substitution. Defaults to `{}`
+ * `other` - Other items to log, e.g., errors.
+ * @typedef {((
+ *   key: string,
+ *   substitutions?: (Object<string,(string|Element|number)>)|null,
+ *   ...other: (string|object)[]
+ * ) => string|null) & {
+ *   _: import('../modules/email-dispatcher.js').Internationalizer
+ * }} Logger
+ */
 
 /**
  * @param {LoggerOptions} options
@@ -15,16 +28,11 @@ const setI18n = i18n();
  */
 const getLogger = async (options) => {
   const _ = await setI18n({
-    acceptsLanguages: () => [options.loggerLocale || 'en-US']
+    // @ts-expect-error Why can't this match the `string[]` overload?
+    acceptsLanguages () {
+      return [options.loggerLocale || 'en-US'];
+    }
   });
-  /**
-   * @callback Logger
-   * @param {string} key
-   * @param {PlainObject<string,(string|Element)>} [substitutions={}] Values for
-   *  substitution
-   * @param {...(string|PlainObject)} other Other items to log, e.g., errors
-   * @returns {string|null}
-   */
 
   /**
    * @type {Logger}

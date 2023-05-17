@@ -1,8 +1,11 @@
 # CHANGES for nogin
 
-## ?
+## 4.0.0
 
 ### User-facing
+
+- feat: TS support
+- chore: change `rtl-detect` -> `intl-locale-textinfo-polyfill`
 
 ### Dev-facing
 

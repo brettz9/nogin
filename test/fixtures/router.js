@@ -1,5 +1,5 @@
 /**
- * @param {ExpressApp} app
+ * @param {import('express').Application} app
  * @param {{userJS: string}} opts
  * @returns {void}
  */
