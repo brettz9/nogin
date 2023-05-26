@@ -59,7 +59,7 @@ describe('Signup', function () {
       timeout: 50000
     }).should(($email) => {
       return expect(
-        $email[0].validationMessage
+        /** @type {HTMLInputElement} */ ($email[0]).validationMessage
       ).to.contain(
         'That email address is already in use'
       );
@@ -99,7 +99,7 @@ describe('Signup', function () {
       timeout: 50000
     }).should(($user) => {
       return expect(
-        $user[0].validationMessage
+        /** @type {HTMLInputElement} */ ($user[0]).validationMessage
       ).to.contain(
         'That username is already in use'
       );
@@ -199,11 +199,18 @@ describe('Signup', function () {
     }).then(() => {
       return cy.task('getRecords', {user: ['bretto']});
     // eslint-disable-next-line promise/prefer-await-to-then
-    }).then((accts) => {
+    }).then((
+      /**
+       * @type {import('../../app/server/modules/account-manager.js').
+       *   AccountInfo[]}
+       */
+      accts
+    ) => {
       const {user, activated} = accts[0];
       expect(user).to.equal('bretto');
       expect(activated).to.be.false;
-      return cy.log(accts);
+      // cy.log(accts);
+      return undefined;
     });
   });
 
@@ -231,7 +238,13 @@ describe('Signup', function () {
       ).should('be.hidden');
 
       // eslint-disable-next-line promise/prefer-await-to-then
-      return cy.task('getRecords').then((accts) => {
+      return cy.task('getRecords').then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]}
+         */
+        accts
+      ) => {
         // Will only delete old account once activated
         expect(accts).to.have.lengthOf(2);
         const bothInactive = accts.every((acct) => {

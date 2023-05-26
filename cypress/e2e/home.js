@@ -149,7 +149,19 @@ describe('Home', function () {
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
-        return cy.task('getRecords', {user: ['bretto']});
+
+        // eslint-disable-next-line cypress/no-assigning-return-values -- TS
+        const ret = /** @type {unknown} */ (
+          cy.task('getRecords', {user: ['bretto']})
+        );
+
+        return (
+          /**
+           * @type {true|
+           *   import('../../app/server/modules/account-manager.js').
+           *   AccountInfo[]}
+           */ (ret)
+        );
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then((accts) => {
         if (accts === true) {
@@ -251,7 +263,19 @@ describe('Home', function () {
             // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
-          return cy.task('getRecords', {user: ['bretto']});
+
+          // eslint-disable-next-line cypress/no-assigning-return-values -- TS
+          const ret = /** @type {unknown} */ (
+            cy.task('getRecords', {user: ['bretto']})
+          );
+
+          return (
+            /**
+             * @type {true|
+             *   import('../../app/server/modules/account-manager.js').
+             *   AccountInfo[]}
+             */ (ret)
+          );
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then((accts) => {
           if (accts === true) {
@@ -315,7 +339,8 @@ describe('Home', function () {
       // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         expect(accts).to.have.lengthOf(1);
-        return cy.log(accts);
+        // return cy.log(accts);
+        return undefined;
       });
     });
 
@@ -340,7 +365,8 @@ describe('Home', function () {
       // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         expect(accts).to.have.lengthOf(0);
-        return cy.log(accts);
+        // return cy.log(accts);
+        return undefined;
       });
     });
 
@@ -385,7 +411,8 @@ describe('Home', function () {
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user} = accts[0];
         expect(user).to.equal('bretto');
-        return cy.log(accts);
+        // return cy.log(accts);
+        return undefined;
       });
     });
     it('Visit Home again', function () {
@@ -414,7 +441,8 @@ describe('Home', function () {
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         expect(accts).to.have.lengthOf(1);
         expect(accts[0].email).to.equal(NL_EMAIL_USER);
-        return cy.log(accts);
+        // return cy.log(accts);
+        return undefined;
       });
     });
 
@@ -445,7 +473,10 @@ describe('Home', function () {
 
       cy.get('[data-name="email"]', {
         timeout: 50000
-      }).should(($email) => {
+      }).should((
+        /** @type {JQuery<HTMLInputElement>} */
+        $email
+      ) => {
         return expect(
           $email[0].validationMessage
         ).to.contain(
@@ -623,7 +654,10 @@ describe('Home', function () {
 
       // eslint-disable-next-line max-len
       // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
-      cy.get('[data-name="user"]').then(($user) => {
+      cy.get('[data-name="user"]').then((
+        /** @type {JQuery<HTMLInputElement>} */
+        $user
+      ) => {
         $user[0].disabled = false;
         $user[0].value = 'nicky';
         // Ensure got set
@@ -644,7 +678,13 @@ describe('Home', function () {
       }).should('eq', '/home');
 
       // eslint-disable-next-line promise/prefer-await-to-then
-      return cy.task('getRecords').then((accts) => {
+      return cy.task('getRecords').then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]}
+         */
+        accts
+      ) => {
         expect(accts).to.have.lengthOf(2);
         expect(accts.some(({user, name}) => {
           // We could change to prevent successful edit of use's *own* name
@@ -725,7 +765,10 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       // eslint-disable-next-line max-len
       // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
-      cy.get('[data-name="name"]').then(($input) => {
+      cy.get('[data-name="name"]').then((
+        /** @type {JQuery<HTMLInputElement>} */
+        $input
+      ) => {
         return expect($input[0].validity.tooShort).to.be.true;
         // return expect($input[0].validationMessage).to.eq(
         //  'Please enter a sufficiently long name'

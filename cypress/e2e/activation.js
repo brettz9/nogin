@@ -78,7 +78,8 @@ describe('Activation', function () {
       expect(user).to.equal('nicky');
       expect(activated).to.be.true;
       expect(activationCode).to.equal(activCode);
-      return cy.log(accts);
+      // return cy.log(accts);
+      return undefined;
     });
   });
   it(

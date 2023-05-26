@@ -29,11 +29,6 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 /**
-* @external CypressVisitOptions
-* @see https://docs.cypress.io/api/commands/visit.html
-*/
-
-/**
  * @returns {void}
  */
 function checkAccessibility () {

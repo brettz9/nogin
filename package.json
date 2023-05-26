@@ -50,6 +50,7 @@
   },
   "scripts": {
     "tsc": "tsc",
+    "tsc-cypress": "tsc -p tsconfig-cypress.json",
     "build": "tsc -p tsconfig-prod.json",
     "prepublishOnly": "echo 'Skipping eslint-3rd' && echo \"skipping: license-badges until ready for pnpm and skipping build-docs until debug\" && run-s build-cli snyk",
     "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",

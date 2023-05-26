@@ -243,8 +243,12 @@ describe('Root (Login)', function () {
       cy.get('[data-name="email"]').type('not-an-email');
       cy.get('[data-name=retrieve-password-submit]').click();
       return cy.get('[data-name="email"]').should((user) => {
-        expect(user[0].checkValidity()).to.equal(false);
-        return expect(user[0].validationMessage).to.contain(
+        expect(/** @type {HTMLInputElement} */ (
+          user[0]
+        ).checkValidity()).to.equal(false);
+        return expect(/** @type {HTMLInputElement} */ (
+          user[0]
+        ).validationMessage).to.contain(
           'Please enter a valid email address'
         );
       });
@@ -313,14 +317,18 @@ describe('Root (Login)', function () {
     cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
     cy.get('[data-name="btn_sign_in"]').click();
     return cy.get('[data-name="user"]').should((user) => {
-      return expect(user[0].checkValidity()).to.equal(false);
+      return expect(/** @type {HTMLInputElement} */ (
+        user[0]
+      ).checkValidity()).to.equal(false);
     });
   });
   it('Should validate against missing pass value', function () {
     cy.get('[data-name="user"]').type('bretto');
     cy.get('[data-name="btn_sign_in"]').click();
     cy.get('[data-name="pass"]').should((pass) => {
-      expect(pass[0].checkValidity()).to.equal(false);
+      expect(/** @type {HTMLInputElement} */ (
+        pass[0]
+      ).checkValidity()).to.equal(false);
     });
   });
 
