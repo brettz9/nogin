@@ -9,5 +9,5 @@
     "lib": ["es2022", "dom"],
     "types": ["cypress", "node"]
   },
-  "include": ["cypress/e2e/*.js", "typings/CypressPlugins.d.ts"]
+  "include": ["e2e/*.js", "../typings/CypressPlugins.d.ts"]
 }
