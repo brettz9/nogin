@@ -14,7 +14,7 @@ import {babel} from '@rollup/plugin-babel';
 /**
  * @param {object} config
  * @param {string} config.input
- * @param {boolean} [config.minifying=false]
+ * @param {boolean} [config.minifying]
  * @returns {RollupConfig}
  */
 function getRollupObject ({input, minifying} = {}) {

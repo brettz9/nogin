@@ -104,7 +104,7 @@ Cypress.Commands.add(
   (url = '/') => {
     cy.visit(url);
     let token;
-    // eslint-disable-next-line max-len -- Long
+    // eslint-disable-next-line @stylistic/max-len -- Long
     // eslint-disable-next-line promise/prefer-await-to-then, cypress/require-data-selectors -- Cypress
     return cy.get('meta[name=csrf-token]').then(($meta) => {
       token = $meta[0].getAttribute('content');
@@ -123,6 +123,18 @@ Cypress.Commands.add(
     cy.get(sel).clear();
     // eslint-disable-next-line cypress/require-data-selectors -- Dynamic
     cy.get(sel).type(content);
+  }
+);
+
+Cypress.Commands.add(
+  'clearTypeAndBlur',
+  (sel, content) => {
+    // eslint-disable-next-line cypress/require-data-selectors -- Dynamic
+    cy.get(sel).clear();
+    // eslint-disable-next-line cypress/require-data-selectors -- Dynamic
+    cy.get(sel).type(content);
+    // eslint-disable-next-line cypress/require-data-selectors -- Dynamic
+    cy.get(sel).blur();
   }
 );
 

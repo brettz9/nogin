@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 
 /**
  * @todo change `content` and `scripts` to `JamilihDocumentFragmentContent[]`
@@ -27,7 +27,8 @@
  * @returns {[import('jamilih').JamilihDoc]}
  */
 const layout = ({
-  _, langDir, isRtl, content, scripts, title,
+  // _,
+  langDir, isRtl, content, scripts, title,
   favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule,
   noPolyfill, useESM, csrfToken,
   error,

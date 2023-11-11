@@ -57,7 +57,7 @@ describe('Reset password', function () {
       cy.get('[data-name="reset-pass"]').type(tooShortPassword);
       // cy.get('[data-name="reset-password-submit"]').click();
 
-      // todo[cypress@>=13.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
       return cy.get('[data-name="reset-pass"]');
@@ -81,7 +81,7 @@ describe('Reset password', function () {
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
     // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
     }).then((
       /** @type {string} */
@@ -118,7 +118,7 @@ describe('Reset password', function () {
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
     // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
     }).then((
       /** @type {string} */

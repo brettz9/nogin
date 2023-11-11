@@ -99,6 +99,7 @@ const exprt = (on, config) => {
 
   // We want `process.env` for login credentials
   // Default in the same way as `app.get('env')`
+  // eslint-disable-next-line n/no-process-env -- Using other config
   config.env.env = process.env.NODE_ENV || 'development';
 
   // https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
@@ -192,7 +193,7 @@ const exprt = (on, config) => {
         pass: [NL_EMAIL_PASS],
         country: ['US'],
         activationCode: [
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
         ],
         activated: [true]
@@ -211,7 +212,7 @@ const exprt = (on, config) => {
         pass: ['123456'],
         country: ['US'],
         activationCode: [
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
         ],
         activated: [true]
@@ -233,7 +234,7 @@ const exprt = (on, config) => {
         pass: [NL_EMAIL_PASS],
         country: ['US'],
         activationCode: [
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
         ],
         activated: [true]
@@ -337,7 +338,7 @@ const exprt = (on, config) => {
      * @returns {Promise<import('./account-manager.js').AccountInfo>}
      */
     async simulateOldActivationRequestDate () {
-      const fortyEightHoursAgo = Date.now() - 48 * 60 * 60 * 1000;
+      const fortyEightHoursAgo = Date.now() - (48 * 60 * 60 * 1000);
       return (await updateAccounts({
         user: ['bretto'],
         activationRequestDate: [fortyEightHoursAgo]
@@ -463,7 +464,7 @@ const exprt = (on, config) => {
             quotes: 0,
             'comma-spacing': 0,
             'quote-props': 0,
-            'max-len': 0,
+            '@stylistic/max-len': 0,
             'key-spacing': 0,
 
             // Not looking for safe function form as not bundling this

@@ -28,7 +28,7 @@ const composeActivationEmail = ({
           }),
           ['br', 'br'],
           ['a', {
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/max-len
             href: `${baseurl}${_('route_activation')}?${_('query_c')}=${activationCode}`
           }, [
             _('ClickToActivateAccount')

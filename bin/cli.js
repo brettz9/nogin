@@ -13,7 +13,7 @@ const __dirname = getDirname(import.meta.url);
  *   import('../app/server/optionDefinitions.js').MainOptionDefinitions>}
  */
 async function getOptions () {
-  // eslint-disable-next-line max-len -- Long
+  // eslint-disable-next-line @stylistic/max-len -- Long
   return /** @type {import('../app/server/optionDefinitions.js').MainOptionDefinitions} */ (
     await cliBasics({
       optionsPath: '../app/server/optionDefinitions.js',

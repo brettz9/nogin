@@ -281,7 +281,7 @@ class AccountManager {
    * @param {AccountInfo} newData
    * @param {{
    *   allowCustomPassVer?: boolean
-   * }} [allowCustomPassVer=false]
+   * }} [allowCustomPassVer]
    * @returns {Promise<AccountInfo & {
    *   activationCode: string
    * }>}
@@ -358,7 +358,7 @@ class AccountManager {
    */
   async activateAccount (activationCode) {
     let o;
-    const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+    const twentyFourHoursAgo = Date.now() - (24 * 60 * 60 * 1000);
     const unactivatedConditions = {
       $and: [
         {activationCode},

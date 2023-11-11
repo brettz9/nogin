@@ -24,10 +24,10 @@ ajaxFormClientSideValidate(
         (pass[0])
       );
     },
-    beforeSubmit (formData, jqForm, options) {
+    beforeSubmit (/* formData, jqForm, options */) {
       rv.hideAlert();
     },
-    success (responseText, status, xhr, $form) {
+    success (/* responseText, status, xhr, $form */) {
       setPasswordSubmit.addClass('disabled');
       setPasswordSubmit.prop('disabled', true);
       rv.showSuccess();

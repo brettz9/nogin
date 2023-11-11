@@ -39,13 +39,13 @@ const addUsersJSON = JSON.parse(
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-/* eslint-disable max-len -- Long */
+/* eslint-disable @stylistic/max-len -- Long */
 // Would add this to config file but would interfere with other tests
 // 1. `mongod`
 // 2. `mongo`
 // 3. `use nogin`
 // 4. Add `db.createUser({user: "brett", pwd: "123456", roles: [{ role: "readWrite", db: "nogin" }]});`
-/* eslint-enable max-len -- Long */
+/* eslint-enable @stylistic/max-len -- Long */
 const DB_USER = 'brett';
 const DB_PASS = '123456';
 
@@ -107,8 +107,8 @@ const testPort2 = 1234;
  */
 const stripMongoAndServerListeningMessages = (s, port = testPort) => {
   // Todo: Replace this with suppressing db output?
-  return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '')
-    .replace(
+  return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '').
+    replace(
       new RegExp(`Express server listening on port ${port}\n`, 'u'),
       ''
     );
@@ -607,7 +607,7 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const helmetResp = await new Promise((resolve, reject) => {
+      const helmetResp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--localScripts',
           '--secret', secret,
@@ -644,7 +644,7 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const helmetResp = await new Promise((resolve, reject) => {
+      const helmetResp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--helmetOptions', JSON.stringify('{noSniff: false}'),
           '--localScripts',
@@ -682,7 +682,7 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const helmetResp = await new Promise((resolve, reject) => {
+      const helmetResp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--noHelmet',
           '--localScripts',
@@ -719,7 +719,7 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const resp = await new Promise((resolve, reject) => {
+      const resp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--sessionOptions', JSON.stringify({
             name
@@ -755,7 +755,7 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const resp = await new Promise((resolve, reject) => {
+      const resp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--sessionCookieOptions', JSON.stringify({
             httpOnly: false
@@ -794,7 +794,7 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new
-      const [langFF2, langFF25] = await new Promise((resolve, reject) => {
+      const [langFF2, langFF25] = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--crossDomainJSRedirects',
           '--localScripts',
@@ -851,7 +851,7 @@ describe('CLI', function () {
         {badURLPostStatus, badURLPostText},
         {signupPostStatus}
       // eslint-disable-next-line promise/avoid-new
-      ] = await new Promise((resolve, reject) => {
+      ] = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--localScripts',
           '--secret', secret,

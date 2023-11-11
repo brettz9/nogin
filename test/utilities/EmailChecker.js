@@ -1,3 +1,5 @@
+/* eslint-disable new-cap -- POP3 API */
+/* eslint-disable jsdoc/imports-as-dependencies -- Bug? */
 // Todo: These email methods should be movable into a general utility
 
 import Pop3Command from 'node-pop3'; // , {listify}
@@ -82,7 +84,7 @@ async function getEmail (messageNum) {
 /**
  * Probably only needed in testing, not from command line API.
  * @param {object} [cfg]
- * @param {boolean} [cfg.lastItem=false]
+ * @param {boolean} [cfg.lastItem]
  * @returns {Promise<import('envelope')[]>}
  */
 export async function getEmails ({lastItem} = {}) {

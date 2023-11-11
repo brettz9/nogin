@@ -3,7 +3,7 @@
 const rules = {
   'import/no-commonjs': 0,
   'import/unambiguous': 0,
-  'max-len': 'error',
+  '@stylistic/max-len': 'error',
 
   // Disable for now
   'eslint-comments/require-description': 0,
@@ -135,7 +135,7 @@ module.exports = {
     ]
   }, {
     files: [
-      'cypress/plugins/main.js',
+      'cypress/plugins/index.js',
       'cypress/plugins/db-basic-testing-extensions.js',
       'rollup.config.js'
     ],

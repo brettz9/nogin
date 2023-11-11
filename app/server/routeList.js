@@ -145,8 +145,10 @@ const routeList = async (app, config) => {
     composeResetPasswordEmailView:
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'
-        // eslint-disable-next-line no-unsanitized/method, max-len -- User path
-        ? (await import(pathResolve(cwd, composeResetPasswordEmailView))).default
+        // eslint-disable-next-line no-unsanitized/method -- User path
+        ? (await import(
+          pathResolve(cwd, composeResetPasswordEmailView)
+        )).default
         : undefined,
     composeActivationEmailView:
       composeActivationEmailView &&
@@ -437,7 +439,7 @@ const routeList = async (app, config) => {
         */
         (getAllRecordsResult.value) ?? [];
 
-      // Todo[>=4.0.0]: `/users` should always be enabled when there are (read)
+      // Todo[>=5.0.0]: `/users` should always be enabled when there are (read)
       //   privileges.
       if (!showUsers) {
         pageNotFound(_, res);
@@ -554,7 +556,9 @@ const routeList = async (app, config) => {
     async logout (routes, req, res) {
       res.clearCookie('login');
       const _ = await setI18n(req, res);
-      req.session.destroy((e) => { res.status(200).send(_('OK')); });
+      req.session.destroy(() => {
+        res.status(200).send(_('OK'));
+      });
     },
 
     /**
@@ -813,11 +817,11 @@ const routeList = async (app, config) => {
         return;
       }
       res.clearCookie('login');
-      req.session.destroy((_e) => {
+      req.session.destroy(() => {
         res.status(200).send(_('OK'));
       });
     }
-    // Todo[>=4.0.0]: Should be available to UI but require privileges.
+    // Todo[>=5.0.0]: Should be available to UI but require privileges.
     /*
     async reset (routes, req, res) {
       await am.deleteAllAccounts();
@@ -992,7 +996,7 @@ window.Nogin = {
 
       // Passing `next` here causes problems; we are no longer in middleware,
       //   so make our own `next`
-      // eslint-disable-next-line max-len -- Long
+      // eslint-disable-next-line @stylistic/max-len -- Long
       // eslint-disable-next-line promise/prefer-await-to-callbacks -- Middleware
       csrf(req, res, (err) => {
         if (err) {

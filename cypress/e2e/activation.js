@@ -88,7 +88,7 @@ describe('Activation', function () {
       cy.task('deleteAllAccounts');
 
       // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
       return cy.task('addNonActivatedAccount').then(({activationCode}) => {
         cy.visitURLAndCheckAccessibility('/activation?c=' + activationCode);

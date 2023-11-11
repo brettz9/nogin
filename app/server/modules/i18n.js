@@ -1,5 +1,5 @@
 import 'intl-locale-textinfo-polyfill';
-import {readdirSync} from 'fs';
+import {readdir} from 'fs/promises';
 import {join} from 'path';
 import {JSDOM} from 'jsdom';
 import {i18n as intl, getMatchingLocale, setFetch, setDocument} from 'intl-dom';
@@ -17,7 +17,7 @@ setDocument((new JSDOM()).window.document);
  * }}
  */
 const localeMaps = {};
-const availableLocales = readdirSync(join(__dirname, '../_locales'));
+const availableLocales = await readdir(join(__dirname, '../_locales'));
 
 /**
  * @typedef {object} LanguageDirection

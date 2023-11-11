@@ -122,7 +122,7 @@ describe('Home', function () {
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then(({html, subject, emailDisabled}) => {
         if (emailDisabled) {
-          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line @stylistic/max-len -- Too long
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
@@ -139,13 +139,13 @@ describe('Home', function () {
         const {activationCode} = (match || {groups: {}}).groups;
         expect(activationCode).to.be.ok;
         cy.visit('/activation?c=' + encodeURIComponent(activationCode));
-        // eslint-disable-next-line max-len -- Too long
+        // eslint-disable-next-line @stylistic/max-len -- Too long
         // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
         return Promise.resolve(false);
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then((emailDisabled) => {
         if (emailDisabled) {
-          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line @stylistic/max-len -- Too long
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
@@ -165,7 +165,7 @@ describe('Home', function () {
         // eslint-disable-next-line promise/prefer-await-to-then
       }).then((accts) => {
         if (accts === true) {
-          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line @stylistic/max-len -- Too long
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(true);
         }
@@ -225,7 +225,7 @@ describe('Home', function () {
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then(({html, subject, emailDisabled}) => {
           if (emailDisabled) {
-            // eslint-disable-next-line max-len -- Too long
+            // eslint-disable-next-line @stylistic/max-len -- Too long
             // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
@@ -253,13 +253,13 @@ describe('Home', function () {
           cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
             'The activation code provided was invalid.'
           );
-          // eslint-disable-next-line max-len -- Too long
+          // eslint-disable-next-line @stylistic/max-len -- Too long
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(false);
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then((emailDisabled) => {
           if (emailDisabled) {
-            // eslint-disable-next-line max-len -- Too long
+            // eslint-disable-next-line @stylistic/max-len -- Too long
             // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
@@ -279,7 +279,7 @@ describe('Home', function () {
           // eslint-disable-next-line promise/prefer-await-to-then
         }).then((accts) => {
           if (accts === true) {
-            // eslint-disable-next-line max-len -- Too long
+            // eslint-disable-next-line @stylistic/max-len -- Too long
             // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
             return Promise.resolve(true);
           }
@@ -567,7 +567,7 @@ describe('Home', function () {
           ).should('be.hidden');
 
           return cy.task('getRecords', {user: ['bretto']});
-          // eslint-disable-next-line max-len -- Long
+          // eslint-disable-next-line @stylistic/max-len -- Long
           // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
         }).then((accts) => {
           const {user, name, country, email, unactivatedEmail} = accts[0];
@@ -652,7 +652,7 @@ describe('Home', function () {
       cy.clearAndType('[data-name="pass"]', 'boo123456');
       cy.clearAndType('[data-name="name"]', 'MyNewName');
 
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
       cy.get('[data-name="user"]').then((
         /** @type {JQuery<HTMLInputElement>} */
@@ -740,7 +740,7 @@ describe('Home', function () {
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=13.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
       // eslint-disable-next-line promise/prefer-await-to-then
@@ -756,14 +756,14 @@ describe('Home', function () {
       const tooShortOfAName = 'a';
       cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
       cy.clearAndType('[data-name="pass"]', 'boo123456');
-      cy.clearAndType('[data-name="name"]', tooShortOfAName).blur();
+      cy.clearTypeAndBlur('[data-name="name"]', tooShortOfAName);
 
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=13.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
       cy.get('[data-name="name"]').then((
         /** @type {JQuery<HTMLInputElement>} */

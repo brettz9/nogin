@@ -34,7 +34,7 @@ import {spawn} from 'child_process';
  * @param {string} path
  * @param {object|string[]|undefined} opts
  * @param {(string|Integer)[]|Integer} [args]
- * @param {Integer|EventWatcher|null|undefined} [killDelay=10000]
+ * @param {Integer|EventWatcher|null|undefined} [killDelay]
  * @param {EventWatcher|null|undefined} [watchEvents]
  * @returns {Promise<import('../cli.js').SpawnResults>}
  */
@@ -75,7 +75,7 @@ const spawnPromise = (
       reject(err);
     });
 
-    cli.on('close', (code) => {
+    cli.on('close', (/* code */) => {
       resolve({
         stdout,
         stderr

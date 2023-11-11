@@ -116,14 +116,14 @@ function setupValidationSubmission () {
     validate () {
       av.validateForm();
     },
-    beforeSubmit (formData, jqForm, options) {
+    beforeSubmit (formData /* , jqForm, options */) {
       // Push the disabled username field onto the form data array
       formData.push({
         name: 'user', value: /** @type {string} */ (user.val())
       });
       return true;
     },
-    success (responseText, status, xhr, $form) {
+    success (responseText, status /* , xhr, $form */) {
       // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
       // istanbul ignore else
       if (status === 'success') {

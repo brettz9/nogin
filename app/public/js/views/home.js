@@ -125,9 +125,9 @@ const HomeView = {
       action1: /** @type {string} */ (_('deleteText')),
       action2: /** @type {string} */ (_('updateText'))
     });
-    accountForm.find('[data-name=action1]')
-      .removeClass('btn-outline-dark')
-      .addClass('btn-danger');
+    accountForm.find('[data-name=action1]').
+      removeClass('btn-outline-dark').
+      addClass('btn-danger');
     return accountForm;
   },
   /**

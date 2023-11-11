@@ -66,7 +66,7 @@ ajaxFormClientSideValidate(
     validate () {
       LoginValidator.validateForm();
     },
-    beforeSubmit (formData, jqForm, options) {
+    beforeSubmit (formData /* , jqForm, options */) {
       /*
       // Doesn't get here; see comment above on validation
       if (!LoginValidator.validateForm()) {
@@ -80,7 +80,7 @@ ajaxFormClientSideValidate(
       });
       return true;
     },
-    success (responseText, status, xhr, $form) {
+    success (responseText, status /* , xhr, $form */) {
       // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
       // istanbul ignore else
       if (status === 'success') {
@@ -120,7 +120,7 @@ ajaxFormClientSideValidate(
       }
     },
     url: Nogin.Routes.lostPassword,
-    success (responseText, status, xhr, $form) {
+    success (/* responseText, status, xhr, $form */) {
       LoginView.switchConfirmToAlert(retrievePasswordModal);
       retrievePasswordSubmit.hide();
       ev.showEmailSuccess(

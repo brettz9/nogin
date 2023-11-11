@@ -187,8 +187,7 @@ describe('Programmatic', function () {
     return new Promise(
       (
         /** @type {(val?: any) => void} */
-        resolve,
-        reject
+        resolve
       ) => {
         // eslint-disable-next-line promise/prefer-await-to-callbacks
         jmlEngine(join(__dirname, 'fixtures/bad-template.js'), {}, (err) => {

@@ -11,7 +11,7 @@ import confirm from './modals/confirm.js';
  * }} cfg
  */
 const home = ({
-  _, layout, user, countries, emailPattern, requireName, title
+  _, layout, user, countries, emailPattern, title // , requireName
 }) => {
   return layout({
     content: /** @type {import('jamilih').JamilihChildren} */ ([

@@ -7,6 +7,7 @@ declare namespace Cypress {
       badSecret?: string
     }): Chainable
     clearAndType(sel: string, content: string): Chainable
+    clearTypeAndBlur(sel: string, content: string): Chainable
     visitURLAndCheckAccessibility(url: string, CypressVisitOptions?: object): void
     loginWithSession(cfg?: {nondefaultEmail?: boolean}): void
     validUserPassword(cfg: {

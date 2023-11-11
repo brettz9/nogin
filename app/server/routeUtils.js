@@ -1,5 +1,4 @@
-import {readdirSync} from 'fs';
-import {readFile} from 'fs/promises';
+import {readdir, readFile} from 'fs/promises';
 import {join} from 'path';
 
 import layoutView from './views/layout.js';
@@ -125,19 +124,19 @@ const layoutAndTitleGetter = (config, jml) => {
 
   // Has SHAs at https://code.jquery.com/ ;
   //  see also https://jquery.com/download/
-  // todo[jquery@>3.7.0]: Update SHA (and path(s) if necessary)
+  // todo[jquery@>3.7.1]: Update SHA (and path(s) if necessary)
 
   // See https://github.com/jquery-form/form for CDN SHA
   // todo: Update SHA (and path(s) if necessary) for jquery-form
 
-  // todo[@fortawesome/fontawesome-free@>6.4.0]: Update SHA (and path(s)
+  // todo[@fortawesome/fontawesome-free@>6.4.2]: Update SHA (and path(s)
   //   if necessary)
 
-  // Todo[bootstrap@>5.2.3]: Update SHA (and path(s) if necessary) for
+  // Todo[bootstrap@>5.3.2]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
-  //   https://github.com/twbs/bootstrap/blob/main/config.yml
-  // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
+  //   https://github.com/twbs/bootstrap/blob/main/hugo.yml
+  // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/hugo.yml
 
   // Todo: If keeping, add badge to a demo and make enableable (off
   //   by default) with option
@@ -145,8 +144,15 @@ const layoutAndTitleGetter = (config, jml) => {
 
   /** @type {SecuritySourceAttributes} */
   const securitySourceAttributes = (type, name) => {
-    // @ts-expect-error Why is this problematic?
-    const base = integrityMap[type].find(
+    const base =
+    /**
+     * @type {(LinkScript & {
+     *   noLocalIntegrity?: boolean | undefined;
+     * }) | (LinkScript & {
+     *   global: string;
+     * })}
+     */
+    (integrityMap[type].find(
       /**
        * @param {{
        *   name: string
@@ -156,13 +162,13 @@ const layoutAndTitleGetter = (config, jml) => {
       ({name: nm}) => {
         return name === nm;
       }
-    );
+    ));
     const baseObj = {
       [type === 'link' ? 'href' : 'src']:
         base[localScripts ? 'local' : 'remote'],
       crossorigin: 'anonymous'
     };
-    if (localScripts && base.noLocalIntegrity) {
+    if (localScripts && 'noLocalIntegrity' in base && base.noLocalIntegrity) {
       return baseObj;
     }
     return {
@@ -250,7 +256,7 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
    * names (which could cause circular redirecting).
    */
   const localePath = join(localesBasePath, '_locales');
-  const availableLocales = readdirSync(localePath);
+  const availableLocales = await readdir(localePath);
   const setI18n = i18n(localesBasePath);
 
   await Promise.all(
