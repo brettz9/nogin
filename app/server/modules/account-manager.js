@@ -236,13 +236,13 @@ class AccountManager {
     const passKey = uuid();
     let o, e;
     try {
-      o = await
+      o = /** @type {import('mongodb').WithId<any> | null} */ (await
       /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
         this.accounts
       ).findOneAndUpdate({email}, {$set: {
         ip: ipAddress,
         passKey
-      }, $unset: {cookie: ''}}, {returnDocument: 'after'});
+      }, $unset: {cookie: ''}}, {returnDocument: 'after'}));
     } catch (err) {
       // Above should not throw readily
       // istanbul ignore next
@@ -413,9 +413,9 @@ class AccountManager {
    * @param {object} cfg
    * @param {boolean} [cfg.forceUpdate]
    * @param {ChangedEmailHandler} [cfg.changedEmailHandler]
-   * @returns {Promise<import('mongodb').ModifyResult<
-   *   import('mongodb').Document
-   * >>}
+   * @returns {Promise<
+   *   import('mongodb').WithId<import('mongodb').Document>
+   * >}
    */
   async updateAccount (newData, {forceUpdate, changedEmailHandler}) {
     let _o;
@@ -466,9 +466,9 @@ class AccountManager {
      *   user: string,
      *   id?: string
      * }} cfg
-     * @returns {Promise<import('mongodb').ModifyResult<
-     *   import('mongodb').Document
-     * >>}
+     * @returns {Promise<
+     *   import('mongodb').WithId<import('mongodb').Document>
+     * >}
      */
     const findOneAndUpdate = async ({
       name, email, country, pass, id, user, activated,
@@ -525,6 +525,10 @@ class AccountManager {
       if (changedEmailHandler && addingTemporaryEmail) {
         await changedEmailHandler(o, user);
       }
+      // istanbul ignore if -- Should not occur?
+      if (!ret) {
+        throw new Error('missing-user');
+      }
       return ret;
     };
     if (!newData.pass) {
@@ -538,9 +542,7 @@ class AccountManager {
   /**
    * @param {string} passKey
    * @param {string} newPass
-   * @returns {Promise<
-   *   import('mongodb').ModifyResult
-   * >}
+   * @returns {Promise<import('mongodb').WithId<any> | null>}
    */
   async updatePassword (passKey, newPass) {
     const hash = await saltAndHash(newPass);
