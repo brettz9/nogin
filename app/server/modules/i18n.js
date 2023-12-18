@@ -35,6 +35,7 @@ const availableLocales = await readdir(join(__dirname, '../_locales'));
 const getLangDir = function (_) {
   // Todo: Add `resolvedDirection` to `intl-dom` so can grab that instead here
   const lang = _.resolvedLocale;
+  // @ts-expect-error Polyfill for a new standard
   const {direction} = new Intl.Locale(lang).textInfo;
   // Don't bother to make default of "ltr" explicit
   const dir = direction === 'rtl' ? direction : undefined;

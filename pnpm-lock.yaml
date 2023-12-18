@@ -218,8 +218,8 @@ devDependencies:
     specifier: ^6.0.2
     version: 6.0.2
   envelope:
-    specifier: ^2.1.0
-    version: 2.1.0
+    specifier: https://github.com/brettz9/node-envelope#ts
+    version: github.com/brettz9/node-envelope/c1bea1473ed42670643bac994f23af55ae6838d5
   es-file-traverse:
     specifier: ^1.1.0
     version: 1.1.0(@babel/core@7.23.3)(eslint-plugin-import@2.29.0)(eslint@8.54.0)
@@ -6438,15 +6438,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /envelope@2.1.0:
-    resolution: {integrity: sha512-+z4Qj2CbVnvpvc6aSmAJ1ah008q4+ywM11HvhurooS6Rk3iuqfmwleyVzLbVS3HmNgGFUKu1PyK8mt82tYXmEw==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      content-disposition: 0.5.4
-      content-type: 1.0.5
-      iconv-lite: 0.5.2
-    dev: true
-
   /err-code@2.0.3:
     resolution: {integrity: sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA==}
     dev: true
@@ -8396,13 +8387,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
-
-  /iconv-lite@0.5.2:
-    resolution: {integrity: sha512-kERHXvpSaB4aU3eANwidg79K8FlrN77m8G9V+0vOR3HYaRifrlwMEpT7ZBJqLSEIHnEgJTHcWK82wwLwwKwtag==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      safer-buffer: 2.1.2
-    dev: true
 
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
@@ -14303,4 +14287,15 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       jquery: 3.7.1
+    dev: true
+
+  github.com/brettz9/node-envelope/c1bea1473ed42670643bac994f23af55ae6838d5:
+    resolution: {tarball: https://codeload.github.com/brettz9/node-envelope/tar.gz/c1bea1473ed42670643bac994f23af55ae6838d5}
+    name: envelope
+    version: 2.1.0
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      content-disposition: 0.5.4
+      content-type: 1.0.5
+      iconv-lite: 0.6.3
     dev: true

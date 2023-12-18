@@ -262,7 +262,7 @@
     "delay": "^6.0.0",
     "delay-cli": "^2.0.0",
     "doiuse": "^6.0.2",
-    "envelope": "^2.1.0",
+    "envelope": "https://github.com/brettz9/node-envelope#ts",
     "es-file-traverse": "^1.1.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^8.54.0",

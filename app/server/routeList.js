@@ -193,7 +193,11 @@ const routeList = async (app, config) => {
       let o;
       try {
         // Checks by `cookie` and `ip`
-        o = await am.validateLoginKey(req.signedCookies.login, req.ip);
+        o = await am.validateLoginKey(
+          req.signedCookies.login,
+          /** @type {string} */
+          (req.ip)
+        );
       } catch (err) {
       }
 
@@ -323,7 +327,11 @@ const routeList = async (app, config) => {
       const queryKey = /** @type {string} */ (req.query[_('query_key')]);
       let o, e;
       try {
-        o = await am.validatePasswordKey(queryKey, req.ip);
+        o = await am.validatePasswordKey(
+          queryKey,
+          /** @type {string} */
+          (req.ip)
+        );
       } catch (error) {
         // `validatePasswordKey` just looks up database records, so no reason
         //   to err
@@ -537,7 +545,7 @@ const routeList = async (app, config) => {
       } else {
         const key = await am.generateLoginKey(
           /** @type {string} */ (o.user),
-          req.ip
+          /** @type {string} */ (req.ip)
         );
         // Is there value in signing this key? The unsigned value
         //  seems of no special value (unlike a password)
@@ -703,7 +711,11 @@ const routeList = async (app, config) => {
         i18nResult, generatePasswordKeyResult
       ] = await Promise.allSettled([
         setI18n(req, res),
-        am.generatePasswordKey(email, req.ip)
+        am.generatePasswordKey(
+          email,
+          /** @type {string} */
+          (req.ip)
+        )
       ]);
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
