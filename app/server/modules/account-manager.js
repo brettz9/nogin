@@ -148,7 +148,7 @@ class AccountManager {
         //  internal states that could exist to cause this
         // istanbul ignore next
         : null;
-    } catch (err) {
+    } catch {
       // No special reason to expect it throwing
       // istanbul ignore next
       return null;
@@ -178,7 +178,7 @@ class AccountManager {
       /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
         this.accounts
       ).findOne({user, activated: true});
-    } catch (err) {}
+    } catch {}
     if (isNullish(o)) {
       throw new Error('user-not-found');
     }
@@ -249,8 +249,8 @@ class AccountManager {
       e = err;
     }
 
-    if (o && !isNullish(o.value)) {
-      return o.value;
+    if (o) {
+      return o;
     }
     // Todo: Either i18nize these in the UI or if better to avoid sniffing
     //  existence of hidden user accounts, avoid this specific message,
@@ -297,7 +297,7 @@ class AccountManager {
         user: newData.user,
         activated: true
       });
-    } catch (err) {}
+    } catch {}
     if (o) {
       throw new Error('username-taken');
     }
@@ -310,7 +310,7 @@ class AccountManager {
         email: newData.email,
         activated: true
       });
-    } catch (err) {}
+    } catch {}
     if (_o) {
       throw new Error('email-taken');
     }
@@ -377,7 +377,7 @@ class AccountManager {
       o = await /** @type {import('mongodb').Collection} */ (
         this.accounts
       ).findOne(unactivatedConditions);
-    } catch (err) {}
+    } catch {}
 
     if (!o) {
       throw new Error('activationCodeProvidedInvalid');
@@ -430,7 +430,7 @@ class AccountManager {
       _o = await /** @type {import('mongodb').Collection} */ (
         this.accounts
       ).findOne(differentUserWithEmailFilter);
-    } catch (err) {}
+    } catch {}
     if (_o) {
       throw new Error('email-taken');
     }
@@ -452,7 +452,7 @@ class AccountManager {
       oldAccount = await /** @type {import('mongodb').Collection} */ (
         this.accounts
       ).findOne(oldAccountFilter);
-    } catch (err) {}
+    } catch {}
     // Todo: Should only occur if user established session and then we
     //  deleted their account
     // istanbul ignore if
@@ -518,6 +518,8 @@ class AccountManager {
         filter,
         {
           // Strip out `undefined` which now are treated by Mongodb as null
+          // eslint-disable-next-line @stylistic/max-len -- Long
+          // eslint-disable-next-line unicorn/prefer-structured-clone -- Different
           $set: JSON.parse(JSON.stringify(o))
         },
         {upsert: true, returnDocument: 'after'}

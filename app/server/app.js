@@ -19,12 +19,12 @@ import stylus from 'stylus';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
-import routes from './app/server/routeList.js';
-import getLogger from './app/server/modules/getLogger.js';
-import DBFactory from './app/server/modules/db-factory.js';
-import jmlEngine from './app/server/modules/jmlEngine.js';
-import {parseCLIJSON} from './app/server/modules/common.js';
-import getDirname from './app/server/modules/getDirname.js';
+import routes from './routeList.js';
+import getLogger from './modules/getLogger.js';
+import DBFactory from './modules/db-factory.js';
+import jmlEngine from './modules/jmlEngine.js';
+import {parseCLIJSON} from './modules/common.js';
+import getDirname from './modules/getDirname.js';
 
 /**
  * These are a subset of the CLI options.
@@ -66,10 +66,10 @@ import getDirname from './app/server/modules/getDirname.js';
 
 /**
  * @typedef {RouteConfigFromOptions & {
- *   log: import('./app/server/modules/getLogger.js').Logger,
+ *   log: import('./modules/getLogger.js').Logger,
  *   DB_URL: string,
- *   opts: import('./app/server/optionDefinitions.js').MainOptionDefinitions,
- *   dbOpts: import('./app/server/modules/db-factory.js').DbOptions,
+ *   opts: import('./optionDefinitions.js').MainOptionDefinitions,
+ *   dbOpts: import('./modules/db-factory.js').DbOptions,
  *   triggerCoverage: boolean
  * }} RouteConfig
  */
@@ -77,7 +77,7 @@ import getDirname from './app/server/modules/getDirname.js';
 const __dirname = getDirname(import.meta.url);
 
 /**
- * @param {Partial<import('./app/server/optionDefinitions.js').
+ * @param {Partial<import('./optionDefinitions.js').
  *   MainOptionDefinitions>
  * } options
  * @returns {Promise<void>}
@@ -98,10 +98,10 @@ const createServer = async function (options) {
   let cfg;
   try {
     cfg = config
-      // eslint-disable-next-line no-unsanitized/method -- User path
+      // // eslint-disable-next-line no-unsanitized/method -- User path
       ? (await import(pathResolve(cwd, config))).default
       : null;
-  } catch (err) {
+  } catch {
     errorLog('noConfigFileDetected', {
       // eslint-disable-next-line object-shorthand -- TS
       config: /** @type {string} */ (config)
@@ -111,7 +111,7 @@ const createServer = async function (options) {
 
   const opts =
     /**
-     * @type {import('./app/server/optionDefinitions.js').
+     * @type {import('./optionDefinitions.js').
      *   MainOptionDefinitions}
      */ ({...cfg, ...options, config: null});
   const {
@@ -124,7 +124,7 @@ const createServer = async function (options) {
     NL_SITE_URL,
     secret,
     PORT = 3000,
-    JS_DIR = '/app/public',
+    JS_DIR = '../public',
     staticDir,
     middleware,
     router,
@@ -144,7 +144,7 @@ const createServer = async function (options) {
     fromText,
     fromURL,
     requireName,
-    localesBasePath = join(__dirname, 'app/server'),
+    localesBasePath = __dirname,
     useESM,
     noPolyfill,
     postLoginRedirectPath,
@@ -180,7 +180,7 @@ const createServer = async function (options) {
   //  file extension
   app.engine('js', jmlEngine);
   app.set('port', PORT);
-  app.set('views', join(__dirname, '/app/server/views'));
+  app.set('views', join(__dirname, '/views'));
   app.set('view engine', 'js');
 
   app.use(limiter);
@@ -191,10 +191,10 @@ const createServer = async function (options) {
   app.use(
     stylus.middleware({src: join(__dirname, JS_DIR), sourcemap: true})
   );
-  if (JS_DIR !== '/app/public') {
+  if (JS_DIR !== '../public') {
     app.use(express.static(join(__dirname, JS_DIR)));
   }
-  app.use(express.static(join(__dirname, '/app/public')));
+  app.use(express.static(join(__dirname, '../public')));
 
   if (!noHelmet) {
     app.use(helmet(
@@ -209,12 +209,12 @@ const createServer = async function (options) {
   }
   if (middleware) {
     const middlewareImports = await Promise.all(middleware.map(async (mw) => {
-      // eslint-disable-next-line no-unsanitized/method -- User path
+      // // eslint-disable-next-line no-unsanitized/method -- User path
       return await import(mw);
     }));
 
     /**
-     * @type {({default: (opts: import('./app/server/optionDefinitions.js').
+     * @type {({default: (opts: import('./optionDefinitions.js').
      *   MainOptionDefinitions) => import('express').Application})[]}
      */
     middlewareImports.forEach((imported) => {
@@ -235,7 +235,7 @@ const createServer = async function (options) {
     /** @type {"mongodb"} */ (dbOpts.adapter),
     isProduction,
     /**
-     * @type {import('./app/server/modules/db-factory.js').
+     * @type {import('./modules/db-factory.js').
      *   DbConfig}
      */ (dbOpts)
   );
@@ -308,7 +308,7 @@ const createServer = async function (options) {
     //  `app/public/js/utilities/ajaxFormClientSideValidate.js`
     // csrfKey: 'csrf-token',
     // User is using instrumenting
-    triggerCoverage: JS_DIR !== '/app/public'
+    triggerCoverage: JS_DIR !== '../public'
   }));
 
   log('BeginningServer');

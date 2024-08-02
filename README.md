@@ -20,14 +20,14 @@ share-alike terms are for the fonts themselves, not its CSS (which is under MIT)
 
 *A maintained and expanded fork of <https://github.com/braitsch/node-login>.*
 
-![nogin](./doc-includes/nogin.jpg?raw=true)
+![nogin](./doc-includes/nogin.jpg)
 
 The project name is a portmanteau of "Node" and "login" and is pronounced "noggin"
 (a colloquial word for "head").
 
 So if you want Node login, use your "nogin"!
 
-![nogin](./doc-includes/retrieve-password.jpg?raw=true)
+![nogin](./doc-includes/retrieve-password.jpg)
 
 ### A basic account management system built in Node.js with the following features:
 

@@ -3,31 +3,12 @@ import {spawn} from 'child_process';
 /**
 * @callback EventWatcher
 * @param {string} stdout Aggregate stdout
-* @param {string} data
+* @param {string} [data]
 * @returns {void|Promise<void>}
 */
 
 /**
  * @typedef {number} Integer
- */
-
-/**
- * @overload
- * @param {string} path
- * @param {object} opts
- * @param {string[]} args
- * @param {Integer} [killDelay=10000]
- * @param {EventWatcher|null|undefined} watchEvents
- * @returns {Promise<import('../cli.js').SpawnResults>}
- */
-
-/**
- * @overload
- * @param {string} path
- * @param {string[]} opts
- * @param {Integer} args
- * @param {EventWatcher|null|undefined} killDelay
- * @returns {Promise<import('../cli.js').SpawnResults>}
  */
 
 /**

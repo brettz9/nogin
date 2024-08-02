@@ -12,12 +12,12 @@ instrumented/**
 .nyc_output
 db
 
+docs/typedoc
+
 mochawesome-report
 mochawesome.json
 nogin.json
 nogin.js
-
-docs/jsdoc
 
 .eslintcache
 .idea

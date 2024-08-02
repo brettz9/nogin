@@ -3,7 +3,7 @@
 import {cliBasics} from 'command-line-basics';
 import getLogger from '../app/server/modules/getLogger.js';
 import getDirname from '../app/server/modules/getDirname.js';
-import {createServer} from '../app.js';
+import {createServer} from '../app/server/app.js';
 import manageAccounts from './manage-accounts.js';
 
 const __dirname = getDirname(import.meta.url);

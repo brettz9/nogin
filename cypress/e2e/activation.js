@@ -13,6 +13,7 @@ describe('Activation', function () {
       timeout: 10000
     }).should('eq', '/');
   });
+
   it(
     'Visit Activation (Missing code) has no detectable a11y violations on load',
     () => {
@@ -49,12 +50,9 @@ describe('Activation', function () {
     cy.task('addExtraNonActivatedAccount');
 
     let activCode;
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line promise/prefer-await-to-then
     return cy.task('addNonActivatedAccount').then(({activationCode}) => {
       activCode = activationCode;
       return cy.task('getRecords');
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then((accts) => {
       expect(accts).to.have.lengthOf(2);
 
@@ -67,10 +65,8 @@ describe('Activation', function () {
       return cy.location('pathname', {
         timeout: 10000
       }).should('eq', '/');
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       return cy.task('getRecords');
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then((accts) => {
       // Should have now cleaned up the unactivated copies.
       expect(accts).to.have.lengthOf(1);
@@ -82,14 +78,12 @@ describe('Activation', function () {
       return undefined;
     });
   });
+
   it(
     'Visit Activation (Success) has no detectable a11y violations on load',
     () => {
       cy.task('deleteAllAccounts');
 
-      // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line @stylistic/max-len
-      // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
       return cy.task('addNonActivatedAccount').then(({activationCode}) => {
         cy.visitURLAndCheckAccessibility('/activation?c=' + activationCode);
       });

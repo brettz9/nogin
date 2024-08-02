@@ -5,7 +5,7 @@ ignore:
   SNYK-JS-JQUERYFORM-574783:
     - jquery-form:
         reason: Using own patch
-        expires: '2023-09-17T01:57:46.538Z'
+        expires: '2099-09-17T01:57:46.538Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   SNYK-JS-LODASH-567746:

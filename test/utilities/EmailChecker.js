@@ -1,5 +1,4 @@
 /* eslint-disable new-cap -- POP3 API */
-/* eslint-disable jsdoc/imports-as-dependencies -- Bug? */
 // Todo: These email methods should be movable into a general utility
 
 import Pop3Command from 'node-pop3'; // , {listify}

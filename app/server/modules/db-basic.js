@@ -114,7 +114,7 @@ async function getAccounts (options, update) {
          * @type {OtherAccountProperty}
          */ (pr);
       const obj = options[prop];
-      if (obj && obj[i]) {
+      if (obj && i in obj) {
         // @ts-expect-error Why is this problematic?
         ret[prop] = obj[i];
       }

@@ -11,7 +11,7 @@ import confirm from './modals/confirm.js';
  * }} cfg
  */
 const home = ({
-  _, layout, user, countries, emailPattern, title // , requireName
+  _, layout, user, countries, emailPattern, title, requireName
 }) => {
   return layout({
     content: /** @type {import('jamilih').JamilihChildren} */ ([
@@ -46,7 +46,7 @@ const home = ({
         role: 'main'
       }, [
         ...account({
-          _, user, countries, emailPattern, title
+          _, user, countries, emailPattern, title, requireName
         }),
         alert({_}),
         confirm({_, type: 'deleteAccount'}),

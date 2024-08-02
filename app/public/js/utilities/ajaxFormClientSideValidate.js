@@ -38,15 +38,16 @@ const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
  * }} cfg
  * @returns {void}
  */
-const ajaxFormClientSideValidate = (form, {
-  validate,
-  // `ajaxForm` properties and methods
-  url,
-  beforeSubmit,
-  success,
-  error,
-  checkXSRF = true
-}) => {
+const ajaxFormClientSideValidate = (form, cfg) => {
+  const {
+    validate,
+    // `ajaxForm` properties and methods
+    url,
+    beforeSubmit,
+    success,
+    error,
+    checkXSRF = true
+  } = cfg;
   // As per problem #3 at https://www.html5rocks.com/en/tutorials/forms/constraintvalidation/#toc-current-implementation-issues ,
   //  we can't do the validation at submit, so we instead add a capturing
   //  change listener as well as input listeners to reset the messages;

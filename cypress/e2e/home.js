@@ -2,6 +2,7 @@ const expressSessionID = 'connect.sid';
 
 describe('Home', function () {
   let NL_EMAIL_PASS, NL_EMAIL_USER;
+
   before(() => {
     ({
       NL_EMAIL_PASS, NL_EMAIL_USER
@@ -17,7 +18,6 @@ describe('Home', function () {
 
     const url = '/';
     let tkn;
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     return cy.getToken(url).then((token) => {
       tkn = token;
       return cy.request({
@@ -32,7 +32,6 @@ describe('Home', function () {
           pass: NL_EMAIL_PASS
         }
       });
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     }).then(() => {
       cy.visit('/');
 
@@ -52,11 +51,11 @@ describe('Home', function () {
           pass: NL_EMAIL_PASS
         }
       });
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     }).then((resp) => {
       return expect(resp.status).to.equal(404);
     });
   });
+
   it(
     'Visit Home and be redirected when no session (no post to `/`, ' +
     '`/home` or GET to auto-login at `/` (from previous-set cookie ' +
@@ -69,6 +68,7 @@ describe('Home', function () {
       }).should('eq', '/');
     }
   );
+
   describe('Changing email', function () {
     beforeEach(() => {
       cy.task('deleteEmails', null, {timeout: 100000});
@@ -78,6 +78,7 @@ describe('Home', function () {
       cy.task('addNonActivatedAccount');
       cy.visit('/home');
     });
+
     it('Make good update (with same user but different email)', function () {
       this.timeout(80000);
       const startingEmail = 'brettz95@example.name';
@@ -105,7 +106,6 @@ describe('Home', function () {
       cy.get(
         '[data-name="modal-alert"] [data-name="ok"]'
       ).click();
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user, name, country, email} = accts[0];
         expect(user).to.equal('bretto');
@@ -113,13 +113,11 @@ describe('Home', function () {
         expect(email).to.equal(startingEmail);
         expect(country).to.equal('FR');
         return expect(name).to.equal('MyNewName');
-        // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
         // We don't know exactly how long until the email will be delivered
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(15000);
         return cy.task('getMostRecentEmail', {timeout: 90000});
-        // eslint-disable-next-line promise/prefer-await-to-then
       }).then(({html, subject, emailDisabled}) => {
         if (emailDisabled) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
@@ -142,7 +140,6 @@ describe('Home', function () {
         // eslint-disable-next-line @stylistic/max-len -- Too long
         // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
         return Promise.resolve(false);
-        // eslint-disable-next-line promise/prefer-await-to-then
       }).then((emailDisabled) => {
         if (emailDisabled) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
@@ -162,7 +159,6 @@ describe('Home', function () {
            *   AccountInfo[]}
            */ (ret)
         );
-        // eslint-disable-next-line promise/prefer-await-to-then
       }).then((accts) => {
         if (accts === true) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
@@ -208,7 +204,6 @@ describe('Home', function () {
         cy.get(
           '[data-name="modal-alert"] [data-name="ok"]'
         ).click();
-        // eslint-disable-next-line promise/prefer-await-to-then
         return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
           const {user, name, country, email} = accts[0];
           expect(user).to.equal('bretto');
@@ -216,13 +211,11 @@ describe('Home', function () {
           expect(email).to.equal(startingEmail);
           expect(country).to.equal('FR');
           return expect(name).to.equal('MyNewName');
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
           // We don't know exactly how long until the email will be delivered
           // eslint-disable-next-line cypress/no-unnecessary-waiting
           cy.wait(15000);
           return cy.task('getMostRecentEmail', {timeout: 90000});
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then(({html, subject, emailDisabled}) => {
           if (emailDisabled) {
             // eslint-disable-next-line @stylistic/max-len -- Too long
@@ -256,7 +249,6 @@ describe('Home', function () {
           // eslint-disable-next-line @stylistic/max-len -- Too long
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
           return Promise.resolve(false);
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then((emailDisabled) => {
           if (emailDisabled) {
             // eslint-disable-next-line @stylistic/max-len -- Too long
@@ -276,7 +268,6 @@ describe('Home', function () {
              *   AccountInfo[]}
              */ (ret)
           );
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then((accts) => {
           if (accts === true) {
             // eslint-disable-next-line @stylistic/max-len -- Too long
@@ -299,6 +290,7 @@ describe('Home', function () {
       }
     );
   });
+
   describe('Pre-logging in with session', function () {
     beforeEach(() => {
       cy.loginWithSession();
@@ -336,7 +328,6 @@ describe('Home', function () {
       cy.get(
         '[data-confirm-type="deleteAccount"] [data-name="cancel"]'
       ).click();
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         expect(accts).to.have.lengthOf(1);
         // return cy.log(accts);
@@ -362,7 +353,6 @@ describe('Home', function () {
         timeout: 10000
       }).should('eq', '/');
 
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         expect(accts).to.have.lengthOf(0);
         // return cy.log(accts);
@@ -377,7 +367,6 @@ describe('Home', function () {
         timeout: 50000,
         failOnStatusCode: false
         // NO `X-XSRF-Token` HEADER
-      // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
       }).then((resp) => {
         return expect(resp.status).to.equal(404);
       });
@@ -407,7 +396,6 @@ describe('Home', function () {
 
       // User not deleted here, just not able to delete account when
       //  session was destroyed
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user} = accts[0];
         expect(user).to.equal('bretto');
@@ -415,6 +403,7 @@ describe('Home', function () {
         return undefined;
       });
     });
+
     it('Visit Home again', function () {
       cy.getCookie(expressSessionID).should('exist');
 
@@ -437,7 +426,6 @@ describe('Home', function () {
       cy.get(
         '[data-confirm-type="notice"] [data-name="cancel"]'
       ).click();
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         expect(accts).to.have.lengthOf(1);
         expect(accts[0].email).to.equal(NL_EMAIL_USER);
@@ -484,14 +472,12 @@ describe('Home', function () {
         );
       });
 
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user, name, email} = accts[0];
         expect(user).to.equal('bretto');
         expect(email).to.equal(NL_EMAIL_USER);
         expect(name).to.equal('Brett');
         return cy.task('getRecords', {user: ['nicky']});
-        // eslint-disable-next-line promise/prefer-await-to-then
       }).then((accts) => {
         const {user, name, email} = accts[0];
         expect(user).to.equal('nicky');
@@ -519,7 +505,6 @@ describe('Home', function () {
             pass: NL_EMAIL_PASS
           },
           error: 'problem-dispatching-link'
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
           const goodEmailToPassClientValidation = NL_EMAIL_USER;
           cy.clearAndType(
@@ -535,7 +520,6 @@ describe('Home', function () {
           cy.get('[data-name="ok"]').click();
 
           return cy.task('getRecords', {user: ['bretto']});
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then((accts) => {
           const {user, name, country, email, unactivatedEmail} = accts[0];
           expect(user).to.equal('bretto');
@@ -545,7 +529,6 @@ describe('Home', function () {
           expect(unactivatedEmail).to.equal(badEmail);
           expect(country).to.equal('FR');
           return expect(name).to.equal('MyNewName');
-          // eslint-disable-next-line promise/prefer-await-to-then
         }).then(() => {
           cy.clearAndType(
             '[data-name="email"]',
@@ -567,8 +550,6 @@ describe('Home', function () {
           ).should('be.hidden');
 
           return cy.task('getRecords', {user: ['bretto']});
-          // eslint-disable-next-line @stylistic/max-len -- Long
-          // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
         }).then((accts) => {
           const {user, name, country, email, unactivatedEmail} = accts[0];
           expect(user).to.equal('bretto');
@@ -589,7 +570,6 @@ describe('Home', function () {
           pass: {}
         },
         error: 'Error Updating Account'
-      // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
         cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
         const goodPasswordToPassClientValidation = 'boo123456';
@@ -636,7 +616,6 @@ describe('Home', function () {
         timeout: 10000
       }).should('eq', '/');
 
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user, name} = accts[0];
         expect(user).to.equal('bretto');
@@ -652,8 +631,6 @@ describe('Home', function () {
       cy.clearAndType('[data-name="pass"]', 'boo123456');
       cy.clearAndType('[data-name="name"]', 'MyNewName');
 
-      // eslint-disable-next-line @stylistic/max-len
-      // eslint-disable-next-line promise/prefer-await-to-then, promise/catch-or-return
       cy.get('[data-name="user"]').then((
         /** @type {JQuery<HTMLInputElement>} */
         $user
@@ -677,7 +654,6 @@ describe('Home', function () {
         timeout: 10000
       }).should('eq', '/home');
 
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords').then((
         /**
          * @type {import('../../app/server/modules/account-manager.js').
@@ -721,7 +697,6 @@ describe('Home', function () {
         cy.get(
           '[data-name="modal-alert"] [data-name="ok"]'
         ).click();
-        // eslint-disable-next-line promise/prefer-await-to-then
         return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
           const {user, name, email, country} = accts[0];
           expect(user).to.equal('bretto');
@@ -735,15 +710,14 @@ describe('Home', function () {
     it('Prevent update with empty email', function () {
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(5000);
+      // Should this addition have been necessary?
+      cy.get('[data-name="email"]').clear();
       cy.clearAndType('[data-name="pass"]', 'boo123456');
       cy.clearAndType('[data-name="name"]', 'MyNewName');
       cy.get('[data-name="name"]:invalid').should('have.length', 0);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
-      //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
         const {user, name, email} = accts[0];
         expect(user).to.equal('bretto');
@@ -757,14 +731,11 @@ describe('Home', function () {
       cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
       cy.clearAndType('[data-name="pass"]', 'boo123456');
       cy.clearTypeAndBlur('[data-name="name"]', tooShortOfAName);
-
       cy.get('[data-name="action2"]').click();
 
       // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
-      // eslint-disable-next-line @stylistic/max-len
-      // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
       cy.get('[data-name="name"]').then((
         /** @type {JQuery<HTMLInputElement>} */
         $input

@@ -24,8 +24,10 @@ describe('Root (Login) - Accessibility', function () {
   });
 });
 
+// eslint-disable-next-line mocha/max-top-level-suites -- Less indentation
 describe('Root (Login)', function () {
   let env, NL_EMAIL_USER, NL_EMAIL_PASS;
+
   before(() => {
     ({
       env,
@@ -33,6 +35,7 @@ describe('Root (Login)', function () {
       NL_EMAIL_PASS
     } = Cypress.env());
   });
+
   beforeEach(() => {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
@@ -91,7 +94,6 @@ describe('Root (Login)', function () {
         user: 'bretto',
         pass: NL_EMAIL_PASS
       }
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     }).then((resp) => {
       return expect(resp.status).to.equal(404);
     });
@@ -186,7 +188,6 @@ describe('Root (Login)', function () {
         pass: null
       },
       error: 'The "password" argument must be'
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       const passwordToPassClientValidation = 'abc123456';
       cy.get('[data-name="user"]').type('bretto');
@@ -228,7 +229,6 @@ describe('Root (Login)', function () {
         '<a href=',
         'reset-password?key='
       ]
-      // eslint-disable-next-line promise/prefer-await-to-then
     }, {timeout: 70000}).then((hasEmail) => {
       // Todo: In full UI testing mode, we could look for the link and
       //   visit it.
@@ -249,7 +249,7 @@ describe('Root (Login)', function () {
         return expect(/** @type {HTMLInputElement} */ (
           user[0]
         ).validationMessage).to.contain(
-          'Please enter a valid email address'
+          'Please include an \'@\' in the email address'
         );
       });
     }
@@ -265,7 +265,6 @@ describe('Root (Login)', function () {
         email: badButExistingEmail
       },
       error: 'Unable to dispatch password reset'
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       const okEmailToBypassValidationAndGetToStub = 'example@example.name';
       cy.get('[data-name="forgot-password"]').click();
@@ -322,6 +321,7 @@ describe('Root (Login)', function () {
       ).checkValidity()).to.equal(false);
     });
   });
+
   it('Should validate against missing pass value', function () {
     cy.get('[data-name="user"]').type('bretto');
     cy.get('[data-name="btn_sign_in"]').click();
@@ -342,8 +342,6 @@ describe('Root (Login)', function () {
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1',
       secure
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then((key) => {
       cy.visit('/');
       cy.location('pathname', {
@@ -370,8 +368,6 @@ describe('Root (Login)', function () {
         // ipv6 read by Express
         ip: '::ffff:127.0.0.1',
         secure
-      // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line promise/prefer-await-to-then
       }).then((key) => {
         cy.visit('/?redirect=/signup');
         cy.location('pathname', {
@@ -388,7 +384,8 @@ describe('Root (Login)', function () {
   );
 
   it(
-    'Visit auto-logging-in root after initial login and with redirect',
+    'Visit auto-logging-in root after initial login and with ' +
+    'redirect (with colons)',
     function () {
       cy.log(env);
       // See `hackEnv` on how apparently not working and why we need this hack
@@ -399,8 +396,6 @@ describe('Root (Login)', function () {
         // ipv6 read by Express
         ip: '::ffff:127.0.0.1',
         secure
-      // Cypress won't run the tests with an `await` here
-      // eslint-disable-next-line promise/prefer-await-to-then
       }).then((key) => {
         cy.visit('/?redirect=http://ignore-redirect-with-colons.com');
         cy.location('pathname', {
@@ -421,7 +416,6 @@ describe('Root (Login)', function () {
     function () {
       cy.loginWithSession();
       cy.task('updateAccountToInactive');
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords').then((accts) => {
         expect(accts).to.have.lengthOf(1);
         expect(accts[0].activated).to.be.false;
@@ -439,14 +433,11 @@ describe('Root (Login)', function () {
       // Won't have server secret, so try our own
       badSecret: 'abcdabcdabcd',
       secure
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then((key) => {
       cy.getCookie('login').should('have.property', 'value', key);
       cy.getCookie('login').should('have.property', 'secure', secure);
 
       return cy.getCookie(expressSessionID).should('exist');
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       cy.visit('/');
       return cy.location('pathname', {

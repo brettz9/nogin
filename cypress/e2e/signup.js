@@ -1,11 +1,13 @@
 describe('Signup', function () {
   let NL_EMAIL_USER, NL_EMAIL_PASS;
+
   before(() => {
     ({
       NL_EMAIL_USER,
       NL_EMAIL_PASS
     } = Cypress.env());
   });
+
   beforeEach(() => {
     cy.task('deleteAllAccounts');
   });
@@ -65,7 +67,6 @@ describe('Signup', function () {
       );
     });
 
-    // eslint-disable-next-line promise/prefer-await-to-then
     return cy.task('getRecords').then((accts) => {
       expect(accts).to.have.lengthOf(1);
       return expect(accts[0].name).to.equal('Nicole');
@@ -105,7 +106,6 @@ describe('Signup', function () {
       );
     });
 
-    // eslint-disable-next-line promise/prefer-await-to-then
     return cy.task('getRecords').then((accts) => {
       expect(accts).to.have.lengthOf(1);
       return expect(accts[0].name).to.equal('Nicole');
@@ -128,7 +128,6 @@ describe('Signup', function () {
         country: 'GB'
       },
       error: 'DispatchActivationLinkError'
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       const goodEmailButStubbingToGetAsThoughBad = 'bad@example.name';
       cy.get('[data-name="name"]').type('MyName');
@@ -149,7 +148,6 @@ describe('Signup', function () {
       );
       // Still gets added as just had trouble sending email out
       return cy.task('getRecords');
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then((accts) => {
       expect(accts).to.have.lengthOf(1);
       return expect(accts[0].user).to.equal('OkUserName');
@@ -190,15 +188,12 @@ describe('Signup', function () {
         '<a href=',
         'activation?c='
       ]
-      // eslint-disable-next-line promise/prefer-await-to-then
     }, {timeout: 70000}).then((hasEmail) => {
       // Todo: In full UI testing mode, we could look for the link and
       //   visit it.
       return expect(hasEmail).to.be.true;
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       return cy.task('getRecords', {user: ['bretto']});
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then((
       /**
        * @type {import('../../app/server/modules/account-manager.js').
@@ -237,7 +232,6 @@ describe('Signup', function () {
         '[data-name=modal-alert] [data-name=modal-body] p'
       ).should('be.hidden');
 
-      // eslint-disable-next-line promise/prefer-await-to-then
       return cy.task('getRecords').then((
         /**
          * @type {import('../../app/server/modules/account-manager.js').

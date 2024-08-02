@@ -1,8 +1,8 @@
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
 
-// eslint-disable-next-line no-shadow
-import chai, {expect} from 'chai';
+import * as chai from 'chai';
+import {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import {
@@ -16,7 +16,7 @@ import * as cryptoNL from '../app/server/modules/crypto.js';
 import {i18n as setI18n} from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
-import {createServer} from '../app.js';
+import {createServer} from '../app/server/app.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -144,7 +144,7 @@ describe('Programmatic', function () {
           _
         });
         await am.connect();
-      } catch (err) {
+      } catch {
         erred = true;
       }
       expect(erred).to.be.false;

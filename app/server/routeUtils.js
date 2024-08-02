@@ -104,7 +104,7 @@ function wrap (elem, content) {
  */
 
 /**
- * @param {import('../../app.js').RouteConfig} config
+ * @param {import('./app.js').RouteConfig} config
  * @param {import('jamilih').jml} jml
  * @returns {LayoutAndTitleGetter}
  */
@@ -129,10 +129,10 @@ const layoutAndTitleGetter = (config, jml) => {
   // See https://github.com/jquery-form/form for CDN SHA
   // todo: Update SHA (and path(s) if necessary) for jquery-form
 
-  // todo[@fortawesome/fontawesome-free@>6.4.2]: Update SHA (and path(s)
+  // todo[@fortawesome/fontawesome-free@>6.6.0]: Update SHA (and path(s)
   //   if necessary)
 
-  // Todo[bootstrap@>5.3.2]: Update SHA (and path(s) if necessary) for
+  // Todo[bootstrap@>5.3.3]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
   //   https://github.com/twbs/bootstrap/blob/main/hugo.yml
@@ -208,7 +208,7 @@ const layoutAndTitleGetter = (config, jml) => {
         };
 
         const injectedHTML = injectHTML
-          // eslint-disable-next-line no-unsanitized/method --- User path
+          // // eslint-disable-next-line no-unsanitized/method --- User path
           ? (await import(injectHTML)).default(cfg)
           : {};
         if (injectHTML) {

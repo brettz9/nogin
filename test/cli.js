@@ -7,12 +7,12 @@ import {dirname, resolve as pathResolve} from 'path';
 
 import {fileURLToPath} from 'url';
 
-// eslint-disable-next-line no-shadow -- Needed
 import {expect} from 'chai';
 
 import {JSDOM} from 'jsdom';
 
-// Todo[engine:node@>16]: Remove `node-fetch` when globally available
+// eslint-disable-next-line @stylistic/max-len -- Long
+// Todo[engine:node@>22]: Remove `node-fetch` when globally available and non-experimental
 // eslint-disable-next-line no-shadow -- Remove when globally available
 import fetch from 'node-fetch';
 
@@ -93,8 +93,8 @@ const stripWarnings = (s) => {
 */
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
-const testPort = 1234;
-const testPort2 = 1234;
+const testPort = '1234';
+const testPort2 = '1234';
 
 /**
  * @typedef {number} Integer
@@ -102,7 +102,7 @@ const testPort2 = 1234;
 
 /**
  * @param {string} s
- * @param {Integer} port
+ * @param {string} port
  * @returns {string}
  */
 const stripMongoAndServerListeningMessages = (s, port = testPort) => {
@@ -289,7 +289,7 @@ describe('CLI', function () {
 
             // Not sure why not getting coverage error when this was missing
             '--RATE_LIMIT',
-            1000,
+            '1000',
 
             '--secret', secret,
             '--PORT', testPort,
@@ -383,7 +383,8 @@ describe('CLI', function () {
         const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
           return link.outerHTML;
         }).join('');
-        const semverNumPattern = '\\d+\\.\\d+\\.\\d+(?:-(?:alpha|beta)\\d+)?';
+        const semverNumPattern =
+          String.raw`\d+\.\d+\.\d+(?:-(?:alpha|beta)\d+)?`;
 
         const regex = new RegExp(
           escStringRegex(
@@ -869,7 +870,7 @@ describe('CLI', function () {
           '--NL_EMAIL_FROM',
           NL_EMAIL_FROM,
           '--NS_EMAIL_TIMEOUT',
-          NS_EMAIL_TIMEOUT,
+          String(NS_EMAIL_TIMEOUT),
           '--NL_EMAIL_HOST',
           NL_EMAIL_HOST,
           '--NL_EMAIL_USER',
@@ -1016,6 +1017,7 @@ describe('CLI', function () {
     });
 
     // Todo: See about fixing/reenabling
+    // eslint-disable-next-line mocha/no-skipped-tests -- Ok
     it.skip('With environment components', async function () {
       this.timeout(40000);
       const {stdout, stderr} = await spawnPromise(cliPath, {
@@ -1108,7 +1110,7 @@ describe('CLI', function () {
         expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
           'Added 2 accounts: brett, coco!\n'
         );
-      } catch (err) {
+      } catch {
         expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
           'Added 2 accounts: coco, brett!\n'
         );
@@ -1325,7 +1327,7 @@ describe('CLI', function () {
         expect(accts[0].user).to.equal('brett');
         expect(accts[0].email).to.equal('bretto@example.name');
         expect(accts[1].user).to.equal('coco');
-      } catch (err) {
+      } catch {
         expect(accts[1].user).to.equal('brett');
         expect(accts[1].email).to.equal('bretto@example.name');
         expect(accts[0].user).to.equal('coco');

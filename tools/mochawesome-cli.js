@@ -33,7 +33,7 @@ const reporterFile = process.argv[2]
   ? process.argv[2].replace(/^--/u, '')
   : 'spec';
 
-// eslint-disable-next-line no-unsanitized/method -- Dynamic CLI script
+// // eslint-disable-next-line no-unsanitized/method -- Dynamic CLI script
 const MochaReporter = await import(`mocha/lib/reporters/${reporterFile}.js`);
 
 const runner = new Runner(

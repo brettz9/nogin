@@ -39,7 +39,6 @@ function getRollupObject ({input, minifying} = {}) {
   return nonMinified;
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default [
   getRollupObject({
     input: 'app/public/js/polyfills/polyfills.js', minifying: true

@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import {pbkdf2, randomBytes} from 'crypto';
 import safeCompare from 'safe-compare';
 
 /*
@@ -16,7 +16,7 @@ function pbkdf2Prom (data, salt) {
   const hashLength = 32;
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
-    crypto.pbkdf2(
+    pbkdf2(
       data, salt, iterations, hashLength, hasher,
       // eslint-disable-next-line promise/prefer-await-to-callbacks
       function (error, derivedKey) {
@@ -41,7 +41,7 @@ const saltAndHash = function (data) {
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line promise/prefer-await-to-callbacks
-    crypto.randomBytes(saltBytes, async function (err, buf) {
+    randomBytes(saltBytes, async function (err, buf) {
       // istanbul ignore if
       if (err) {
         reject(err);

@@ -17,7 +17,6 @@ describe('Manual testing', function () {
     cy.location('pathname', {
       timeout: 10000
     }).should('eq', '/users');
-    // eslint-disable-next-line promise/prefer-await-to-then
     return cy.task('getRecords').then((accts) => {
       expect(accts).to.have.lengthOf(0);
       return cy.log(accts);

@@ -87,11 +87,9 @@ Cypress.Commands.add(
   } = {}) => {
     return cy.task('generateLoginKey', {
       user, ip, badSecret
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then((key) => {
       return cy.setCookie('login', key, {
         secure
-      // eslint-disable-next-line promise/prefer-await-to-then
       }).then(() => {
         return key;
       });
@@ -104,12 +102,10 @@ Cypress.Commands.add(
   (url = '/') => {
     cy.visit(url);
     let token;
-    // eslint-disable-next-line @stylistic/max-len -- Long
-    // eslint-disable-next-line promise/prefer-await-to-then, cypress/require-data-selectors -- Cypress
+    // eslint-disable-next-line cypress/require-data-selectors -- Cypress
     return cy.get('meta[name=csrf-token]').then(($meta) => {
       token = $meta[0].getAttribute('content');
       return cy.log(token);
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     }).then(() => {
       return token;
     });
@@ -156,7 +152,6 @@ Cypress.Commands.add(
 
     // It is no longer sufficient to make a request now that we have CSRF, and
     //   we don't want to expose an API to get the token
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     return cy.getToken(url).then((token) => {
       return cy.request({
         url,
@@ -189,7 +184,6 @@ Cypress.Commands.add(
       : cy.getToken(
         cfg.tokenURL || cfg.url
       )
-    // eslint-disable-next-line promise/prefer-await-to-then
     ).then((token) => {
       // We first trigger coverage on the server, checking that it
       //  indeed would give the response expected (as HTML doesn't
@@ -210,7 +204,6 @@ Cypress.Commands.add(
         };
       }
       return cy.request(reqCfg);
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then((response) => {
       expect(response.status).to.eq(400);
       expect(response.body).to.contain(

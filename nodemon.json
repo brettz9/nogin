@@ -1,7 +1,6 @@
 {
   "watch": [
     "app/server",
-    "app.js",
     "nogin.js",
     "cypress.json",
     "cypress.env.json"

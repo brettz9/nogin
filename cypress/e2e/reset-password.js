@@ -2,12 +2,14 @@ const expressSessionID = 'connect.sid';
 
 describe('Reset password', function () {
   let NL_EMAIL_USER, NL_EMAIL_PASS;
+
   before(() => {
     ({
       NL_EMAIL_USER,
       NL_EMAIL_PASS
     } = Cypress.env());
   });
+
   beforeEach(() => {
     cy.task('deleteAllAccounts');
     cy.task('addAccount');
@@ -29,7 +31,6 @@ describe('Reset password', function () {
       timeout: 50000,
       failOnStatusCode: false
       // NO `X-XSRF-Token` HEADER
-    // eslint-disable-next-line promise/prefer-await-to-then -- Cypress
     }).then((resp) => {
       return expect(resp.status).to.equal(404);
     });
@@ -40,8 +41,6 @@ describe('Reset password', function () {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then((
       /** @type {string} */
       key
@@ -61,7 +60,6 @@ describe('Reset password', function () {
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
       return cy.get('[data-name="reset-pass"]');
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then(($input) => {
       expect(/** @type {HTMLInputElement} */ (
         $input[0]
@@ -80,9 +78,6 @@ describe('Reset password', function () {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line @stylistic/max-len
-    // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
     }).then((
       /** @type {string} */
       key
@@ -117,9 +112,6 @@ describe('Reset password', function () {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line @stylistic/max-len
-    // eslint-disable-next-line promise/prefer-await-to-then, promise/always-return
     }).then((
       /** @type {string} */
       key
@@ -149,8 +141,6 @@ describe('Reset password', function () {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
       ip: '::ffff:127.0.0.1'
-    // Cypress won't run the tests with an `await` here
-    // eslint-disable-next-line promise/prefer-await-to-then
     }).then((
       /** @type {string} */
       key
@@ -166,7 +156,6 @@ describe('Reset password', function () {
         },
         error: 'Unable to update password'
       });
-      // eslint-disable-next-line promise/prefer-await-to-then
     }).then(() => {
       cy.get('[data-name="reset-pass"]').type('new' + NL_EMAIL_PASS);
       cy.get('[data-name="reset-password-submit"]').click();

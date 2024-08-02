@@ -41,7 +41,7 @@ const __dirname = getDirname(import.meta.url);
 
 /**
  * @param {import('express').Application} app
- * @param {import('../../app.js').RouteConfig} config
+ * @param {import('./app.js').RouteConfig} config
  * @returns {Promise<void>}
  */
 const routeList = async (app, config) => {
@@ -145,7 +145,7 @@ const routeList = async (app, config) => {
     composeResetPasswordEmailView:
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'
-        // eslint-disable-next-line no-unsanitized/method -- User path
+        // // eslint-disable-next-line no-unsanitized/method -- User path
         ? (await import(
           pathResolve(cwd, composeResetPasswordEmailView)
         )).default
@@ -153,7 +153,7 @@ const routeList = async (app, config) => {
     composeActivationEmailView:
       composeActivationEmailView &&
         typeof composeActivationEmailView === 'string'
-        // eslint-disable-next-line no-unsanitized/method -- User path
+        // // eslint-disable-next-line no-unsanitized/method -- User path
         ? (await import(pathResolve(cwd, composeActivationEmailView))).default
         : undefined
   });
@@ -198,7 +198,7 @@ const routeList = async (app, config) => {
           /** @type {string} */
           (req.ip)
         );
-      } catch (err) {
+      } catch {
       }
 
       if (o) {
@@ -888,7 +888,12 @@ window.Nogin = {
   disableXSRF: ${disableXSRF},
   postLoginRedirectPath: ${postLoginRedirectPath},
   Routes: ${JSON.stringify(routes)},
-  _: IntlDom.i18nServer(${JSON.stringify(args)}),
+  _: IntlDom.i18nServer(${JSON.stringify({
+    strings: {
+      ...args.strings
+    },
+    resolvedLocale: args.resolvedLocale
+  })}),
   // Avoid shorthand for compatibility
   redirect: function (key) {
     // Use var for compatibility
@@ -932,7 +937,7 @@ window.Nogin = {
   });
 
   if (router) {
-    // eslint-disable-next-line no-unsanitized/method -- User path
+    // // eslint-disable-next-line no-unsanitized/method -- User path
     (await import(pathResolve(cwd, router))).default(app, opts);
   }
 

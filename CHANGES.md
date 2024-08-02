@@ -1,5 +1,12 @@
 # CHANGES for nogin
 
+## 5.0.0
+
+BREAKING CHANGES:
+- Requires Node 18
+
+- chore: update deps, flat config, switch to typedoc
+
 ## 4.0.0
 
 ### User-facing

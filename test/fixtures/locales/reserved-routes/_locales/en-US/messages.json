@@ -42,6 +42,9 @@
 
 
     "LOST-PASSWORD (TEMPLATES)": true,
+    "UnableToDispatchPasswordReset": {
+      "message": "Unable to dispatch password reset"
+    },
     "RetrievePassword": {
       "message": "Retrieve Password"
     },
@@ -52,16 +55,7 @@
       "message": "Submit"
     },
 
-    "LOST-PASSWORD (TEMPLATES)": true,
-    "UnableToDispatchPasswordReset": {
-      "message": "Unable to dispatch password reset"
-    },
-
-
     "RESET-PASSWORD (TEMPLATES)": true,
-    "ResetPassword": {
-      "message": "Reset Password"
-    },
     "PleaseEnterNewPassword": {
       "message": "Please enter your new password"
     },

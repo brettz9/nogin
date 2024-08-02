@@ -1,9 +1,0 @@
-node_modules/**
-instrumented/**
-coverage/**
-!.*.js
-mochawesome-report/**
-cypress/results/**
-app/public/js/controllers/*.iife.min.js
-app/public/js/polyfills/*.iife.min.js
-docs/jsdoc

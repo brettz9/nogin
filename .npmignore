@@ -25,7 +25,7 @@ app/public/js/controllers/*.js
 !app/public/js/controllers/*.iife.min.js*
 rollup.config.js
 
-docs/jsdoc
+docs/typedoc
 .eslintcache
 .husky
 pnpm-lock.yaml

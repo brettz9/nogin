@@ -11,7 +11,7 @@ import {jml} from 'jamilih/src/jml-jsdom.js';
  * @returns {Promise<void>}
  */
 const jmlEngine = async (filePath, options, callback) => {
-  // eslint-disable-next-line no-unsanitized/method -- Could supply import
+  // // eslint-disable-next-line no-unsanitized/method -- Could supply import
   const template = (await import(filePath)).default;
 
   let rendered;

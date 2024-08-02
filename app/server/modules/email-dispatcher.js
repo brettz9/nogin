@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-unresolved -- https://github.com/import-js/eslint-plugin-import/issues/2495
+// // eslint-disable-next-line import/no-unresolved -- https://github.com/import-js/eslint-plugin-import/issues/2495
 import {SMTPClient} from 'emailjs';
 
 // Todo: Reenable when getting dominum working

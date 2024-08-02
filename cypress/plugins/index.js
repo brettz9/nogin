@@ -16,6 +16,7 @@
 // import {spawn} from 'child_process';
 
 import {ESLint} from 'eslint';
+import globals from 'globals';
 import cookieSign from 'cookie-signature';
 
 // import browserify from '@cypress/browserify-preprocessor';
@@ -456,16 +457,16 @@ const exprt = (on, config) => {
     async lint (text) {
       const cli = new ESLint({
         overrideConfig: {
-          env: {
-            browser: true
+          languageOptions: {
+            globals: globals.browser
           },
           rules: {
             // Some rules to disable due to `JSON.stringify`
-            quotes: 0,
-            'comma-spacing': 0,
-            'quote-props': 0,
+            '@stylistic/quotes': 0,
+            '@stylistic/comma-spacing': 0,
+            '@stylistic/quote-props': 0,
             '@stylistic/max-len': 0,
-            'key-spacing': 0,
+            '@stylistic/key-spacing': 0,
 
             // Not looking for safe function form as not bundling this
             strict: ['error', 'global'],
