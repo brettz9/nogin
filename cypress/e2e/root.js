@@ -24,7 +24,6 @@ describe('Root (Login) - Accessibility', function () {
   });
 });
 
-// eslint-disable-next-line mocha/max-top-level-suites -- Less indentation
 describe('Root (Login)', function () {
   let env, NL_EMAIL_USER, NL_EMAIL_PASS;
 

@@ -226,8 +226,8 @@ importers:
         specifier: ^9.8.0
         version: 9.8.0
       eslint-config-ash-nazg:
-        specifier: 36.8.6
-        version: 36.8.6(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4)
+        specifier: 36.9.0
+        version: 36.9.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4)
       github-fork-ribbon-css:
         specifier: ^0.2.3
         version: 0.2.3
@@ -3741,8 +3741,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-ash-nazg@36.8.6:
-    resolution: {integrity: sha512-r7cqowtsfLJCBFqCxQFTFyJCkLbh/kIPaY6yIYezVcFJdM96fUVLF6s+HRbiTY3ysvi60P3TecDUOuZKiVROVg==}
+  eslint-config-ash-nazg@36.9.0:
+    resolution: {integrity: sha512-9vBE4SKRTEU2YpCbrdSLVcVxrgMvSRCmOmdB0N/6BBzdnrw6GGsl+GA7+XKZoTAO3wErt2pJ1fKuE1zTwRg6jA==}
     engines: {node: '>=18.20.3'}
     peerDependencies:
       eslint: ^9.6.0
@@ -3783,10 +3783,6 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=8.51.0'
-
-  eslint-plugin-chai-assert-bdd@0.0.3:
-    resolution: {integrity: sha512-4sK/ivV3UxDpCxl008QvqEuigz3SXIVXw9O9bSLgCDA3C9r95o+9W5pHQQEcmJnaHd/D0se6dujkLo4K0eVLJw==}
-    engines: {node: '>=0.10.0'}
 
   eslint-plugin-chai-expect-keywords@3.1.0:
     resolution: {integrity: sha512-0RccqS5zfNFnwomz2OhpaIaK/Z5f0RypBiR4Va+nTo1QncPHQC2YxQk+IbHb3SY4Lj4hToQ9IXejzZSqF0Ae9A==}
@@ -12499,7 +12495,7 @@ snapshots:
       eslint: 9.8.0
       semver: 7.6.3
 
-  eslint-config-ash-nazg@36.8.6(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4):
+  eslint-config-ash-nazg@36.9.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4):
     dependencies:
       '@babel/eslint-parser': 7.25.1(@babel/core@7.25.2)(eslint@9.8.0)
       '@babel/eslint-plugin': 7.25.1(@babel/eslint-parser@7.25.1(@babel/core@7.25.2)(eslint@9.8.0))(eslint@9.8.0)
@@ -12513,7 +12509,6 @@ snapshots:
       es-file-traverse: 1.2.0(@babel/core@7.25.2)(eslint-plugin-import@2.29.1(eslint@9.8.0))(eslint@9.8.0)
       eslint: 9.8.0
       eslint-plugin-array-func: 5.0.1(eslint@9.8.0)
-      eslint-plugin-chai-assert-bdd: 0.0.3
       eslint-plugin-chai-expect: 3.1.0(eslint@9.8.0)
       eslint-plugin-chai-expect-keywords: 3.1.0
       eslint-plugin-chai-friendly: 1.0.1(eslint@9.8.0)
@@ -12589,8 +12584,6 @@ snapshots:
   eslint-plugin-array-func@5.0.1(eslint@9.8.0):
     dependencies:
       eslint: 9.8.0
-
-  eslint-plugin-chai-assert-bdd@0.0.3: {}
 
   eslint-plugin-chai-expect-keywords@3.1.0:
     dependencies:
