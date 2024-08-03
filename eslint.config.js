@@ -54,27 +54,15 @@ export default [
     };
   }),
   {
-    name: 'nogin/markdown',
-    files: ['**/*.md/*.js'],
-    rules: {
-      'n/no-unsupported-features/es-syntax': 'off',
-      'n/no-unpublished-import': 'off'
-    }
-  },
-  {
     name: 'nogin/basic',
     rules: {
       'import/no-commonjs': 0,
       'import/unambiguous': 0,
-      '@stylistic/max-len': 'error',
-
-      // Disable for now
+      'no-console': 0,
       '@brettz9/no-use-ignored-vars': 0,
 
       // For modules, we shouldn't need `window`
-      'no-restricted-globals': ['error', 'window'],
-
-      'no-console': 0
+      'no-restricted-globals': ['error', 'window']
     }
   }
 ];
