@@ -129,7 +129,8 @@ const exprt = (on, config) => {
   /* eslint 'jsdoc/require-jsdoc':
     ['error',
       {contexts:
-    ['ExpressionStatement > CallExpression > ObjectExpression > Property']}] */
+    ['ExpressionStatement > CallExpression > ObjectExpression > Property']}] --
+      Ensure tasks are documented */
   on('task', { // Tasks are run in *Node* (unlike commands/custom commands)
     /**
      * Simulates calling login command (when POSTing to route `/`
@@ -194,7 +195,7 @@ const exprt = (on, config) => {
         pass: [NL_EMAIL_PASS],
         country: ['US'],
         activationCode: [
-          // eslint-disable-next-line @stylistic/max-len
+          // eslint-disable-next-line @stylistic/max-len -- Long
           '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
         ],
         activated: [true]
@@ -213,7 +214,7 @@ const exprt = (on, config) => {
         pass: ['123456'],
         country: ['US'],
         activationCode: [
-          // eslint-disable-next-line @stylistic/max-len
+          // eslint-disable-next-line @stylistic/max-len -- Long
           '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
         ],
         activated: [true]
@@ -235,7 +236,7 @@ const exprt = (on, config) => {
         pass: [NL_EMAIL_PASS],
         country: ['US'],
         activationCode: [
-          // eslint-disable-next-line @stylistic/max-len
+          // eslint-disable-next-line @stylistic/max-len -- Long
           '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
         ],
         activated: [true]

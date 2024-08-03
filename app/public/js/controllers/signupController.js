@@ -1,4 +1,4 @@
-/* globals Nogin */
+/* globals Nogin -- Server-set */
 
 import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';

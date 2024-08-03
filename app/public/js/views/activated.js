@@ -1,4 +1,4 @@
-/* globals $, Nogin */
+/* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
 import AlertDialog from './utilities/AlertDialog.js';
 
 const ActivatedView = {

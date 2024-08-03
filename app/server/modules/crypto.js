@@ -14,11 +14,11 @@ function pbkdf2Prom (data, salt) {
   const hasher = 'sha256';
   const iterations = 10000;
   const hashLength = 32;
-  // eslint-disable-next-line promise/avoid-new
+  // eslint-disable-next-line promise/avoid-new -- our own API
   return new Promise((resolve, reject) => {
     pbkdf2(
       data, salt, iterations, hashLength, hasher,
-      // eslint-disable-next-line promise/prefer-await-to-callbacks
+      // eslint-disable-next-line promise/prefer-await-to-callbacks -- API
       function (error, derivedKey) {
         // istanbul ignore if
         if (error) {
@@ -38,9 +38,9 @@ function pbkdf2Prom (data, salt) {
  */
 const saltAndHash = function (data) {
   const saltBytes = 16;
-  // eslint-disable-next-line promise/avoid-new
+  // eslint-disable-next-line promise/avoid-new -- our own API
   return new Promise((resolve, reject) => {
-    // eslint-disable-next-line promise/prefer-await-to-callbacks
+    // eslint-disable-next-line promise/prefer-await-to-callbacks -- API
     randomBytes(saltBytes, async function (err, buf) {
       // istanbul ignore if
       if (err) {

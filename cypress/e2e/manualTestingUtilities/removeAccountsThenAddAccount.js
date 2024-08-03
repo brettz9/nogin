@@ -5,7 +5,7 @@ describe('Manual testing', function () {
   });
 
   it('Added account for testing', function () {
-    // eslint-disable-next-line chai-expect/no-inner-literal
+    // eslint-disable-next-line chai-expect/no-inner-literal -- Placeholder
     expect(true).to.be.true;
   });
 });

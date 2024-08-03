@@ -1,4 +1,5 @@
-/* globals $, Nogin, NoginInitialErrorGlobal */
+/* globals $, Nogin, NoginInitialErrorGlobal -- `$` is jQuery not ESM,
+  `Nogin` and `NoginInitialErrorGlobal` are server-set */
 import AlertDialog from './utilities/AlertDialog.js';
 
 const ActivationFailedView = {

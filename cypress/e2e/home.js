@@ -92,7 +92,7 @@ describe('Home', function () {
 
       // Cypress needs us to wait to be able to find the
       //   dialog to dismiss it
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
       cy.wait(500);
       cy.get(
         '[data-confirm-type="notice"] [data-name="submit-confirm"]'
@@ -115,13 +115,13 @@ describe('Home', function () {
         return expect(name).to.equal('MyNewName');
       }).then(() => {
         // We don't know exactly how long until the email will be delivered
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
         cy.wait(15000);
         return cy.task('getMostRecentEmail', {timeout: 90000});
       }).then(({html, subject, emailDisabled}) => {
         if (emailDisabled) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
-          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
           return Promise.resolve(true);
         }
         // A bit of redundancy with `hasEmail`, but we want to get the link too
@@ -138,12 +138,12 @@ describe('Home', function () {
         expect(activationCode).to.be.ok;
         cy.visit('/activation?c=' + encodeURIComponent(activationCode));
         // eslint-disable-next-line @stylistic/max-len -- Too long
-        // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+        // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
         return Promise.resolve(false);
       }).then((emailDisabled) => {
         if (emailDisabled) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
-          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
           return Promise.resolve(true);
         }
 
@@ -162,7 +162,7 @@ describe('Home', function () {
       }).then((accts) => {
         if (accts === true) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
-          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
           return Promise.resolve(true);
         }
         const {user, name, country, email} = accts[0];
@@ -190,7 +190,7 @@ describe('Home', function () {
 
         // Cypress needs us to wait to be able to find the
         //   dialog to dismiss it
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
         cy.wait(500);
         cy.get(
           '[data-confirm-type="notice"] [data-name="submit-confirm"]'
@@ -213,13 +213,14 @@ describe('Home', function () {
           return expect(name).to.equal('MyNewName');
         }).then(() => {
           // We don't know exactly how long until the email will be delivered
-          // eslint-disable-next-line cypress/no-unnecessary-waiting
+          // eslint-disable-next-line @stylistic/max-len -- Long
+          // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
           cy.wait(15000);
           return cy.task('getMostRecentEmail', {timeout: 90000});
         }).then(({html, subject, emailDisabled}) => {
           if (emailDisabled) {
             // eslint-disable-next-line @stylistic/max-len -- Too long
-            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
             return Promise.resolve(true);
           }
           // A bit of redundancy with `hasEmail`, but we want to get
@@ -247,12 +248,12 @@ describe('Home', function () {
             'The activation code provided was invalid.'
           );
           // eslint-disable-next-line @stylistic/max-len -- Too long
-          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+          // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
           return Promise.resolve(false);
         }).then((emailDisabled) => {
           if (emailDisabled) {
             // eslint-disable-next-line @stylistic/max-len -- Too long
-            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
             return Promise.resolve(true);
           }
 
@@ -271,7 +272,7 @@ describe('Home', function () {
         }).then((accts) => {
           if (accts === true) {
             // eslint-disable-next-line @stylistic/max-len -- Too long
-            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject
+            // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
             return Promise.resolve(true);
           }
           const {user, name, country, email, unactivatedEmail} = accts[0];
@@ -539,7 +540,8 @@ describe('Home', function () {
           cy.get('[data-name="action2"]').click();
           // Cypress needs us to wait to be able to find the
           //   dialog to dismiss it (at least when visually viewing tests)
-          // eslint-disable-next-line cypress/no-unnecessary-waiting
+          // eslint-disable-next-line @stylistic/max-len -- Long
+          // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
           cy.wait(500);
           cy.get(
             '[data-confirm-type="notice"] [data-name="submit-confirm"]'
@@ -708,7 +710,8 @@ describe('Home', function () {
     );
 
     it('Prevent update with empty email', function () {
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      // eslint-disable-next-line @stylistic/max-len -- Long
+      // eslint-disable-next-line cypress/no-unnecessary-waiting -- Needed after beforeEach
       cy.wait(5000);
       // Should this addition have been necessary?
       cy.get('[data-name="email"]').clear();

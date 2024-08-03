@@ -1,4 +1,4 @@
-/* eslint-disable promise/prefer-await-to-callbacks */
+/* eslint-disable promise/prefer-await-to-callbacks -- Convenient */
 // Todo: Reenable dominum when getting it working
 // const jml = require('jamilih/dist/jml-dominum.js').default;
 // const jml = dominum.default;

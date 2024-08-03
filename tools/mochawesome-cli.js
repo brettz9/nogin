@@ -4,7 +4,8 @@
 // Todo: Show /test (i.e., `unit.js`) test results at beginning?
 
 // See https://github.com/jsdoc/jsdoc/issues/1750 to create such tags
-/* eslint "jsdoc/check-tag-names": ["error", {definedTags: ["cli-arg"]}] */
+/* eslint "jsdoc/check-tag-names": ["error", {definedTags: ["cli-arg"]}] -- want
+    our own tag */
 /**
  * @file A CLI reporter against after-the-fact compiled (merged Mochawesome)
  * Mocha results.
@@ -43,7 +44,7 @@ runner.stats = stats;
 
 console.log('Mocha results:');
 
-// eslint-disable-next-line no-new
+// eslint-disable-next-line no-new -- API
 new MochaReporter(runner);
 
 runner.emit(EVENT_RUN_BEGIN);

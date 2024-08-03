@@ -162,7 +162,7 @@ class AccountManager {
   getRecords (acctInfo) {
     return /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
       this.accounts
-    // eslint-disable-next-line unicorn/no-array-callback-reference
+    // eslint-disable-next-line unicorn/no-array-callback-reference -- Mongo API
     ).find(acctInfo).toArray();
   }
 
@@ -213,16 +213,15 @@ class AccountManager {
     return cookie;
   }
 
-  /* eslint-disable require-await */
   /**
    * @param {string} cookie
    * @param {string} ipAddress
    * @returns {Promise<Partial<AccountInfo>|null>}
    */
   async validateLoginKey (cookie, ipAddress) {
-    /* eslint-enable require-await */
     // ensure the cookie maps to the user's last recorded ip address
-    return /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+    return await
+    /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
       this.accounts
     ).findOne({cookie, ip: ipAddress});
   }
@@ -259,16 +258,15 @@ class AccountManager {
       new Error('email-not-found');
   }
 
-  /* eslint-disable require-await */
   /**
    * @param {string} passKey
    * @param {string} ipAddress
    * @returns {Promise<Partial<AccountInfo>|null>}
    */
   async validatePasswordKey (passKey, ipAddress) {
-    /* eslint-enable require-await */
     // ensure the passKey maps to the user's last recorded ip address
-    return /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+    return await
+    /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
       this.accounts
     ).findOne({passKey, ip: ipAddress});
   }
@@ -560,25 +558,23 @@ class AccountManager {
     account lookup methods
   */
 
-  /* eslint-disable require-await */
   /**
    * @returns {Promise<Partial<AccountInfo>[]>}
    */
   async getAllRecords () {
-    /* eslint-enable require-await */
-    return /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+    return await
+    /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
       this.accounts
     ).find().toArray();
   }
 
-  /* eslint-disable require-await */
   /**
    * @param {string} id
    * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
    */
   async deleteAccountById (id) {
-    /* eslint-enable require-await */
-    return /** @type {import('mongodb').Collection} */ (
+    return await
+    /** @type {import('mongodb').Collection} */ (
       this.accounts
     ).deleteOne({
       _id: /** @type {typeof import('./db-adapters/MongoDB.js').MongoDB} */ (
@@ -587,25 +583,23 @@ class AccountManager {
     });
   }
 
-  /* eslint-disable require-await */
   /**
    * @param {AccountInfoFilter} acctInfo
    * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
    */
   async deleteAccounts (acctInfo) {
-    /* eslint-enable require-await */
-    return /** @type {import('mongodb').Collection} */ (
+    return await
+    /** @type {import('mongodb').Collection} */ (
       this.accounts
     ).deleteMany(acctInfo);
   }
 
-  /* eslint-disable require-await */
   /**
    * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
    */
   async deleteAllAccounts () {
-    /* eslint-enable require-await */
-    return /** @type {import('mongodb').Collection} */ (
+    return await
+    /** @type {import('mongodb').Collection} */ (
       this.accounts
     ).deleteMany({});
   }

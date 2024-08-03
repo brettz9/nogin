@@ -183,13 +183,13 @@ describe('Programmatic', function () {
   });
 
   it('jmlEngine (erring)', function () {
-    // eslint-disable-next-line promise/avoid-new
+    // eslint-disable-next-line promise/avoid-new -- Testing
     return new Promise(
       (
         /** @type {(val?: any) => void} */
         resolve
       ) => {
-        // eslint-disable-next-line promise/prefer-await-to-callbacks
+        // eslint-disable-next-line promise/prefer-await-to-callbacks -- Testing
         jmlEngine(join(__dirname, 'fixtures/bad-template.js'), {}, (err) => {
           expect(err).to.be.an('Error');
           resolve();

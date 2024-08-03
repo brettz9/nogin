@@ -123,7 +123,7 @@ describe('CLI', function () {
         this.timeout(110000);
         /** @type {Promise<SpawnResults>} */
         let cliProm;
-        // eslint-disable-next-line promise/avoid-new
+        // eslint-disable-next-line promise/avoid-new -- Testing
         const {text} = await new Promise((resolve, reject) => {
           cliProm = spawnPromise(cliPath, [
             '--noBuiltinStylesheets',
@@ -272,7 +272,7 @@ describe('CLI', function () {
           {coverageStatus, coverageText},
           {updateAccountText},
           {homeStatus, homeText}
-          // eslint-disable-next-line promise/avoid-new
+          // eslint-disable-next-line promise/avoid-new -- Testing
         ] = await new Promise((resolve, reject) => {
           cliProm = spawnPromise(cliPath, [
             '--staticDir', pathResolve(__dirname, './fixtures/'),
@@ -607,7 +607,7 @@ describe('CLI', function () {
       /** @type {boolean} */
       let fetching;
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--localScripts',
@@ -644,7 +644,7 @@ describe('CLI', function () {
       /** @type {boolean} */
       let fetching;
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--helmetOptions', JSON.stringify('{noSniff: false}'),
@@ -682,7 +682,7 @@ describe('CLI', function () {
       /** @type {boolean} */
       let fetching;
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--noHelmet',
@@ -719,7 +719,7 @@ describe('CLI', function () {
       /** @type {boolean} */
       let fetching;
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       const resp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--sessionOptions', JSON.stringify({
@@ -755,7 +755,7 @@ describe('CLI', function () {
       /** @type {boolean} */
       let fetching;
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       const resp = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--sessionCookieOptions', JSON.stringify({
@@ -794,7 +794,7 @@ describe('CLI', function () {
       /** @type {boolean} */
       let fetching;
       let cliProm;
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       const [langFF2, langFF25] = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--crossDomainJSRedirects',
@@ -851,7 +851,7 @@ describe('CLI', function () {
       const [
         {badURLPostStatus, badURLPostText},
         {signupPostStatus}
-      // eslint-disable-next-line promise/avoid-new
+      // eslint-disable-next-line promise/avoid-new -- Testing
       ] = await new Promise((resolve) => {
         cliProm = spawnPromise(cliPath, [
           '--localScripts',

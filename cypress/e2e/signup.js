@@ -177,7 +177,7 @@ describe('Signup', function () {
     }).should('eq', '/');
 
     // We don't know exactly how long until the email will be delivered
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
     cy.wait(15000);
 
     // Check that received activation email

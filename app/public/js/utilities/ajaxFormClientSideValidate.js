@@ -1,4 +1,4 @@
-/* globals $, Nogin */
+/* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
 
 // Note: This per-request approach suffers from the possibility that the
 //   may subsequently open a page from the site with nogin in another tab

@@ -28,7 +28,7 @@ const composeResetPasswordEmail = ({
           }),
           ['br', 'br'],
           ['a', {
-            // eslint-disable-next-line @stylistic/max-len
+            // eslint-disable-next-line @stylistic/max-len -- Long
             href: `${baseurl}${_('route_resetPassword')}?${_('query_key')}=${passKey}`
           }, [
             _('ClickToResetPassword')

@@ -447,7 +447,7 @@ const routeList = async (app, config) => {
         */
         (getAllRecordsResult.value) ?? [];
 
-      // Todo[>=5.0.0]: `/users` should always be enabled when there are (read)
+      // Todo[>=6.0.0]: `/users` should always be enabled when there are (read)
       //   privileges.
       if (!showUsers) {
         pageNotFound(_, res);
@@ -833,7 +833,7 @@ const routeList = async (app, config) => {
         res.status(200).send(_('OK'));
       });
     }
-    // Todo[>=5.0.0]: Should be available to UI but require privileges.
+    // Todo[>=6.0.0]: Should be available to UI but require privileges.
     /*
     async reset (routes, req, res) {
       await am.deleteAllAccounts();

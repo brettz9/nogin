@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals, no-shadow */
+/* eslint-disable no-restricted-globals, no-shadow -- Polyfill */
 // For IE 5.5 (needed per `eslint-plugin-compat`)
 if (typeof Error === 'undefined') {
   /**

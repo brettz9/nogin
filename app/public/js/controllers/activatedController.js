@@ -1,4 +1,4 @@
-/* globals Nogin */
+/* globals Nogin -- Server-set */
 
 import ActivatedView from '../views/activated.js';
 

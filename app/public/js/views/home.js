@@ -1,4 +1,4 @@
-/* globals $, Nogin */
+/* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
 
 import ConfirmDialog from './utilities/ConfirmDialog.js';
 import AlertDialog from './utilities/AlertDialog.js';

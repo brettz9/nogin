@@ -1,4 +1,4 @@
-/* globals $ */
+/* globals $ -- `$` is jQuery not ESM */
 
 const ConfirmDialog = {
   /**

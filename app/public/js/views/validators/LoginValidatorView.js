@@ -1,4 +1,4 @@
-/* globals $, Nogin */
+/* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
 
 const {_} = Nogin;
 

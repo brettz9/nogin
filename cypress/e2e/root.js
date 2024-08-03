@@ -219,7 +219,7 @@ describe('Root (Login)', function () {
       }
     );
     // We don't know exactly how long until the email will be delivered
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
     cy.wait(15000);
     // Check that password was received by email
     return cy.task('hasEmail', {
@@ -302,7 +302,7 @@ describe('Root (Login)', function () {
     cy.get('[data-name="forgot-password"]').click();
     // Cypress needs us to wait to be able to find the
     //   dialog to dismiss it
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    // eslint-disable-next-line cypress/no-unnecessary-waiting -- See above
     cy.wait(500);
     cy.get('[data-name="retrieve-password-cancel"]').click();
     cy.get('[data-name="login"] [data-name="user"]', {

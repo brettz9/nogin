@@ -1,4 +1,4 @@
-/* globals $, Nogin */
+/* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
 
 import '../polyfills/Error.js';
 import '../polyfills/console.js';
@@ -166,7 +166,7 @@ function onUpdateSuccess () {
  * @returns {Promise<void>}
  */
 function post (url) {
-  // eslint-disable-next-line promise/avoid-new
+  // eslint-disable-next-line promise/avoid-new -- our own API
   return new Promise((resolve, reject) => {
     $.ajax(url, {
       type: 'post',

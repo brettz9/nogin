@@ -69,7 +69,6 @@ export default [
       '@stylistic/max-len': 'error',
 
       // Disable for now
-      '@eslint-community/eslint-comments/require-description': 0,
       '@brettz9/no-use-ignored-vars': 0,
 
       // For modules, we shouldn't need `window`

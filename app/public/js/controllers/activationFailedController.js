@@ -1,4 +1,4 @@
-/* globals Nogin */
+/* globals Nogin -- Server-set */
 
 import ActivationFailedView from '../views/activation-failed.js';
 

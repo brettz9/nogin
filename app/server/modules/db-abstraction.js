@@ -1,4 +1,4 @@
-/* eslint-disable class-methods-use-this, no-unused-vars */
+/* eslint-disable class-methods-use-this, no-unused-vars -- Abstract methods */
 /**
  * Patterned after {@link https://mongodb.github.io/node-mongodb-native/3.4/api/ObjectID.html}.
  * While in MongoDB, this is an object, as its `toString` (and `toHexString`)

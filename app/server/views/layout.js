@@ -1,5 +1,3 @@
-/* eslint-disable @stylistic/max-len */
-
 /**
  * @todo change `content` and `scripts` to `JamilihDocumentFragmentContent[]`
  *   once jamilih updated
@@ -14,7 +12,8 @@
  *   userJS: string,
  *   userJSModule: string,
  *   localScripts: boolean,
- *   securitySourceAttributes: import('../routeUtils.js').SecuritySourceAttributes
+ *   securitySourceAttributes:
+ *     import('../routeUtils.js').SecuritySourceAttributes
  *   noPolyfill: boolean,
  *   useESM: boolean,
  * }} cfg
@@ -40,6 +39,7 @@ const layout = ({
       /** @type {import('jamilih').JamilihArray} */
       (['html', langDir, [
         ['head', [
+          // eslint-disable-next-line @stylistic/max-len -- Long
           // eslint-disable-next-line unicorn/text-encoding-identifier-case -- Required with hyphen
           ['meta', {charset: 'utf-8'}],
           ...(csrfToken
@@ -62,7 +62,9 @@ const layout = ({
             : [
               ['link', {
                 rel: 'stylesheet',
-                ...securitySourceAttributes('link', '@fortawesome/fontawesome-free')
+                ...securitySourceAttributes(
+                  'link', '@fortawesome/fontawesome-free'
+                )
               }],
               ['link', {
                 rel: 'stylesheet',
@@ -81,7 +83,8 @@ const layout = ({
           stylesheet ? ['link', {rel: 'stylesheet', href: stylesheet}] : '',
 
           error
-            // Use this so that client-side code can add the error to a dialog, etc.
+            // Use this so that client-side code can add the error to
+            //   a dialog, etc.
             ? ['script', [
               'window.NoginInitialErrorGlobal = ' + JSON.stringify(error)
             ]]
@@ -108,12 +111,13 @@ const layout = ({
             src: '/node_modules/jamilih/dist/jml.js'
           }],
           */
-          // While we could import this within `_lang`, we'd need a separate build
-          //   for each locale
+          // While we could import this within `_lang`, we'd need a separate
+          //   build for each locale
           ['script', {
             src: '/node_modules/intl-dom/dist/index.umd.min.js'
           }],
-          // We don't roll this up as it is both locale-dependent and CLI-flag-dependent
+          // We don't roll this up as it is both locale-dependent and
+          //   CLI-flag-dependent
           ['script', {
             src: '/_lang'
           }],
@@ -127,8 +131,9 @@ const layout = ({
             }]
             : '',
           noPolyfill
-            // We will avoid even with `useESM` (which doesn't have an equivalent
-            //  version) as that is mostly for testing and shouldn't need it
+            // We will avoid even with `useESM` (which doesn't have an
+            //  equivalent version) as that is mostly for testing and
+            //  shouldn't need it
             ? ''
             : ['script', {
               src: '/js/polyfills/polyfills.iife.min.js'

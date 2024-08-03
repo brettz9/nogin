@@ -1,4 +1,4 @@
-/* globals Nogin */
+/* globals Nogin -- Server-set */
 
 import '../polyfills/console.js';
 import ajaxFormClientSideValidate from

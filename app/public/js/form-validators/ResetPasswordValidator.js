@@ -1,4 +1,4 @@
-/* globals Nogin */
+/* globals Nogin -- Server-set */
 import ResetPasswordValidatorView from
   '../views/validators/ResetPasswordValidatorView.js';
 
