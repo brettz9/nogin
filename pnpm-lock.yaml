@@ -226,8 +226,8 @@ importers:
         specifier: ^9.8.0
         version: 9.8.0
       eslint-config-ash-nazg:
-        specifier: 36.11.0
-        version: 36.11.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4)
+        specifier: 36.11.1
+        version: 36.11.1(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4)
       github-fork-ribbon-css:
         specifier: ^0.2.3
         version: 0.2.3
@@ -3741,8 +3741,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-ash-nazg@36.11.0:
-    resolution: {integrity: sha512-kChSiojIv5ReMYZ6gCG6vJ8Vwoco6VsmNLMCSj9du4F1BEA4ZROTz6eSrnp7+I704rMYMopQQ4VVArUWOyYs5w==}
+  eslint-config-ash-nazg@36.11.1:
+    resolution: {integrity: sha512-J7UyelcDEUJztQxmPGuVNdPDzheygWgDe1Q+qNLyBhTo+dtGryf+usV+4Tj4LC6cPCqEnWOgjmaWvFeAqvnlTA==}
     engines: {node: '>=18.20.3'}
     peerDependencies:
       eslint: ^9.6.0
@@ -12495,7 +12495,7 @@ snapshots:
       eslint: 9.8.0
       semver: 7.6.3
 
-  eslint-config-ash-nazg@36.11.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4):
+  eslint-config-ash-nazg@36.11.1(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4):
     dependencies:
       '@babel/eslint-parser': 7.25.1(@babel/core@7.25.2)(eslint@9.8.0)
       '@babel/eslint-plugin': 7.25.1(@babel/eslint-parser@7.25.1(@babel/core@7.25.2)(eslint@9.8.0))(eslint@9.8.0)
