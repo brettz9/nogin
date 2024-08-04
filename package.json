@@ -264,7 +264,7 @@
     "es-file-traverse": "^1.2.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^9.8.0",
-    "eslint-config-ash-nazg": "36.10.0",
+    "eslint-config-ash-nazg": "36.11.0",
     "github-fork-ribbon-css": "^0.2.3",
     "globals": "^15.9.0",
     "husky": "^9.1.4",

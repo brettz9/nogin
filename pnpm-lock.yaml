@@ -226,8 +226,8 @@ importers:
         specifier: ^9.8.0
         version: 9.8.0
       eslint-config-ash-nazg:
-        specifier: 36.10.0
-        version: 36.10.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4)
+        specifier: 36.11.0
+        version: 36.11.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4)
       github-fork-ribbon-css:
         specifier: ^0.2.3
         version: 0.2.3
@@ -2259,8 +2259,8 @@ packages:
     resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
     engines: {node: '>=12'}
 
-  ansi-to-html@git+https://git@github.com:brettz9/ansi-to-html.git#0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b:
-    resolution: {commit: 0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b, repo: git@github.com:brettz9/ansi-to-html.git, type: git}
+  ansi-to-html@https://codeload.github.com/brettz9/ansi-to-html/tar.gz/0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b:
+    resolution: {tarball: https://codeload.github.com/brettz9/ansi-to-html/tar.gz/0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b}
     version: 0.6.11
     hasBin: true
 
@@ -3741,8 +3741,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-ash-nazg@36.10.0:
-    resolution: {integrity: sha512-3ivsZXSFRTT+QrAyHgrYd+fmCldyMFGCDEgkiSm8msthScQzTAxnb3W9vtkEZsAhwate4Cj64Cp+Ce58Sdjo0A==}
+  eslint-config-ash-nazg@36.11.0:
+    resolution: {integrity: sha512-kChSiojIv5ReMYZ6gCG6vJ8Vwoco6VsmNLMCSj9du4F1BEA4ZROTz6eSrnp7+I704rMYMopQQ4VVArUWOyYs5w==}
     engines: {node: '>=18.20.3'}
     peerDependencies:
       eslint: ^9.6.0
@@ -10642,7 +10642,7 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  ansi-to-html@git+https://git@github.com:brettz9/ansi-to-html.git#0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b:
+  ansi-to-html@https://codeload.github.com/brettz9/ansi-to-html/tar.gz/0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b:
     dependencies:
       entities: 1.1.2
 
@@ -11662,7 +11662,7 @@ snapshots:
 
   command-line-publish@1.1.0:
     dependencies:
-      ansi-to-html: git+https://git@github.com:brettz9/ansi-to-html.git#0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b
+      ansi-to-html: https://codeload.github.com/brettz9/ansi-to-html/tar.gz/0eaa84080b8b2f1aaa01f99ccaf564c28b11dd4b
       ansi-to-svg: 1.4.3
       command-line-basics: 1.1.0
       command-line-usage: 6.1.3
@@ -12495,7 +12495,7 @@ snapshots:
       eslint: 9.8.0
       semver: 7.6.3
 
-  eslint-config-ash-nazg@36.10.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4):
+  eslint-config-ash-nazg@36.11.0(@babel/core@7.25.2)(eslint@9.8.0)(typescript@5.5.4):
     dependencies:
       '@babel/eslint-parser': 7.25.1(@babel/core@7.25.2)(eslint@9.8.0)
       '@babel/eslint-plugin': 7.25.1(@babel/eslint-parser@7.25.1(@babel/core@7.25.2)(eslint@9.8.0))(eslint@9.8.0)
