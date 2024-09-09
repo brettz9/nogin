@@ -86,7 +86,7 @@ describe('Root (Login)', function () {
 
   it('Login attempt fails without CSRF token', function () {
     return cy.request({
-      url: '/login',
+      url: '/', // Was `/login`, but seems this was wrong
       method: 'POST',
       timeout: 50000,
       failOnStatusCode: false,

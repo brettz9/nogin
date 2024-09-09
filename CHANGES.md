@@ -1,5 +1,18 @@
 # CHANGES for nogin
 
+## 6.0.0
+
+### User-facing
+
+- feat: add `fallback` option
+- docs: elaborate on install steps
+- docs: update info in CLI
+
+### Dev-facing
+
+- docs: update programmatic docs
+- chore: update 3rd party eslint file
+
 ## 5.1.0
 
 ### User-facing

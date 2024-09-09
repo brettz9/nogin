@@ -429,7 +429,7 @@
       "message": "c"
     },
     "route_root": {
-      "message": "/"
+      "message": "/login"
     },
     "route_logout": {
       "message": "/logout"
