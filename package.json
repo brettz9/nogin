@@ -25,7 +25,7 @@
     "cache": false,
     "excludeAfterRemap": true,
     "exclude": [
-      ".3rdparty-eslintrc.cjs",
+      ".3rdparty-eslintrc.js",
       ".eslintrc.cjs",
       ".ncurc.cjs",
       "nogin.js",
@@ -68,7 +68,7 @@
     "help": "node ./bin/cli.js --help",
     "version": "node ./bin/cli.js --version",
     "csslint": "doiuse app/public/css/style.css node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/github-fork-ribbon-css/gh-fork-ribbon.css",
-    "eslint-3rd": "eslint --no-inline-config --ignore-path .3rdparty-eslintignore --no-eslintrc --config .3rdparty-eslintrc.js `es-file-traverse --file ./app/server/app.js --node --cjs --ignoreResolutionErrors`",
+    "eslint-3rd": "eslint --no-inline-config --config .3rdparty-eslintrc.js `es-file-traverse --file ./app/server/app.js --node --cjs --ignoreResolutionErrors`",
     "eslint-arg": "eslint",
     "eslint": "eslint .",
     "eslint-no-cache": "eslint .",
