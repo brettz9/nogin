@@ -1025,6 +1025,7 @@ window.Nogin = {
     return {_, route, routes, error};
   };
 
+  // eslint-disable-next-line sonarjs/csrf -- Need to review
   app.post('*', async function (req, res, next) {
     const {
       _, route, routes, error

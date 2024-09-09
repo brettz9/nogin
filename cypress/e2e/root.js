@@ -15,6 +15,8 @@
 // Todo: Add accessibility tests for small error response messages
 //   not yet covered.
 
+// eslint-disable-next-line sonarjs/no-hardcoded-ip -- Testing
+const ip = '::ffff:127.0.0.1';
 const expressSessionID = 'connect.sid';
 
 describe('Root (Login) - Accessibility', function () {
@@ -188,6 +190,7 @@ describe('Root (Login)', function () {
       },
       error: 'The "password" argument must be'
     }).then(() => {
+      // eslint-disable-next-line sonarjs/no-hardcoded-credentials -- Testing
       const passwordToPassClientValidation = 'abc123456';
       cy.get('[data-name="user"]').type('bretto');
       cy.get('[data-name="pass"]').type(passwordToPassClientValidation);
@@ -339,7 +342,7 @@ describe('Root (Login)', function () {
     return cy.login({
       user: 'bretto',
       // ipv6 read by Express
-      ip: '::ffff:127.0.0.1',
+      ip,
       secure
     }).then((key) => {
       cy.visit('/');
@@ -365,7 +368,7 @@ describe('Root (Login)', function () {
       return cy.login({
         user: 'bretto',
         // ipv6 read by Express
-        ip: '::ffff:127.0.0.1',
+        ip,
         secure
       }).then((key) => {
         cy.visit('/?redirect=/signup');
@@ -393,7 +396,7 @@ describe('Root (Login)', function () {
       return cy.login({
         user: 'bretto',
         // ipv6 read by Express
-        ip: '::ffff:127.0.0.1',
+        ip,
         secure
       }).then((key) => {
         cy.visit('/?redirect=http://ignore-redirect-with-colons.com');
@@ -428,7 +431,7 @@ describe('Root (Login)', function () {
     return cy.login({
       user: 'bretto',
       // ipv6 read by Express
-      ip: '::ffff:127.0.0.1',
+      ip,
       // Won't have server secret, so try our own
       badSecret: 'abcdabcdabcd',
       secure

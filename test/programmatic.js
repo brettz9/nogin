@@ -25,6 +25,7 @@ chai.use(chaiAsPromised);
 
 describe('Programmatic', function () {
   describe('createServer', function () {
+    // eslint-disable-next-line sonarjs/assertions-in-tests -- Temporary
     it('Allows JSON options as objects', async function () {
       let i = 0;
       // Todo: Should really test behavior including that our `genid` function

@@ -1,3 +1,5 @@
+// eslint-disable-next-line sonarjs/no-hardcoded-ip -- Testing
+const ip = '::ffff:127.0.0.1';
 const expressSessionID = 'connect.sid';
 
 describe('Reset password', function () {
@@ -40,7 +42,7 @@ describe('Reset password', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
-      ip: '::ffff:127.0.0.1'
+      ip
     }).then((
       /** @type {string} */
       key
@@ -77,7 +79,7 @@ describe('Reset password', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
-      ip: '::ffff:127.0.0.1'
+      ip
     }).then((
       /** @type {string} */
       key
@@ -111,7 +113,7 @@ describe('Reset password', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
-      ip: '::ffff:127.0.0.1'
+      ip
     }).then((
       /** @type {string} */
       key
@@ -140,7 +142,7 @@ describe('Reset password', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,
       // ipv6 read by Express
-      ip: '::ffff:127.0.0.1'
+      ip
     }).then((
       /** @type {string} */
       key
