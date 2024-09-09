@@ -1,5 +1,18 @@
 # CHANGES for nogin
 
+## 5.1.0
+
+### User-facing
+
+- chore: update jamilih, jsdom, mongodb
+
+### Dev-facing
+
+- chore: eslint clean-up; lint
+- chore: comment descriptions
+- chore: update devDeps.
+- chore: fix TS target
+
 ## 5.0.0
 
 BREAKING CHANGES:

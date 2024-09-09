@@ -1,13 +1,13 @@
 {
   "name": "nogin",
+  "version": "5.1.0",
+  "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
   "main": "./app/server/app.js",
   "bin": {
     "nogin": "./bin/cli.js"
   },
-  "version": "5.0.0",
-  "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "author": "Brett Zamir",
   "contributors": [],
   "browserslist": [
@@ -52,7 +52,7 @@
     "tsc": "tsc",
     "tsc-cypress": "tsc -p cypress/tsconfig.json",
     "build": "tsc -p tsconfig-prod.json",
-    "prepublishOnly": "echo 'Skipping eslint-3rd' && echo \"skipping: license-badges until ready for pnpm and skipping build-docs until debug\" && run-s build-cli snyk",
+    "prepublishOnly": "echo 'Skipping eslint-3rd' && echo \"skipping: license-badges (takes long to do frequently) and skipping build-docs until debug\" && run-s build-cli snyk",
     "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",
     "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment doc-includes/licenses-badge-dev.svg",
     "license-badges": "run-s license-badge license-badge-dev",
