@@ -1003,7 +1003,9 @@ window.Nogin = {
 
     let error;
     if (!disableXSRF && !openRoutes.has(route)) {
-      console.log('route', method, route);
+      if (error) { // Deliberately not reaching
+        console.log('route', method, route);
+      }
       // Note: We don't use separate middleware for this, as we need
       //  a dynamic route (we could pre-build if examining all locales in
       //  beginning, but this would need to take into account locales
