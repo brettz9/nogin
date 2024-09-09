@@ -1,5 +1,11 @@
 # CHANGES for nogin
 
+## 6.0.1
+
+### User-facing
+
+- chore: update `jamilih` in `peerDependencies`
+
 ## 6.0.0
 
 ### User-facing
