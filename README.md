@@ -314,8 +314,8 @@ familiarity with nogin internals to be sure to include all required fields.
 
 ## Programmatic docs
 
-1. `npm i` (local install to get devDeps)
-1. `npm run build-docs`
+1. `pnpm i` (local install to get devDeps)
+1. `pnpm build-docs`
 1. Open `docs/jsdoc/index.html`
 
 ## Contributing
