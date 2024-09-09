@@ -77,7 +77,12 @@ npm install nogin
     (`npm i -g install-peerdeps`); then `install-peerdeps nogin` will
     auto-install the rest.
 
-4. Use `run-p` (which is made available by the `nogin` dependency, `npm-run-all`)
+4. Add a `nogin.js` file (see the `nogin-sample.js` file)
+
+5. Add a `db` directory at your project root (and probably add it to
+    `.gitignore` and `.npmignore`)
+
+6. Use `run-p` (which is made available by the `nogin` dependency, `npm-run-all`)
     along with two of your own `package.json` scripts, one of which to start
     the mongo database, and the other to start the nogin server (note that
     `nodemon` is also provided as a dependency, so you could add that to
@@ -107,7 +112,7 @@ mongod
 nogin --localScripts --config nogin.js
 ```
 
-5. Once the script mentions it is listening (on port 3000 by default), open
+7. Once the script mentions it is listening (on port 3000 by default), open
     a browser window and navigate to: [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
 ## Steps for getting port that may block Mongo DB
