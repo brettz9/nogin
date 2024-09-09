@@ -16,9 +16,9 @@ declare namespace EmailValidatorView {
      * }}
      */
     function getFormFields(): {
-        retrievePasswordModal: JQuery<HTMLElement>;
-        retrievePasswordAlert: JQuery<HTMLElement>;
-        retrievePasswordForm: JQuery<HTMLElement> & {
+        retrievePasswordModal: JQuery;
+        retrievePasswordAlert: JQuery;
+        retrievePasswordForm: JQuery & {
             resetForm: () => void;
         };
     };
@@ -27,7 +27,7 @@ declare namespace EmailValidatorView {
      */
     function addSuccess(msg: string): void;
     namespace messages {
-        const PleaseEnterValidEmailAddress: string;
+        let PleaseEnterValidEmailAddress: string;
     }
 }
 //# sourceMappingURL=EmailValidatorView.d.ts.map

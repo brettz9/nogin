@@ -5,7 +5,7 @@ export default resetPassword;
 * }} cfg
 */
 declare function resetPassword({ _ }: {
-    _: import('intl-dom').I18NCallback;
+    _: import("intl-dom").I18NCallback;
 }): (string | {
     id: string;
     class: string;

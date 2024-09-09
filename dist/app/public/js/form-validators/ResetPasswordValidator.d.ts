@@ -13,7 +13,7 @@ declare class ResetPasswordValidator {
     /**
      * @returns {import('../views/utilities/AlertDialog.js').JQueryWithModal}
      */
-    getPasswordDialog(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
+    getPasswordDialog(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
     /**
      * @param {"bad-session"|undefined} [type]
      * @returns {void}

@@ -1,4 +1,4 @@
-export type ListIndexesDefinitions = import('./common-definitions.js').CommonDefinitions & import('./db-definitions.js').DbDefinitions;
+export type ListIndexesDefinitions = import("./common-definitions.js").CommonDefinitions & import("./db-definitions.js").DbDefinitions;
 /**
  * @typedef {import('./common-definitions.js').CommonDefinitions &
  *   import('./db-definitions.js').DbDefinitions
@@ -8,7 +8,7 @@ export type ListIndexesDefinitions = import('./common-definitions.js').CommonDef
  * @type {import('command-line-usage').
  *   OptionDefinition[]}
  */
-declare const optionDefinitions: import('command-line-usage').OptionDefinition[];
+declare const optionDefinitions: import("command-line-usage").OptionDefinition[];
 declare const cliSections: ({
     content: string;
     optionList?: undefined;

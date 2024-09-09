@@ -12,7 +12,7 @@ export type LoggerOptions = {
 export type Logger = ((key: string, substitutions?: ({
     [x: string]: (string | Element | number);
 }) | null, ...other: (string | object)[]) => string | null) & {
-    _: import('../modules/email-dispatcher.js').Internationalizer;
+    _: import("../modules/email-dispatcher.js").Internationalizer;
 };
 /**
 * @typedef {object} LoggerOptions

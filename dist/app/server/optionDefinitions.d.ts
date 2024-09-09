@@ -58,16 +58,13 @@ export type MainOptionDefinitions = {
     };
 };
 /** @type {import('command-line-usage').OptionDefinition[]} */
-declare const optionDefinitions: import('command-line-usage').OptionDefinition[];
+declare const optionDefinitions: import("command-line-usage").OptionDefinition[];
 /**
  * @type {[
  *   import('command-line-usage').Content,
  *   import('command-line-usage').OptionList
  * ]}
  */
-declare const cliSections: [
-    import('command-line-usage').Content,
-    import('command-line-usage').OptionList
-];
+declare const cliSections: [import("command-line-usage").Content, import("command-line-usage").OptionList];
 export { optionDefinitions as definitions, cliSections as sections };
 //# sourceMappingURL=optionDefinitions.d.ts.map

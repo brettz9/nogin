@@ -13,7 +13,8 @@ export default layout;
  *   userJS: string,
  *   userJSModule: string,
  *   localScripts: boolean,
- *   securitySourceAttributes: import('../routeUtils.js').SecuritySourceAttributes
+ *   securitySourceAttributes:
+ *     import('../routeUtils.js').SecuritySourceAttributes
  *   noPolyfill: boolean,
  *   useESM: boolean,
  * }} cfg
@@ -25,8 +26,8 @@ export default layout;
  * }} injectedHTML
  * @returns {[import('jamilih').JamilihDoc]}
  */
-declare function layout({ _, langDir, isRtl, content, scripts, title, favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule, noPolyfill, useESM, csrfToken, error, triggerCoverage, securitySourceAttributes }: import('../routeUtils.js').LayoutAndTitleArgs & import('../routeUtils.js').TemplateArgs & {
-    langDir: import('../modules/i18n.js').LanguageDirection;
+declare function layout({ langDir, isRtl, content, scripts, title, favicon, stylesheet, noBuiltinStylesheets, userJS, userJSModule, noPolyfill, useESM, csrfToken, error, triggerCoverage, securitySourceAttributes }: import("../routeUtils.js").LayoutAndTitleArgs & import("../routeUtils.js").TemplateArgs & {
+    langDir: import("../modules/i18n.js").LanguageDirection;
     isRtl: boolean;
     triggerCoverage: boolean;
     favicon: string;
@@ -35,13 +36,13 @@ declare function layout({ _, langDir, isRtl, content, scripts, title, favicon, s
     userJS: string;
     userJSModule: string;
     localScripts: boolean;
-    securitySourceAttributes: import('../routeUtils.js').SecuritySourceAttributes;
+    securitySourceAttributes: import("../routeUtils.js").SecuritySourceAttributes;
     noPolyfill: boolean;
     useESM: boolean;
 }, injectedHTML: {
-    headPre: import('jamilih').JamilihArray[];
-    headPost: import('jamilih').JamilihArray[];
-    bodyPre: import('jamilih').JamilihArray[];
-    bodyPost: import('jamilih').JamilihArray[];
-}): [import('jamilih').JamilihDoc];
+    headPre: import("jamilih").JamilihArray[];
+    headPost: import("jamilih").JamilihArray[];
+    bodyPre: import("jamilih").JamilihArray[];
+    bodyPost: import("jamilih").JamilihArray[];
+}): [import("jamilih").JamilihDoc];
 //# sourceMappingURL=layout.d.ts.map

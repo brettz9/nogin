@@ -3,17 +3,17 @@ declare namespace SignupView {
     /**
      * @returns {JQuery}
      */
-    function getName(): JQuery<HTMLElement>;
+    function getName(): JQuery;
     /**
      * @param {JQuery} accountCreatedAlertDialog `HTMLDivElement`
      * @returns {JQuery} `HTMLFormElement`
      */
-    function getAccountCreatedOkButton(accountCreatedAlertDialog: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getAccountCreatedOkButton(accountCreatedAlertDialog: JQuery): JQuery;
     /**
      * @param {JQuery} accountForm `HTMLFormElement`
      * @returns {JQuery}
      */
-    function getActionForAccountForm(accountForm: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getActionForAccountForm(accountForm: JQuery): JQuery;
     /**
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`

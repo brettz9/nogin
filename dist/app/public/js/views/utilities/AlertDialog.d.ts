@@ -1,5 +1,5 @@
 export default AlertDialog;
-export type JQueryWithModal = JQuery<HTMLElement> & {
+export type JQueryWithModal = JQuery & {
     modal: (showOrHide: "show" | "hide" | {
         show: boolean;
         keyboard: boolean;
@@ -17,7 +17,7 @@ declare namespace AlertDialog {
      */
     function populate({ heading, body, keyboard, backdrop }: {
         heading: string;
-        body: string | Element;
+        body: Element | string;
         keyboard: boolean;
         backdrop: boolean | "static";
     }): JQueryWithModal;

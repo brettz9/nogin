@@ -6,7 +6,7 @@ export default lostPassword;
 * }} cfg
 */
 declare function lostPassword({ _, emailPattern }: {
-    _: import('intl-dom').I18NCallback;
+    _: import("intl-dom").I18NCallback;
     emailPattern: string;
 }): (string | {
     id: string;

@@ -5,13 +5,13 @@ declare namespace ActivationFailedView {
      *   modal: (showOrHide: "show"|"hide") => void
      * }} `HTMLDivElement`
      */
-    function accountFailedActivation(): JQuery<HTMLElement> & {
-        modal: (showOrHide: "hide" | "show") => void;
+    function accountFailedActivation(): JQuery & {
+        modal: (showOrHide: "show" | "hide") => void;
     };
     /**
      * @param {JQuery} accountActivatedAlertDialog `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getOKButton(accountActivatedAlertDialog: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getOKButton(accountActivatedAlertDialog: JQuery): JQuery;
 }
 //# sourceMappingURL=activation-failed.d.ts.map

@@ -8,24 +8,24 @@ export type ObjectID = string | object;
 /**
  * Has other properties, but not required here.
  */
-export type InsertOneWriteOpResult = import('mongodb').InsertOneResult;
+export type InsertOneWriteOpResult = import("mongodb").InsertOneResult;
 /**
  * Has other properties, but not required here.
  */
-export type DeleteWriteOpResult = import('mongodb').DeleteResult;
+export type DeleteWriteOpResult = import("mongodb").DeleteResult;
 /**
  * Patterned after {@link https://docs.mongodb.com/manual/reference/method/js-cursor/}.
  */
-export type Cursor = import('mongodb').AbstractCursor;
+export type Cursor = import("mongodb").AbstractCursor;
 /**
  * Patterned after {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Db.html}.
  */
-export type DBObject = import('mongodb').Db;
+export type DBObject = import("mongodb").Db;
 export type DBConfigObject = {
     DB_NAME: string;
     DB_URL: string;
     log?: import("./getLogger.js").Logger | undefined;
-    _: import('./email-dispatcher.js').Internationalizer;
+    _: import("./email-dispatcher.js").Internationalizer;
 };
 /**
  * Patterned after {@link https://mongodb.github.io/node-mongodb-native/3.4/api/ObjectID.html}.
@@ -67,7 +67,7 @@ declare class DBAbstraction {
      * @param {import('./db-factory.js').DbConfig} dbConfig
      * @returns {string}
      */
-    static getURL(prod: boolean, dbConfig: import('./db-factory.js').DbConfig): string;
+    static getURL(prod: boolean, dbConfig: import("./db-factory.js").DbConfig): string;
     /**
      * @abstract
      * @param {string|number} [id] Can be a 24 byte hex string, 12 byte binary
@@ -90,6 +90,6 @@ declare class DBAbstraction {
      * @abstract
      * @returns {Promise<import('mongodb').Collection>}
      */
-    getAccounts(): Promise<import('mongodb').Collection>;
+    getAccounts(): Promise<import("mongodb").Collection>;
 }
 //# sourceMappingURL=db-abstraction.d.ts.map

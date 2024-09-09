@@ -25,8 +25,8 @@ export type CountryInfo = {
  */
 /**
  * @param {import('express').Application} app
- * @param {import('../../app.js').RouteConfig} config
+ * @param {import('./app.js').RouteConfig} config
  * @returns {Promise<void>}
  */
-declare function routeList(app: import('express').Application, config: import('../../app.js').RouteConfig): Promise<void>;
+declare function routeList(app: import("express").Application, config: import("./app.js").RouteConfig): Promise<void>;
 //# sourceMappingURL=routeList.d.ts.map

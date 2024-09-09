@@ -1,6 +1,6 @@
 export default composeActivationEmail;
 export type ComposeActivationEmail = (cfg: {
-    _: import('../modules/email-dispatcher.js').Internationalizer;
+    _: import("../modules/email-dispatcher.js").Internationalizer;
     langDir: {
         dir: "rtl" | "ltr" | undefined;
         lang: string;
@@ -12,7 +12,7 @@ export type ComposeActivationEmail = (cfg: {
     activationCode: string;
     fromText: string;
     fromURL: string;
-}) => import('jamilih').JamilihDoc;
+}) => import("jamilih").JamilihDoc;
 /**
  *
  * @typedef {(cfg: {

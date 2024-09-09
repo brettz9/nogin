@@ -5,7 +5,7 @@ export default AccountValidator;
 declare class AccountValidator {
     /**
      * Sets up properties and methods.
-     * @param {object} [cfg={}]
+     * @param {object} [cfg]
      * @param {boolean} [cfg.signup]
      */
     constructor({ signup }?: {

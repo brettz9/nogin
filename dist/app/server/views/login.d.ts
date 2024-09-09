@@ -8,8 +8,8 @@ export default login;
  * }} cfg
  */
 declare function login({ _, layout, emailPattern, signup }: {
-    _: import('intl-dom').I18NCallback;
-    layout: import('../routeUtils.js').LayoutCallback;
+    _: import("intl-dom").I18NCallback;
+    layout: import("../routeUtils.js").LayoutCallback;
     emailPattern: string;
     signup: string;
 }): Promise<[import("jamilih").JamilihDoc]>;

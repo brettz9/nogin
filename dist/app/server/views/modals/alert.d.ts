@@ -5,7 +5,7 @@ export default alert;
  * }} cfg
  */
 declare function alert({ _ }: {
-    _: import('intl-dom').I18NCallback;
+    _: import("intl-dom").I18NCallback;
 }): (string | {
     class: string;
     'data-name': string;

@@ -3,11 +3,11 @@ declare namespace LoginView {
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getInputForInitialFocus(): JQuery<HTMLElement>;
+    function getInputForInitialFocus(): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getLoginModal(): JQuery<HTMLElement>;
+    function getLoginModal(): JQuery;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
@@ -18,7 +18,7 @@ declare namespace LoginView {
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function retrievePasswordForm(retrievePasswordModal: JQuery<HTMLElement>): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    function retrievePasswordForm(retrievePasswordModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
     /**
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm
@@ -29,51 +29,51 @@ declare namespace LoginView {
      * @param {JQuery} retrievePasswordModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function retrievePasswordSubmit(retrievePasswordModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function retrievePasswordSubmit(retrievePasswordModal: JQuery): JQuery;
     /**
      * @param {JQuery} retrievePasswordModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function retrievePasswordCancel(retrievePasswordModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function retrievePasswordCancel(retrievePasswordModal: JQuery): JQuery;
     /**
      * @param {JQuery} retrievePasswordModal `HTMLDivElement`
      * @returns {JQuery} `HTMLInputElement`
      */
-    function retrieveLostPasswordEmail(retrievePasswordModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function retrieveLostPasswordEmail(retrievePasswordModal: JQuery): JQuery;
     /**
      * @param {JQuery} loginModal `HTMLDivElement`
      * @returns {JQuery} `HTMLInputElement`
      */
-    function getLostPasswordUsername(loginModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getLostPasswordUsername(loginModal: JQuery): JQuery;
     /**
      * @param {JQuery} loginModal
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getForgotPassword(loginModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getForgotPassword(loginModal: JQuery): JQuery;
     /**
     * @param {JQuery} loginModal
     * @returns {JQuery} `HTMLButtonElement`
     */
-    function getRememberMeButton(loginModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getRememberMeButton(loginModal: JQuery): JQuery;
     /**
     * @param {JQuery} loginModal
     * @returns {boolean}
     */
-    function isRememberMeChecked(loginModal: JQuery<HTMLElement>): boolean;
+    function isRememberMeChecked(loginModal: JQuery): boolean;
     /**
     * @param {JQuery} retrievePasswordModal `HTMLDivElement`
     * @returns {JQuery}
     */
-    function setRetrievePasswordCancel(retrievePasswordModal: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function setRetrievePasswordCancel(retrievePasswordModal: JQuery): JQuery;
     /**
     * @param {JQuery} loginModal
     * @returns {void}
     */
-    function toggleCheckSquare(loginModal: JQuery<HTMLElement>): void;
+    function toggleCheckSquare(loginModal: JQuery): void;
     /**
      * @param {JQuery} retrievePasswordModal `HTMLDivElement`
      * @returns {void}
      */
-    function switchConfirmToAlert(retrievePasswordModal: JQuery<HTMLElement>): void;
+    function switchConfirmToAlert(retrievePasswordModal: JQuery): void;
 }
 //# sourceMappingURL=login.d.ts.map

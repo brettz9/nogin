@@ -8,10 +8,10 @@ declare namespace ResetPasswordView {
     /**
      * @returns {JQuery} `HTMLInputElement`
      */
-    function getPassword(): JQuery<HTMLElement>;
+    function getPassword(): JQuery;
     /**
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getSetPasswordSubmit(): JQuery<HTMLElement>;
+    function getSetPasswordSubmit(): JQuery;
 }
 //# sourceMappingURL=reset-password.d.ts.map

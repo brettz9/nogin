@@ -9,7 +9,7 @@ export class MongoDB extends DBAbstraction {
      * string or a Number.
      * @returns {import('mongodb').ObjectId}
      */
-    static getObjectId(id?: string | undefined): import('mongodb').ObjectId;
+    static getObjectId(id?: string | undefined): import("mongodb").ObjectId;
     /**
      * @returns {Promise<void>} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/MongoClient.html}.
      */

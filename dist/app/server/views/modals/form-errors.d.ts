@@ -5,7 +5,7 @@ export default formErrors;
 * }} cfg
 */
 declare function formErrors({ _ }: {
-    _: import('intl-dom').I18NCallback;
+    _: import("intl-dom").I18NCallback;
 }): (string | {
     class: string;
 } | (string | {

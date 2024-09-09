@@ -14,12 +14,12 @@ declare namespace AccountValidatorView {
     /**
      * @returns {JQuery}
      */
-    function getUserId(): JQuery<HTMLElement>;
+    function getUserId(): JQuery;
     /**
      * @returns {AccountInfoElements}
      */
     function getFormFields(): AccountInfoElements;
-    const errorMessages: {
+    let errorMessages: {
         [x: string]: {
             [x: string]: string;
         };

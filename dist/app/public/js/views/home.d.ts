@@ -3,34 +3,34 @@ declare namespace HomeView {
     /**
      * @returns {JQuery}
      */
-    function getLogoutButton(): JQuery<HTMLElement>;
+    function getLogoutButton(): JQuery;
     /**
      * @returns {JQuery}
      */
-    function getName(): JQuery<HTMLElement>;
+    function getName(): JQuery;
     /**
      * @returns {JQuery}
      */
-    function getEmail(): JQuery<HTMLElement>;
+    function getEmail(): JQuery;
     /**
      * @param {JQuery} accountForm
      * @returns {JQuery}
      */
-    function getDeleteAccountAction(accountForm: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getDeleteAccountAction(accountForm: JQuery): JQuery;
     /**
      * @param {JQuery} lockedAlertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getLockedAlertButton(lockedAlertDialog: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
     /**
      * @param {JQuery} accountUpdatedAlertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getAccountUpdatedButton(accountUpdatedAlertDialog: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getAccountUpdatedButton(accountUpdatedAlertDialog: JQuery): JQuery;
     /**
      * @returns {JQuery}
      */
-    function getUser(): JQuery<HTMLElement>;
+    function getUser(): JQuery;
     /**
      * @param {object} cfg
      * @param {"AppearsChangingEmail"} cfg.type

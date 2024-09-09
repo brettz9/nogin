@@ -12,10 +12,10 @@ export type EmailDispatcherConfig = {
     NL_EMAIL_FROM: string;
     NL_SITE_URL: string;
     NS_EMAIL_TIMEOUT: number;
-    composeResetPasswordEmailView: import('../views/composeResetPasswordEmail.js').ComposeResetPasswordEmail;
-    composeActivationEmailView: import('../views/composeActivationEmail.js').ComposeActivationEmail;
+    composeResetPasswordEmailView: import("../views/composeResetPasswordEmail.js").ComposeResetPasswordEmail;
+    composeActivationEmailView: import("../views/composeActivationEmail.js").ComposeActivationEmail;
 };
-export type Internationalizer = import('intl-dom').I18NCallback<string>;
+export type Internationalizer = import("intl-dom").I18NCallback<string>;
 /**
 * @typedef {object} EmailDispatcherConfig
 * @property {string} NL_EMAIL_HOST
@@ -61,7 +61,7 @@ declare class EmailDispatcher {
     }, cfg: {
         fromText: string;
         fromURL: string;
-    }, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message>;
+    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): Promise<import("emailjs").Message>;
     /**
     * @typedef {object} EmailInfo
     * @property {string} data
@@ -94,7 +94,7 @@ declare class EmailDispatcher {
     }, { fromText, fromURL }: {
         fromText: string;
         fromURL: string;
-    }, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): {
+    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): {
         data: string;
         alternative: boolean;
     }[];
@@ -109,14 +109,14 @@ declare class EmailDispatcher {
      * @param {import('./i18n.js').LanguageDirection} langDir
      * @returns {Promise<import('emailjs').Message>}
      */
-    dispatchActivationLink(account: Partial<import('./account-manager.js').AccountInfo> & {
+    dispatchActivationLink(account: Partial<import("./account-manager.js").AccountInfo> & {
         name: string;
         user: string;
         activationCode: string;
     }, cfg: {
         fromText: string;
         fromURL: string;
-    }, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message>;
+    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): Promise<import("emailjs").Message>;
     /**
      * @param {Partial<import('./account-manager.js').AccountInfo> & {
      *   name: string,
@@ -128,14 +128,14 @@ declare class EmailDispatcher {
      * @param {import('./i18n.js').LanguageDirection} langDir
      * @returns {EmailInfo[]}
      */
-    composeActivationEmail({ name, user, activationCode }: Partial<import('./account-manager.js').AccountInfo> & {
+    composeActivationEmail({ name, user, activationCode }: Partial<import("./account-manager.js").AccountInfo> & {
         name: string;
         user: string;
         activationCode: string;
     }, { fromText, fromURL }: {
         fromText: string;
         fromURL: string;
-    }, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): {
+    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): {
         data: string;
         alternative: boolean;
     }[];

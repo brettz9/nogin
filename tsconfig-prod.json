@@ -11,7 +11,7 @@
     "declarationMap": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "target": "es6",
+    "target": "es2017",
     "outDir": "dist"
   },
   "include": ["app/**/*.js", "bin/**/*.js", "./typings/Nogin.d.ts", "./typings/CypressCoverage.d.ts"],

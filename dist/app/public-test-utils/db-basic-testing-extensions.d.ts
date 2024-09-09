@@ -1,8 +1,8 @@
-export type GenerateLoginOptionDefinitions = import('../server/modules/db-factory.js').DbConfig & {
+export type GenerateLoginOptionDefinitions = import("../server/modules/db-factory.js").DbConfig & {
     user: string | string[];
     ip: string | string[];
 };
-export type GeneratePasswordOptionDefinitions = import('../server/modules/db-factory.js').DbConfig & {
+export type GeneratePasswordOptionDefinitions = import("../server/modules/db-factory.js").DbConfig & {
     email: string | string[];
     ip: string | string[];
 };

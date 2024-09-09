@@ -15,5 +15,5 @@ declare function populateForm(sel: string, { heading, subheading, action1, actio
     subheading: string;
     action1: string;
     action2: string;
-}): import('../../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
+}): import("../../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
 //# sourceMappingURL=populateForm.d.ts.map

@@ -10,10 +10,10 @@ export default account;
  * }} cfg
  */
 declare function account({ _, user, countries, emailPattern, requireName, title }: {
-    _: import('intl-dom').I18NCallback<string>;
+    _: import("intl-dom").I18NCallback<string>;
     title: string;
-    user: import('../modules/account-manager.js').AccountInfo;
-    countries: import('../routeList.js').CountryInfo[];
+    user: import("../modules/account-manager.js").AccountInfo;
+    countries: import("../routeList.js").CountryInfo[];
     emailPattern: string;
     requireName?: boolean;
 }): ((string | {

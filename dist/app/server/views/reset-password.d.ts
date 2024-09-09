@@ -6,7 +6,7 @@ export default resetPassword;
  * }} cfg
  */
 declare function resetPassword({ _, layout }: {
-    _: import('intl-dom').I18NCallback;
-    layout: import('../routeUtils.js').LayoutCallback;
+    _: import("intl-dom").I18NCallback;
+    layout: import("../routeUtils.js").LayoutCallback;
 }): Promise<[import("jamilih").JamilihDoc]>;
 //# sourceMappingURL=reset-password.d.ts.map

@@ -6,7 +6,7 @@ export default confirm;
  * }} cfg
  */
 declare function confirm({ _, type }: {
-    _: import('intl-dom').I18NCallback;
+    _: import("intl-dom").I18NCallback;
     type: string;
 }): (string | {
     class: string;

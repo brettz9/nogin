@@ -79,7 +79,7 @@ declare class AccountManager {
      * @param {"mongodb"} adapter
      * @param {import('./db-abstraction.js').DBConfigObject} config
      */
-    constructor(adapter: "mongodb", config: import('./db-abstraction.js').DBConfigObject);
+    constructor(adapter: "mongodb", config: import("./db-abstraction.js").DBConfigObject);
     adapter: import("./db-adapters/MongoDB.js").default;
     /**
      * @returns {Promise<AccountManager>}
@@ -136,7 +136,7 @@ declare class AccountManager {
      * @param {AccountInfo} newData
      * @param {{
      *   allowCustomPassVer?: boolean
-     * }} [allowCustomPassVer=false]
+     * }} [allowCustomPassVer]
      * @returns {Promise<AccountInfo & {
      *   activationCode: string
      * }>}
@@ -144,7 +144,7 @@ declare class AccountManager {
      *   at once.
      */
     addNewAccount(newData: AccountInfo, { allowCustomPassVer }?: {
-        allowCustomPassVer?: boolean | undefined;
+        allowCustomPassVer?: boolean;
     } | undefined): Promise<AccountInfo & {
         activationCode: string;
     }>;
@@ -153,7 +153,7 @@ declare class AccountManager {
      * @returns {Promise<import('mongodb').UpdateResult|
      *   import('mongodb').Document>}
      */
-    activateAccount(activationCode: string): Promise<import('mongodb').UpdateResult | import('mongodb').Document>;
+    activateAccount(activationCode: string): Promise<import("mongodb").UpdateResult | import("mongodb").Document>;
     /**
     * @callback ChangedEmailHandler
     * @param {Partial<AccountInfo>} acct
@@ -167,24 +167,22 @@ declare class AccountManager {
      * @param {object} cfg
      * @param {boolean} [cfg.forceUpdate]
      * @param {ChangedEmailHandler} [cfg.changedEmailHandler]
-     * @returns {Promise<import('mongodb').ModifyResult<
-     *   import('mongodb').Document
-     * >>}
+     * @returns {Promise<
+     *   import('mongodb').WithId<import('mongodb').Document>
+     * >}
      */
     updateAccount(newData: Partial<AccountInfo> & {
         user: string;
     }, { forceUpdate, changedEmailHandler }: {
         forceUpdate?: boolean | undefined;
         changedEmailHandler?: ((acct: Partial<AccountInfo>, user: string) => void) | undefined;
-    }): Promise<import('mongodb').ModifyResult<import('mongodb').Document>>;
+    }): Promise<import("mongodb").WithId<import("mongodb").Document>>;
     /**
      * @param {string} passKey
      * @param {string} newPass
-     * @returns {Promise<
-     *   import('mongodb').ModifyResult
-     * >}
+     * @returns {Promise<import('mongodb').WithId<any> | null>}
      */
-    updatePassword(passKey: string, newPass: string): Promise<import('mongodb').ModifyResult>;
+    updatePassword(passKey: string, newPass: string): Promise<import("mongodb").WithId<any> | null>;
     /**
      * @returns {Promise<Partial<AccountInfo>[]>}
      */
@@ -193,15 +191,15 @@ declare class AccountManager {
      * @param {string} id
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAccountById(id: string): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
+    deleteAccountById(id: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
     /**
      * @param {AccountInfoFilter} acctInfo
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAccounts(acctInfo: AccountInfoFilter): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
+    deleteAccounts(acctInfo: AccountInfoFilter): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
     /**
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAllAccounts(): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
+    deleteAllAccounts(): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
 }
 //# sourceMappingURL=account-manager.d.ts.map

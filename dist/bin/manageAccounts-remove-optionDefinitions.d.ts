@@ -1,4 +1,4 @@
-export type RemoveOptionDefinitions = import('./common-definitions.js').CommonDefinitions & import('./db-definitions.js').DbDefinitions & {
+export type RemoveOptionDefinitions = import("./common-definitions.js").CommonDefinitions & import("./db-definitions.js").DbDefinitions & {
     user?: string[];
     name?: string[];
     email?: string[];
@@ -41,7 +41,7 @@ export type RemoveOptionDefinitions = import('./common-definitions.js').CommonDe
  * @type {import('command-line-usage').
  *   OptionDefinition[]}
  */
-declare const optionDefinitions: import('command-line-usage').OptionDefinition[];
+declare const optionDefinitions: import("command-line-usage").OptionDefinition[];
 declare const cliSections: ({
     content: string;
     optionList?: undefined;

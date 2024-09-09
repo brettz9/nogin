@@ -8,12 +8,12 @@ declare namespace ResetPasswordValidatorView {
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getSetPasswordAlert(): JQuery<HTMLElement>;
+    function getSetPasswordAlert(): JQuery;
     /**
      * @param {JQuery} alertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getLockedAlertButton(alertDialog: JQuery<HTMLElement>): JQuery<HTMLElement>;
+    function getLockedAlertButton(alertDialog: JQuery): JQuery;
     /**
      * @returns {void}
      */
@@ -27,9 +27,9 @@ declare namespace ResetPasswordValidatorView {
      * @param {"bad-session"|undefined} type
      * @returns {import('../utilities/AlertDialog.js').JQueryWithModal|void}
      */
-    function showDanger(type: "bad-session" | undefined): void | import("../utilities/AlertDialog.js").JQueryWithModal;
+    function showDanger(type: "bad-session" | undefined): import("../utilities/AlertDialog.js").JQueryWithModal | void;
     namespace messages {
-        const ShouldBeMinimumLength: string | Element;
+        let ShouldBeMinimumLength: string | Element;
     }
 }
 //# sourceMappingURL=ResetPasswordValidatorView.d.ts.map
