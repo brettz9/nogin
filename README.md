@@ -242,6 +242,7 @@ for supporting additional routes.
 - `--staticDir` (One or more string paths)
 - `--middleware` (One or more middleware to be required)
 - `--router`
+- `--fallback`
 
 ##### Used mainly for internal testing of `nogin`
 

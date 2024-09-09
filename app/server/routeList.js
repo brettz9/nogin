@@ -65,6 +65,7 @@ const routeList = async (app, config) => {
     fromURL,
     requireName,
     router,
+    fallback,
     localesBasePath,
     postLoginRedirectPath,
     customRoute = [],
@@ -1054,8 +1055,21 @@ window.Nogin = {
       ](routes, req, res, next);
       return;
     }
-    console.log('ERRRRROR2', error, route);
-    pageNotFound(_, res);
+
+    const notFoundNext = () => {
+      console.log('ERRRRROR2', error, route);
+      pageNotFound(_, res);
+    };
+
+    if (fallback) {
+      // // eslint-disable-next-line no-unsanitized/method -- User path
+      (await import(pathResolve(cwd, fallback))).default(
+        req, res, notFoundNext, opts
+      );
+      return;
+    }
+
+    notFoundNext();
   });
 
   // To create custom Bad CSRF page:

@@ -37,6 +37,7 @@ const pkg = JSON.parse(
  *   staticDir: string[],
  *   middleware: string[],
  *   router: string,
+ *   fallback: string,
  *   useESM: boolean,
  *   noPolyfill: boolean,
  *   injectHTML: string,
@@ -215,6 +216,14 @@ const optionDefinitions = [
     description: 'Path to a Node file that will be imported. The file must ' +
       'have an ESM default function export that will be ' +
       'passed the Express `app` instance and resolved options. Not required.',
+    typeLabel: '{underline path}'
+  },
+  {
+    name: 'fallback', type: String,
+    description: 'Path to a Node file that will be imported. Use for a file ' +
+      'server. The file must have an ESM default function export that will ' +
+      'be passed the `req` object, `res` object, and `next` function. ' +
+      'Probably required.',
     typeLabel: '{underline path}'
   },
   {
