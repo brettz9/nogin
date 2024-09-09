@@ -171,8 +171,8 @@ const optionDefinitions = [
   },
   {
     name: 'composeResetPasswordEmailView', type: String,
-    description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that ' +
+    description: 'Path to a Node file that will be imported. The file must ' +
+      'have an ESM default function export that ' +
       'accepts the template options (_, jml, baseurl, name, user, passKey, ' +
       'fromText, fromURL). Defaults to ' +
       '`/app/server/views/composeResetPasswordEmail.js`.',
@@ -180,8 +180,8 @@ const optionDefinitions = [
   },
   {
     name: 'composeActivationEmailView', type: String,
-    description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that ' +
+    description: 'Path to a Node file that will be imported. The file must ' +
+      'have an ESM default function export that ' +
       'accepts the template options (_, jml, baseurl, name, user, ' +
       'activationCode, fromText, fromURL). Defaults to ' +
       '`/app/server/views/composeActivationEmail.js`.',
@@ -202,8 +202,8 @@ const optionDefinitions = [
   },
   {
     name: 'middleware', type: String, multiple: true,
-    description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be ' +
+    description: 'Path to a Node file that will be imported. The file must ' +
+      'have an ESM default function export that will be ' +
       'passed the resolved options. Multiple allowed. Not required. To ' +
       'require serving within a particular non-root path, ' +
       'use `router` with Express\' `app.use()`. See ' +
@@ -212,8 +212,8 @@ const optionDefinitions = [
   },
   {
     name: 'router', type: String,
-    description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be ' +
+    description: 'Path to a Node file that will be imported. The file must ' +
+      'have an ESM default function export that will be ' +
       'passed the Express `app` instance and resolved options. Not required.',
     typeLabel: '{underline path}'
   },
@@ -230,8 +230,8 @@ const optionDefinitions = [
   },
   {
     name: 'injectHTML', type: String,
-    description: 'Path to a Node file that will be required. The file must ' +
-      'have a `module.exports` default function export that will be ' +
+    description: 'Path to a Node file that will be imported. The file must ' +
+      'have an ESM default function export that will be ' +
       'passed a config object, including a `template` string indicating ' +
       'the template being built. Must return an object with any of 4 ' +
       'optional methods (`headPre`, `headPost`, `bodyPre`, and/or ' +
