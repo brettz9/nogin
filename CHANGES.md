@@ -1,5 +1,11 @@
 # CHANGES for nogin
 
+## 6.0.5
+
+### User-facing
+
+- fix: display of "remember me" button
+
 ## 6.0.4
 
 ### User-facing

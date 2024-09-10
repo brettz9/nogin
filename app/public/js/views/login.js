@@ -115,7 +115,7 @@ const LoginView = {
   */
   isRememberMeChecked (loginModal) {
     return this.getRememberMeButton(loginModal).find('span').hasClass(
-      'fa-check-square'
+      'fa-square-check'
     );
   },
 
@@ -138,12 +138,12 @@ const LoginView = {
     // todo[cypress@>=14.0.0]: class checking: remove this disabling of
     //   istanbul to see if fixed
     // istanbul ignore if
-    if (span.hasClass('fa-minus-square')) {
-      span.removeClass('fa-minus-square').
-        addClass('fa-check-square');
+    if (span.hasClass('fa-square-minus')) {
+      span.removeClass('fa-square-minus');
+      span.addClass('fa-square-check');
     } else {
-      span.addClass('fa-minus-square').
-        removeClass('fa-check-square');
+      span.addClass('fa-square-minus');
+      span.removeClass('fa-square-check');
     }
   },
 

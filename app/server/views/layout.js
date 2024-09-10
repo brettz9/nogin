@@ -69,6 +69,12 @@ const layout = ({
               ['link', {
                 rel: 'stylesheet',
                 ...securitySourceAttributes(
+                  'link', '@fortawesome/fontawesome-free/solid'
+                )
+              }],
+              ['link', {
+                rel: 'stylesheet',
+                ...securitySourceAttributes(
                   'link',
                   isRtl ? 'bootstrap-rtl' : 'bootstrap'
                 )

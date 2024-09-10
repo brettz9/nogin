@@ -46,7 +46,8 @@ const login = ({_, layout, emailPattern, signup}) => {
               id: 'btn_remember', class: 'remember-me btn btn-light btn-left',
               'data-name': 'btn_remember'
             }, [
-              ['span', {class: 'fa fa-check-square'}, [_('RememberMe')]]
+              ['span', {class: 'fa fa-solid fa-square-check'}],
+              _('RememberMe')
             ]],
             ['button', {
               type: 'submit',

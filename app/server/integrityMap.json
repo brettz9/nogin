@@ -19,6 +19,12 @@
       "remote": "https://use.fontawesome.com/releases/v6.6.0/css/fontawesome.css"
     },
     {
+      "name": "@fortawesome/fontawesome-free/solid",
+      "local": "/node_modules/@fortawesome/fontawesome-free/css/solid.min.css",
+      "integrity": "sha384-JN5YK8e9Be0IBEB/Z3BYAzxlDbH7hFQbYtlnB60vKU7JE8v86SmeuD4031oI7nAy",
+      "remote": "https://use.fontawesome.com/releases/v6.6.0/css/solid.css"
+    },
+    {
       "name": "github-fork-ribbon-css",
       "noLocalIntegrity": true,
       "local": "/node_modules/github-fork-ribbon-css/gh-fork-ribbon.css",

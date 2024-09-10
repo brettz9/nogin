@@ -845,6 +845,7 @@ const routeList = async (app, config) => {
   [
     'bootstrap',
     '@fortawesome/fontawesome-free',
+    '@fortawesome/fontawesome-free/solid',
     'github-fork-ribbon-css',
     'intl-dom',
     'jamilih',
