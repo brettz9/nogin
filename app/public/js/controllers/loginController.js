@@ -84,7 +84,7 @@ ajaxFormClientSideValidate(
       // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
       // istanbul ignore else
       if (status === 'success') {
-        Nogin.redirect('home');
+        Nogin.redirect('root');
       }
     },
     error (e) {

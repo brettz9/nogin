@@ -907,12 +907,12 @@ window.Nogin = {
     ? 'true'
     : 'false'};
     if (permittingXDomainRedirects) {
-      location.href = (key === 'home' && this.postLoginRedirectPath) ||
+      location.href = (key === 'root' && this.postLoginRedirectPath) ||
         this.Routes[key];
       return;
     }
     location.assign(
-      (key === 'home' && this.postLoginRedirectPath) ||
+      (key === 'root' && this.postLoginRedirectPath) ||
         this.Routes['safe_' + key]
     );
   }

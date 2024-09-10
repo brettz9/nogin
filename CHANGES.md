@@ -1,5 +1,11 @@
 # CHANGES for nogin
 
+## 6.0.4
+
+### User-facing
+
+- fix: redirect to `root` instead of `home` after login
+
 ## 6.0.3
 
 ### User-facing
