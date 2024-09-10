@@ -887,7 +887,7 @@ const routeList = async (app, config) => {
 /* globals IntlDom -- Non-ESM */
 window.Nogin = {
   disableXSRF: ${disableXSRF},
-  postLoginRedirectPath: ${postLoginRedirectPath},
+  postLoginRedirectPath: ${JSON.stringify(postLoginRedirectPath ?? '')},
   Routes: ${JSON.stringify(routes)},
   _: IntlDom.i18nServer(${JSON.stringify({
     strings: {

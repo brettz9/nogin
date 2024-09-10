@@ -1,5 +1,11 @@
 # CHANGES for nogin
 
+## 6.0.3
+
+### User-facing
+
+- fix ensure `postLoginRedirectPath` is stringified
+
 ## 6.0.2
 
 ### User-facing
