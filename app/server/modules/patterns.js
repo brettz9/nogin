@@ -1,4 +1,4 @@
-const nonSpecialChars = String.raw`[^<>()[\]\\.,;:\s@"]+`;
+const nonSpecialChars = String.raw`[^<>\(\)\[\]\\.,;:\s@"]+`;
 const ipv4Address = String.raw`\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]`;
 
 const emailPattern = '^(' +

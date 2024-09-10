@@ -1,5 +1,16 @@
 # CHANGES for nogin
 
+## 6.0.2
+
+### User-facing
+
+- fix: do escaping for changed implicit 'u' flag of pattern property
+
+### Dev-facing
+
+- chore: linting
+- refactor: avoid logging
+
 ## 6.0.1
 
 ### User-facing
