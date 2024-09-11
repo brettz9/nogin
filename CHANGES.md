@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 6.1.0
+
+- chore: update `body-parser`, `express`, `intl-dom` and devDeps
+
 ## 6.0.6
 
 - docs: clarify more on usage

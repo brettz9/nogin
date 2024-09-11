@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "6.0.6",
+  "version": "6.1.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -190,18 +190,18 @@
     "jquery-form": "https://github.com/brettz9/form#xss"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "command-line-basics": "^2.0.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "csurf": "^1.11.0",
     "emailjs": "^4.0.3",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "express-rate-limit": "^7.4.0",
     "express-session": "^1.18.0",
     "file-fetch": "^2.0.0",
     "helmet": "^7.1.0",
-    "intl-dom": "^0.19.0",
+    "intl-dom": "^0.20.0",
     "intl-locale-textinfo-polyfill": "^2.1.1",
     "jamilih": "^0.60.0",
     "jsdom": "^25.0.0",
@@ -218,7 +218,7 @@
     "@babel/plugin-syntax-top-level-await": "^7.14.5",
     "@babel/preset-env": "^7.25.4",
     "@cypress/browserify-preprocessor": "^3.0.2",
-    "@cypress/code-coverage": "^3.12.47",
+    "@cypress/code-coverage": "^3.12.48",
     "@cypress/fiddle": "^1.19.3",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@hkdobrev/run-if-changed": "^0.6.1",
@@ -264,7 +264,7 @@
     "es-file-traverse": "^1.2.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^9.10.0",
-    "eslint-config-ash-nazg": "36.16.2",
+    "eslint-config-ash-nazg": "36.16.3",
     "github-fork-ribbon-css": "^0.2.3",
     "globals": "^15.9.0",
     "husky": "^9.1.5",
@@ -290,6 +290,6 @@
     "snyk": "^1.1293.0",
     "stop-only": "^3.4.1",
     "typedoc": "^0.26.7",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   }
 }
