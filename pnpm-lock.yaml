@@ -36,8 +36,8 @@ importers:
         specifier: ^1.18.0
         version: 1.18.0
       file-fetch:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: 1.6.1
+        version: 1.6.1(encoding@0.1.13)
       helmet:
         specifier: ^7.1.0
         version: 7.1.0

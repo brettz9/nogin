@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -199,7 +199,7 @@
     "express": "^4.20.0",
     "express-rate-limit": "^7.4.0",
     "express-session": "^1.18.0",
-    "file-fetch": "^2.0.0",
+    "file-fetch": "1.6.1",
     "helmet": "^7.1.0",
     "intl-dom": "^0.20.0",
     "intl-locale-textinfo-polyfill": "^2.1.1",

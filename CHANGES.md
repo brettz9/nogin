@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## 6.2.0
+
+- chore: revert version of `file-fetch` to allow working with jsdom-overwritten
+    global `URL`s as in typeson-registry
+
 ## 6.1.0
 
 - chore: update `body-parser`, `express`, `intl-dom` and devDeps
