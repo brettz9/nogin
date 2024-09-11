@@ -54,6 +54,13 @@ export default [
     };
   }),
   {
+    name: 'nogin/readme',
+    files: ['*.md/*.js'],
+    rules: {
+      'sonarjs/no-hardcoded-ip': 'off'
+    }
+  },
+  {
     name: 'nogin/basic',
     rules: {
       'import/no-commonjs': 0,

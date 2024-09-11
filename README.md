@@ -56,8 +56,11 @@ to see all of the fixes and enhancements (including security fixes), the
 essential change has been to avoid the necessity of directly modifying
 source. This component has been retooled to allow it to be added as an
 npm dependency and provided command-line arguments which customize the
-appearance and behavior to a high degree--and using a config file or CLI
+appearance and behavior to a high degree—and using a config file or CLI
 flags rather than environmental variables.
+
+You provide the app (through the `--router` argument) your Express app
+entry file and optionally other arguments. See the next section.
 
 ## Installation & Setup
 
@@ -112,8 +115,13 @@ mongod
 nogin --localScripts --config nogin.js
 ```
 
+You will most likely also want to use the `--router` and possibly `--fallback`, as
+well as `--postLoginRedirectPath /` arguments. See these options for more details.
+
 7. Once the script mentions it is listening (on port 3000 by default), open
     a browser window and navigate to: [http://127.0.0.1:3000](http://127.0.0.1:3000)
+
+8. (For your live site, ensure your `nogin.js` `NL_SITE_URL` is pointing to this port.)
 
 ## Steps for getting port that may block Mongo DB
 
@@ -230,7 +238,8 @@ This is for changing the names or behavior of existing routes. See "Adding route
 for supporting additional routes.
 
 - `--postLoginRedirectPath` (Path/URL to which to redirect after login; defaults
-    to `/home` (or locale equivalent.)
+    to home (`/home`) (or locale equivalent), but you should probably set it
+    so that it redirects instead to your root (`/`).
 - `--customRoute` (Multiple strings in format `<locale>=<route>=<path>`)
 - `--crossDomainJSRedirects` (Boolean, defaults to `false`.)
 
@@ -241,8 +250,85 @@ for supporting additional routes.
 - `-s`/`--SERVE_COVERAGE` (Boolean; defaults to `false`.)
 - `--staticDir` (One or more string paths)
 - `--middleware` (One or more middleware to be required)
-- `--router`
-- `--fallback`
+- `--fallback` - If you need a default static file server and not just
+    specific paths, you can add your own file such as follows, adding
+    any desired headers, etc.:
+
+```js
+import express from 'express';
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ * @returns {void}
+ */
+export default function fallback (req, res, next) {
+  express.static('.', {
+    setHeaders (resp /* , path, stat */) {
+      resp.set({
+        'Content-Security-Policy': `object-src 'none';`
+      });
+    }
+  })(req, res, next);
+}
+```
+
+- `--router` - This is where your own (Express) app should be. Note: The following
+    paths should not be set as they are reserved by nogin: `/login`, `/logout`,
+    `/home`, `/signup`, `/activation`, `/lost-password`, `/reset-password`,
+    `/users`, `/delete`, `/reset`, `/coverage`
+
+```js
+/**
+ * @param {import('express').Application} app
+ * @param {{userJS: string}} opts
+ * @returns {void}
+ */
+export default function router (app, opts) {
+  // Grab your `nogin.js` options here as needed
+  console.log('Started with options:', {
+    ...opts,
+    secret: '<HIDDEN>',
+    NL_EMAIL_PASS: '<HIDDEN>'
+  });
+
+  app.get('/', (req, _res, next) => {
+    // To see your user session info (and determine privileges), you can get
+    //   them from `req.sesssion?.user`:
+    console.log('req.session', {
+      ...req.session?.user,
+      _id: '<some unique ID>',
+      name: 'Brett Zamir',
+      email: '<the user email address>',
+      user: 'brettz9',
+      pass: '<the password hash>',
+      country: 'US',
+      activationCode: '<activation code hash>',
+      activated: true,
+      passVer: 1,
+      date: 1725865509592,
+      cookie: '<cookie hash>',
+      ip: '::ffff:127.0.0.1'
+    });
+
+    // We just use express' approach to point `/` to the path `/index.html`.
+    req.url = '/index.html';
+
+    // Or instead add optional config to conditionally point to any
+    //    Cypress-instrumented entry file:
+    // req.url = instrumented
+    //   ? '/instrumented/index.html'
+    //   : '/index.html';
+
+    // Or point the user to the login page if they are not yet logged in
+    // req.url = req.session?.user
+    //   ? '/index.html'
+    //   : '/login';
+    next();
+  });
+}
+```
 
 ##### Used mainly for internal testing of `nogin`
 
@@ -375,6 +461,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
             plugins, wouldn't need access to user database, but can of
             course have potential to reject submission.
 1. **Authentication strategies**
+    1. [Passkeys](https://developers.google.com/identity/passkeys)
     1. See about **`passport-next`** integration
         1. [WebSockets with passport](https://stackoverflow.com/questions/35654099/using-websocket-with-passport/47984698)?
         1. Supporting **user choice** of authentication method

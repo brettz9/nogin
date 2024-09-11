@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 6.0.6
+
+- docs: clarify more on usage
+
 ## 6.0.5
 
 ### User-facing
