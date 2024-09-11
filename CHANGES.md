@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 6.3.0
+
+- feat: log `req.url` for now when page not found
+
 ## 6.2.0
 
 - chore: revert version of `file-fetch` to allow working with jsdom-overwritten

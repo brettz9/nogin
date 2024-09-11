@@ -1042,7 +1042,7 @@ window.Nogin = {
       ](routes, req, res);
       return;
     }
-    console.log('ERRRRROR1', error, route);
+    console.log('ERRRRROR1', error, route, req.url);
     pageNotFound(_, res);
   });
 
@@ -1060,7 +1060,7 @@ window.Nogin = {
     }
 
     const notFoundNext = () => {
-      console.log('ERRRRROR2', error, route);
+      console.log('ERRRRROR2', error, route, req.url);
       pageNotFound(_, res);
     };
 
