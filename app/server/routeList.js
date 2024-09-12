@@ -813,14 +813,23 @@ const routeList = async (app, config) => {
      * @returns {Promise<void>}
      */
     async delete (_routes, req, res) {
+      const {selfdelete} = req.body;
       const sess = req.session;
       const [
         i18nResult, {status}
       ] = await Promise.allSettled([
         setI18n(req, res),
-        sess.user
-          ? am.deleteAccountById(/** @type {string} */ (sess.user._id))
-          : Promise.reject(new Error('Missing session user'))
+        selfdelete
+          ? sess.user
+            ? am.deleteAccountById(/** @type {string} */ (sess.user._id))
+            : Promise.reject(new Error('Missing session user'))
+          : hasRootAccess(req)
+            ? typeof req.body.user === 'string' && req.body.user
+              ? am.deleteAccounts({
+                user: [req.body.user]
+              })
+              : Promise.reject(new Error('Missing user argument'))
+            : Promise.reject(new Error('No privileges to delete user'))
       ]);
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');

@@ -37,7 +37,7 @@ import {
   * @property {Object<"$in",string[]>} [pass]
   * @property {Object<"$in",number[]>} [passVer]
   * @property {Object<"$in",number[]>} [date] Timestamp
-  * @property {Object<"$in",boolean[]>} activated
+  * @property {Object<"$in",boolean[]>} [activated]
   * @property {Object<"$in",string[]>} [activationCode]
   * @property {Object<"$in",string[]>} [unactivatedEmail]
   * @property {Object<"$in",number[]>} [activationRequestDate] Timestamp

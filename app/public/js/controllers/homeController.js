@@ -163,17 +163,24 @@ function onUpdateSuccess () {
 
 /**
  * @param {string} url
+ * @param {object} [data]
  * @returns {Promise<void>}
  */
-function post (url) {
+function post (url, data) {
+  /** @type {JQuery.AjaxSettings} */
+  const args = {
+    type: 'post',
+    headers: {
+      'X-XSRF-Token': xsrfCookie
+    }
+  };
+  if (data) {
+    args.data = data;
+  }
+
   // eslint-disable-next-line promise/avoid-new -- our own API
   return new Promise((resolve, reject) => {
-    $.ajax(url, {
-      type: 'post',
-      headers: {
-        'X-XSRF-Token': xsrfCookie
-      }
-    }).done(resolve).fail(
+    $.ajax(url, args).done(resolve).fail(
       (jqXHR /* , textStatus, errorThrown */) => {
         const err = /** @type {AjaxPostError} */ (
           new Error('Ajax POST error')
@@ -216,7 +223,7 @@ function post (url) {
  */
 async function deleteAccount () {
   deleteAccountConfirmDialog.modal('hide');
-  await post(Nogin.Routes.delete);
+  await post(Nogin.Routes.delete, {selfdelete: true});
   showLockedAlert({type: 'accountDeleted'});
 }
 
