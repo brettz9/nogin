@@ -276,9 +276,9 @@ export default function fallback (req, res, next) {
 ```
 
 - `--router` - This is where your own (Express) app should be. Note: The following
-    paths should not be set as they are reserved by nogin: `/login`, `/logout`,
-    `/home`, `/signup`, `/activation`, `/lost-password`, `/reset-password`,
-    `/users`, `/delete`, `/reset`, `/coverage`
+    paths should not be set as they are reserved by nogin:
+    - POST: `/login`, `/logout`, `/home`, `/signup`, `/lost-password`, `/reset-password`, `/delete`, `/reset`
+    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`
 
 ```js
 /**

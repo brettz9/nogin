@@ -460,8 +460,8 @@ const routeList = async (app, config) => {
         (getAllRecordsResult.value) ?? [];
 
       // Todo[>=7.0.0]: `/users` should always be enabled when there are (read)
-      //   privileges. Should later remove `showUsers` when privileges are
-      //   available
+      //   privileges. Should later remove `showUsers` when wider privileges
+      //   are available
       if (!showUsers && !hasRootAccess(req)) {
         pageNotFound(_, res);
         return;
@@ -813,13 +813,7 @@ const routeList = async (app, config) => {
      * @returns {Promise<void>}
      */
     async delete (_routes, req, res) {
-      const sess =
-        /**
-        * @type {import('express-session').Session & {
-        *   user: Partial<import('./modules/account-manager.js').AccountInfo>
-        * }}
-        */
-        (req.session);
+      const sess = req.session;
       const [
         i18nResult, {status}
       ] = await Promise.allSettled([
