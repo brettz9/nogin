@@ -62,7 +62,8 @@ const pkg = JSON.parse(
  *   sessionCookieOptions: string|{
  *     genid: () => number
  *   },
- *   sessionOptions: string|{name: string, secret: string}
+ *   sessionOptions: string|{name: string, secret: string},
+ *   rootUser: string[]
  * }} MainOptionDefinitions
  */
 
@@ -162,6 +163,14 @@ const optionDefinitions = [
       '`/home` path to `/updateAccount` for the `en-US` locale. If present, ' +
       'this will take precedence over the routes in `localesBasePath`.',
     typeLabel: '{underline locale=route=path}'
+  },
+  {
+    name: 'rootUser', type: String, multiple: true,
+    description: 'Users who are granted all available privileges to view and ' +
+    // Todo: add description as implementing privileges and groups; also
+    //        add to README
+    'edit users.', // , privileges, and groups.',
+    typeLabel: '{underline user}'
   },
   {
     name: 'crossDomainJSRedirects', type: Boolean,

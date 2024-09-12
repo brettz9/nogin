@@ -18,7 +18,7 @@ declare function resetPassword({ _ }: {
     class: string;
 } | ((string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-name': string;
 })[] | (string | {
@@ -26,7 +26,7 @@ declare function resetPassword({ _ }: {
     class: string;
     'data-dismiss': string;
     'aria-label': string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     'aria-hidden': string;
 })[][])[])[])[] | (string | {
     class: string;
@@ -35,7 +35,7 @@ declare function resetPassword({ _ }: {
     method: string;
 } | (string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     for: string;
     'data-name': string;
 })[] | (string | {
@@ -51,7 +51,7 @@ declare function resetPassword({ _ }: {
     class: string;
 })[])[])[][])[][])[] | (string | {
     class: string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     id: string;
     class: string;
     'data-name': string;

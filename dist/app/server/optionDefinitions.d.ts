@@ -26,6 +26,7 @@ export type MainOptionDefinitions = {
     staticDir: string[];
     middleware: string[];
     router: string;
+    fallback: string;
     useESM: boolean;
     noPolyfill: boolean;
     injectHTML: string;
@@ -56,6 +57,7 @@ export type MainOptionDefinitions = {
         name: string;
         secret: string;
     };
+    rootUser: string[];
 };
 /** @type {import('command-line-usage').OptionDefinition[]} */
 declare const optionDefinitions: import("command-line-usage").OptionDefinition[];

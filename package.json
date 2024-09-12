@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -52,7 +52,7 @@
     "tsc": "tsc",
     "tsc-cypress": "tsc -p cypress/tsconfig.json",
     "build": "tsc -p tsconfig-prod.json",
-    "prepublishOnly": "echo 'Skipping eslint-3rd' && echo \"skipping: license-badges (takes long to do frequently) and skipping build-docs until debug\" && run-s build-cli snyk",
+    "prepublishOnly": "echo 'Skipping eslint-3rd' && echo \"skipping: license-badges (takes long to do frequently) and skipping build-docs until debug\" && run-s build-cli snyk build",
     "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",
     "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment doc-includes/licenses-badge-dev.svg",
     "license-badges": "run-s license-badge license-badge-dev",

@@ -27,18 +27,18 @@ declare function confirm({ _, type }: {
     class: string;
     'data-dismiss': string;
     'aria-label': string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     'aria-hidden': string;
 })[][])[])[])[] | (string | string[][] | {
     class: string;
     'data-name': string;
 })[] | (string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-name': string;
     'data-dismiss': string;
-})[] | (string | (string | Text | DocumentFragment)[] | {
+})[] | (string | (string | DocumentFragment | Text)[] | {
     'data-name': string;
     class: string;
 })[])[])[])[])[][])[][])[];

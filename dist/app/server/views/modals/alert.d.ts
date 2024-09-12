@@ -24,7 +24,7 @@ declare function alert({ _ }: {
     'data-name': string;
 })[] | (string | {
     class: string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     id: string;
     'data-name': string;
     class: string;

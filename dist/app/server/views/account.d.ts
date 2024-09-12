@@ -25,7 +25,7 @@ declare function account({ _, user, countries, emailPattern, requireName, title 
     class: string;
 } | ((string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-name': string;
 })[] | (string | {
@@ -33,13 +33,13 @@ declare function account({ _, user, countries, emailPattern, requireName, title 
     class: string;
     'data-dismiss': string;
     'aria-label': string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     'aria-hidden': string;
 })[][])[])[])[] | (string | {
     class: string;
-} | (string | string[] | Text | DocumentFragment)[])[] | (string | {
+} | (string | string[] | DocumentFragment | Text)[])[] | (string | {
     class: string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-dismiss': string;
 })[][])[])[])[][])[][])[] | (string | {

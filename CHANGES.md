@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## 6.4.0
+
+- feat: add `rootUser` CLI option
+- chore: attempts req.session.user type
+
 ## 6.3.0
 
 - feat: log `req.url` for now when page not found

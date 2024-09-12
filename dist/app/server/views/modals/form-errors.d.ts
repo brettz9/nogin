@@ -15,7 +15,7 @@ declare function formErrors({ _ }: {
     class: string;
 } | ((string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-name': string;
 })[] | (string | {
@@ -23,13 +23,13 @@ declare function formErrors({ _ }: {
     class: string;
     'data-dismiss': string;
     'aria-label': string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     'aria-hidden': string;
 })[][])[])[])[] | (string | {
     class: string;
-} | (string | string[] | Text | DocumentFragment)[])[] | (string | {
+} | (string | string[] | DocumentFragment | Text)[])[] | (string | {
     class: string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-dismiss': string;
 })[][])[])[])[][])[][])[];

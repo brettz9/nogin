@@ -19,7 +19,7 @@ declare function lostPassword({ _, emailPattern }: {
     class: string;
 } | ((string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     class: string;
     'data-name': string;
 })[] | (string | {
@@ -27,7 +27,7 @@ declare function lostPassword({ _, emailPattern }: {
     class: string;
     'data-dismiss': string;
     'aria-label': string;
-} | (string | (string | Text | DocumentFragment)[] | {
+} | (string | (string | DocumentFragment | Text)[] | {
     'aria-hidden': string;
 })[][])[])[])[] | (string | {
     class: string;
@@ -36,7 +36,7 @@ declare function lostPassword({ _, emailPattern }: {
     method: string;
 } | (string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     for: string;
 })[] | (string | {
     class: string;
@@ -52,13 +52,13 @@ declare function lostPassword({ _, emailPattern }: {
     'data-name': string;
 })[])[])[][])[][])[] | (string | {
     class: string;
-} | ((string | (string | Text | DocumentFragment)[] | {
+} | ((string | (string | DocumentFragment | Text)[] | {
     id: string;
     'data-name': string;
     class: string;
     'data-dismiss': string;
     form: string;
-})[] | (string | (string | Text | DocumentFragment)[] | {
+})[] | (string | (string | DocumentFragment | Text)[] | {
     type: string;
     id: string;
     'data-name': string;

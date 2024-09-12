@@ -13,11 +13,13 @@ export type RouteConfigFromOptions = {
     localesBasePath: string;
     postLoginRedirectPath: string;
     customRoute: string[];
+    rootUser: string[];
     crossDomainJSRedirects: boolean;
     composeResetPasswordEmailView: string;
     composeActivationEmailView: string;
     requireName: boolean;
     router: string;
+    fallback: string;
     useESM: boolean;
     noPolyfill: boolean;
     injectHTML: string;

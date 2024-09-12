@@ -194,6 +194,7 @@ your own `nogin.js` config file.
 - `--NS_EMAIL_TIMEOUT` (number of milliseconds, defaulting to 5000)
 - `--PORT` (number, defaulting to 3000)
 - `-a`/`--adapter` (Defaults to "mongodb", the only current option.)
+- `--rootUser` - Users who are granted all available privileges to view and edit users
 
 ##### Tweaks for user-facing behavior
 

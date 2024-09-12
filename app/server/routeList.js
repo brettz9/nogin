@@ -69,6 +69,7 @@ const routeList = async (app, config) => {
     localesBasePath,
     postLoginRedirectPath,
     customRoute = [],
+    rootUser = [],
     crossDomainJSRedirects,
     opts,
     cwd,
@@ -102,6 +103,15 @@ const routeList = async (app, config) => {
         name: _(`country${code}`)
       };
     });
+  };
+
+  /**
+   * @param {import('express').Request} req
+   */
+  const hasRootAccess = (req) => {
+    return req.session.user?.user && rootUser.includes(
+      req.session.user.user
+    );
   };
 
   log('AwaitingI18NAndLogging');
@@ -421,6 +431,7 @@ const routeList = async (app, config) => {
      * @returns {Promise<void>}
      */
     async users (routes, req, res) {
+      console.log('USSERS', req.session?.user);
       const [
         i18nResult,
         getAllRecordsResult
@@ -449,8 +460,9 @@ const routeList = async (app, config) => {
         (getAllRecordsResult.value) ?? [];
 
       // Todo[>=7.0.0]: `/users` should always be enabled when there are (read)
-      //   privileges.
-      if (!showUsers) {
+      //   privileges. Should later remove `showUsers` when privileges are
+      //   available
+      if (!showUsers && !hasRootAccess(req)) {
         pageNotFound(_, res);
         return;
       }
@@ -535,11 +547,7 @@ const routeList = async (app, config) => {
         return;
       }
 
-      /**
-       * @type {import('express-session').Session & {
-       *   user: Partial<import('./modules/account-manager.js').AccountInfo>
-       * }}
-       */ (req.session).user = o;
+      req.session.user = o;
 
       if (req.body['remember-me'] === 'false') {
         res.status(200).send(o);
