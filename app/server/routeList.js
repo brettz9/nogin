@@ -835,13 +835,25 @@ const routeList = async (app, config) => {
       req.session.destroy(() => {
         res.status(200).send(_('OK'));
       });
-    }
-    // Todo[>=7.0.0]: Should be available to UI but require privileges.
-    /*
-    async reset (routes, req, res) {
+    },
+
+    /**
+     * Should be safe as express-session stores session object server-side.
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async reset (_routes, req, res) {
+      const _ = await setI18n(req, res);
+
+      if (!hasRootAccess(req)) {
+        pageNotFound(_, res);
+        return;
+      }
       await am.deleteAllAccounts();
+      res.status(200).send(_('OK'));
     }
-    */
   };
 
   [
