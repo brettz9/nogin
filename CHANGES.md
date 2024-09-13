@@ -1,5 +1,12 @@
 # CHANGES for nogin
 
+## 6.5.0
+
+- feat: `/users` page delete ability for root users
+- feat: add back `reset` API but only for root user
+- feat: allow `delete` API to accept specific account
+- fix: display of CLI help chars.
+
 ## 6.4.0
 
 - feat: add `rootUser` CLI option
