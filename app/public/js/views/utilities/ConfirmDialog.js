@@ -44,7 +44,7 @@ const ConfirmDialog = {
    * @param {JQuery} confirmDialog
    * @returns {JQuery}
    */
-  getAccountSubmit (confirmDialog) {
+  getSubmit (confirmDialog) {
     return confirmDialog.find('.submit');
   }
 };

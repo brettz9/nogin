@@ -3,6 +3,7 @@
  *   _: import('intl-dom').I18NCallback,
  *   type: string
  * }} cfg
+ * @returns {import('jamilih').JamilihArray}
  */
 const confirm = ({_, type}) => {
   return ['div', {

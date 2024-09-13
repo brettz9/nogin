@@ -1,3 +1,6 @@
+import alert from './modals/alert.js';
+import confirm from './modals/confirm.js';
+
 /**
  * @param {{
 *   _: import('intl-dom').I18NCallback,
@@ -41,15 +44,29 @@ const users = ({_, layout, accounts, hasDeleteUsersAccess}) => {
                 hasDeleteUsersAccess
                   ? ['td', [
                     ['button', {
-                      class: 'deleteAccount'
+                      class: 'deleteAccount',
+                      'data-user': user
                     }, ['x']]
                   ]]
                   : ''
               ]];
             })
           )]
-        ]]
+        ]],
+        ['br'],
+        ['button', {class: 'deleteAllAccounts btn btn-danger focus'}, [
+          _('deleteAllAccounts')
+        ]],
+        alert({_}),
+        confirm({_, type: 'deleteAccount'}),
+        confirm({_, type: 'deleteAllAccounts'})
       ]]
+    ],
+    scripts: [
+      ['script', {
+        src: '/js/controllers/usersController.iife.min.js',
+        defer: 'defer'
+      }]
     ]
   });
 };

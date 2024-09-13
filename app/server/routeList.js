@@ -829,7 +829,7 @@ const routeList = async (app, config) => {
           : hasRootAccess(req)
             ? typeof req.body?.user === 'string' && req.body?.user
               ? am.deleteAccounts({
-                user: [req.body.user]
+                user: {$in: [req.body.user]}
               })
               : Promise.reject(new Error('Missing user argument'))
             : Promise.reject(new Error('No privileges to delete user'))
@@ -843,10 +843,15 @@ const routeList = async (app, config) => {
         res.status(400).send(_('RecordNotFound'));
         return;
       }
-      res.clearCookie('login');
-      req.session.destroy(() => {
+
+      if (selfdelete) {
+        res.clearCookie('login');
+        req.session.destroy(() => {
+          res.status(200).send(_('OK'));
+        });
+      } else {
         res.status(200).send(_('OK'));
-      });
+      }
     },
 
     /**
@@ -864,7 +869,12 @@ const routeList = async (app, config) => {
         return;
       }
       await am.deleteAllAccounts();
-      res.status(200).send(_('OK'));
+
+      // Since we are deleting the user's own account, we log them out
+      res.clearCookie('login');
+      req.session.destroy(() => {
+        res.status(200).send(_('OK'));
+      });
     }
   };
 

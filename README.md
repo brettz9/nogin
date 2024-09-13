@@ -119,7 +119,7 @@ You will most likely also want to use the `--router` and possibly `--fallback`, 
 well as `--postLoginRedirectPath /` arguments. See these options for more details.
 
 7. Once the script mentions it is listening (on port 3000 by default), open
-    a browser window and navigate to: [http://127.0.0.1:3000](http://127.0.0.1:3000)
+    a browser window and navigate to: [http://127.0.0.1:3000/login](http://127.0.0.1:3000/login)
 
 8. (For your live site, ensure your `nogin.js` `NL_SITE_URL` is pointing to this port.)
 
@@ -278,7 +278,7 @@ export default function fallback (req, res, next) {
 - `--router` - This is where your own (Express) app should be. Note: The following
     paths should not be set as they are reserved by nogin:
     - POST: `/login`, `/logout`, `/home`, `/signup`, `/lost-password`, `/reset-password`, `/delete`, `/reset`
-    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`
+    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`, `/api` (reserved for possible future use)
 
 ```js
 /**

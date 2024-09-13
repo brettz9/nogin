@@ -289,10 +289,23 @@
       "message": "Please check your email for a verification link which will confirm your email address.{lb}Click OK to return to the login page."
     },
 
+    "USERS (CLIENT)": true,
+    "sureWantDeleteUserAccount": {
+      "message": "Are you sure you want to delete the account for user {user}?"
+    },
+    "reallyWantDeleteAllUserAccounts": {
+      "message": "Do you really want to delete all user accounts?"
+    },
+    "allUserAccountsDeleted": {
+      "message": "All user accounts were deleted!"
+    },
 
     "USERS (TEMPLATES)": true,
     "AccountCreated": {
       "message": "Account Created"
+    },
+    "deleteAllAccounts": {
+      "message": "Delete all accounts"
     },
     "NumberAbbreviated": {
       "message": "#"

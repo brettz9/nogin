@@ -30,7 +30,7 @@ user.attr('disabled', 'disabled');
 
 // handle account deletion
 const deleteAccountConfirmDialog = HomeView.setDeleteAccount();
-ConfirmDialog.getAccountSubmit(
+ConfirmDialog.getSubmit(
   deleteAccountConfirmDialog
 ).on('click', async () => {
   try {
@@ -104,7 +104,7 @@ function setupValidationSubmission () {
       type: 'AppearsChangingEmail'
     });
     emailChangeConfirmDialog.modal('show');
-    ConfirmDialog.getAccountSubmit(
+    ConfirmDialog.getSubmit(
       emailChangeConfirmDialog
     ).on('click', () => {
       confirmed = true;

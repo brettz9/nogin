@@ -2,6 +2,7 @@
  * @param {{
  *   _: import('intl-dom').I18NCallback
  * }} cfg
+ * @returns {import('jamilih').JamilihArray}
  */
 const alert = ({_}) => {
   return ['div', {

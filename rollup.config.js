@@ -47,6 +47,7 @@ export default [
     'activatedController.js',
     'activationFailedController.js',
     'homeController.js',
+    'usersController.js',
     'loginController.js',
     'resetPasswordController.js',
     'signupController.js'
