@@ -73,7 +73,7 @@ const pkg = JSON.parse(
  */
 const getChalkTemplateEscape = (s) => {
   return s.replaceAll(/[{}\\]/gu, (ch) => {
-    return `\\\\u${
+    return `\\u${
       /** @type {number} */ (ch.codePointAt(0)).toString(16).padStart(4, '0')
     }`;
   });
