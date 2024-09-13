@@ -109,9 +109,9 @@ const routeList = async (app, config) => {
    * @param {import('express').Request} req
    */
   const hasRootAccess = (req) => {
-    return req.session.user?.user && rootUser.includes(
+    return Boolean(req.session.user?.user && rootUser.includes(
       req.session.user.user
-    );
+    ));
   };
 
   log('AwaitingI18NAndLogging');
@@ -431,7 +431,6 @@ const routeList = async (app, config) => {
      * @returns {Promise<void>}
      */
     async users (routes, req, res) {
-      console.log('USSERS', req.session?.user);
       const [
         i18nResult,
         getAllRecordsResult
@@ -462,7 +461,11 @@ const routeList = async (app, config) => {
       // Todo[>=7.0.0]: `/users` should always be enabled when there are (read)
       //   privileges. Should later remove `showUsers` when wider privileges
       //   are available
-      if (!showUsers && !hasRootAccess(req)) {
+      // If adding adding/edit features, ensure have privileges of
+      //   `nogin.editUsers` and `nogin.addUsers`
+      const hasReadusersAccess = showUsers || hasRootAccess(req);
+      const hasDeleteUsersAccess = hasRootAccess(req);
+      if (!hasReadusersAccess) {
         pageNotFound(_, res);
         return;
       }
@@ -470,10 +473,10 @@ const routeList = async (app, config) => {
       const title = _('AccountList');
       res.render('users', {
         ...getLayoutAndTitle({
-          _, title, template: 'users'
-          // Enable if allowing any modification behaviors
-          // csrfToken: req.csrfToken()
+          _, title, template: 'users',
+          csrfToken: req.csrfToken()
         }),
+        hasDeleteUsersAccess,
         accounts: accounts.map(
           /**
            * @param {{
@@ -824,7 +827,7 @@ const routeList = async (app, config) => {
             ? am.deleteAccountById(/** @type {string} */ (sess.user._id))
             : Promise.reject(new Error('Missing session user'))
           : hasRootAccess(req)
-            ? typeof req.body.user === 'string' && req.body.user
+            ? typeof req.body?.user === 'string' && req.body?.user
               ? am.deleteAccounts({
                 user: [req.body.user]
               })

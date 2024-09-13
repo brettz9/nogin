@@ -3,9 +3,10 @@
 *   _: import('intl-dom').I18NCallback,
 *   layout: import('../routeUtils.js').LayoutCallback
 *   accounts: import('../routeList.js').UserAccount[]
+*   hasDeleteUsersAccess: boolean
 * }} cfg
 */
-const users = ({_, layout, accounts}) => {
+const users = ({_, layout, accounts, hasDeleteUsersAccess}) => {
   return layout({
     content: [
       ['div', {
@@ -23,7 +24,8 @@ const users = ({_, layout, accounts}) => {
               ['th', {class: 'users name'}, [_('Name')]],
               ['th', {class: 'users username'}, [_('Username')]],
               ['th', {class: 'users location'}, [_('Location')]],
-              ['th', [_('AccountCreated')]]
+              ['th', [_('AccountCreated')]],
+              hasDeleteUsersAccess ? ['th', [_('delete')]] : ''
             ]]
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
@@ -35,7 +37,14 @@ const users = ({_, layout, accounts}) => {
                 ['td', [name]],
                 ['td', [user]],
                 ['td', [country]],
-                ['td', [date]]
+                ['td', [date]],
+                hasDeleteUsersAccess
+                  ? ['td', [
+                    ['button', {
+                      class: 'deleteAccount'
+                    }, ['x']]
+                  ]]
+                  : ''
               ]];
             })
           )]
