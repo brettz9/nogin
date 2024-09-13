@@ -194,7 +194,8 @@ your own `nogin.js` config file.
 - `--NS_EMAIL_TIMEOUT` (number of milliseconds, defaulting to 5000)
 - `--PORT` (number, defaulting to 3000)
 - `-a`/`--adapter` (Defaults to "mongodb", the only current option.)
-- `--rootUser` - Users who are granted all available privileges to view and edit users
+- `--rootUser` - Users who are granted all available privileges to view and
+    edit groups, privileges, and users
 
 ##### Tweaks for user-facing behavior
 
@@ -277,8 +278,8 @@ export default function fallback (req, res, next) {
 
 - `--router` - This is where your own (Express) app should be. Note: The following
     paths should not be set as they are reserved by nogin:
-    - POST: `/login`, `/logout`, `/home`, `/signup`, `/lost-password`, `/reset-password`, `/delete`, `/reset`
-    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`, `/api` (reserved for possible future use)
+    - POST: `/login`, `/logout`, `/home`, `/signup`, `/lost-password`, `/reset-password`, `/delete`, `/reset`, `/accessAPI`
+    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`, `/accessAPI`, `/groups`, `/privileges` (reserved)
 
 ```js
 /**
@@ -532,7 +533,10 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 ## Lower priority to-dos
 
 1. Add `/user/<username>` (GET) script for admins and others
-1. Add `/api` (GET) to explain API and also possibly consolidate to one page?
+1. Add `/group/<groupname>` (GET) script for admins and others
+1. Add to `/accessAPI` (GET) to explain API and also possibly consolidate
+    to one page?
+1. Could make groups hierarchical (multiple? inheritance privileges)
 1. Allow variant of `localScripts` which uses CDN but generates fallback
 1. Option to **email forgotten username** (as a workaround, the reset
     password email will send this currently, but not if adding an option to

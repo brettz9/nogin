@@ -8,7 +8,7 @@ import {i18n, getLangDir} from './modules/i18n.js';
  * @typedef {string} Path
  */
 /**
- * @typedef {Object<Route, Path>} Routes
+ * @typedef {Record<Route, Path>} Routes
  */
 /**
  * @callback RouteGetter
@@ -299,8 +299,9 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
 };
 
 /**
- * @typedef {"root"|"logout"|"home"|"signup"|"activation"|"lostPassword"|
- * "resetPassword"|"users"|"delete"|"reset"|"coverage"} Route
+ * @typedef {"activation"|"lostPassword"|
+ *   "resetPassword"|"users"|"delete"|"reset"|"coverage"|"accessAPI"|
+ *   "groups"|"privileges"|"signup"|"root"|"home"} Route
  */
 
 const routeMap = new Map();
@@ -312,7 +313,7 @@ const routeMap = new Map();
 function routeGetter (customRoute) {
   /**
    * Keyed by locale, then by route, and set to a path.
-   * @typedef {Object<string, Object<string, string>>} CustomRouteObject
+   * @typedef {{[key: string]: {[key: string]: string}}} CustomRouteObject
    */
   /**
    * @type {CustomRouteObject}
@@ -333,23 +334,25 @@ function routeGetter (customRoute) {
     if (routeMap.has(_.resolvedLocale)) {
       return routeMap.get(_.resolvedLocale);
     }
-    const routeObj = [
+    const routeObj = /** @type {Route[]} */ ([
       'root', 'logout', 'home', 'signup', 'activation',
       'lostPassword', 'resetPassword', 'users', 'delete',
-      'reset', 'coverage'
-    ].reduce((o, route) => {
+      'reset', 'coverage', 'accessAPI', `groups`
+    ]).reduce((o, route) => {
       const i18nRoute = _(`route_${route}`);
       o[route] = (
         customRoutesObj[_.resolvedLocale] &&
         customRoutesObj[_.resolvedLocale][route]
       ) || i18nRoute;
 
+      /* eslint-disable jsdoc/valid-types -- Bug */
       // Add a safe route (since only `customRoutes` should allow URLs)
       //  so if Firefox 2 is detected, client can redirect to that with
       //  location.assign() (since `location.href` not supported).
-      o['safe_' + route] = i18nRoute;
+      o[/** @type {`safe_${Route}`} */ ('safe_' + route)] = i18nRoute;
       return o;
-    }, /** @type {{[key: string]: string}} */ ({}));
+    }, /** @type {Record<Route|`safe_${Route}`, string>} */ ({}));
+    /* eslint-enable jsdoc/valid-types -- Bug */
     routeMap.set(_.resolvedLocale, routeObj);
     return routeObj;
   };

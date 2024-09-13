@@ -46,6 +46,7 @@ export default [
   ...[
     'activatedController.js',
     'activationFailedController.js',
+    'groupsController.js',
     'homeController.js',
     'usersController.js',
     'loginController.js',

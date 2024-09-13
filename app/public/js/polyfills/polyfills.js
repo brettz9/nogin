@@ -4,6 +4,7 @@
 
 // app/public/js/controllers/homeController.js
 // app/public/js/controllers/usersController.js
+// app/public/js/controllers/groupsController.js
 import 'core-js/stable/promise/index.js';
 
 // app/public/js/form-validators/AccountValidator.js

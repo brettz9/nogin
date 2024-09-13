@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- feat: `/groups` page
+
 ## 6.5.0
 
 - feat: `/users` page delete ability for root users

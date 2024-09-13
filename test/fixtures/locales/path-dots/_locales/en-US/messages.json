@@ -358,6 +358,84 @@
       "message": "The activation code provided was invalid.{lb}Click OK to return to the login page."
     },
 
+    "ACCESSAPI (BUSINESS LOGIC)": true,
+    "accessAPI": {
+      "message": "Access API"
+    },
+    "user-missing": {
+      "message": "User missing"
+    },
+    "bad-groupname": {
+      "message": "Bad group name"
+    },
+    "bad-old-groupname": {
+      "message": "Bad old group name"
+    },
+    "groupname-taken": {
+      "message": "Group name already in use"
+    },
+
+    "GROUPS (BUSINESS LOGIC)": true,
+    "groups": {
+      "message": "Groups"
+    },
+    "Group": {
+      "message": "Group"
+    },
+    "Privileges": {
+      "message": "Privileges"
+    },
+    "createGroup": {
+      "message": "Add group"
+    },
+    "renameGroup": {
+      "message": "Rename group"
+    },
+    "addUserToGroup": {
+      "message": "Add user to group"
+    },
+    "PleaseInputGroupToCreate": {
+      "message": "Please input group to create"
+    },
+    "PleaseInputGroupToRename": {
+      "message": "Please input group to rename"
+    },
+    "PleaseInputUserToAddToGroup": {
+      "message": "Please input user to add to group"
+    },
+    "EditGroupName": {
+      "message": "Edit group name"
+    },
+
+    "GROUPS (CLIENT)": true,
+    "removeUserFromGroup": {
+      "message": "Remove user from group"
+    },
+    "reallyWantRemoveUserFromGroup": {
+      "message": "Do you really want to remove this user from the group"
+    },
+    "groupCreated": {
+      "message": "Group created"
+    },
+    "groupDeleted": {
+      "message": "Group deleted"
+    },
+    "groupRenamed": {
+      "message": "Group renamed"
+    },
+    "userAddedToGroup": {
+      "message": "User added to group"
+    },
+    "userRemovedFromGroup": {
+      "message": "User removed from group"
+    },
+    "deleteGroup": {
+      "message": "Delete group"
+    },
+    "sureWantDeleteGroup": {
+      "message": "Are you sure you want to delete group {group}?"
+    },
+
     "EMAIL DISPATCHER (BUSINESS LOGIC)": true,
     "PasswordReset": {
       "message": "Password Reset"
@@ -464,6 +542,12 @@
     },
     "route_coverage": {
       "message": "/coverage"
+    },
+    "route_accessAPI": {
+      "message": "/accessAPI"
+    },
+    "route_groups": {
+      "message": "/groups"
     },
 
     "COUNTRIES (BUSINESS LOGIC)": true,

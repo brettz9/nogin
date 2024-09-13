@@ -1,3 +1,7 @@
+/**
+ * @file Low-level operations on user accounts and groups.
+ */
+
 import safeCompare from 'safe-compare';
 
 import {isNullish, uuid} from './common.js';
@@ -30,7 +34,8 @@ import {
 
 /**
   * @typedef {object} AccountInfoFilter
-  * @property {Object<"$in",string[]>} user
+  * @property {Object<"$in",string[]>} [user]
+  * @property {Object<"$in",string[]>} [_id]
   * @property {Object<"$in",string[]>} [name]
   * @property {Object<"$in",string[]>} [email]
   * @property {Object<"$in",string[]>} [country]
@@ -42,6 +47,20 @@ import {
   * @property {Object<"$in",string[]>} [unactivatedEmail]
   * @property {Object<"$in",number[]>} [activationRequestDate] Timestamp
   */
+
+/**
+ * @typedef {object} GroupInfo
+ * @property {string} [_id] Auto-set
+ * @property {string} groupName
+ * @property {number[]} privilegeIDs
+ * @property {number[]} userIDs
+ * @property {number} date
+ */
+
+/**
+ * @typedef {object} GroupInfoFilter
+ * @property {{$in: string[]}} group
+ */
 
 const passVer = 1;
 
@@ -90,6 +109,10 @@ class AccountManager {
         activationRequestDate: 1,
         _id: 1
         */
+      });
+      this.groups = await this.adapter.getGroups();
+      await this.accounts.createIndex({
+        groupName: 1
       });
     } catch (err) {
       // Not clear on how to check; we're just rethrowing here for
@@ -164,6 +187,28 @@ class AccountManager {
       this.accounts
     // eslint-disable-next-line unicorn/no-array-callback-reference -- Mongo API
     ).find(acctInfo).toArray();
+  }
+
+  // /**
+  //  * @param {GroupInfoFilter} groupInfo
+  //  * @returns {Promise<Partial<GroupInfo>[]>}
+  //  */
+  // getGroups (groupInfo) {
+  //   return /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
+  //     this.groups
+  // eslint-disable-next-line @stylistic/max-len -- Long
+  //   // eslint-disable-next-line unicorn/no-array-callback-reference -- Mongo API
+  //   ).find(groupInfo).toArray();
+  // }
+
+  /**
+   * @returns {Promise<GroupInfo[]>}
+   */
+  async getAllGroups () {
+    return await
+    /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).find().toArray();
   }
 
   /**
@@ -283,7 +328,7 @@ class AccountManager {
    * @returns {Promise<AccountInfo & {
    *   activationCode: string
    * }>}
-   * @todo Would ideally check for multiple erros to report back all issues
+   * @todo Would ideally check for multiple errors to report back all issues
    *   at once.
    */
   async addNewAccount (newData, {allowCustomPassVer = false} = {}) {
@@ -346,6 +391,190 @@ class AccountManager {
        *   activationCode: string
        * }}
        */ (newData)
+    );
+  }
+
+  /**
+   * @param {Partial<GroupInfo>} data
+   * @returns {Promise<GroupInfo>}
+   */
+  async addNewGroup (data) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+
+    let o;
+    try {
+      // eslint-disable-next-line @stylistic/max-len -- Long
+      o = await /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
+        this.groups
+      ).findOne({
+        groupName: data.groupName
+      });
+    } catch {}
+    if (o) {
+      throw new Error('groupname-taken');
+    }
+
+    const newData = {
+      groupName: data.groupName,
+      userIDs: [],
+      privilegeIDs: [],
+      // Append date stamp when record was created
+      date: Date.now()
+    };
+
+    await /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
+      this.groups
+    ).insertOne(newData);
+
+    return newData;
+  }
+
+  /**
+   * @param {string} userID
+   * @returns {Promise<string>}
+   */
+  async getGroupForUser (userID) {
+    let o;
+    try {
+      // eslint-disable-next-line @stylistic/max-len -- Long
+      o = await /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
+        this.groups
+      ).findOne({
+        // @ts-expect-error Why is this a problem?
+        userIDs: {$in: [userID]}
+      });
+    } catch {}
+    if (!o) {
+      throw new Error('group-not-found');
+    }
+    return /** @type {string} */ (o.groupName);
+  }
+
+  /**
+   * @param {Partial<GroupInfo> & {newGroupName: string}} data
+   * @returns {Promise<void>}
+   */
+  async renameGroup (data) {
+    if (typeof data.newGroupName !== 'string' || !data.newGroupName) {
+      throw new Error('bad-old-groupname');
+    }
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+
+    let o;
+    try {
+      o = await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+        this.groups
+      ).findOne({
+        groupName: data.newGroupName
+      });
+    } catch {}
+    if (o) {
+      throw new Error('groupname-taken');
+    }
+
+    const filter = {
+      groupName: data.groupName
+    };
+
+    const newData = {
+      groupName: data.newGroupName,
+      // Append date stamp when record was modified
+      date: Date.now()
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filter,
+      {
+        // Strip out `undefined` which now are treated by Mongodb as null
+        // eslint-disable-next-line unicorn/prefer-structured-clone -- Different
+        $set: JSON.parse(JSON.stringify(newData))
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
+   * @param {Partial<GroupInfo> & {userID: number}} data
+   * @returns {Promise<void>}
+   */
+  async addUserToGroup (data) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+
+    let _o;
+    const userFilter = {
+      user: {$eq: data.userID}
+    };
+    try {
+      _o = await /** @type {import('mongodb').Collection} */ (
+        this.accounts
+      ).findOne(userFilter);
+    } catch {}
+    if (!_o) {
+      throw new Error('user-missing');
+    }
+
+    // First remove user from any other groups
+    await this.removeUserIDFromGroup(data.userID);
+
+    const filterAdd = {
+      groupName: data.groupName
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filterAdd,
+      {
+        $addToSet: {userIDs: data.userID},
+        $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
+   * @param {Partial<GroupInfo> & {userID: number}} data
+   * @returns {Promise<void>}
+   */
+  async removeUserFromGroup (data) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+
+    let _o;
+    const userFilter = {
+      user: {$eq: data.userID}
+    };
+    try {
+      _o = await /** @type {import('mongodb').Collection} */ (
+        this.accounts
+      ).findOne(userFilter);
+    } catch {}
+    if (!_o) {
+      throw new Error('user-missing');
+    }
+
+    const filter = {
+      groupName: data.groupName
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filter,
+      {
+        $pull: {userIDs: data.userID},
+        $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
     );
   }
 
@@ -573,6 +802,8 @@ class AccountManager {
    * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
    */
   async deleteAccountById (id) {
+    // Todo: Should really run `await this.removeUserIDFromGroup(userID);`,
+    //        but requires knowing the user ID
     return await
     /** @type {import('mongodb').Collection} */ (
       this.accounts
@@ -584,10 +815,51 @@ class AccountManager {
   }
 
   /**
+   * @param {string} groupName
+   * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
+   */
+  async deleteGroupByGroupName (groupName) {
+    return await
+    /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).deleteOne({
+      groupName
+    });
+  }
+
+  /**
+   * @param {number} userID
+   * @returns {Promise<void>}
+   */
+  async removeUserIDFromGroup (userID) {
+    const filter = {
+      userIDs: {$in: [userID]}
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filter,
+      {
+        $pull: {userIDs: userID},
+        $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
    * @param {AccountInfoFilter} acctInfo
    * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
    */
   async deleteAccounts (acctInfo) {
+    const userID = acctInfo.user?.$in?.[0];
+    // Todo: Should really try even if userID is missing, but filter won't work
+    if (userID) {
+      // Remove any references to the user ID within groups
+      await this.removeUserIDFromGroup(userID);
+    }
+
     return await
     /** @type {import('mongodb').Collection} */ (
       this.accounts

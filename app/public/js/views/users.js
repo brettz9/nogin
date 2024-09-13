@@ -57,8 +57,6 @@ const UsersView = {
    *   JQueryWithModal} `HTMLDivElement`
    */
   setDeleteAccount (info) {
-    // setup the confirm window that displays when the user chooses to
-    //  delete their account
     const deleteAccountConfirmDialog = ConfirmDialog.populate({
       type: 'deleteAccount',
       header: /** @type {string} */ (_('deleteAccount')),
@@ -79,8 +77,6 @@ const UsersView = {
   *   JQueryWithModal} `HTMLDivElement`
   */
   setDeleteAllAccounts () {
-    // setup the confirm window that displays when the user chooses to
-    //  delete their account
     const deleteAllAccountsConfirmDialog = ConfirmDialog.populate({
       type: 'deleteAllAccounts',
       header: /** @type {string} */ (_('deleteAllAccounts')),

@@ -48,7 +48,7 @@ const ajaxFormClientSideValidate = (form, cfg) => {
     error,
     checkXSRF = true
   } = cfg;
-  // As per problem #3 at https://www.html5rocks.com/en/tutorials/forms/constraintvalidation/#toc-current-implementation-issues ,
+  // As per problem #3 at https://web.archive.org/web/20160930102348/http://www.html5rocks.com/en/tutorials/forms/constraintvalidation/#toc-current-implementation-issues ,
   //  we can't do the validation at submit, so we instead add a capturing
   //  change listener as well as input listeners to reset the messages;
   //  note that we can't use the `invalid` event to call `reportValidity`

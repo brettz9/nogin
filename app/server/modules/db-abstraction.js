@@ -82,6 +82,16 @@ class DBAbstraction {
   getAccounts () {
     throw new Error('Abstract method');
   }
+
+  /**
+   * @abstract
+   * @returns {Promise<
+   *   import('mongodb').Collection<import('./account-manager.js').GroupInfo>
+   * >}
+   */
+  getGroups () {
+    throw new Error('Abstract method');
+  }
 }
 
 export default DBAbstraction;

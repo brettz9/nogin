@@ -41,7 +41,7 @@ const AccountValidatorView = {
   },
 
   /**
-   * @type {Object<string, Object<string,string>>}
+   * @type {{[key: string]: {[key: string]: string}}}
    */
   errorMessages: {
     name: {

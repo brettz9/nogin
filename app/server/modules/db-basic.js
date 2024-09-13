@@ -1,7 +1,8 @@
 /**
  * @file Utility for running basic database CRUD commands for accounts
  * and setting specific kinds of account data. Wraps credentials/set-up
- * with `AccountManager` commands.
+ * with `AccountManager` commands. Used by CLI and tests.
+ * @todo Add methods for group creation/editing
  */
 
 import {readFile as readFileOrig} from 'fs';

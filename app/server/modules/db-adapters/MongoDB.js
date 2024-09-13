@@ -68,6 +68,25 @@ class MongoDB extends DBAbstraction {
     }
     return accounts;
   }
+
+  /**
+   * @returns {Promise<
+   *   import('mongodb').Collection<import('../account-manager.js').GroupInfo>
+   * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+   */
+  async getGroups () {
+    // For collection method: See https://mongodb.github.io/node-mongodb-native/3.4/api/Db.html#collection
+    // For collection object: https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    const groups = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (
+      this.db
+    ).collection('groups'));
+
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    return /** @type {import('mongodb').Collection<import('../account-manager.js').GroupInfo>} */ (
+      groups
+    );
+  }
 }
 
 export default MongoDB;

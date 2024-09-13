@@ -425,12 +425,12 @@ const routeList = async (app, config) => {
 
     /**
      * View, delete & reset accounts (currently view only).
-     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('./routeUtils.js').Routes} _routes
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      * @returns {Promise<void>}
      */
-    async users (routes, req, res) {
+    async users (_routes, req, res) {
       const [
         i18nResult,
         getAllRecordsResult
@@ -458,17 +458,24 @@ const routeList = async (app, config) => {
         */
         (getAllRecordsResult.value) ?? [];
 
-      // Todo[>=7.0.0]: `/users` should always be enabled when there are (read)
+      // Todo[>=8.0.0]: `/users` should always be enabled when there are (read)
       //   privileges. Should later remove `showUsers` when wider privileges
       //   are available
       // If adding adding/edit features, ensure have privileges of
-      //   `nogin.editUsers` and `nogin.addUsers`
+      //   `nogin.editUser` and `nogin.createUser`
       const hasReadusersAccess = showUsers || hasRootAccess(req);
       const hasDeleteUsersAccess = hasRootAccess(req);
+      const hasReadGroupsAccess = hasRootAccess(req);
       if (!hasReadusersAccess) {
         pageNotFound(_, res);
         return;
       }
+
+      const groups = hasReadGroupsAccess
+        ? await Promise.all(accounts.map(async ({user}) => {
+          return await am.getGroupForUser(user);
+        }))
+        : [];
 
       const title = _('AccountList');
       res.render('users', {
@@ -477,6 +484,7 @@ const routeList = async (app, config) => {
           csrfToken: req.csrfToken()
         }),
         hasDeleteUsersAccess,
+        hasReadGroupsAccess,
         accounts: accounts.map(
           /**
            * @param {{
@@ -485,12 +493,14 @@ const routeList = async (app, config) => {
            *   country: string,
            *   date: Date
            * }} cfg
-           * @returns {UserAccount}
+           * @param {number} idx
+           * @returns {UserAccount & {group: string}}
            */
-          ({name, user, country, date}) => {
+          ({name, user, country, date}, idx) => {
             return {
               user,
               name: name || '',
+              group: groups[idx] ?? '',
               country: country ? _('country' + country) : '',
               date: new Intl.DateTimeFormat(
                 _.resolvedLocale, {dateStyle: 'full'}
@@ -502,13 +512,13 @@ const routeList = async (app, config) => {
     },
 
     /**
-     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('./routeUtils.js').Routes} _routes
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      * @param {import('express').NextFunction} next
      * @returns {Promise<void>}
      */
-    async coverage (routes, req, res, next) {
+    async coverage (_routes, req, res, next) {
       if (SERVE_COVERAGE) {
         // Tried just this, but apparently must be used with `app.use`
         // express.static(join(__dirname, '../../coverage'))(req, res, next);
@@ -522,7 +532,119 @@ const routeList = async (app, config) => {
 
       const _ = await setI18n(req, res);
       pageNotFound(_, res);
+    },
+
+    /**
+     * View, delete & reset accounts (currently view only).
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async accessAPI (_routes, req, res) {
+      const _ = await setI18n(req, res);
+      const title = _('accessAPI');
+      res.render('accessAPI', {
+        ...getLayoutAndTitle({
+          _, title, template: 'accessAPI'
+          // Add if making POST requests from this page
+          // csrfToken: req.csrfToken()
+        })
+      });
+    },
+
+    /**
+     * View, delete & reset accounts (currently view only).
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async groups (_routes, req, res) {
+      const [
+        i18nResult,
+        readGroupsResult,
+        getAllRecords
+      ] = await Promise.allSettled([
+        setI18n(req, res),
+        readGroups(),
+        am.getAllRecords()
+      ]);
+
+      if (getAllRecords.status === 'rejected') {
+        res.status(400).send('bad-records');
+        return;
+      }
+
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
+        return;
+      }
+      if (readGroupsResult.status === 'rejected') {
+        res.status(400).send('bad-group-read');
+        return;
+      }
+      const {value: _} = i18nResult;
+
+      const hasReadusersAccess = hasRootAccess(req);
+      const hasDeleteGroupsAccess = hasRootAccess(req);
+      if (!hasReadusersAccess) {
+        pageNotFound(_, res);
+        return;
+      }
+
+      const title = _('groups');
+      res.render('groups', {
+        ...getLayoutAndTitle({
+          _, title, template: 'groups',
+          csrfToken: req.csrfToken()
+        }),
+        groupsInfo: readGroupsResult.value.sort(
+          ({groupName: gn1}, {groupName: gn2}) => {
+            return gn1 < gn2 ? -1 : gn1 > gn2 ? 1 : 0;
+          }
+        ),
+        hasDeleteGroupsAccess,
+        users: (getAllRecords.value).map(
+          ({user}) => /** @type {string} */ (user)
+        )
+      });
     }
+  };
+
+  /**
+   * @returns {Promise<{
+   *   groupName: string,
+   *   usersInfo: {user: string, _id: string}[]
+   * }[]>}
+   */
+  const readGroups = async () => {
+    const groups = await am.getAllGroups();
+
+    // const records = await am.getAllRecords();
+    // console.log('records', records);
+
+    return await Promise.all(groups.map(async (group) => {
+      console.log('group', group);
+      return {
+        success: true,
+        groupName: group.groupName,
+        usersInfo: await Promise.all(group.userIDs.map(async (usrID) => {
+          // eslint-disable-next-line @stylistic/max-len -- Long
+          return /** @type {(Partial<import('./modules/account-manager.js').AccountInfo> & {user: string, _id: string})[]} */ (await am.getRecords({
+            user: {$eq: usrID}
+          })).map(({user: usr, _id}) => ({user: usr, _id}))[0];
+        }))
+        // Todo: get privileges later too
+        // privileges: await Promise.all(group.privilegeIDs.map(
+        //   async (privilegeID) => {
+        //     return (await am.getPrivilege({
+        //       _id: privilegeID
+        //     })).map(({privilege}) => privilege);
+        //   })
+        // )
+      };
+    }));
   };
 
   const PostRoutes = {
@@ -875,6 +997,138 @@ const routeList = async (app, config) => {
       req.session.destroy(() => {
         res.status(200).send(_('OK'));
       });
+    },
+
+    /**
+     *
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async accessAPI (_routes, req, res) {
+      const _ = await setI18n(req, res);
+
+      if (!hasRootAccess(req)) {
+        pageNotFound(_, res);
+        return;
+      }
+
+      const {
+        verb,
+        groupName,
+        newGroupName,
+        userID
+      } = req.body;
+
+      /**
+       * @todo This verb should really be a GET request.
+       * @type {{
+       *   success: true,
+       *   value?: ({
+       *     groupName: string,
+       *     usersInfo: {user: string, _id: string}[]
+       *   }|string)[]
+       * }}
+       */
+      let resp = {success: true};
+      switch (verb) {
+      case 'readUsers':
+        resp = {
+          success: true,
+          value: (await am.getAllRecords()).map(
+            ({user}) => /** @type {string} */ (user)
+          )
+        };
+        break;
+      case 'readGroups':
+        resp = {
+          success: true,
+          value: await readGroups()
+        };
+        break;
+      case 'createGroup':
+        try {
+          await am.addNewGroup({
+            groupName
+          });
+        } catch (err) {
+          if ([
+            'bad-groupname', 'groupname-taken'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'deleteGroup':
+        try {
+          await am.deleteGroupByGroupName(groupName);
+        } catch (err) {
+          res.status(400).send(/** @type {Error} */ (err).message);
+          return;
+        }
+        break;
+      case 'renameGroup':
+        try {
+          await am.renameGroup({
+            groupName,
+            newGroupName
+          });
+        } catch (err) {
+          if ([
+            'bad-groupname', 'groupname-taken',
+            'bad-old-groupname'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'addUserToGroup':
+        try {
+          await am.addUserToGroup({
+            groupName,
+            userID
+          });
+        } catch (err) {
+          if ([
+            'bad-groupname', 'user-missing'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'removeUserFromGroup':
+        try {
+          await am.removeUserFromGroup({
+            groupName,
+            userID
+          });
+        } catch (err) {
+          if ([
+            'bad-groupname', 'user-missing'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      default:
+        console.log('Unrecognized verb', verb);
+        pageNotFound(_, res);
+        break;
+      }
+      res.status(200).json(resp);
     }
   };
 
