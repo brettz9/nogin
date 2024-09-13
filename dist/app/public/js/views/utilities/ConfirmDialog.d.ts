@@ -21,6 +21,6 @@ declare namespace ConfirmDialog {
      * @param {JQuery} confirmDialog
      * @returns {JQuery}
      */
-    function getAccountSubmit(confirmDialog: JQuery): JQuery;
+    function getSubmit(confirmDialog: JQuery): JQuery;
 }
 //# sourceMappingURL=ConfirmDialog.d.ts.map

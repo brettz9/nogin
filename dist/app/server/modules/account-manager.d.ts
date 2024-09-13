@@ -58,7 +58,7 @@ export type AccountInfoFilter = {
      * Timestamp
      */
     date?: any;
-    activated: any;
+    activated?: any;
     activationCode?: any;
     unactivatedEmail?: any;
     /**

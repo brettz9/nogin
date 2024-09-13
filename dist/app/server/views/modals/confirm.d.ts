@@ -4,42 +4,10 @@ export default confirm;
  *   _: import('intl-dom').I18NCallback,
  *   type: string
  * }} cfg
+ * @returns {import('jamilih').JamilihArray}
  */
 declare function confirm({ _, type }: {
     _: import("intl-dom").I18NCallback;
     type: string;
-}): (string | {
-    class: string;
-    'data-name': string;
-    'data-confirm-type': string;
-} | (string | {
-    class: string;
-    role: string;
-} | (string | {
-    class: string;
-} | ((string | {
-    class: string;
-} | ((string | {
-    class: string;
-    'data-name': string;
-})[] | (string | {
-    type: string;
-    class: string;
-    'data-dismiss': string;
-    'aria-label': string;
-} | (string | (string | DocumentFragment | Text)[] | {
-    'aria-hidden': string;
-})[][])[])[])[] | (string | string[][] | {
-    class: string;
-    'data-name': string;
-})[] | (string | {
-    class: string;
-} | ((string | (string | DocumentFragment | Text)[] | {
-    class: string;
-    'data-name': string;
-    'data-dismiss': string;
-})[] | (string | (string | DocumentFragment | Text)[] | {
-    'data-name': string;
-    class: string;
-})[])[])[])[])[][])[][])[];
+}): import("jamilih").JamilihArray;
 //# sourceMappingURL=confirm.d.ts.map
