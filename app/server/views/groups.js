@@ -9,7 +9,9 @@ import singleInputForm from './modals/single-input-form.js';
 *   hasDeleteGroupsAccess: boolean,
 *   groupsInfo: {
 *     groupName: string,
-*     usersInfo: {user: string, _id: string}[]
+*     usersInfo: {user: string, _id: string}[],
+*     privileges: import('../modules/account-manager.js').PrivilegeInfo[]
+*     builtin: boolean
 *   }[],
 *   users: string[]
 * }} cfg
@@ -28,6 +30,10 @@ const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
             ['tr', [
               ['th', {class: 'groups number'}, [_('NumberAbbreviated')]],
               ['th', {class: 'groups group'}, [_('Group')]],
+              ['th', {class: 'groups privileges'}, [_('Privileges')]],
+              ['th', {class: 'groups addPrivilegeToGroup'}, [
+                _('addPrivilegeToGroup')
+              ]],
               ['th', {class: 'groups users'}, [_('Users')]],
               ['th', {class: 'groups addUserToGroup'}, [_('addUserToGroup')]],
               ['th', {class: 'groups rename'}, [_('EditGroupName')]],
@@ -37,39 +43,71 @@ const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
             groupsInfo.map((
-              {groupName, usersInfo}, i
+              {groupName, usersInfo, privileges, builtin}, i
             ) => {
               return ['tr', [
                 ['td', {class: 'groups group'}, [i + 1]],
-                ['td', [groupName]],
-                ['td', usersInfo.filter(Boolean).map(({user}) => {
+                ['td', [
+                  builtin
+                    ? ['span', [
+                      ['b', [groupName]],
+                      ' ',
+                      ['i', [_('builtin')]]
+                    ]]
+                    : groupName
+                ]],
+                ['td', privileges.map(({privilegeName}) => {
                   return ['button', {
-                    class: 'removeUserFromGroup',
-                    'data-user': user,
+                    class: 'removePrivilegeFromGroup',
+                    'data-privilege': privilegeName,
                     'data-group': groupName
                   }, [
-                    `${user} ☒`
+                    `${privilegeName} ☒`
                   ]];
                 })],
                 ['td', [
                   ['button', {
-                    class: 'addUserToGroup btn btn-primary',
+                    class: 'addPrivilegeToGroup btn btn-primary',
                     'data-group': groupName
                   }, ['+']]
                 ]],
-                ['td', [
-                  ['button', {
-                    class: 'renameGroup', 'data-group': groupName
-                  }, ['e']]
-                ]],
-                hasDeleteGroupsAccess
-                  ? ['td', [
-                    ['button', {
-                      class: 'deleteGroup',
-                      'data-group': groupName
-                    }, ['x']]
-                  ]]
-                  : ''
+                ...builtin
+                  ? [
+                    ['td'],
+                    ['td'],
+                    ['td'],
+                    hasDeleteGroupsAccess ? ['td'] : ''
+                  ]
+                  : [
+                    ['td', usersInfo.filter(Boolean).map(({user}) => {
+                      return ['button', {
+                        class: 'removeUserFromGroup',
+                        'data-user': user,
+                        'data-group': groupName
+                      }, [
+                        `${user} ☒`
+                      ]];
+                    })],
+                    ['td', [
+                      ['button', {
+                        class: 'addUserToGroup btn btn-primary',
+                        'data-group': groupName
+                      }, ['+']]
+                    ]],
+                    ['td', [
+                      ['button', {
+                        class: 'renameGroup', 'data-group': groupName
+                      }, ['e']]
+                    ]],
+                    hasDeleteGroupsAccess
+                      ? ['td', [
+                        ['button', {
+                          class: 'deleteGroup',
+                          'data-group': groupName
+                        }, ['x']]
+                      ]]
+                      : ''
+                  ]
               ]];
             })
           )]

@@ -12,6 +12,23 @@ import {
   saltAndHash, validatePasswordV1
 } from './crypto.js';
 
+const builtInGroups = new Set([
+  'nogin.loggedInUsers',
+  'nogin.guests'
+]);
+const builtInPrivileges = new Set([
+  'nogin.editPrivilege',
+  'nogin.addPrivilegeToGroup',
+  'nogin.removePrivilegeFromGroup',
+  'nogin.readPrivilege',
+  'nogin.readUsers',
+  'nogin.deleteUsers',
+  'nogin.editGroup',
+  'nogin.addUserToGroup',
+  'nogin.removeUserFromGroup',
+  'nogin.readGroup'
+]);
+
 /**
   * @typedef {object} AccountInfo
   * @property {string} [_id] Auto-set
@@ -52,14 +69,24 @@ import {
  * @typedef {object} GroupInfo
  * @property {string} [_id] Auto-set
  * @property {string} groupName
- * @property {number[]} privilegeIDs
- * @property {number[]} userIDs
- * @property {number} date
+ * @property {string[]} privilegeIDs
+ * @property {string[]} userIDs
+ * @property {boolean} builtin
+ * @property {number} date Auto-generated timestamp
  */
 
 /**
  * @typedef {object} GroupInfoFilter
  * @property {{$in: string[]}} group
+ */
+
+/**
+ * @typedef {object} PrivilegeInfo
+ * @property {string} [_id] Auto-set
+ * @property {string} privilegeName
+ * @property {string} description
+ * @property {boolean} builtin
+ * @property {number} date Auto-generated timestamp
  */
 
 const passVer = 1;
@@ -114,6 +141,15 @@ class AccountManager {
       await this.accounts.createIndex({
         groupName: 1
       });
+      await this.addDefaultGroups();
+
+      this.privileges = await this.adapter.getPrivileges();
+
+      await this.addDefaultPrivileges();
+
+      await this.accounts.createIndex({
+        privilegeName: 1
+      });
     } catch (err) {
       // Not clear on how to check; we're just rethrowing here for
       //   now anyways
@@ -145,6 +181,217 @@ class AccountManager {
         )
       );
     }
+  }
+
+  /**
+   * @returns {Promise<import('mongodb').BulkWriteResult|void>}
+   */
+  async addDefaultGroups () {
+    return await this.groups?.bulkWrite(
+      [
+        // If adding more here, add also to `builtInGroups` Set above
+        {
+          updateOne: {
+            filter: {
+              groupName: 'nogin.loggedInUsers'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                groupName: 'nogin.loggedInUsers',
+                privilegeIDs: [],
+                userIDs: [],
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              groupName: 'nogin.guests'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                groupName: 'nogin.guests',
+                privilegeIDs: [],
+                userIDs: [],
+                builtin: true
+              }
+            }
+          }
+        }
+      ]
+    );
+  }
+
+  /**
+   * @returns {Promise<import('mongodb').BulkWriteResult|void>}
+   */
+  async addDefaultPrivileges () {
+    return await this.privileges?.bulkWrite(
+      [
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.editPrivilege'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                // Todo: Could make more granular, but need to reflect in
+                //         UI and API
+                privilegeName: 'nogin.editPrivilege',
+                description: 'Privilege to allow creating new privileges, ' +
+                  'renaming them, and deleting them.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.addPrivilegeToGroup'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.addPrivilegeToGroup',
+                description: 'Privilege to allow adding privileges to groups.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.removePrivilegeFromGroup'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.removePrivilegeFromGroup',
+                description: 'Privilege to allow removing privileges ' +
+                  'from groups.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.readPrivilege'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.readPrivilege',
+                description: 'Privilege to allow reading and listing ' +
+                                'of privileges.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.readUsers'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.readUsers',
+                description: 'Privilege to allow reading and listing of users.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.deleteUsers'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.deleteUsers',
+                description: 'Privilege to allow deleting users.',
+                builtin: true
+              }
+            }
+          }
+        },
+
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.editGroup'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.editGroup',
+                description: 'Privilege to allow creating new groups, ' +
+                  'renaming them, and deleting them.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.addUserToGroup'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.addUserToGroup',
+                description: 'Privilege to allow adding users to groups.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.removeUserFromGroup'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.removeUserFromGroup',
+                description: 'Privilege to allow removing users from groups.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.readGroup'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.readGroup',
+                description: 'Privilege to allow reading and listing ' +
+                                'of groups.',
+                builtin: true
+              }
+            }
+          }
+        }
+      ]
+    );
   }
 
   /*
@@ -208,6 +455,16 @@ class AccountManager {
     return await
     /** @type {import('mongodb').Collection<GroupInfo>} */ (
       this.groups
+    ).find().toArray();
+  }
+
+  /**
+   * @returns {Promise<PrivilegeInfo[]>}
+   */
+  async getAllPrivileges () {
+    return await
+    /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+      this.privileges
     ).find().toArray();
   }
 
@@ -420,6 +677,7 @@ class AccountManager {
       groupName: data.groupName,
       userIDs: [],
       privilegeIDs: [],
+      builtin: false,
       // Append date stamp when record was created
       date: Date.now()
     };
@@ -442,7 +700,6 @@ class AccountManager {
       o = await /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
         this.groups
       ).findOne({
-        // @ts-expect-error Why is this a problem?
         userIDs: {$in: [userID]}
       });
     } catch {}
@@ -457,11 +714,13 @@ class AccountManager {
    * @returns {Promise<void>}
    */
   async renameGroup (data) {
-    if (typeof data.newGroupName !== 'string' || !data.newGroupName) {
-      throw new Error('bad-old-groupname');
+    if (typeof data.newGroupName !== 'string' || !data.newGroupName ||
+      builtInGroups.has(data.newGroupName)
+    ) {
+      throw new Error('bad-groupname');
     }
     if (typeof data.groupName !== 'string' || !data.groupName) {
-      throw new Error('bad-groupname');
+      throw new Error('bad-old-groupname');
     }
 
     let o;
@@ -500,11 +759,13 @@ class AccountManager {
   }
 
   /**
-   * @param {Partial<GroupInfo> & {userID: number}} data
+   * @param {Partial<GroupInfo> & {userID: string}} data
    * @returns {Promise<void>}
    */
   async addUserToGroup (data) {
-    if (typeof data.groupName !== 'string' || !data.groupName) {
+    if (typeof data.groupName !== 'string' || !data.groupName ||
+      builtInGroups.has(data.groupName)
+    ) {
       throw new Error('bad-groupname');
     }
 
@@ -541,11 +802,13 @@ class AccountManager {
   }
 
   /**
-   * @param {Partial<GroupInfo> & {userID: number}} data
+   * @param {Partial<GroupInfo> & {userID: string}} data
    * @returns {Promise<void>}
    */
   async removeUserFromGroup (data) {
-    if (typeof data.groupName !== 'string' || !data.groupName) {
+    if (typeof data.groupName !== 'string' || !data.groupName ||
+      builtInGroups.has(data.groupName)
+    ) {
       throw new Error('bad-groupname');
     }
 
@@ -576,6 +839,194 @@ class AccountManager {
       },
       {upsert: false, returnDocument: 'after'}
     );
+  }
+
+  /**
+   * @param {Partial<PrivilegeInfo>} data
+   * @returns {Promise<PrivilegeInfo>}
+   */
+  async addNewPrivilege (data) {
+    if (typeof data.privilegeName !== 'string' || !data.privilegeName ||
+      builtInPrivileges.has(data.privilegeName)
+    ) {
+      throw new Error('bad-privilegename');
+    }
+
+    if (typeof data.description !== 'string') {
+      throw new TypeError('bad-privilege-description');
+    }
+
+    let o;
+    try {
+      // eslint-disable-next-line @stylistic/max-len -- Long
+      o = await /** @type {import('mongodb').Collection<Partial<PrivilegeInfo>>} */ (
+        this.privileges
+      ).findOne({
+        privilegeName: data.privilegeName
+      });
+    } catch {}
+    if (o) {
+      throw new Error('privilegename-taken');
+    }
+
+    const newData = {
+      privilegeName: data.privilegeName,
+      description: data.description,
+      builtin: false,
+      // Append date stamp when record was created
+      date: Date.now()
+    };
+
+    await /** @type {import('mongodb').Collection<Partial<PrivilegeInfo>>} */ (
+      this.privileges
+    ).insertOne(newData);
+
+    return newData;
+  }
+
+  /**
+   * @param {string} privilege
+   * @returns {Promise<void>}
+   */
+  async removePrivilegeIDFromGroup (privilege) {
+    const filter = {
+      privilegeIDs: {$in: [privilege]}
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filter,
+      {
+        $pull: {privilegeIDs: privilege},
+        $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
+   * @param {Partial<GroupInfo> & {privilegeName: string}} data
+   * @returns {Promise<void>}
+   */
+  async addPrivilegeToGroup (data) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+
+    let _o;
+    const privilegeFilter = {
+      privilege: {$eq: data.privilegeName}
+    };
+    try {
+      _o = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+        this.privileges
+      ).findOne(privilegeFilter);
+    } catch {}
+    if (!_o) {
+      throw new Error('privilege-missing');
+    }
+
+    const filterAdd = {
+      groupName: data.groupName
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filterAdd,
+      {
+        $addToSet: {privilegeIDs: data.privilegeName},
+        $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
+   * @param {Partial<GroupInfo> & {privilegeName: string}} data
+   * @returns {Promise<void>}
+   */
+  async removePrivilegeFromGroup (data) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+
+    let _o;
+    const privilegeFilter = {
+      privilegeName: {$eq: data.privilegeName}
+    };
+    try {
+      _o = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+        this.privileges
+      ).findOne(privilegeFilter);
+    } catch {}
+    if (!_o) {
+      throw new Error('privilege-missing');
+    }
+
+    const filter = {
+      groupName: data.groupName
+    };
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).findOneAndUpdate(
+      filter,
+      {
+        $pull: {privilegeIDs: data.privilegeName},
+        $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
+   * @param {string} privilegeName
+   * @returns {Promise<Partial<PrivilegeInfo>|null|undefined>}
+   */
+  async getPrivilege (privilegeName) {
+    let o;
+    try {
+      // eslint-disable-next-line @stylistic/max-len -- Long
+      o = await /** @type {import('mongodb').Collection<Partial<PrivilegeInfo>>} */ (
+        this.privileges
+      ).findOne({
+        privilegeName
+      });
+    } catch {}
+    return o;
+  }
+
+  /**
+   * @param {string} groupName
+   * @returns {Promise<PrivilegeInfo[]>}
+   */
+  async getPrivilegesForGroup (groupName) {
+    let o;
+    try {
+      // eslint-disable-next-line @stylistic/max-len -- Long
+      o = await /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
+        this.groups
+      ).findOne({
+        groupName
+      });
+    } catch {}
+    if (!o) {
+      throw new Error('group-not-found');
+    }
+
+    return await Promise.all(/** @type {Promise<PrivilegeInfo>[]} */ (
+      /** @type {string[]} */
+      (o.privilegeIDs).map(async (privilegeName) => {
+        // eslint-disable-next-line @stylistic/max-len -- Long
+        return await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+          this.privileges
+        ).findOne({
+          privilegeName
+        });
+      }).filter(Boolean)
+    ));
   }
 
   /**
@@ -819,6 +1270,12 @@ class AccountManager {
    * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
    */
   async deleteGroupByGroupName (groupName) {
+    if (typeof groupName !== 'string' || !groupName ||
+      builtInGroups.has(groupName)
+    ) {
+      throw new Error('bad-groupname');
+    }
+
     return await
     /** @type {import('mongodb').Collection<GroupInfo>} */ (
       this.groups
@@ -828,7 +1285,7 @@ class AccountManager {
   }
 
   /**
-   * @param {number} userID
+   * @param {string} userID
    * @returns {Promise<void>}
    */
   async removeUserIDFromGroup (userID) {
@@ -843,6 +1300,74 @@ class AccountManager {
       {
         $pull: {userIDs: userID},
         $set: {date: Date.now()}
+      },
+      {upsert: false, returnDocument: 'after'}
+    );
+  }
+
+  /**
+   * @param {string} privilegeName
+   * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
+   */
+  async deletePrivilegeByPrivilegeName (privilegeName) {
+    if (typeof privilegeName !== 'string' || !privilegeName ||
+      builtInPrivileges.has(privilegeName)
+    ) {
+      throw new Error('bad-privilegename');
+    }
+
+    return await
+    /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+      this.privileges
+    ).deleteOne({
+      privilegeName
+    });
+  }
+
+  /**
+   * @param {Partial<PrivilegeInfo> & {newPrivilegeName: string}} data
+   * @returns {Promise<void>}
+   */
+  async renamePrivilege (data) {
+    if (typeof data.newPrivilegeName !== 'string' || !data.newPrivilegeName ||
+      builtInPrivileges.has(data.newPrivilegeName)
+    ) {
+      throw new Error('bad-privilegename');
+    }
+    if (typeof data.privilegeName !== 'string' || !data.privilegeName) {
+      throw new Error('bad-old-privilegename');
+    }
+
+    let o;
+    try {
+      o = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+        this.privileges
+      ).findOne({
+        privilegeName: data.newPrivilegeName
+      });
+    } catch {}
+    if (o) {
+      throw new Error('privilegename-taken');
+    }
+
+    const filter = {
+      privilegeName: data.privilegeName
+    };
+
+    const newData = {
+      privilegeName: data.newPrivilegeName,
+      // Append date stamp when record was modified
+      date: Date.now()
+    };
+
+    await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+      this.privileges
+    ).findOneAndUpdate(
+      filter,
+      {
+        // Strip out `undefined` which now are treated by Mongodb as null
+        // eslint-disable-next-line unicorn/prefer-structured-clone -- Different
+        $set: JSON.parse(JSON.stringify(newData))
       },
       {upsert: false, returnDocument: 'after'}
     );

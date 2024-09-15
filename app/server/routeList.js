@@ -463,17 +463,21 @@ const routeList = async (app, config) => {
       //   are available
       // If adding adding/edit features, ensure have privileges of
       //   `nogin.editUser` and `nogin.createUser`
-      const hasReadusersAccess = showUsers || hasRootAccess(req);
+      const hasReadUsersAccess = showUsers || hasRootAccess(req);
       const hasDeleteUsersAccess = hasRootAccess(req);
       const hasReadGroupsAccess = hasRootAccess(req);
-      if (!hasReadusersAccess) {
+      if (!hasReadUsersAccess) {
         pageNotFound(_, res);
         return;
       }
 
       const groups = hasReadGroupsAccess
         ? await Promise.all(accounts.map(async ({user}) => {
-          return await am.getGroupForUser(user);
+          const group = await am.getGroupForUser(user);
+          return {
+            group,
+            privileges: await am.getPrivilegesForGroup(group)
+          };
         }))
         : [];
 
@@ -494,13 +498,19 @@ const routeList = async (app, config) => {
            *   date: Date
            * }} cfg
            * @param {number} idx
-           * @returns {UserAccount & {group: string}}
+           * @returns {UserAccount & {
+           *   groupInfo: {
+           *     group: string,
+           *     privileges:
+           *       import('./modules/account-manager.js').PrivilegeInfo[]
+           *   }
+           * }}
            */
           ({name, user, country, date}, idx) => {
             return {
               user,
               name: name || '',
-              group: groups[idx] ?? '',
+              groupInfo: groups[idx] ?? '',
               country: country ? _('country' + country) : '',
               date: new Intl.DateTimeFormat(
                 _.resolvedLocale, {dateStyle: 'full'}
@@ -554,7 +564,7 @@ const routeList = async (app, config) => {
     },
 
     /**
-     * View, delete & reset accounts (currently view only).
+     * View, delete & edit groups.
      * @param {import('./routeUtils.js').Routes} _routes
      * @param {import('express').Request} req
      * @param {import('express').Response} res
@@ -586,9 +596,9 @@ const routeList = async (app, config) => {
       }
       const {value: _} = i18nResult;
 
-      const hasReadusersAccess = hasRootAccess(req);
+      const hasReadGroupsAccess = hasRootAccess(req);
       const hasDeleteGroupsAccess = hasRootAccess(req);
-      if (!hasReadusersAccess) {
+      if (!hasReadGroupsAccess) {
         pageNotFound(_, res);
         return;
       }
@@ -600,8 +610,12 @@ const routeList = async (app, config) => {
           csrfToken: req.csrfToken()
         }),
         groupsInfo: readGroupsResult.value.sort(
-          ({groupName: gn1}, {groupName: gn2}) => {
-            return gn1 < gn2 ? -1 : gn1 > gn2 ? 1 : 0;
+          ({groupName: gn1, builtin: bi1}, {groupName: gn2, builtin: bi2}) => {
+            return bi1 && !bi2
+              ? -1
+              : bi2 && !bi1
+                ? 1
+                : gn1 < gn2 ? -1 : gn1 > gn2 ? 1 : 0;
           }
         ),
         hasDeleteGroupsAccess,
@@ -609,13 +623,112 @@ const routeList = async (app, config) => {
           ({user}) => /** @type {string} */ (user)
         )
       });
+    },
+
+    /**
+     * View, delete, and edit privileges.
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async privileges (_routes, req, res) {
+      const [
+        i18nResult,
+        readPrivilegesResult
+      ] = await Promise.allSettled([
+        setI18n(req, res),
+        readPrivileges()
+      ]);
+
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
+        return;
+      }
+      if (readPrivilegesResult.status === 'rejected') {
+        res.status(400).send('bad-privilege-read');
+        return;
+      }
+      const {value: _} = i18nResult;
+
+      const hasReadPrivilegesAccess = hasRootAccess(req);
+      const hasDeletePrivilegesAccess = hasRootAccess(req);
+      if (!hasReadPrivilegesAccess) {
+        pageNotFound(_, res);
+        return;
+      }
+
+      const title = _('Privileges');
+      res.render('privileges', {
+        ...getLayoutAndTitle({
+          _, title, template: 'privileges',
+          csrfToken: req.csrfToken()
+        }),
+        hasDeletePrivilegesAccess,
+        privilegesInfo: readPrivilegesResult.value
+      });
     }
   };
 
   /**
    * @returns {Promise<{
+   *   privilegeName: string,
+   *   builtin: boolean,
+   *   description: string,
+   *   groupsInfo: {
+   *     groupName: string,
+   *     builtin: boolean,
+   *     usersInfo: {
+   *       user: string,
+   *       _id: string
+   *     }[]
+   *   }[]
+   * }[]>}
+   */
+  const readPrivileges = async () => {
+    const privileges = await am.getAllPrivileges();
+
+    const groups = await readGroups();
+
+    return privileges.map(({privilegeName, description, builtin}) => {
+      return {
+        privilegeName,
+        description,
+        builtin,
+        groupsInfo:
+        /**
+         * @type {{
+         *   groupName: string,
+         *   builtin: boolean,
+         *   usersInfo: {
+         *     user: string,
+         *     _id: string
+         *   }[]
+         * }[]}
+         */ (groups.map((group) => {
+          const privilegeGroup = group.privileges.find(({
+            privilegeName: pn
+          }) => {
+            return pn === privilegeName;
+          });
+          if (privilegeGroup) {
+            return {
+              groupName: group.groupName,
+              usersInfo: group.usersInfo
+            };
+          }
+          return undefined;
+        }).filter(Boolean))
+      };
+    });
+  };
+
+  /**
+   * @returns {Promise<{
    *   groupName: string,
-   *   usersInfo: {user: string, _id: string}[]
+   *   builtin: boolean,
+   *   usersInfo: {user: string, _id: string}[],
+   *   privileges: import('./modules/account-manager.js').PrivilegeInfo[]
    * }[]>}
    */
   const readGroups = async () => {
@@ -629,20 +742,23 @@ const routeList = async (app, config) => {
       return {
         success: true,
         groupName: group.groupName,
+        builtin: group.builtin,
         usersInfo: await Promise.all(group.userIDs.map(async (usrID) => {
           // eslint-disable-next-line @stylistic/max-len -- Long
-          return /** @type {(Partial<import('./modules/account-manager.js').AccountInfo> & {user: string, _id: string})[]} */ (await am.getRecords({
-            user: {$eq: usrID}
-          })).map(({user: usr, _id}) => ({user: usr, _id}))[0];
-        }))
-        // Todo: get privileges later too
-        // privileges: await Promise.all(group.privilegeIDs.map(
-        //   async (privilegeID) => {
-        //     return (await am.getPrivilege({
-        //       _id: privilegeID
-        //     })).map(({privilege}) => privilege);
-        //   })
-        // )
+          return /** @type {(Partial<import('./modules/account-manager.js').AccountInfo> & {user: string, _id: string})[]} */ (
+            await am.getRecords({
+              user: {$eq: usrID}
+            })
+          ).map(({user: usr, _id}) => ({user: usr, _id}))[0];
+        })),
+        privileges: await Promise.all(group.privilegeIDs.map(
+          async (privilegeID) => {
+            // eslint-disable-next-line @stylistic/max-len -- Long
+            return /** @type {import('./modules/account-manager.js').PrivilegeInfo} */ (
+              await am.getPrivilege(privilegeID)
+            );
+          }
+        ))
       };
     }));
   };
@@ -1018,7 +1134,9 @@ const routeList = async (app, config) => {
         verb,
         groupName,
         newGroupName,
-        userID
+        userID,
+        privilegeName,
+        newPrivilegeName
       } = req.body;
 
       /**
@@ -1028,7 +1146,17 @@ const routeList = async (app, config) => {
        *   value?: ({
        *     groupName: string,
        *     usersInfo: {user: string, _id: string}[]
-       *   }|string)[]
+       *   }|string|{
+       *   privilegeName: string,
+       *   groupsInfo: {
+       *     groupName: string,
+       *     builtin: boolean,
+       *     usersInfo: {
+       *       user: string,
+       *       _id: string
+       *     }[]
+       *   }[]
+       * })[]
        * }}
        */
       let resp = {success: true};
@@ -1123,6 +1251,96 @@ const routeList = async (app, config) => {
           return;
         }
         break;
+
+      case 'readPrivileges':
+        resp = {
+          success: true,
+          value: await readPrivileges()
+        };
+        break;
+      case 'createPrivilege':
+        try {
+          await am.addNewPrivilege({
+            privilegeName
+          });
+        } catch (err) {
+          if ([
+            'bad-privilegename', 'privilegename-taken'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'deletePrivilege':
+        try {
+          await am.deletePrivilegeByPrivilegeName(privilegeName);
+        } catch (err) {
+          if ([
+            'bad-privilegename'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'renamePrivilege':
+        try {
+          await am.renamePrivilege({
+            privilegeName,
+            newPrivilegeName
+          });
+        } catch (err) {
+          if ([
+            'bad-privilegename', 'privilegename-taken',
+            'bad-old-privilegename'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'addPrivilegeToGroup':
+        try {
+          await am.addPrivilegeToGroup({
+            groupName,
+            privilegeName
+          });
+        } catch (err) {
+          if ([
+            'bad-groupname', 'privilege-missing'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'removePrivilegeFromGroup':
+        try {
+          await am.removePrivilegeFromGroup({
+            groupName,
+            privilegeName
+          });
+        } catch (err) {
+          if ([
+            'bad-groupname', 'privilege-missing'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+
       default:
         console.log('Unrecognized verb', verb);
         pageNotFound(_, res);

@@ -272,7 +272,7 @@ const GroupsView = {
   */
   setRemoveUserFromGroup () {
     const removeUserFromGroupConfirmDialog = ConfirmDialog.populate({
-      type: 'deleteGroup',
+      type: 'removeUserFromGroup',
       header: /** @type {string} */ (_('removeUserFromGroup')),
       body: /** @type {string} */ (_('reallyWantRemoveUserFromGroup')),
       cancel: /** @type {string} */ (_('cancel')),

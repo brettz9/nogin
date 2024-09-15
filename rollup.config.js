@@ -50,6 +50,7 @@ export default [
     'homeController.js',
     'usersController.js',
     'loginController.js',
+    'privilegesController.js',
     'resetPasswordController.js',
     'signupController.js'
   ].map((file) => {

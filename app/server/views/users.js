@@ -3,13 +3,18 @@ import confirm from './modals/confirm.js';
 
 /**
  * @param {{
-*   _: import('intl-dom').I18NCallback,
-*   layout: import('../routeUtils.js').LayoutCallback
-*   accounts: (import('../routeList.js').UserAccount & {group: string})[]
-*   hasDeleteUsersAccess: boolean,
-*   hasReadGroupsAccess: boolean
-* }} cfg
-*/
+ *   _: import('intl-dom').I18NCallback,
+ *   layout: import('../routeUtils.js').LayoutCallback
+ *   accounts: (import('../routeList.js').UserAccount & {
+ *      groupInfo: {
+ *     group: string,
+ *     privileges:
+ *       import('../modules/account-manager.js').PrivilegeInfo[]
+ *   }})[]
+ *   hasDeleteUsersAccess: boolean,
+ *   hasReadGroupsAccess: boolean
+ * }} cfg
+ */
 const users = ({
   _, layout, accounts, hasDeleteUsersAccess, hasReadGroupsAccess
 }) => {
@@ -39,14 +44,18 @@ const users = ({
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
             accounts.map((
-              {name, user, group, country, date}, i
+              {name, user, groupInfo: {group, privileges}, country, date}, i
             ) => {
               return ['tr', [
                 ['td', {class: 'users number'}, [i + 1]],
                 ['td', [name]],
                 ['td', [user]],
                 hasReadGroupsAccess
-                  ? ['td', [group]]
+                  ? ['td', {
+                    title: privileges.map(({privilegeName}) => {
+                      return privilegeName;
+                    }).join(', ')
+                  }, [group]]
                   : '',
                 ['td', [country]],
                 ['td', [date]],

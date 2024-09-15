@@ -122,7 +122,6 @@ renameGroupButton.on('click', (e) => {
   });
 });
 
-// Todo: 'addUserToGroup'
 const addUserToGroupButton = GroupsView.getAddUserToGroupButton();
 const addUserToGroupModal = GroupsView.addUserToGroupModal();
 const addUserToGroupForm = GroupsView.addUserToGroupForm(

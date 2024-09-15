@@ -337,7 +337,7 @@ function routeGetter (customRoute) {
     const routeObj = /** @type {Route[]} */ ([
       'root', 'logout', 'home', 'signup', 'activation',
       'lostPassword', 'resetPassword', 'users', 'delete',
-      'reset', 'coverage', 'accessAPI', `groups`
+      'reset', 'coverage', 'accessAPI', `groups`, 'privileges'
     ]).reduce((o, route) => {
       const i18nRoute = _(`route_${route}`);
       o[route] = (

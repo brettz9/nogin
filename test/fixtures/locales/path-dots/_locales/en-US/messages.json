@@ -406,6 +406,12 @@
     "EditGroupName": {
       "message": "Edit group name"
     },
+    "addPrivilegeToGroup": {
+      "message": "Add privilege to group"
+    },
+    "builtin": {
+      "message": "(built-in)"
+    },
 
     "GROUPS (CLIENT)": true,
     "removeUserFromGroup": {
@@ -548,6 +554,47 @@
     },
     "route_groups": {
       "message": "/groups"
+    },
+    "route_privileges": {
+      "message": "/privileges"
+    },
+
+    "PRIVILEGES (BUSINESS LOGIC)": true,
+    "bad-privilegename": {
+      "message": "Bad privilege name"
+    },
+    "privilegename-taken": {
+      "message": "Privilege name already taken"
+    },
+    "bad-old-privilegename": {
+      "message": "Bad old privilege name"
+    },
+    "createPrivilege": {
+      "message": "Create privilege"
+    },
+    "PleaseInputPrivilegeToCreate": {
+      "message": "Please input a privilege to create"
+    },
+    "editPrivilege": {
+      "message": "Edit privilege"
+    },
+    "PleaseInputPrivilegeToEdit": {
+      "message": "Please input a privilege to edit"
+    },
+    "Privilege": {
+      "message": "Privilege"
+    },
+    "EditPrivilege": {
+      "message": "Edit privilege"
+    },
+    "Description": {
+      "message": "Description"
+    },
+    "removePrivilegeFromGroup": {
+      "message": "Remove privilege from group"
+    },
+    "PleaseInputGroupToWhichToAddPrivilege": {
+      "message": "Please input group to which to add privilege"
     },
 
     "COUNTRIES (BUSINESS LOGIC)": true,

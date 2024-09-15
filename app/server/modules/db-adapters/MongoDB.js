@@ -75,8 +75,6 @@ class MongoDB extends DBAbstraction {
    * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
    */
   async getGroups () {
-    // For collection method: See https://mongodb.github.io/node-mongodb-native/3.4/api/Db.html#collection
-    // For collection object: https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html
     // eslint-disable-next-line @stylistic/max-len -- Long
     const groups = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (
       this.db
@@ -85,6 +83,25 @@ class MongoDB extends DBAbstraction {
     // eslint-disable-next-line @stylistic/max-len -- Long
     return /** @type {import('mongodb').Collection<import('../account-manager.js').GroupInfo>} */ (
       groups
+    );
+  }
+
+  /**
+   * @returns {Promise<
+  *   import('mongodb').Collection<
+  *     import('../account-manager.js').PrivilegeInfo
+  *   >
+  * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+  */
+  async getPrivileges () {
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    const privileges = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (
+      this.db
+    ).collection('privileges'));
+
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    return /** @type {import('mongodb').Collection<import('../account-manager.js').PrivilegeInfo>} */ (
+      privileges
     );
   }
 }

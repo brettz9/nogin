@@ -4,10 +4,14 @@
 *   type: string,
 *   inputDirections: string
 *   autocomplete?: string[]
+*   additionalFields?: import('jamilih').JamilihArray[]
 * }} cfg
 * @returns {import('jamilih').JamilihArray}
 */
-const singleInputForm = ({_, type, inputDirections, autocomplete}) => {
+const singleInputForm = ({
+  _, type, inputDirections, autocomplete,
+  additionalFields = []
+}) => {
   return ['div', {
     id: type,
     'data-name': type, class: 'modal fade'
@@ -48,7 +52,8 @@ const singleInputForm = ({_, type, inputDirections, autocomplete}) => {
                 id: type + '-input',
                 'data-name': type,
                 name: type
-              }]
+              }],
+              ...additionalFields
               // Not hiding? Keeping in case wish to use for client validation
               // ['div', {
               //   class: 'alert alert-danger hide', 'data-name': 'alert'
