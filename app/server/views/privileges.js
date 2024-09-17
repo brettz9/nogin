@@ -168,9 +168,9 @@ const privileges = ({
     ],
     scripts: [
       ['script', {
-        src: '/js/controllers/privilegesController.js', type: 'module'
-        // src: '/js/controllers/privilegesController.iife.min.js',
-        // defer: 'defer'
+        // src: '/js/controllers/privilegesController.js', type: 'module'
+        src: '/js/controllers/privilegesController.iife.min.js',
+        defer: 'defer'
       }]
     ]
   });

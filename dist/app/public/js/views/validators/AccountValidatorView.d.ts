@@ -20,8 +20,8 @@ declare namespace AccountValidatorView {
      */
     function getFormFields(): AccountInfoElements;
     let errorMessages: {
-        [x: string]: {
-            [x: string]: string;
+        [key: string]: {
+            [key: string]: string;
         };
     };
 }

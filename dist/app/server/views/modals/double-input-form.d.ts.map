@@ -1,0 +1,1 @@
+{"version":3,"file":"double-input-form.d.ts","sourceRoot":"","sources":["../../../../../app/server/views/modals/double-input-form.js"],"names":[],"mappings":";AAEA;;;;;;;;;EASE;AACF,oGATW;IACP,CAAC,EAAE,OAAO,UAAU,EAAE,YAAY,CAAC;IACnC,IAAI,EAAE,MAAM,CAAC;IACb,eAAe,EAAE,MAAM,CAAC;IACxB,qBAAqB,EAAE,MAAM,CAAC;IAC9B,YAAY,CAAC,EAAE,MAAM,EAAE,CAAA;CACxB,GACS,OAAO,SAAS,EAAE,YAAY,CAmBzC"}

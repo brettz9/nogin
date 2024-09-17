@@ -1,5 +1,5 @@
 export type Path = string;
-export type Routes = any;
+export type Routes = Record<Route, Path>;
 export type RouteGetter = (_: import("./modules/email-dispatcher.js").Internationalizer) => Routes;
 export type SecuritySourceAttributes = (type: "link" | "script", name: string) => {
     crossorigin: string;
@@ -42,7 +42,7 @@ export type LayoutAndTitleArgs = {
     csrfToken?: string;
 };
 export type LayoutAndTitleGetter = (businessLogicArgs: LayoutAndTitleArgs) => TitleWithLayoutCallback;
-export type Route = "root" | "logout" | "home" | "signup" | "activation" | "lostPassword" | "resetPassword" | "users" | "delete" | "reset" | "coverage";
+export type Route = "activation" | "lostPassword" | "resetPassword" | "users" | "delete" | "reset" | "coverage" | "accessAPI" | "groups" | "privileges" | "signup" | "root" | "home" | "logout";
 /**
  * @typedef {{
  *   content: import('jamilih').JamilihChildren,

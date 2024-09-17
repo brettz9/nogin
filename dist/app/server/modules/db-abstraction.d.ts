@@ -91,5 +91,12 @@ declare class DBAbstraction {
      * @returns {Promise<import('mongodb').Collection>}
      */
     getAccounts(): Promise<import("mongodb").Collection>;
+    /**
+     * @abstract
+     * @returns {Promise<
+     *   import('mongodb').Collection<import('./account-manager.js').GroupInfo>
+     * >}
+     */
+    getGroups(): Promise<import("mongodb").Collection<import("./account-manager.js").GroupInfo>>;
 }
 //# sourceMappingURL=db-abstraction.d.ts.map

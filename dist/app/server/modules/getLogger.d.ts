@@ -9,9 +9,9 @@ export type LoggerOptions = {
  * `substitutions` - Values for substitution. Defaults to `{}`
  * `other` - Other items to log, e.g., errors.
  */
-export type Logger = ((key: string, substitutions?: ({
-    [x: string]: (string | Element | number);
-}) | null, ...other: (string | object)[]) => string | null) & {
+export type Logger = ((key: string, substitutions?: {
+    [key: string]: string | Element | number;
+} | null, ...other: (string | object)[]) => string | null) & {
     _: import("../modules/email-dispatcher.js").Internationalizer;
 };
 /**
@@ -26,7 +26,7 @@ export type Logger = ((key: string, substitutions?: ({
  * `other` - Other items to log, e.g., errors.
  * @typedef {((
  *   key: string,
- *   substitutions?: (Object<string,(string|Element|number)>)|null,
+ *   substitutions?: {[key: string]: string|Element|number}|null,
  *   ...other: (string|object)[]
  * ) => string|null) & {
  *   _: import('../modules/email-dispatcher.js').Internationalizer

@@ -190,9 +190,9 @@ const groups = ({
     ],
     scripts: [
       ['script', {
-        src: '/js/controllers/groupsController.js', type: 'module'
-        // src: '/js/controllers/groupsController.iife.min.js',
-        // defer: 'defer'
+        // src: '/js/controllers/groupsController.js', type: 'module'
+        src: '/js/controllers/groupsController.iife.min.js',
+        defer: 'defer'
       }]
     ]
   });

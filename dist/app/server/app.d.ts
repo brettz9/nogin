@@ -33,7 +33,6 @@ export type RouteConfigFromOptions = {
     fromText: string;
     fromURL: string;
     SERVE_COVERAGE: boolean;
-    showUsers: boolean;
     disableXSRF: boolean;
     csurfOptions: string;
 };

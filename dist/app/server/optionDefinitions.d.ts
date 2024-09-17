@@ -42,10 +42,10 @@ export type MainOptionDefinitions = {
     fromText: string;
     fromURL: string;
     SERVE_COVERAGE: boolean;
-    showUsers: boolean;
     RATE_LIMIT: number;
     disableXSRF: boolean;
     noHelmet: boolean;
+    noHostValidation: boolean;
     helmetOptions: string | {
         noSniff: boolean;
     };

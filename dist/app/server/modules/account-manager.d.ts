@@ -48,7 +48,8 @@ export type AccountInfo = {
     passKey?: string | undefined;
 };
 export type AccountInfoFilter = {
-    user: any;
+    user?: any;
+    _id?: any;
     name?: any;
     email?: any;
     country?: any;
@@ -65,6 +66,38 @@ export type AccountInfoFilter = {
      * Timestamp
      */
     activationRequestDate?: any;
+};
+export type GroupInfo = {
+    /**
+     * Auto-set
+     */
+    _id?: string | undefined;
+    groupName: string;
+    privilegeIDs: string[];
+    userIDs: string[];
+    builtin: boolean;
+    /**
+     * Auto-generated timestamp
+     */
+    date: number;
+};
+export type GroupInfoFilter = {
+    group: {
+        $in: string[];
+    };
+};
+export type PrivilegeInfo = {
+    /**
+     * Auto-set
+     */
+    _id?: string | undefined;
+    privilegeName: string;
+    description: string;
+    builtin: boolean;
+    /**
+     * Auto-generated timestamp
+     */
+    date: number;
 };
 /**
  * Manages accounts.
@@ -86,11 +119,21 @@ declare class AccountManager {
      */
     connect(): Promise<AccountManager>;
     accounts: import("mongodb").Collection<import("mongodb").Document> | undefined;
+    groups: import("mongodb").Collection<GroupInfo> | undefined;
+    privileges: import("mongodb").Collection<PrivilegeInfo> | undefined;
     /**
      * Currently only in use by the CLI.
      * @returns {Promise<void>}
      */
     listIndexes(): Promise<void>;
+    /**
+     * @returns {Promise<import('mongodb').BulkWriteResult|void>}
+     */
+    addDefaultGroups(): Promise<import("mongodb").BulkWriteResult | void>;
+    /**
+     * @returns {Promise<import('mongodb').BulkWriteResult|void>}
+     */
+    addDefaultPrivileges(): Promise<import("mongodb").BulkWriteResult | void>;
     /**
      * @param {string} user
      * @param {string} pass The hashed password
@@ -102,6 +145,14 @@ declare class AccountManager {
      * @returns {Promise<Partial<AccountInfo>[]>}
      */
     getRecords(acctInfo: AccountInfoFilter): Promise<Partial<AccountInfo>[]>;
+    /**
+     * @returns {Promise<GroupInfo[]>}
+     */
+    getAllGroups(): Promise<GroupInfo[]>;
+    /**
+     * @returns {Promise<PrivilegeInfo[]>}
+     */
+    getAllPrivileges(): Promise<PrivilegeInfo[]>;
     /**
      * @param {string} user
      * @param {string} pass The raw password
@@ -140,7 +191,7 @@ declare class AccountManager {
      * @returns {Promise<AccountInfo & {
      *   activationCode: string
      * }>}
-     * @todo Would ideally check for multiple erros to report back all issues
+     * @todo Would ideally check for multiple errors to report back all issues
      *   at once.
      */
     addNewAccount(newData: AccountInfo, { allowCustomPassVer }?: {
@@ -148,6 +199,71 @@ declare class AccountManager {
     } | undefined): Promise<AccountInfo & {
         activationCode: string;
     }>;
+    /**
+     * @param {Partial<GroupInfo>} data
+     * @returns {Promise<GroupInfo>}
+     */
+    addNewGroup(data: Partial<GroupInfo>): Promise<GroupInfo>;
+    /**
+     * @param {string} userID
+     * @returns {Promise<string|void>}
+     */
+    getGroupForUser(userID: string): Promise<string | void>;
+    /**
+     * @param {Partial<GroupInfo> & {newGroupName: string}} data
+     * @returns {Promise<void>}
+     */
+    renameGroup(data: Partial<GroupInfo> & {
+        newGroupName: string;
+    }): Promise<void>;
+    /**
+     * @param {Partial<GroupInfo> & {userID: string}} data
+     * @returns {Promise<void>}
+     */
+    addUserToGroup(data: Partial<GroupInfo> & {
+        userID: string;
+    }): Promise<void>;
+    /**
+     * @param {Partial<GroupInfo> & {userID: string}} data
+     * @returns {Promise<void>}
+     */
+    removeUserFromGroup(data: Partial<GroupInfo> & {
+        userID: string;
+    }): Promise<void>;
+    /**
+     * @param {Partial<PrivilegeInfo>} data
+     * @returns {Promise<PrivilegeInfo>}
+     */
+    addNewPrivilege(data: Partial<PrivilegeInfo>): Promise<PrivilegeInfo>;
+    /**
+     * @param {string} privilege
+     * @returns {Promise<void>}
+     */
+    removePrivilegeIDFromGroup(privilege: string): Promise<void>;
+    /**
+     * @param {Partial<GroupInfo> & {privilegeName: string}} data
+     * @returns {Promise<void>}
+     */
+    addPrivilegeToGroup(data: Partial<GroupInfo> & {
+        privilegeName: string;
+    }): Promise<void>;
+    /**
+     * @param {Partial<GroupInfo> & {privilegeName: string}} data
+     * @returns {Promise<void>}
+     */
+    removePrivilegeFromGroup(data: Partial<GroupInfo> & {
+        privilegeName: string;
+    }): Promise<void>;
+    /**
+     * @param {string} privilegeName
+     * @returns {Promise<Partial<PrivilegeInfo>|null|undefined>}
+     */
+    getPrivilege(privilegeName: string): Promise<Partial<PrivilegeInfo> | null | undefined>;
+    /**
+     * @param {string} groupName
+     * @returns {Promise<PrivilegeInfo[]>}
+     */
+    getPrivilegesForGroup(groupName: string): Promise<PrivilegeInfo[]>;
     /**
      * @param {string} activationCode
      * @returns {Promise<import('mongodb').UpdateResult|
@@ -193,6 +309,28 @@ declare class AccountManager {
      */
     deleteAccountById(id: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
     /**
+     * @param {string} groupName
+     * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
+     */
+    deleteGroupByGroupName(groupName: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    /**
+     * @param {string} userID
+     * @returns {Promise<void>}
+     */
+    removeUserIDFromGroup(userID: string): Promise<void>;
+    /**
+     * @param {string} privilegeName
+     * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
+     */
+    deletePrivilegeByPrivilegeName(privilegeName: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    /**
+     * @param {Partial<PrivilegeInfo> & {newPrivilegeName: string}} data
+     * @returns {Promise<void>}
+     */
+    editPrivilege(data: Partial<PrivilegeInfo> & {
+        newPrivilegeName: string;
+    }): Promise<void>;
+    /**
      * @param {AccountInfoFilter} acctInfo
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
@@ -201,5 +339,9 @@ declare class AccountManager {
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
     deleteAllAccounts(): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    /**
+     * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
+     */
+    deleteAllGroups(): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
 }
 //# sourceMappingURL=account-manager.d.ts.map

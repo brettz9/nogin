@@ -16,8 +16,8 @@ declare class AccountValidator {
     formFields: import("../views/validators/AccountValidatorView.js").AccountInfoElements;
     userId: JQuery<HTMLElement>;
     errorMessages: {
-        [x: string]: {
-            [x: string]: string;
+        [key: string]: {
+            [key: string]: string;
         };
     };
     /**

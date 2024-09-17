@@ -49,7 +49,7 @@ declare namespace UsersView {
     function onShowLockedErrorAlert({ type, user, message }: {
         user: string;
         message?: string | undefined;
-        type?: "ErrorLoggingOut" | "FailureSubmittingUserInfo" | "SessionLost" | "ProblemDispatchingLink" | undefined;
+        type?: "ErrorLoggingOut" | "SessionLost" | "ProblemDispatchingLink" | "FailureSubmittingUserInfo" | undefined;
     }): import("./utilities/AlertDialog.js").JQueryWithModal;
 }
 //# sourceMappingURL=users.d.ts.map

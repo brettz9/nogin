@@ -79,7 +79,7 @@ declare namespace HomeView {
      */
     function onShowLockedErrorAlert({ type, message }: {
         message?: string | undefined;
-        type?: "ErrorLoggingOut" | "FailureSubmittingUserInfo" | "SessionLost" | "ProblemDispatchingLink" | undefined;
+        type?: "ErrorLoggingOut" | "SessionLost" | "ProblemDispatchingLink" | "FailureSubmittingUserInfo" | undefined;
     }): import("./utilities/AlertDialog.js").JQueryWithModal;
 }
 //# sourceMappingURL=home.d.ts.map

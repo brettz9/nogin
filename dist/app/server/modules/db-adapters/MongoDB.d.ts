@@ -16,6 +16,14 @@ export class MongoDB extends DBAbstraction {
     connect(): Promise<void>;
     connection: mongodb.MongoClient | undefined;
     db: mongodb.Db | undefined;
+    /**
+     * @returns {Promise<
+    *   import('mongodb').Collection<
+    *     import('../account-manager.js').PrivilegeInfo
+    *   >
+    * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+    */
+    getPrivileges(): Promise<import("mongodb").Collection<import("../account-manager.js").PrivilegeInfo>>;
 }
 import DBAbstraction from '../db-abstraction.js';
 import mongodb from 'mongodb';
