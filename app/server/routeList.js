@@ -585,15 +585,21 @@ const routeList = async (app, config) => {
       const [
         i18nResult,
         readGroupsResult,
-        getAllRecords
+        getAllRecords,
+        privilegesInfo
       ] = await Promise.allSettled([
         setI18n(req, res),
         readGroups(),
-        am.getAllRecords()
+        am.getAllRecords(),
+        am.getAllPrivileges()
       ]);
 
       if (getAllRecords.status === 'rejected') {
         res.status(400).send('bad-records');
+        return;
+      }
+      if (privilegesInfo.status === 'rejected') {
+        res.status(400).send('bad-privileges-info');
         return;
       }
 
@@ -630,7 +636,10 @@ const routeList = async (app, config) => {
           }
         ),
         hasDeleteGroupsAccess,
-        users: (getAllRecords.value).map(
+        privileges: privilegesInfo.value.map(({
+          privilegeName
+        }) => privilegeName),
+        users: getAllRecords.value.map(
           ({user}) => /** @type {string} */ (user)
         )
       });

@@ -176,6 +176,118 @@ addUserToGroupButton.on('click', (e) => {
   });
 });
 
+const addPrivilegeToGroupButton = GroupsView.getAddPrivilegeToGroupButton();
+const addPrivilegeToGroupModal = GroupsView.addPrivilegeToGroupModal();
+const addPrivilegeToGroupForm = GroupsView.addPrivilegeToGroupForm(
+  addPrivilegeToGroupModal
+);
+
+addPrivilegeToGroupForm.on('submit', function (e) {
+  e.preventDefault();
+});
+addPrivilegeToGroupButton.on('click', (e) => {
+  const privilegeToAdd = GroupsView.getAddPrivilegeToGroupGroup();
+  const groupName = /** @type {string} */ (e.target.dataset.group);
+
+  const addPrivilegeToGroupCancel = GroupsView.addPrivilegeToGroupCancel(
+    addPrivilegeToGroupModal
+  );
+
+  addPrivilegeToGroupCancel.on('click', () => {
+    addPrivilegeToGroupModal.modal('hide');
+  });
+  addPrivilegeToGroupModal.modal('show');
+
+  const addPrivilegeToGroupSubmit = GroupsView.addPrivilegeToGroupSubmit(
+    addPrivilegeToGroupModal
+  );
+  addPrivilegeToGroupSubmit.on('click', async () => {
+    try {
+      if (privilegeToAdd.validity.tooShort) {
+        privilegeToAdd.setCustomValidity(
+          GroupsView.errorMessages.name.PleaseEnterName
+        );
+        /** @type {HTMLFormElement} */ (
+          addPrivilegeToGroupForm[0]
+        ).reportValidity();
+        return;
+      }
+      await addPrivilegeToGroup(groupName, privilegeToAdd.value);
+    } catch (er) {
+      addPrivilegeToGroupModal.modal('hide');
+      const err = /** @type {AjaxPostError} */ (er);
+
+      // Log just in case not internationalized
+      console.error(Nogin._('ErrorFormat', {
+        text: err.text,
+        statusText:
+          // istanbul ignore next
+          err.statusText ||
+          ''
+      }));
+      // However, should already be internationalized by server
+      showLockedErrorAlert({message: err.text});
+    }
+  });
+});
+
+/**
+ * @param {string} groupName
+ * @param {string} privilegeName
+ * @throws {Error}
+ * @returns {Promise<void>}
+ */
+async function addPrivilegeToGroup (groupName, privilegeName) {
+  await post(Nogin.Routes.accessAPI, {
+    verb: 'addPrivilegeToGroup', groupName, privilegeName
+  });
+  addPrivilegeToGroupModal.modal('hide');
+  showLockedAlertReload({type: 'privilegeAddedToGroup'});
+}
+
+const removePrivilegeFromGroupConfirmDialog =
+  GroupsView.setRemovePrivilegeFromGroup();
+GroupsView.getRemovePrivilegeFromGroup().on('click', (e) => {
+  const groupName = /** @type {string} */ (e.target.dataset.group);
+  const privilegeID = /** @type {string} */ (e.target.dataset.privilege);
+
+  ConfirmDialog.getSubmit(
+    removePrivilegeFromGroupConfirmDialog
+  ).on('click', async () => {
+    try {
+      await removePrivilegeFromGroup(groupName, privilegeID);
+    } catch (er) {
+      const err = /** @type {AjaxPostError} */ (er);
+
+      // Log just in case not internationalized
+      console.error(Nogin._('ErrorFormat', {
+        text: err.text,
+        statusText:
+          // istanbul ignore next
+          err.statusText ||
+          ''
+      }));
+      // However, should already be internationalized by server
+      showLockedErrorAlert({message: err.text});
+    }
+  });
+  removePrivilegeFromGroupConfirmDialog.modal('show');
+});
+
+/**
+ * @throws {Error}
+ * @param {string} groupName
+ * @param {string} privilegeName
+ * @returns {Promise<void>}
+ */
+async function removePrivilegeFromGroup (groupName, privilegeName) {
+  removePrivilegeFromGroupConfirmDialog.modal('hide');
+  await post(Nogin.Routes.accessAPI, {
+    verb: 'removePrivilegeFromGroup', groupName, privilegeName
+  });
+  showLockedAlertReload({type: 'privilegeRemovedFromGroup'});
+}
+
 /** @type {string} */
 let group;
 
@@ -361,7 +473,8 @@ async function deleteGroup () {
 /**
  * @param {object} cfg
  * @param {"groupCreated"|"groupDeleted"|"groupRenamed"|
- *   "userRemovedFromGroup"|"userAddedToGroup"} cfg.type
+ *   "userRemovedFromGroup"|"userAddedToGroup"|"privilegeAddedToGroup"|
+ *   "privilegeRemovedFromGroup"} cfg.type
  * @returns {void}
  */
 function showLockedAlertReload ({type}) {

@@ -441,6 +441,9 @@
     "sureWantDeleteGroup": {
       "message": "Are you sure you want to delete group {group}?"
     },
+    "PleaseInputPrivilegeToAddToGroup": {
+      "message": "Please input the privilege you wish to add to the group"
+    },
 
     "PRIVILEGES (BUSINESS LOGIC AND TEMPLATE)": true,
     "bad-privilegename": {

@@ -290,8 +290,8 @@ const PrivilegesView = {
 
   /**
    * @returns {import('./utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   setRemovePrivilegeFromGroup () {
     const removePrivilegeFromGroupConfirmDialog = ConfirmDialog.populate({
       type: 'removePrivilegeFromGroup',

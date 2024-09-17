@@ -13,10 +13,13 @@ import singleInputForm from './modals/single-input-form.js';
 *     privileges: import('../modules/account-manager.js').PrivilegeInfo[]
 *     builtin: boolean
 *   }[],
-*   users: string[]
+*   users: string[],
+*   privileges: string[]
 * }} cfg
 */
-const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
+const groups = ({
+  _, layout, hasDeleteGroupsAccess, groupsInfo, users, privileges
+}) => {
   return layout({
     content: [
       ['div', {
@@ -43,7 +46,7 @@ const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
             groupsInfo.map((
-              {groupName, usersInfo, privileges, builtin}, i
+              {groupName, usersInfo, privileges: privs, builtin}, i
             ) => {
               return ['tr', [
                 ['td', {class: 'groups group'}, [i + 1]],
@@ -56,7 +59,7 @@ const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
                     ]]
                     : groupName
                 ]],
-                ['td', privileges.map(({privilegeName}) => {
+                ['td', privs.map(({privilegeName}) => {
                   return ['button', {
                     class: 'removePrivilegeFromGroup',
                     'data-privilege': privilegeName,
@@ -119,6 +122,7 @@ const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
         alert({_}),
         confirm({_, type: 'deleteGroup'}),
         confirm({_, type: 'removeUserFromGroup'}),
+        confirm({_, type: 'removePrivilegeFromGroup'}),
         singleInputForm({
           _, type: 'createGroup', inputDirections: 'PleaseInputGroupToCreate'
         }),
@@ -129,14 +133,19 @@ const groups = ({_, layout, hasDeleteGroupsAccess, groupsInfo, users}) => {
           _, type: 'addUserToGroup',
           inputDirections: 'PleaseInputUserToAddToGroup',
           autocomplete: users
+        }),
+        singleInputForm({
+          _, type: 'addPrivilegeToGroup',
+          inputDirections: 'PleaseInputPrivilegeToAddToGroup',
+          autocomplete: privileges
         })
       ]]
     ],
     scripts: [
       ['script', {
-        // src: '/js/controllers/groupsController.js', type: 'module'
-        src: '/js/controllers/groupsController.iife.min.js',
-        defer: 'defer'
+        src: '/js/controllers/groupsController.js', type: 'module'
+        // src: '/js/controllers/groupsController.iife.min.js',
+        // defer: 'defer'
       }]
     ]
   });

@@ -57,6 +57,73 @@ const GroupsView = {
   },
 
   /**
+   * @returns {JQuery} `HTMLDivElement`
+   */
+  getAddPrivilegeToGroupButton () {
+    return $('button.addPrivilegeToGroup');
+  },
+
+  /**
+   * @returns {import('../views/utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
+   */
+  addPrivilegeToGroupModal () {
+    const addPrivilegeToGroupModal =
+      /**
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
+        $('#addPrivilegeToGroup')
+      );
+    addPrivilegeToGroupModal.modal({
+      show: false, keyboard: true, backdrop: true
+    });
+    return addPrivilegeToGroupModal;
+  },
+
+  /**
+   * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm} `HTMLFormElement`
+   */
+  addPrivilegeToGroupForm (addPrivilegeToGroupModal) {
+    return (
+    /**
+     * @type {import('../utilities/ajaxFormClientSideValidate.js').
+     * JQueryWithAjaxForm}
+     */
+      (addPrivilegeToGroupModal.find('#addPrivilegeToGroup-form'))
+    );
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
+  getAddPrivilegeToGroupGroup () {
+    return /** @type {HTMLInputElement} */ ($('#addPrivilegeToGroup-input')[0]);
+  },
+
+  /**
+   * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
+   */
+  addPrivilegeToGroupCancel (addPrivilegeToGroupModal) {
+    return addPrivilegeToGroupModal.find(
+      '[data-name=addPrivilegeToGroup-cancel]'
+    );
+  },
+
+  /**
+   * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
+   */
+  addPrivilegeToGroupSubmit (addPrivilegeToGroupModal) {
+    return addPrivilegeToGroupModal.find(
+      '[data-name=addPrivilegeToGroup-submit]'
+    );
+  },
+
+  /**
    * @returns {import('../views/utilities/AlertDialog.js').
   *   JQueryWithModal} `HTMLDivElement`
   */
@@ -285,9 +352,37 @@ const GroupsView = {
   },
 
   /**
+   * @returns {JQuery<HTMLElement>}
+   */
+  getRemovePrivilegeFromGroup () {
+    return $('button.removePrivilegeFromGroup');
+  },
+
+  /**
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
+   */
+  setRemovePrivilegeFromGroup () {
+    const removePrivilegeFromGroupConfirmDialog = ConfirmDialog.populate({
+      type: 'removePrivilegeFromGroup',
+      header: /** @type {string} */ (_('removePrivilegeFromGroup')),
+      body: /** @type {string} */ (_('reallyWantRemovePrivilegeFromGroup')),
+      cancel: /** @type {string} */ (_('cancel')),
+      submit: /** @type {string} */ (_('delete'))
+    });
+    removePrivilegeFromGroupConfirmDialog.find(
+      '.submit'
+    ).addClass('btn-danger');
+    return /** @type {import('./utilities/AlertDialog.js').JQueryWithModal} */ (
+      removePrivilegeFromGroupConfirmDialog
+    );
+  },
+
+  /**
    * @param {object} cfg
    * @param {"groupCreated"|"groupDeleted"|"groupRenamed"|
-   *   "userRemovedFromGroup"|"userAddedToGroup"} cfg.type
+   *   "userRemovedFromGroup"|"userAddedToGroup"|
+   *   "privilegeAddedToGroup"|"privilegeRemovedFromGroup"} cfg.type
    * @param {string} [cfg.group]
    * @returns {import('./utilities/AlertDialog.js').
    *   JQueryWithModal} `HTMLDivElement`
