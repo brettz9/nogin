@@ -1342,16 +1342,19 @@ class AccountManager {
       throw new TypeError('bad-privilege-description');
     }
 
-    let o;
-    try {
-      o = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
-        this.privileges
-      ).findOne({
-        privilegeName: data.newPrivilegeName
-      });
-    } catch {}
-    if (o) {
-      throw new Error('privilegename-taken');
+    // User may also be just editing description
+    if (data.newPrivilegeName !== data.privilegeName) {
+      let o;
+      try {
+        o = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+          this.privileges
+        ).findOne({
+          privilegeName: data.newPrivilegeName
+        });
+      } catch {}
+      if (o) {
+        throw new Error('privilegename-taken');
+      }
     }
 
     const filter = {
