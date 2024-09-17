@@ -1748,6 +1748,12 @@ window.Nogin = {
       return;
     }
 
+    if (req.query.format === 'esm') {
+      res.type('.js');
+      res.status(200).send(`export default ${JSON.stringify(converted)};`);
+      return;
+    }
+
     res.type('.js');
     res.status(200).send(`window.NoginPrivs = ${JSON.stringify(converted)};`);
   });

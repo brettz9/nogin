@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.1.0
+
+- feat: expose ESM format for `_privs`
+
 ## 7.0.2
 
 - fix: proper JSON format for `_privs`
