@@ -1776,11 +1776,7 @@ window.Nogin = {
   });
 
   app.use((req, _res, next) => {
-    /**
-     * @type {import('express').Request & {
-     *   hasPrivilege: (priv: string) => Promise<boolean>}}
-     */
-    (req).hasPrivilege =
+    req.hasPrivilege =
     /**
      * @param {string} priv
      * @returns {Promise<boolean>}

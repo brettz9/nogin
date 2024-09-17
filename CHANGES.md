@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.2.4
+
+- fix: TS for `req.hasPrivilege(priv)`
+
 ## 7.2.3
 
 - fix: manually copy over some typings files

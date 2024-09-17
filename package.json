@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "7.2.3",
+  "version": "7.2.4",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
