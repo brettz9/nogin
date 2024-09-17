@@ -123,6 +123,13 @@ well as `--postLoginRedirectPath /` arguments. See these options for more detail
 
 8. (For your live site, ensure your `nogin.js` `NL_SITE_URL` is pointing to this port.)
 
+9. Set yourself as `rootUser` in `nogin.js` and add groups and privileges and
+    assign groups to users as relevant. Use dots as namespaces in privilege and
+    group names. Note that the built-in groups `nogin.loggedInUsers` and
+    `nogin.guests` will apply to all who are logged in or not, respectfully. The
+    privilegs should be additive from the level of guest to logged in user to
+    regular user to root user.
+
 ## Steps for getting port that may block Mongo DB
 
 MongoDB may end up with a process that interferes with starting a new instance.
@@ -419,7 +426,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
-1. Recheck coverage tests
+1. Recheck **coverage** tests
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)
 1. **Login page**
@@ -531,10 +538,15 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## Lower priority to-dos
 
-1. Add `/user/<username>` (GET) script for admins and others
-1. Add `/group/<groupname>` (GET) script for admins and others
+1. Change POST APIs to GET where expected.
 1. Add to `/accessAPI` (GET) to explain API and also possibly consolidate
     to one page?
+1. "blockedIPs" pseudo-group to which one can add IPs (as distinct from
+    "nogin.guests")
+1. Add types like number, string, and array (of strings) privileges?
+1. Add "local" boolean flag to privileges (if delivered by default in JavaScript)?
+1. Add `/user/<username>` (GET) script for admins and others
+1. Add `/group/<groupname>` (GET) script for admins and others
 1. Could make groups hierarchical (multiple? inheritance privileges)
 1. Allow variant of `localScripts` which uses CDN but generates fallback
 1. Option to **email forgotten username** (as a workaround, the reset
