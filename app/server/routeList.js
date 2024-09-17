@@ -1755,7 +1755,11 @@ window.Nogin = {
     }
 
     res.type('.js');
-    res.status(200).send(`window.NoginPrivs = ${JSON.stringify(converted)};`);
+    res.status(200).send(`window.NoginPrivs = ${JSON.stringify(converted)};
+window.NoginPrivs.hasPrivilege = function (priv) {
+  return this.privs === true ? true : this.privs.includes(priv);
+};
+`);
   });
 
   // To save the client extra requests

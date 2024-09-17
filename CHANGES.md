@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.3.0
+
+- feat: expose `hasPrivilege` on `_privs`
+
 ## 7.2.4
 
 - fix: TS for `req.hasPrivilege(priv)`
