@@ -57,6 +57,7 @@ const pkg = JSON.parse(
  *   RATE_LIMIT: number,
  *   disableXSRF: boolean,
  *   noHelmet: boolean,
+ *   noHostValidation: boolean,
  *   helmetOptions: string|{noSniff: boolean},
  *   csurfOptions: string,
  *   sessionCookieOptions: string|{
@@ -347,6 +348,10 @@ const optionDefinitions = [
   {
     name: 'noHelmet', type: Boolean,
     description: 'Disable helmet use entirely. Off by default.'
+  },
+  {
+    name: 'noHostValidation', type: Boolean,
+    description: 'Disable hostValidation use entirely. Off by default.'
   },
   {
     name: 'helmetOptions', type: String,

@@ -41,6 +41,9 @@ importers:
       helmet:
         specifier: ^7.1.0
         version: 7.1.0
+      host-validation:
+        specifier: ^2.0.1
+        version: 2.0.1
       intl-dom:
         specifier: ^0.20.0
         version: 0.20.0(encoding@0.1.13)
@@ -4715,6 +4718,9 @@ packages:
 
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
+
+  host-validation@2.0.1:
+    resolution: {integrity: sha512-ph83JIH9675FQsSXKGICgGJE0qFssaitxgjI9XhlJwqLERUcI25lbvyopVeTDMUbxrU7eLg1MVzzhw0IRzJ6NQ==}
 
   hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
@@ -15350,6 +15356,8 @@ snapshots:
       hash.js: 1.1.7
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
+
+  host-validation@2.0.1: {}
 
   hosted-git-info@2.8.9: {}
 

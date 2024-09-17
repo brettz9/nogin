@@ -19,6 +19,9 @@ import stylus from 'stylus';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
+// @ts-expect-error No TS
+import hostValidation from 'host-validation';
+
 import routes from './routeList.js';
 import getLogger from './modules/getLogger.js';
 import DBFactory from './modules/db-factory.js';
@@ -155,6 +158,7 @@ const createServer = async function (options) {
     rootUser,
     crossDomainJSRedirects,
     noHelmet,
+    noHostValidation,
     disableXSRF,
     sessionCookieOptions = {
       sameSite: 'lax' // Not concerned about strict for GET access
@@ -204,6 +208,12 @@ const createServer = async function (options) {
     app.use(helmet(
       parseCLIJSON(helmetOptions)
     ));
+  }
+
+  if (!noHostValidation) {
+    app.use(hostValidation({hosts: [
+      new URL(NL_SITE_URL).host
+    ]}));
   }
 
   if (staticDir) {

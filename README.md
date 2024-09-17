@@ -174,6 +174,7 @@ your own `nogin.js` config file.
 
 - `--disableXSRF` (Boolean; defaults to `false`.)
 - `--noHelmet` (Boolean; defaults to `false`.)
+- `--noHostValidation` (Boolean; defaults to `false`.)
 - `--RATE_LIMIT` (A number defaulting to 100 for a rate limit.)
 - `--csurfOptions` (A string, or, in config, an object; defaults to
     `{cookie: {signed: true, sameSite: "lax"}`; note that if you are on

@@ -201,6 +201,7 @@
     "express-session": "^1.18.0",
     "file-fetch": "1.6.1",
     "helmet": "^7.1.0",
+    "host-validation": "^2.0.1",
     "intl-dom": "^0.20.0",
     "intl-locale-textinfo-polyfill": "^2.1.1",
     "jamilih": "^0.60.0",
