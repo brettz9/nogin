@@ -62,6 +62,11 @@ flags rather than environmental variables.
 You provide the app (through the `--router` argument) your Express app
 entry file and optionally other arguments. See the next section.
 
+Besides these changes, there have been subsequent additions as well:
+
+- Groups, privilege, and user management
+- Additional security like `hostValidation`
+
 ## Installation & Setup
 
 1. Install [Node.js](https://nodejs.org/) (minimum version of 10.4.0) and
