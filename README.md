@@ -432,6 +432,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
+1. Review `csurf` and usage
 1. Recheck **coverage** tests
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)
