@@ -331,6 +331,8 @@ const routeList = async (app, config) => {
      */
     logout (routes, req, res) {
       res.clearCookie('login');
+      const csurfCookie = '_csrf';
+      res.clearCookie(csurfCookie);
       req.session.destroy(() => {
         res.redirect(routes.root);
       });
@@ -1736,7 +1738,10 @@ window.Nogin = {
 
   app.get('/_privs', async function (req, res) {
     const userPrivs = await getUserPrivs(req);
-    const converted = userPrivs === true ? true : [...userPrivs];
+    const converted = {
+      privs: userPrivs === true ? true : [...userPrivs],
+      guest: !req.session?.user?.user
+    };
 
     if (req.query.format === 'json') {
       res.status(200).json(converted);
@@ -1744,9 +1749,7 @@ window.Nogin = {
     }
 
     res.type('.js');
-    res.status(200).send(`window.NoginPrivs = {
-    privs: ${JSON.stringify(converted)}
-};`);
+    res.status(200).send(`window.NoginPrivs = ${JSON.stringify(converted)};`);
   });
 
   // To save the client extra requests

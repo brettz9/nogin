@@ -12,6 +12,6 @@ export async function getPrivileges () {
  * @param {string} priv
  */
 export async function hasPrivilege (priv) {
-  const privs = await getPrivileges();
+  const {privs} = await getPrivileges();
   return privs === true ? true : privs.includes(priv);
 }

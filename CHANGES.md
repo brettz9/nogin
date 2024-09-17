@@ -1,8 +1,12 @@
 # CHANGES for nogin
 
+## 7.0.2
+
+- fix: proper JSON format for `_privs`
+
 ## 7.0.1
 
-- fix: Also clear `_csurf` cookie on logout
+- fix: Also clear `_csrf` cookie on logout
 
 ## 7.0.0
 
