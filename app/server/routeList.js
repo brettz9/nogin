@@ -1039,6 +1039,8 @@ const routeList = async (app, config) => {
      */
     async logout (routes, req, res) {
       res.clearCookie('login');
+      const csurfCookie = '_csrf';
+      res.clearCookie(csurfCookie);
       const _ = await setI18n(req, res);
       req.session.destroy(() => {
         res.status(200).send(_('OK'));

@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.0.1
+
+- fix: Also clear `_csurf` cookie on logout
+
 ## 7.0.0
 
 BREAKING CHANGE: Drop `--showUsers` (in favor of privileges)
