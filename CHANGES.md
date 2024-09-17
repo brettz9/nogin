@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.2.3
+
+- fix: manually copy over some typings files
+
 ## 7.2.2
 
 - fix: update `intl-dom` peerDependency
