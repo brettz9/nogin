@@ -141,6 +141,7 @@ class AccountManager {
       await this.accounts.createIndex({
         groupName: 1
       });
+
       await this.addDefaultGroups();
 
       this.privileges = await this.adapter.getPrivileges();
@@ -909,6 +910,9 @@ class AccountManager {
   async addPrivilegeToGroup (data) {
     if (typeof data.groupName !== 'string' || !data.groupName) {
       throw new Error('bad-groupname');
+    }
+    if (typeof data.privilegeName !== 'string' || !data.privilegeName) {
+      throw new Error('bad-privilegename');
     }
 
     let _o;

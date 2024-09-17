@@ -256,7 +256,7 @@ const PrivilegesView = {
   /**
    * @returns {HTMLInputElement}
    */
-  getAddPrivilegeToGroupName () {
+  getAddPrivilegeToGroupGroup () {
     return /** @type {HTMLInputElement} */ ($('#addPrivilegeToGroup-input')[0]);
   },
 

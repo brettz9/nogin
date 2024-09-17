@@ -144,8 +144,8 @@ addPrivilegeToGroupForm.on('submit', function (e) {
   e.preventDefault();
 });
 addPrivilegeToGroupButton.on('click', (e) => {
-  const groupName = /** @type {string} */ (e.target.dataset.group);
-  const privilegeToAdd = PrivilegesView.getAddPrivilegeToGroupName();
+  const privilegeToAdd = /** @type {string} */ (e.target.dataset.privilege);
+  const groupName = PrivilegesView.getAddPrivilegeToGroupGroup();
 
   const addPrivilegeToGroupCancel = PrivilegesView.addPrivilegeToGroupCancel(
     addPrivilegeToGroupModal
@@ -161,8 +161,8 @@ addPrivilegeToGroupButton.on('click', (e) => {
   );
   addPrivilegeToGroupSubmit.on('click', async () => {
     try {
-      if (privilegeToAdd.validity.tooShort) {
-        privilegeToAdd.setCustomValidity(
+      if (groupName.validity.tooShort) {
+        groupName.setCustomValidity(
           PrivilegesView.errorMessages.name.PleaseEnterName
         );
         /** @type {HTMLFormElement} */ (
@@ -170,8 +170,7 @@ addPrivilegeToGroupButton.on('click', (e) => {
         ).reportValidity();
         return;
       }
-      const privilegeID = privilegeToAdd.value;
-      await addPrivilegeToGroup(groupName, privilegeID);
+      await addPrivilegeToGroup(groupName.value, privilegeToAdd);
     } catch (er) {
       addPrivilegeToGroupModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
