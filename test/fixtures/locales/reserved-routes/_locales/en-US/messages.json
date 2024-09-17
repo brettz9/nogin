@@ -602,6 +602,9 @@
     "PleaseInputADescriptionForPrivilege": {
       "message": "Please input a description for the privilege"
     },
+    "privilege-missing": {
+      "message": "Privilege missing"
+    },
 
     "PRIVILEGES (CLIENT)": true,
     "deletePrivilege": {

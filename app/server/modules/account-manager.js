@@ -917,7 +917,7 @@ class AccountManager {
 
     let _o;
     const privilegeFilter = {
-      privilege: {$eq: data.privilegeName}
+      privilegeName: {$eq: data.privilegeName}
     };
     try {
       _o = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (

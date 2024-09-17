@@ -354,13 +354,13 @@ async function editPrivilege (privilegeName, newPrivilegeName, description) {
 
 /**
  * @param {string} groupName
- * @param {string} privilegeID
+ * @param {string} privilegeName
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function addPrivilegeToGroup (groupName, privilegeID) {
+async function addPrivilegeToGroup (groupName, privilegeName) {
   await post(Nogin.Routes.accessAPI, {
-    verb: 'addPrivilegeToGroup', groupName, privilegeID
+    verb: 'addPrivilegeToGroup', groupName, privilegeName
   });
   addPrivilegeToGroupModal.modal('hide');
   showLockedAlertReload({type: 'privilegeAddedToGroup'});
