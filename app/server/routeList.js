@@ -170,14 +170,11 @@ const routeList = async (app, config) => {
 
   /**
    * @param {import('express').Request} req
-   * @param {string[]} privs
    */
-  const getUserAccess = async (req, privs) => {
+  const getUserPrivs = async (req) => {
     const rootAccess = hasRootAccess(req);
     if (rootAccess) {
-      return privs.map(() => {
-        return rootAccess;
-      });
+      return true;
     }
 
     const user = req.session?.user?.user;
@@ -201,8 +198,22 @@ const routeList = async (app, config) => {
         set.add(item.privilegeName);
       }
       return set;
-    }, new Set());
+    }, /** @type {Set<string>} */ (new Set()));
 
+    return privSet;
+  };
+
+  /**
+   * @param {import('express').Request} req
+   * @param {string[]} privs
+   */
+  const getUserAccess = async (req, privs) => {
+    const privSet = await getUserPrivs(req);
+    if (privSet === true) {
+      return privs.map(() => {
+        return true;
+      });
+    }
 
     return privs.map((priv) => {
       return privSet.has(priv);
@@ -1707,6 +1718,21 @@ window.Nogin = {
 };
 `;
   };
+
+  app.get('/_privs', async function (req, res) {
+    const userPrivs = await getUserPrivs(req);
+    const converted = userPrivs === true ? true : [...userPrivs];
+
+    if (req.query.format === 'json') {
+      res.status(200).json(converted);
+      return;
+    }
+
+    res.type('.js');
+    res.status(200).send(`window.NoginPrivs = {
+    privs: ${JSON.stringify(converted)}
+};`);
+  });
 
   // To save the client extra requests
   // We don't i18nize this route, as the client will need it to find the paths

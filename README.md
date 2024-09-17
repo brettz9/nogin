@@ -130,6 +130,12 @@ well as `--postLoginRedirectPath /` arguments. See these options for more detail
     privilegs should be additive from the level of guest to logged in user to
     regular user to root user.
 
+10. Check the privileges in your app. You can get the privileges from `/_privs`
+    JavaScript. If you want live results, you can make a GET request to
+    `/_privs?format=json` (or just import the helper `nogin/hasPrivilege.js`).
+    We don't put the privileges on the session object since the app should
+    also be able to get them for non-logged-in users.
+
 ## Steps for getting port that may block Mongo DB
 
 MongoDB may end up with a process that interferes with starting a new instance.
@@ -285,7 +291,7 @@ export default function fallback (req, res, next) {
 - `--router` - This is where your own (Express) app should be. Note: The following
     paths should not be set as they are reserved by nogin:
     - POST: `/login`, `/logout`, `/home`, `/signup`, `/lost-password`, `/reset-password`, `/delete`, `/reset`, `/accessAPI`
-    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`, `/accessAPI`, `/groups`, `/privileges` (reserved)
+    - GET: `/login`, `/home`, `/signup`, `/reset-password`, `/activation`, `/users`,  `/coverage`, `/accessAPI`, `/groups`, `/privileges`, `_lang`, `_privs`
 
 ```js
 /**
