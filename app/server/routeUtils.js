@@ -301,7 +301,7 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
 /**
  * @typedef {"activation"|"lostPassword"|
  *   "resetPassword"|"users"|"delete"|"reset"|"coverage"|"accessAPI"|
- *   "groups"|"privileges"|"signup"|"root"|"home"} Route
+ *   "groups"|"privileges"|"signup"|"root"|"home"|"logout"} Route
  */
 
 const routeMap = new Map();

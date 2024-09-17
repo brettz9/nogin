@@ -324,6 +324,19 @@ const routeList = async (app, config) => {
     },
 
     /**
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {void}
+     */
+    logout (routes, req, res) {
+      res.clearCookie('login');
+      req.session.destroy(() => {
+        res.redirect(routes.root);
+      });
+    },
+
+    /**
      * Control panel.
      * @param {import('./routeUtils.js').Routes} routes
      * @param {import('express').Request} req
