@@ -6,7 +6,13 @@ import singleInputForm from './modals/single-input-form.js';
  * @param {{
 *   _: import('intl-dom').I18NCallback,
 *   layout: import('../routeUtils.js').LayoutCallback
-*   hasDeleteGroupsAccess: boolean,
+*   hasEditGroupAccess: boolean,
+*   hasAddUserToGroupAccess: boolean,
+*   hasRemoveUserFromGroupAccess: boolean,
+*   hasAddPrivilegeToGroupAccess: boolean,
+*   hasRemovePrivilegeFromGroupAccess: boolean,
+*   hasReadPrivilegeAccess: boolean,
+*   hasReadUsersAccess: boolean,
 *   groupsInfo: {
 *     groupName: string,
 *     usersInfo: {user: string, _id: string}[],
@@ -18,7 +24,15 @@ import singleInputForm from './modals/single-input-form.js';
 * }} cfg
 */
 const groups = ({
-  _, layout, hasDeleteGroupsAccess, groupsInfo, users, privileges
+  _, layout,
+  hasEditGroupAccess,
+  hasAddUserToGroupAccess,
+  hasRemoveUserFromGroupAccess,
+  hasAddPrivilegeToGroupAccess,
+  hasRemovePrivilegeFromGroupAccess,
+  hasReadPrivilegeAccess,
+  hasReadUsersAccess,
+  groupsInfo, users, privileges
 }) => {
   return layout({
     content: [
@@ -33,15 +47,26 @@ const groups = ({
             ['tr', [
               ['th', {class: 'groups number'}, [_('NumberAbbreviated')]],
               ['th', {class: 'groups group'}, [_('Group')]],
-              ['th', {class: 'groups privileges'}, [_('Privileges')]],
-              ['th', {class: 'groups addPrivilegeToGroup'}, [
-                _('addPrivilegeToGroup')
-              ]],
-              ['th', {class: 'groups users'}, [_('Users')]],
-              ['th', {class: 'groups addUserToGroup'}, [_('addUserToGroup')]],
-              ['th', {class: 'groups rename'}, [_('EditGroupName')]],
-              // ['th', {class: 'groups privileges'}, [_('Privileges')]],
-              hasDeleteGroupsAccess ? ['th', [_('delete')]] : ''
+              hasRemovePrivilegeFromGroupAccess || hasReadPrivilegeAccess
+                ? ['th', {class: 'groups privileges'}, [_('Privileges')]]
+                : '',
+              hasAddPrivilegeToGroupAccess
+                ? ['th', {class: 'groups addPrivilegeToGroup'}, [
+                  _('addPrivilegeToGroup')
+                ]]
+                : '',
+              hasReadUsersAccess || hasRemoveUserFromGroupAccess
+                ? ['th', {class: 'groups users'}, [_('Users')]]
+                : '',
+              hasAddUserToGroupAccess
+                ? ['th', {
+                  class: 'groups addUserToGroup'
+                }, [_('addUserToGroup')]]
+                : '',
+              hasEditGroupAccess
+                ? ['th', {class: 'groups rename'}, [_('EditGroupName')]]
+                : '',
+              hasEditGroupAccess ? ['th', [_('delete')]] : ''
             ]]
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
@@ -59,50 +84,72 @@ const groups = ({
                     ]]
                     : groupName
                 ]],
-                ['td', privs.map(({privilegeName}) => {
-                  return ['button', {
-                    class: 'removePrivilegeFromGroup',
-                    'data-privilege': privilegeName,
-                    'data-group': groupName
-                  }, [
-                    `${privilegeName} ☒`
-                  ]];
-                })],
-                ['td', [
-                  ['button', {
-                    class: 'addPrivilegeToGroup btn btn-primary',
-                    'data-group': groupName
-                  }, ['+']]
-                ]],
+                hasRemovePrivilegeFromGroupAccess
+                  ? ['td', privs.map(({privilegeName}) => {
+                    return ['button', {
+                      class: 'removePrivilegeFromGroup',
+                      'data-privilege': privilegeName,
+                      'data-group': groupName
+                    }, [
+                      `${privilegeName} ☒`
+                    ]];
+                  })]
+                  : hasReadPrivilegeAccess
+                    ? ['td', privs.map(({privilegeName}) => {
+                      return ['span', [
+                        privilegeName
+                      ]];
+                    })]
+                    : '',
+                hasAddPrivilegeToGroupAccess
+                  ? ['td', [
+                    ['button', {
+                      class: 'addPrivilegeToGroup btn btn-primary',
+                      'data-group': groupName
+                    }, ['+']]
+                  ]]
+                  : '',
                 ...builtin
                   ? [
-                    ['td'],
-                    ['td'],
-                    ['td'],
-                    hasDeleteGroupsAccess ? ['td'] : ''
+                    hasReadUsersAccess || hasRemoveUserFromGroupAccess
+                      ? ['td']
+                      : '',
+                    hasAddUserToGroupAccess ? ['td'] : '',
+                    hasEditGroupAccess ? ['td'] : '',
+                    hasEditGroupAccess ? ['td'] : ''
                   ]
                   : [
-                    ['td', usersInfo.filter(Boolean).map(({user}) => {
-                      return ['button', {
-                        class: 'removeUserFromGroup',
-                        'data-user': user,
-                        'data-group': groupName
-                      }, [
-                        `${user} ☒`
-                      ]];
-                    })],
-                    ['td', [
-                      ['button', {
-                        class: 'addUserToGroup btn btn-primary',
-                        'data-group': groupName
-                      }, ['+']]
-                    ]],
-                    ['td', [
-                      ['button', {
-                        class: 'renameGroup', 'data-group': groupName
-                      }, ['e']]
-                    ]],
-                    hasDeleteGroupsAccess
+                    hasRemoveUserFromGroupAccess
+                      ? ['td', usersInfo.filter(Boolean).map(({user}) => {
+                        return ['button', {
+                          class: 'removeUserFromGroup',
+                          'data-user': user,
+                          'data-group': groupName
+                        }, [
+                          `${user} ☒`
+                        ]];
+                      })]
+                      : hasReadUsersAccess
+                        ? ['td', usersInfo.filter(Boolean).map(({user}) => {
+                          return ['span', [user]];
+                        })]
+                        : '',
+                    hasAddUserToGroupAccess
+                      ? ['td', [
+                        ['button', {
+                          class: 'addUserToGroup btn btn-primary',
+                          'data-group': groupName
+                        }, ['+']]
+                      ]]
+                      : '',
+                    hasEditGroupAccess
+                      ? ['td', [
+                        ['button', {
+                          class: 'renameGroup', 'data-group': groupName
+                        }, ['e']]
+                      ]]
+                      : '',
+                    hasEditGroupAccess
                       ? ['td', [
                         ['button', {
                           class: 'deleteGroup',

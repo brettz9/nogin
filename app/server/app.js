@@ -63,7 +63,6 @@ import getDirname from './modules/getDirname.js';
  *   fromText: string,
  *   fromURL: string,
  *   SERVE_COVERAGE: boolean,
- *   showUsers: boolean,
  *   disableXSRF: boolean,
  *   csurfOptions: string
  * }} RouteConfigFromOptions
@@ -138,7 +137,6 @@ const createServer = async function (options) {
     SERVE_COVERAGE = false,
     composeResetPasswordEmailView,
     composeActivationEmailView,
-    showUsers,
     injectHTML,
     favicon,
     stylesheet,
@@ -294,7 +292,6 @@ const createServer = async function (options) {
     SERVE_COVERAGE,
     composeResetPasswordEmailView,
     composeActivationEmailView,
-    showUsers,
     dbOpts,
     injectHTML,
     favicon,

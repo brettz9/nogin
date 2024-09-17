@@ -12,11 +12,12 @@ import confirm from './modals/confirm.js';
  *       import('../modules/account-manager.js').PrivilegeInfo[]
  *   }})[]
  *   hasDeleteUsersAccess: boolean,
- *   hasReadGroupsAccess: boolean
+ *   hasReadGroupAccess: boolean
  * }} cfg
  */
 const users = ({
-  _, layout, accounts, hasDeleteUsersAccess, hasReadGroupsAccess
+  _, layout, accounts,
+  hasDeleteUsersAccess, hasReadGroupAccess
 }) => {
   return layout({
     content: [
@@ -34,7 +35,7 @@ const users = ({
               ['th', {class: 'users number'}, [_('NumberAbbreviated')]],
               ['th', {class: 'users name'}, [_('Name')]],
               ['th', {class: 'users username'}, [_('Username')]],
-              hasReadGroupsAccess
+              hasReadGroupAccess
                 ? ['th', {class: 'users group'}, [_('Group')]]
                 : '',
               ['th', {class: 'users location'}, [_('Location')]],
@@ -53,8 +54,9 @@ const users = ({
                 ['td', {class: 'users number'}, [i + 1]],
                 ['td', [name]],
                 ['td', [user]],
-                hasReadGroupsAccess
+                hasReadGroupAccess
                   ? ['td', {
+                    // Won't be present if don't have access
                     title: privileges.map(({privilegeName}) => {
                       return privilegeName;
                     }).join(', ')
@@ -75,9 +77,11 @@ const users = ({
           )]
         ]],
         ['br'],
-        ['button', {class: 'deleteAllAccounts btn btn-danger focus'}, [
-          _('deleteAllAccounts')
-        ]],
+        hasDeleteUsersAccess
+          ? ['button', {class: 'deleteAllAccounts btn btn-danger focus'}, [
+            _('deleteAllAccounts')
+          ]]
+          : '',
         alert({_}),
         confirm({_, type: 'deleteAccount'}),
         confirm({_, type: 'deleteAllAccounts'})

@@ -319,7 +319,7 @@ describe('CLI', function () {
                 fetch(`http://127.0.0.1:${testPort}/dynamic-route`),
                 // Check countryCodes (and lack of `requireName`)
                 fetch(`http://127.0.0.1:${testPort}/signup`),
-                // Check missing `--showUsers` flag
+                // Check missing `--showUsers` flag (now should be user access)
                 //   (in main Cypress tests, we are enabling `showUsers`
                 //   and `requireName` so as to fully test them; while
                 //   we would ideally test these in the UI as well,

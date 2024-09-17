@@ -53,7 +53,6 @@ const pkg = JSON.parse(
  *   fromText: string,
  *   fromURL: string,
  *   SERVE_COVERAGE: boolean,
- *   showUsers: boolean,
  *   RATE_LIMIT: number,
  *   disableXSRF: boolean,
  *   noHelmet: boolean,
@@ -328,12 +327,6 @@ const optionDefinitions = [
     name: 'SERVE_COVERAGE', alias: 's', type: Boolean,
     description: 'Whether to host coverage within `/coverage`; defaults ' +
       'to `false`.'
-  },
-  {
-    name: 'showUsers', type: Boolean,
-    description: 'Whether to show the `/users` page. Off by default ' +
-      'for privacy. (May be removed as an option in the future if privileges ' +
-      'are added.)'
   },
   {
     name: 'RATE_LIMIT', alias: 'r', type: Number,

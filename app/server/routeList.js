@@ -60,7 +60,6 @@ const routeList = async (app, config) => {
     SERVE_COVERAGE,
     composeResetPasswordEmailView,
     composeActivationEmailView,
-    showUsers,
     fromText,
     fromURL,
     requireName,
@@ -168,6 +167,47 @@ const routeList = async (app, config) => {
         ? (await import(pathResolve(cwd, composeActivationEmailView))).default
         : undefined
   });
+
+  /**
+   * @param {import('express').Request} req
+   * @param {string[]} privs
+   */
+  const getUserAccess = async (req, privs) => {
+    const rootAccess = hasRootAccess(req);
+    if (rootAccess) {
+      return privs.map(() => {
+        return rootAccess;
+      });
+    }
+
+    const user = req.session?.user?.user;
+
+    const privInfos = (await Promise.all([
+      am.getPrivilegesForGroup('nogin.guests'),
+      user ? am.getPrivilegesForGroup('nogin.loggedInUsers') : null,
+      user
+        // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
+        ? am.getGroupForUser(user).then((groupName) => {
+          if (!groupName) {
+            return null;
+          }
+          return am.getPrivilegesForGroup(groupName);
+        })
+        : null
+    ])).flat();
+
+    const privSet = privInfos.reduce((set, item) => {
+      if (item) {
+        set.add(item.privilegeName);
+      }
+      return set;
+    }, new Set());
+
+
+    return privs.map((priv) => {
+      return privSet.has(priv);
+    });
+  };
 
   const GetRoutes = {
     /**
@@ -432,9 +472,14 @@ const routeList = async (app, config) => {
      */
     async users (_routes, req, res) {
       const [
+        accessResult,
         i18nResult,
         getAllRecordsResult
       ] = await Promise.allSettled([
+        getUserAccess(req, [
+          'nogin.readUsers', 'nogin.deleteUsers', 'nogin.readGroup',
+          'nogin.readPrivilege'
+        ]),
         setI18n(req, res),
         am.getAllRecords()
       ]);
@@ -450,6 +495,11 @@ const routeList = async (app, config) => {
         return;
       }
 
+      if (accessResult.status === 'rejected') {
+        res.status(400).send('bad-access');
+        return;
+      }
+
       const accounts =
         /**
         * @type {(import('./modules/account-manager.js').AccountInfo & {
@@ -458,20 +508,19 @@ const routeList = async (app, config) => {
         */
         (getAllRecordsResult.value) ?? [];
 
-      // Todo[>=8.0.0]: `/users` should always be enabled when there are (read)
-      //   privileges. Should later remove `showUsers` when wider privileges
-      //   are available
       // If adding adding/edit features, ensure have privileges of
       //   `nogin.editUser` and `nogin.createUser`
-      const hasReadUsersAccess = showUsers || hasRootAccess(req);
-      const hasDeleteUsersAccess = hasRootAccess(req);
-      const hasReadGroupsAccess = hasRootAccess(req);
+      const [
+        hasReadUsersAccess, hasDeleteUsersAccess, hasReadGroupAccess,
+        hasReadPrivilegeAccess
+      ] = accessResult.value;
+
       if (!hasReadUsersAccess) {
         pageNotFound(_, res);
         return;
       }
 
-      const groups = hasReadGroupsAccess
+      const groups = hasReadGroupAccess
         ? await Promise.all(
           /**
            * @type {Promise<{
@@ -499,7 +548,7 @@ const routeList = async (app, config) => {
           csrfToken: req.csrfToken()
         }),
         hasDeleteUsersAccess,
-        hasReadGroupsAccess,
+        hasReadGroupAccess,
         accounts: accounts.map(
           /**
            * @param {{
@@ -510,9 +559,9 @@ const routeList = async (app, config) => {
            * }} cfg
            * @param {number} idx
            * @returns {UserAccount & {
-           *   groupInfo: {
+           *   groupInfo: {}|{
            *     group: string,
-           *     privileges:
+           *     privileges?:
            *       import('./modules/account-manager.js').PrivilegeInfo[]
            *   }
            * }}
@@ -521,7 +570,14 @@ const routeList = async (app, config) => {
             return {
               user,
               name: name || '',
-              groupInfo: groups[idx] ?? '',
+              groupInfo: hasReadGroupAccess && hasReadPrivilegeAccess
+                ? groups[idx] ?? {}
+                : hasReadGroupAccess
+                  ? {
+                    ...groups[idx],
+                    privileges: undefined
+                  }
+                  : {},
               country: country ? _('country' + country) : '',
               date: new Intl.DateTimeFormat(
                 _.resolvedLocale, {dateStyle: 'full'}
@@ -583,17 +639,30 @@ const routeList = async (app, config) => {
      */
     async groups (_routes, req, res) {
       const [
+        accessResult,
         i18nResult,
         readGroupsResult,
         getAllRecords,
         privilegesInfo
       ] = await Promise.allSettled([
+        getUserAccess(req, [
+          'nogin.readGroup', 'nogin.editGroup',
+          'nogin.addUserToGroup', 'nogin.removeUserFromGroup',
+          'nogin.addPrivilegeToGroup',
+          'nogin.removePrivilegeFromGroup',
+          'nogin.readUsers',
+          'nogin.readPrivilege'
+        ]),
         setI18n(req, res),
         readGroups(),
         am.getAllRecords(),
         am.getAllPrivileges()
       ]);
 
+      if (accessResult.status === 'rejected') {
+        res.status(400).send('bad-access');
+        return;
+      }
       if (getAllRecords.status === 'rejected') {
         res.status(400).send('bad-records');
         return;
@@ -613,11 +682,41 @@ const routeList = async (app, config) => {
       }
       const {value: _} = i18nResult;
 
-      const hasReadGroupsAccess = hasRootAccess(req);
-      const hasDeleteGroupsAccess = hasRootAccess(req);
-      if (!hasReadGroupsAccess) {
+      const [
+        hasReadGroupAccess, hasEditGroupAccess,
+        hasAddUserToGroupAccess, hasRemoveUserFromGroupAccess,
+        hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess,
+        hasReadUsersAccess, hasReadPrivilegeAccess
+      ] = accessResult.value;
+
+      if (!hasReadGroupAccess) {
         pageNotFound(_, res);
         return;
+      }
+
+      /**
+       * @type {{
+       *   groupName: string;
+       *   builtin: boolean;
+       *   usersInfo?: {
+       *     user: string;
+       *     _id: string;
+       *   }[];
+       *   privileges?: import("./modules/account-manager.js").PrivilegeInfo[];
+       * }[]}
+       */
+      let readGroupsResultValue = readGroupsResult.value;
+      if (!hasRemovePrivilegeFromGroupAccess && !hasReadPrivilegeAccess) {
+        readGroupsResultValue = readGroupsResultValue.map((val) => {
+          delete val.privileges;
+          return val;
+        });
+      }
+      if (!hasRemoveUserFromGroupAccess && !hasReadUsersAccess) {
+        readGroupsResultValue = readGroupsResultValue.map((val) => {
+          delete val.usersInfo;
+          return val;
+        });
       }
 
       const title = _('groups');
@@ -626,7 +725,7 @@ const routeList = async (app, config) => {
           _, title, template: 'groups',
           csrfToken: req.csrfToken()
         }),
-        groupsInfo: readGroupsResult.value.sort(
+        groupsInfo: readGroupsResultValue.sort(
           ({groupName: gn1, builtin: bi1}, {groupName: gn2, builtin: bi2}) => {
             return bi1 && !bi2
               ? -1
@@ -635,13 +734,23 @@ const routeList = async (app, config) => {
                 : gn1 < gn2 ? -1 : gn1 > gn2 ? 1 : 0;
           }
         ),
-        hasDeleteGroupsAccess,
-        privileges: privilegesInfo.value.map(({
-          privilegeName
-        }) => privilegeName),
-        users: getAllRecords.value.map(
-          ({user}) => /** @type {string} */ (user)
-        )
+        hasEditGroupAccess,
+        hasAddUserToGroupAccess,
+        hasRemoveUserFromGroupAccess,
+        hasAddPrivilegeToGroupAccess,
+        hasRemovePrivilegeFromGroupAccess,
+        hasReadPrivilegeAccess,
+        hasReadUsersAccess,
+        privileges: hasAddPrivilegeToGroupAccess // Implies priv read access
+          ? privilegesInfo.value.map(({
+            privilegeName
+          }) => privilegeName)
+          : [],
+        users: hasReadUsersAccess || hasAddUserToGroupAccess
+          ? getAllRecords.value.map(
+            ({user}) => /** @type {string} */ (user)
+          )
+          : []
       });
     },
 
@@ -654,9 +763,18 @@ const routeList = async (app, config) => {
      */
     async privileges (_routes, req, res) {
       const [
+        accessResult,
         i18nResult,
         readPrivilegesResult
       ] = await Promise.allSettled([
+        getUserAccess(req, [
+          'nogin.readPrivilege',
+          'nogin.editPrivilege',
+          'nogin.addPrivilegeToGroup',
+          'nogin.removePrivilegeFromGroup',
+          'nogin.readGroup',
+          'nogin.readUsers'
+        ]),
         setI18n(req, res),
         readPrivileges()
       ]);
@@ -669,13 +787,60 @@ const routeList = async (app, config) => {
         res.status(400).send('bad-privilege-read');
         return;
       }
+      if (accessResult.status === 'rejected') {
+        res.status(400).send('bad-access');
+        return;
+      }
+
       const {value: _} = i18nResult;
 
-      const hasReadPrivilegesAccess = hasRootAccess(req);
-      const hasDeletePrivilegesAccess = hasRootAccess(req);
-      if (!hasReadPrivilegesAccess) {
+      const [
+        hasReadPrivilegeAccess,
+        hasEditPrivilegeAccess,
+        hasAddPrivilegeToGroupAccess,
+        hasRemovePrivilegeFromGroupAccess,
+        hasReadGroupAccess,
+        hasReadUsersAccess
+      ] = accessResult.value;
+
+      if (!hasReadPrivilegeAccess) {
         pageNotFound(_, res);
         return;
+      }
+
+      /**
+       * @type {{
+       *   privilegeName: string;
+       *   builtin: boolean;
+       *   description: string;
+       *   groupsInfo?: {
+       *     groupName: string;
+       *     builtin: boolean;
+       *     usersInfo?: {
+       *       user: string;
+       *      _id: string;
+       *     }[];
+       *   }[];
+       * }[]}
+       */
+      let readPrivilegesResultValue = readPrivilegesResult.value;
+      if (!hasRemovePrivilegeFromGroupAccess && !hasReadGroupAccess) {
+        readPrivilegesResultValue = readPrivilegesResultValue.map((val) => {
+          delete val.groupsInfo;
+          return val;
+        });
+      } else if (!hasReadUsersAccess) {
+        readPrivilegesResultValue = readPrivilegesResultValue.map((val) => {
+          return {
+            ...val,
+            groupsInfo: val.groupsInfo?.map((groupInfo) => {
+              return {
+                ...groupInfo,
+                usersInfo: undefined
+              };
+            })
+          };
+        });
       }
 
       const title = _('Privileges');
@@ -684,9 +849,15 @@ const routeList = async (app, config) => {
           _, title, template: 'privileges',
           csrfToken: req.csrfToken()
         }),
-        hasDeletePrivilegesAccess,
-        privilegesInfo: readPrivilegesResult.value,
-        groups: (await am.getAllGroups()).map(({groupName}) => groupName)
+        hasEditPrivilegeAccess,
+        hasAddPrivilegeToGroupAccess,
+        hasRemovePrivilegeFromGroupAccess,
+        hasReadGroupAccess,
+        hasReadUsersAccess,
+        privilegesInfo: readPrivilegesResultValue,
+        groups: hasAddPrivilegeToGroupAccess
+          ? (await am.getAllGroups()).map(({groupName}) => groupName)
+          : []
       });
     }
   };
@@ -1095,7 +1266,9 @@ const routeList = async (app, config) => {
           ? sess.user
             ? am.deleteAccountById(/** @type {string} */ (sess.user._id))
             : Promise.reject(new Error('Missing session user'))
-          : hasRootAccess(req)
+          : (await getUserAccess(req, [
+            'nogin.deleteUsers'
+          ]))[0]
             ? typeof req.body?.user === 'string' && req.body?.user
               ? am.deleteAccounts({
                 user: {$in: [req.body.user]}
@@ -1133,7 +1306,11 @@ const routeList = async (app, config) => {
     async reset (_routes, req, res) {
       const _ = await setI18n(req, res);
 
-      if (!hasRootAccess(req)) {
+      const [hasDeleteUsersAccess] = await getUserAccess(req, [
+        'nogin.deleteUsers'
+      ]);
+
+      if (!hasDeleteUsersAccess) {
         pageNotFound(_, res);
         return;
       }
@@ -1156,10 +1333,27 @@ const routeList = async (app, config) => {
     async accessAPI (_routes, req, res) {
       const _ = await setI18n(req, res);
 
-      if (!hasRootAccess(req)) {
-        pageNotFound(_, res);
-        return;
-      }
+      const [
+        hasReadUsersAccess,
+        hasReadGroupAccess,
+        hasEditGroupAccess,
+        hasAddUserToGroupAccess,
+        hasRemoveUserFromGroupAccess,
+        hasReadPrivilegeAccess,
+        hasEditPrivilegeAccess,
+        hasAddPrivilegeToGroupAccess,
+        hasRemovePrivilegeFromGroupAccess
+      ] = await getUserAccess(req, [
+        'nogin.readUsers',
+        'nogin.readGroup',
+        'nogin.editGroup',
+        'nogin.addUserToGroup',
+        'nogin.removeUserFromGroup',
+        'nogin.readPrivilege',
+        'nogin.editPrivilege',
+        'nogin.addPrivilegeToGroup',
+        'nogin.removePrivilegeFromGroup'
+      ]);
 
       const {
         verb,
@@ -1194,6 +1388,10 @@ const routeList = async (app, config) => {
       let resp = {success: true};
       switch (verb) {
       case 'readUsers':
+        if (!hasReadUsersAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         resp = {
           success: true,
           value: (await am.getAllRecords()).map(
@@ -1202,12 +1400,20 @@ const routeList = async (app, config) => {
         };
         break;
       case 'readGroups':
+        if (!hasReadGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         resp = {
           success: true,
           value: await readGroups()
         };
         break;
       case 'createGroup':
+        if (!hasEditGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.addNewGroup({
             groupName
@@ -1224,6 +1430,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'deleteGroup':
+        if (!hasEditGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.deleteGroupByGroupName(groupName);
         } catch (err) {
@@ -1232,6 +1442,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'renameGroup':
+        if (!hasEditGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.renameGroup({
             groupName,
@@ -1250,6 +1464,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'addUserToGroup':
+        if (!hasAddUserToGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.addUserToGroup({
             groupName,
@@ -1267,6 +1485,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'removeUserFromGroup':
+        if (!hasRemoveUserFromGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.removeUserFromGroup({
             groupName,
@@ -1285,12 +1507,20 @@ const routeList = async (app, config) => {
         break;
 
       case 'readPrivileges':
+        if (!hasReadPrivilegeAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         resp = {
           success: true,
           value: await readPrivileges()
         };
         break;
       case 'createPrivilege':
+        if (!hasEditPrivilegeAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.addNewPrivilege({
             privilegeName, description
@@ -1307,6 +1537,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'deletePrivilege':
+        if (!hasEditPrivilegeAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.deletePrivilegeByPrivilegeName(privilegeName);
         } catch (err) {
@@ -1321,6 +1555,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'editPrivilege':
+        if (!hasEditPrivilegeAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.editPrivilege({
             privilegeName,
@@ -1340,6 +1578,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'addPrivilegeToGroup':
+        if (!hasAddPrivilegeToGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.addPrivilegeToGroup({
             groupName,
@@ -1357,6 +1599,10 @@ const routeList = async (app, config) => {
         }
         break;
       case 'removePrivilegeFromGroup':
+        if (!hasRemovePrivilegeFromGroupAccess) {
+          pageNotFound(_, res);
+          return;
+        }
         try {
           await am.removePrivilegeFromGroup({
             groupName,

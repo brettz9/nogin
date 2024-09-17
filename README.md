@@ -248,8 +248,6 @@ for supporting additional routes.
 
 ##### Adding routes
 
-- `--showUsers` - `/users` page is not shown by default for privacy of those
-    users. Set to `true` to enable.
 - `-s`/`--SERVE_COVERAGE` (Boolean; defaults to `false`.)
 - `--staticDir` (One or more string paths)
 - `--middleware` (One or more middleware to be required)

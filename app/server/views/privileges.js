@@ -7,7 +7,11 @@ import doubleInputForm from './modals/double-input-form.js';
  * @param {{
  *   _: import('intl-dom').I18NCallback,
  *   layout: import('../routeUtils.js').LayoutCallback
- *   hasDeletePrivilegesAccess: boolean,
+ *   hasEditPrivilegeAccess: boolean,
+ *   hasAddPrivilegeToGroupAccess: boolean,
+ *   hasRemovePrivilegeFromGroupAccess: boolean,
+ *   hasReadGroupAccess: boolean,
+ *   hasReadUsersAccess: boolean,
  *   privilegesInfo: {
  *     privilegeName: string,
  *     description: string,
@@ -25,7 +29,12 @@ import doubleInputForm from './modals/double-input-form.js';
  * }} cfg
  */
 const privileges = ({
-  _, layout, hasDeletePrivilegesAccess, privilegesInfo, groups
+  _, layout,
+  hasEditPrivilegeAccess, hasAddPrivilegeToGroupAccess,
+  hasRemovePrivilegeFromGroupAccess,
+  hasReadGroupAccess,
+  hasReadUsersAccess,
+  privilegesInfo, groups
 }) => {
   return layout({
     content: [
@@ -42,11 +51,15 @@ const privileges = ({
               ['th', {class: 'privileges privilege'}, [_('Privilege')]],
               ['th', {class: 'privileges description'}, [_('Description')]],
               ['th', {class: 'privileges group'}, [_('Group')]],
-              ['th', {class: 'privileges addPrivilegeToGroup'}, [
-                _('addPrivilegeToGroup')
-              ]],
-              ['th', {class: 'privileges edit'}, [_('EditPrivilege')]],
-              hasDeletePrivilegesAccess ? ['th', [_('delete')]] : ''
+              hasAddPrivilegeToGroupAccess
+                ? ['th', {class: 'privileges addPrivilegeToGroup'}, [
+                  _('addPrivilegeToGroup')
+                ]]
+                : '',
+              hasEditPrivilegeAccess
+                ? ['th', {class: 'privileges edit'}, [_('EditPrivilege')]]
+                : '',
+              hasEditPrivilegeAccess ? ['th', [_('delete')]] : ''
             ]]
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
@@ -67,40 +80,56 @@ const privileges = ({
                 ['td', [
                   description
                 ]],
-                ['td', groupsInfo.map(
-                  ({groupName, usersInfo}) => {
-                    return ['button', {
-                      class: 'removePrivilegeFromGroup',
-                      'data-privilege': privilegeName,
-                      'data-group': groupName,
-                      title: usersInfo.map(({user}) => {
-                        return user;
-                      }).join(', ')
-                    }, [
-                      `${groupName} ☒`
-                    ]];
-                  }
-                )],
-                ['td', [
-                  ['button', {
-                    class: 'addPrivilegeToGroup btn btn-primary',
-                    'data-privilege': privilegeName
-                  }, ['+']]
-                ]],
+                hasRemovePrivilegeFromGroupAccess
+                  ? ['td', groupsInfo.map(
+                    ({groupName, usersInfo}) => {
+                      return ['button', {
+                        class: 'removePrivilegeFromGroup',
+                        'data-privilege': privilegeName,
+                        'data-group': groupName,
+                        title: hasReadUsersAccess
+                          ? usersInfo.map(({user}) => {
+                            return user;
+                          }).join(', ')
+                          : undefined
+                      }, [
+                        `${groupName} ☒`
+                      ]];
+                    }
+                  )]
+                  : hasReadGroupAccess
+                    ? ['td', groupsInfo.map(
+                      ({groupName}) => {
+                        return ['span', [
+                          groupName
+                        ]];
+                      }
+                    )]
+                    : '',
+                hasAddPrivilegeToGroupAccess
+                  ? ['td', [
+                    ['button', {
+                      class: 'addPrivilegeToGroup btn btn-primary',
+                      'data-privilege': privilegeName
+                    }, ['+']]
+                  ]]
+                  : '',
                 ...builtin
                   ? [
-                    ['td'],
-                    hasDeletePrivilegesAccess ? ['td'] : ''
+                    hasEditPrivilegeAccess ? ['td'] : '',
+                    hasEditPrivilegeAccess ? ['td'] : ''
                   ]
                   : [
-                    ['td', [
-                      ['button', {
-                        class: 'editPrivilege',
-                        'data-privilege': privilegeName,
-                        'data-description': description
-                      }, ['e']]
-                    ]],
-                    hasDeletePrivilegesAccess
+                    hasEditPrivilegeAccess
+                      ? ['td', [
+                        ['button', {
+                          class: 'editPrivilege',
+                          'data-privilege': privilegeName,
+                          'data-description': description
+                        }, ['e']]
+                      ]]
+                      : '',
+                    hasEditPrivilegeAccess
                       ? ['td', [
                         ['button', {
                           class: 'deletePrivilege',
