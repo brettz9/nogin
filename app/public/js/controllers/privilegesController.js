@@ -310,13 +310,13 @@ function post (url, data) {
 /**
  * @throws {Error}
  * @param {string} groupName
- * @param {string} privilegeID
+ * @param {string} privilegeName
  * @returns {Promise<void>}
  */
-async function removePrivilegeFromGroup (groupName, privilegeID) {
+async function removePrivilegeFromGroup (groupName, privilegeName) {
   removePrivilegeFromGroupConfirmDialog.modal('hide');
   await post(Nogin.Routes.accessAPI, {
-    verb: 'removePrivilegeFromGroup', groupName, privilegeID
+    verb: 'removePrivilegeFromGroup', groupName, privilegeName
   });
   showLockedAlertReload({type: 'privilegeRemovedFromGroup'});
 }

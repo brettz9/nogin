@@ -952,6 +952,9 @@ class AccountManager {
     if (typeof data.groupName !== 'string' || !data.groupName) {
       throw new Error('bad-groupname');
     }
+    if (typeof data.privilegeName !== 'string' || !data.privilegeName) {
+      throw new Error('bad-privilegename');
+    }
 
     let _o;
     const privilegeFilter = {
