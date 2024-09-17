@@ -731,7 +731,17 @@ const routeList = async (app, config) => {
           return undefined;
         }).filter(Boolean))
       };
-    });
+    }).sort(
+      ({
+        privilegeName: pn1, builtin: bi1}, {privilegeName: pn2, builtin: bi2
+      }) => {
+        return bi1 && !bi2
+          ? 1
+          : bi2 && !bi1
+            ? -1
+            : pn1 < pn2 ? -1 : pn1 > pn2 ? 1 : 0;
+      }
+    );
   };
 
   /**

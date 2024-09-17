@@ -132,7 +132,7 @@ const privileges = ({
         }),
         singleInputForm({
           _, type: 'addPrivilegeToGroup',
-          inputDirections: 'PleaseInputGroupToWhichToAddPrivilege',
+          inputDirections: 'PleaseInputPrivilegeToAddToGroup',
           autocomplete: privilegesInfo.map(({privilegeName}) => privilegeName)
         })
       ]]

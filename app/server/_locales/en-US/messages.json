@@ -481,14 +481,20 @@
     "removePrivilegeFromGroup": {
       "message": "Remove privilege from group"
     },
-    "PleaseInputGroupToWhichToAddPrivilege": {
-      "message": "Please input group to which to add privilege"
+    "PleaseInputPrivilegeToAddToGroup": {
+      "message": "Please input the privilege you wish to add to the group"
     },
     "PleaseInputADescriptionForPrivilege": {
       "message": "Please input a description for the privilege"
     },
 
     "PRIVILEGES (CLIENT)": true,
+    "deletePrivilege": {
+      "message": "Delete privilege"
+    },
+    "sureWantDeletePrivilege": {
+      "message": "Are you sure you want to delete the privilege {privilege}?"
+    },
     "reallyWantRemovePrivilegeFromGroup": {
       "message": "Do you really want to remove the privilege from the group?"
     },
