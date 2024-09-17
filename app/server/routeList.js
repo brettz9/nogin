@@ -472,13 +472,24 @@ const routeList = async (app, config) => {
       }
 
       const groups = hasReadGroupsAccess
-        ? await Promise.all(accounts.map(async ({user}) => {
-          const group = await am.getGroupForUser(user);
-          return {
-            group,
-            privileges: await am.getPrivilegesForGroup(group)
-          };
-        }))
+        ? await Promise.all(
+          /**
+           * @type {Promise<{
+           *   group: string,
+           *   privileges:
+           *     import('./modules/account-manager.js').PrivilegeInfo[]
+           * }>[]}
+           */ (accounts.map(async ({user}) => {
+            const group = await am.getGroupForUser(user);
+            if (!group) {
+              return null;
+            }
+            return {
+              group,
+              privileges: await am.getPrivilegesForGroup(group)
+            };
+          }).filter(Boolean))
+        )
         : [];
 
       const title = _('AccountList');

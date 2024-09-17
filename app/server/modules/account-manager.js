@@ -691,7 +691,7 @@ class AccountManager {
 
   /**
    * @param {string} userID
-   * @returns {Promise<string>}
+   * @returns {Promise<string|void>}
    */
   async getGroupForUser (userID) {
     let o;
@@ -704,7 +704,8 @@ class AccountManager {
       });
     } catch {}
     if (!o) {
-      throw new Error('group-not-found');
+      return undefined;
+      // throw new Error('group-not-found');
     }
     return /** @type {string} */ (o.groupName);
   }

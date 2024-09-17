@@ -44,8 +44,11 @@ const users = ({
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
             accounts.map((
-              {name, user, groupInfo: {group, privileges}, country, date}, i
+              {name, user, groupInfo: {
+                group, privileges = []
+              }, country, date}, i
             ) => {
+              console.log('group', group, '::', privileges);
               return ['tr', [
                 ['td', {class: 'users number'}, [i + 1]],
                 ['td', [name]],
@@ -55,7 +58,7 @@ const users = ({
                     title: privileges.map(({privilegeName}) => {
                       return privilegeName;
                     }).join(', ')
-                  }, [group]]
+                  }, [group ?? _('noGroup')]]
                   : '',
                 ['td', [country]],
                 ['td', [date]],

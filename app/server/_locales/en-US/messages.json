@@ -316,12 +316,14 @@
     "Users": {
       "message": "Users"
     },
+    "noGroup": {
+      "message": "(No group)"
+    },
 
     "USERS (BUSINESS LOGIC)": true,
     "AccountList": {
       "message": "Account List"
     },
-
 
     "SIGNUP (BUSINESS LOGIC)": true,
     "Signup": {
@@ -361,7 +363,7 @@
       "message": "The activation code provided was invalid.{lb}Click OK to return to the login page."
     },
 
-    "ACCESSAPI (BUSINESS LOGIC)": true,
+    "ACCESSAPI (BUSINESS LOGIC AND TEMPLATE)": true,
     "accessAPI": {
       "message": "Access API"
     },
@@ -378,7 +380,7 @@
       "message": "Group name already in use"
     },
 
-    "GROUPS (BUSINESS LOGIC)": true,
+    "GROUPS (BUSINESS LOGIC AND TEMPLATE)": true,
     "groups": {
       "message": "Groups"
     },
@@ -445,7 +447,7 @@
       "message": "Are you sure you want to delete group {group}?"
     },
 
-    "PRIVILEGES (BUSINESS LOGIC)": true,
+    "PRIVILEGES (BUSINESS LOGIC AND TEMPLATE)": true,
     "bad-privilegename": {
       "message": "Bad privilege name"
     },
