@@ -1,8 +1,15 @@
 # CHANGES for nogin
 
-## ?
+## 7.0.0
+
+BREAKING CHANGE: Drop `--showUsers` (in favor of privileges)
 
 - feat: `/groups` page
+- feat: `/privileges` page
+- feat: add delete and group/privilege info to `/users`
+- feat: `/logout` page (now GET also)
+- feat: `/_privs` page (and helper JavaScript)
+- feat: enforce `hostValidation` security check
 
 ## 6.5.0
 
