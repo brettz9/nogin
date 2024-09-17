@@ -204,7 +204,7 @@ your own `nogin.js` config file.
 - `--sessionOptions` (A string, or, in config, an object; defaults to
     `{resave: true, saveUninitialized: true}` along with
     `cookie: sessionCookieOptions`, `secret`, and
-    `store: new MongoStore({url: DB_URL, mongoOptions: '{useUnifiedTopology: true, useNewUrlParser: true}})')`
+    `store: MongoStore.create({mongoUrl: DB_URL})`
 - `--sessionCookieOptions` (A string, or, in config, an object; defaults to
     `{sameSite: 'lax'}`)
 

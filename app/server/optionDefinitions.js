@@ -378,8 +378,7 @@ const optionDefinitions = [
       getChalkTemplateEscape(
         `{resave: true, saveUninitialized: true}` +
         ' along with `cookie: sessionCookieOptions`, `secret`, and ' +
-        '`store: new MongoStore({url: DB_URL, mongoOptions: ' +
-        '{useUnifiedTopology: true, useNewUrlParser: true}})'
+        '`store: MongoStore.create({mongoUrl: DB_URL})`'
       ),
     typeLabel: '{underline options}'
   }
