@@ -764,9 +764,7 @@ class AccountManager {
    * @returns {Promise<void>}
    */
   async addUserToGroup (data) {
-    if (typeof data.groupName !== 'string' || !data.groupName ||
-      builtInGroups.has(data.groupName)
-    ) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
       throw new Error('bad-groupname');
     }
 
@@ -807,9 +805,7 @@ class AccountManager {
    * @returns {Promise<void>}
    */
   async removeUserFromGroup (data) {
-    if (typeof data.groupName !== 'string' || !data.groupName ||
-      builtInGroups.has(data.groupName)
-    ) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
       throw new Error('bad-groupname');
     }
 
@@ -1406,6 +1402,16 @@ class AccountManager {
     return await
     /** @type {import('mongodb').Collection} */ (
       this.accounts
+    ).deleteMany({});
+  }
+
+  /**
+   * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
+   */
+  async deleteAllGroups () {
+    return await
+    /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
     ).deleteMany({});
   }
 }

@@ -21,11 +21,11 @@ import doubleInputForm from './modals/double-input-form.js';
  *       }[]
  *     }[]
  *   }[],
- *   users: string[]
+ *   groups: string[]
  * }} cfg
  */
 const privileges = ({
-  _, layout, hasDeletePrivilegesAccess, privilegesInfo
+  _, layout, hasDeletePrivilegesAccess, privilegesInfo, groups
 }) => {
   return layout({
     content: [
@@ -132,8 +132,8 @@ const privileges = ({
         }),
         singleInputForm({
           _, type: 'addPrivilegeToGroup',
-          inputDirections: 'PleaseInputPrivilegeToAddToGroup',
-          autocomplete: privilegesInfo.map(({privilegeName}) => privilegeName)
+          inputDirections: 'PleaseInputGroupToWhichToAddPrivilege',
+          autocomplete: groups
         })
       ]]
     ],

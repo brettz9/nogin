@@ -676,7 +676,8 @@ const routeList = async (app, config) => {
           csrfToken: req.csrfToken()
         }),
         hasDeletePrivilegesAccess,
-        privilegesInfo: readPrivilegesResult.value
+        privilegesInfo: readPrivilegesResult.value,
+        groups: (await am.getAllGroups()).map(({groupName}) => groupName)
       });
     }
   };
