@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.2.1
+
+- fix: missing type for `req.hasPrivilege(priv)`
+
 ## 7.2.0
 
 - feat: `req.hasPrivilege(priv)`

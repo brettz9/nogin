@@ -14,6 +14,6 @@
     "target": "es2017",
     "outDir": "dist"
   },
-  "include": ["app/**/*.js", "bin/**/*.js", "./typings/Nogin.d.ts", "./typings/ExpressSessionUser.d.ts", "./typings/CypressCoverage.d.ts"],
+  "include": ["app/**/*.js", "bin/**/*.js", "./typings/Nogin.d.ts", "./typings/ExpressSessionUser.d.ts", "./typings/CypressCoverage.d.ts", "./typings/ExpressHasPrivilege.d.ts"],
   "exclude": ["node_modules"]
 }
