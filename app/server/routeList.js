@@ -1775,6 +1775,24 @@ window.Nogin = {
     );
   });
 
+  app.use((req, _res, next) => {
+    /**
+     * @type {import('express').Request & {
+     *   hasPrivilege: (priv: string) => Promise<boolean>}}
+     */
+    (req).hasPrivilege =
+    /**
+     * @param {string} priv
+     * @returns {Promise<boolean>}
+     */
+    async (priv) => {
+      const privs = await getUserPrivs(req);
+      return privs === true ? true : privs.has(priv);
+    };
+
+    next();
+  });
+
   if (router) {
     // // eslint-disable-next-line no-unsanitized/method -- User path
     (await import(pathResolve(cwd, router))).default(app, opts);

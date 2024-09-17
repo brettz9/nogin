@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.2.0
+
+- feat: `req.hasPrivilege(priv)`
+
 ## 7.1.0
 
 - feat: expose ESM format for `_privs`
