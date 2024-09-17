@@ -599,6 +599,29 @@
     "PleaseInputGroupToWhichToAddPrivilege": {
       "message": "Please input group to which to add privilege"
     },
+    "PleaseInputADescriptionForPrivilege": {
+      "message": "Please input a description for the privilege"
+    },
+
+    "PRIVILEGES (CLIENT)": true,
+    "reallyWantRemovePrivilegeFromGroup": {
+      "message": "Do you really want to remove the privilege from the group?"
+    },
+    "privilegeEdited": {
+      "message": "Privilege edited"
+    },
+    "privilegeCreated": {
+      "message": "Privilege created"
+    },
+    "privilegeDeleted": {
+      "message": "Privilege deleted"
+    },
+    "privilegeRemovedFromGroup": {
+      "message": "Privilege removed from group"
+    },
+    "privilegeAddedToGroup": {
+      "message": "Privilege added to group"
+    },
 
     "COUNTRIES (BUSINESS LOGIC)": true,
     "PleaseSelectACountry": {

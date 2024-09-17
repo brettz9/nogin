@@ -247,6 +247,15 @@ const PrivilegesView = {
   /**
    * @returns {HTMLInputElement}
    */
+  getEditPrivilegeDescription () {
+    return /** @type {HTMLInputElement} */ (
+      $('#editPrivilege-description-input')[0]
+    );
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
   getAddPrivilegeToGroupName () {
     return /** @type {HTMLInputElement} */ ($('#addPrivilegeToGroup-input')[0]);
   },

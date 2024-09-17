@@ -56,6 +56,8 @@ createPrivilegeButton.on('click', () => {
       createPrivilegeModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
 
+      console.log('err', err);
+
       // Log just in case not internationalized
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
@@ -81,17 +83,21 @@ editPrivilegeForm.on('submit', function (e) {
 });
 editPrivilegeButton.on('click', (e) => {
   const privilegeName = /** @type {string} */ (e.target.dataset.privilege);
+  const descriptionVal = /** @type {string} */ (e.target.dataset.description);
   const privilegeToEdit = PrivilegesView.getEditPrivilege();
 
   const editPrivilegeCancel = PrivilegesView.editPrivilegeCancel(
     editPrivilegeModal
   );
-
   editPrivilegeCancel.on('click', () => {
     editPrivilegeModal.modal('hide');
   });
+
   editPrivilegeModal.modal('show');
   privilegeToEdit.value = privilegeName;
+
+  const privilegeDescription = PrivilegesView.getEditPrivilegeDescription();
+  privilegeDescription.value = descriptionVal;
 
   const editPrivilegeSubmit = PrivilegesView.editPrivilegeSubmit(
     editPrivilegeModal
@@ -106,10 +112,13 @@ editPrivilegeButton.on('click', (e) => {
         return;
       }
       const newPrivilegeName = privilegeToEdit.value;
-      await editPrivilege(privilegeName, newPrivilegeName);
+      const description = privilegeDescription.value;
+      await editPrivilege(privilegeName, newPrivilegeName, description);
     } catch (er) {
       editPrivilegeModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
+
+      console.log('err', err);
 
       // Log just in case not internationalized
       console.error(Nogin._('ErrorFormat', {
@@ -332,12 +341,13 @@ async function createPrivilege (privilegeToCreate, description) {
 /**
  * @param {string} privilegeName
  * @param {string} newPrivilegeName
+ * @param {string} description
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function editPrivilege (privilegeName, newPrivilegeName) {
+async function editPrivilege (privilegeName, newPrivilegeName, description) {
   await post(Nogin.Routes.accessAPI, {
-    verb: 'editPrivilege', privilegeName, newPrivilegeName
+    verb: 'editPrivilege', privilegeName, newPrivilegeName, description
   });
   editPrivilegeModal.modal('hide');
   showLockedAlertReload({type: 'privilegeEdited'});

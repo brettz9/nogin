@@ -1147,6 +1147,7 @@ const routeList = async (app, config) => {
         newGroupName,
         userID,
         privilegeName,
+        description,
         newPrivilegeName
       } = req.body;
 
@@ -1272,7 +1273,7 @@ const routeList = async (app, config) => {
       case 'createPrivilege':
         try {
           await am.addNewPrivilege({
-            privilegeName
+            privilegeName, description
           });
         } catch (err) {
           if ([
@@ -1299,11 +1300,12 @@ const routeList = async (app, config) => {
           return;
         }
         break;
-      case 'renamePrivilege':
+      case 'editPrivilege':
         try {
-          await am.renamePrivilege({
+          await am.editPrivilege({
             privilegeName,
-            newPrivilegeName
+            newPrivilegeName,
+            description
           });
         } catch (err) {
           if ([

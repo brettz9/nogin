@@ -1329,7 +1329,7 @@ class AccountManager {
    * @param {Partial<PrivilegeInfo> & {newPrivilegeName: string}} data
    * @returns {Promise<void>}
    */
-  async renamePrivilege (data) {
+  async editPrivilege (data) {
     if (typeof data.newPrivilegeName !== 'string' || !data.newPrivilegeName ||
       builtInPrivileges.has(data.newPrivilegeName)
     ) {
@@ -1337,6 +1337,9 @@ class AccountManager {
     }
     if (typeof data.privilegeName !== 'string' || !data.privilegeName) {
       throw new Error('bad-old-privilegename');
+    }
+    if (typeof data.description !== 'string') {
+      throw new TypeError('bad-privilege-description');
     }
 
     let o;
@@ -1357,6 +1360,7 @@ class AccountManager {
 
     const newData = {
       privilegeName: data.newPrivilegeName,
+      description: data.description,
       // Append date stamp when record was modified
       date: Date.now()
     };

@@ -95,7 +95,9 @@ const privileges = ({
                   : [
                     ['td', [
                       ['button', {
-                        class: 'editPrivilege', 'data-privilege': privilegeName
+                        class: 'editPrivilege',
+                        'data-privilege': privilegeName,
+                        'data-description': description
                       }, ['e']]
                     ]],
                     hasDeletePrivilegesAccess
