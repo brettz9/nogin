@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.2.2
+
+- fix: update `intl-dom` peerDependency
+
 ## 7.2.1
 
 - fix: missing type for `req.hasPrivilege(priv)`
