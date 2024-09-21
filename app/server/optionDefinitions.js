@@ -63,6 +63,7 @@ const pkg = JSON.parse(
  *     genid: () => number
  *   },
  *   sessionOptions: string|{name: string, secret: string},
+ *   transferLimit: string,
  *   rootUser: string[]
  * }} MainOptionDefinitions
  */
@@ -381,6 +382,12 @@ const optionDefinitions = [
         '`store: MongoStore.create({mongoUrl: DB_URL})`'
       ),
     typeLabel: '{underline options}'
+  },
+  {
+    name: 'transferLimit', type: String,
+    description: 'Options to be supplied to `express.json` and ' +
+      '`express.urlencoded`. Defaults to 10mb',
+    typeLabel: '{underline limit}'
   }
 ];
 

@@ -57,6 +57,7 @@ export type MainOptionDefinitions = {
         name: string;
         secret: string;
     };
+    transferLimit: string;
     rootUser: string[];
 };
 /** @type {import('command-line-usage').OptionDefinition[]} */

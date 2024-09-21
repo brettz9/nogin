@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "7.3.0",
+  "version": "7.4.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -190,7 +190,6 @@
     "jquery-form": "https://github.com/brettz9/form#xss"
   },
   "dependencies": {
-    "body-parser": "^1.20.3",
     "command-line-basics": "^2.0.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
@@ -228,7 +227,6 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "@types/body-parser": "^1.19.5",
     "@types/chai": "^4.3.19",
     "@types/chai-as-promised": "^8.0.0",
     "@types/command-line-args": "^5.2.3",

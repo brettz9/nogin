@@ -65,7 +65,7 @@ entry file and optionally other arguments. See the next section.
 Besides these changes, there have been subsequent additions as well:
 
 - Groups, privilege, and user management
-- Additional security like `hostValidation`
+- Additional security
 
 ## Installation & Setup
 
@@ -194,6 +194,8 @@ your own `nogin.js` config file.
 - `--noHelmet` (Boolean; defaults to `false`.)
 - `--noHostValidation` (Boolean; defaults to `false`.)
 - `--RATE_LIMIT` (A number defaulting to 100 for a rate limit.)
+- `--transferLimit` (A string like "50mb" to be passed to `express.json()`
+    and `express.urlencoded()`)
 - `--csurfOptions` (A string, or, in config, an object; defaults to
     `{cookie: {signed: true, sameSite: "lax"}`; note that if you are on
     HTTPS, it is recommended to set this to

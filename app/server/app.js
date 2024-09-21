@@ -9,7 +9,6 @@ import * as http from 'http';
 import {join, resolve as pathResolve} from 'path';
 import express from 'express';
 import session from 'express-session';
-import bodyParser from 'body-parser';
 // Though not needed for `express-session`, `cookie-parser` is needed for
 //   creating signed cookies (see `routeList.js`) (or if we were to use
 //   non-signed cookies and access `req.cookies`).
@@ -158,6 +157,7 @@ const createServer = async function (options) {
     noHelmet,
     noHostValidation,
     disableXSRF,
+    transferLimit,
     sessionCookieOptions = {
       sameSite: 'lax' // Not concerned about strict for GET access
     },
@@ -192,8 +192,11 @@ const createServer = async function (options) {
   app.use(limiter);
   // Todo: Use https://github.com/ebourmalo/cookie-encrypter also?
   app.use(cookieParser(secret));
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));
+
+  // See https://stackoverflow.com/questions/19917401/error-request-entity-too-large
+  app.use(express.json({limit: transferLimit ?? '50mb'}));
+  app.use(express.urlencoded({limit: transferLimit ?? '50mb'}));
+
   app.use(
     stylus.middleware({src: join(__dirname, JS_DIR), sourcemap: true})
   );

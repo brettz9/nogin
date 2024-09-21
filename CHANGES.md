@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.4.0
+
+- feat: add `--transferLimit` option, dropping bodyParser dep.
+
 ## 7.3.0
 
 - feat: expose `hasPrivilege` on `_privs`
