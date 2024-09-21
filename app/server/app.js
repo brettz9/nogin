@@ -260,7 +260,7 @@ const createServer = async function (options) {
     // proxy: true, // `undefined` checks `trust proxy` (see below)
     resave: true,
     saveUninitialized: true,
-    // Not setting the above two is seprecated, so allow just overriding
+    // Not setting the above two is deprecated, so allow just overriding
     ...(opts.sessionOptions ? parseCLIJSON(opts.sessionOptions) : null)
   };
 
