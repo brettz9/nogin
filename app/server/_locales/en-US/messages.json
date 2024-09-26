@@ -288,6 +288,15 @@
     "PleaseCheckEmailForVerificationLink": {
       "message": "Please check your email for a verification link which will confirm your email address.{lb}Click OK to return to the login page."
     },
+    "SignupAgreement": {
+      "message": "Signup agreement"
+    },
+    "agreeToSignupAgreement": {
+      "message": "Do you agree to the signup agreement?"
+    },
+    "agree": {
+      "message": "Agree"
+    },
 
     "USERS (CLIENT)": true,
     "sureWantDeleteUserAccount": {

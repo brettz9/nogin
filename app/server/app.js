@@ -63,7 +63,8 @@ import getDirname from './modules/getDirname.js';
  *   fromURL: string,
  *   SERVE_COVERAGE: boolean,
  *   disableXSRF: boolean,
- *   csurfOptions: string
+ *   csurfOptions: string,
+ *   signupAgreement?: string|{[locale: string]: string},
  * }} RouteConfigFromOptions
  */
 
@@ -169,7 +170,8 @@ const createServer = async function (options) {
         sameSite: 'lax'
       }
     },
-    helmetOptions
+    helmetOptions,
+    signupAgreement
   } = opts;
 
   const dbOpts = DBFactory.getDefaults(opts);
@@ -324,7 +326,8 @@ const createServer = async function (options) {
     //  `app/public/js/utilities/ajaxFormClientSideValidate.js`
     // csrfKey: 'csrf-token',
     // User is using instrumenting
-    triggerCoverage: JS_DIR !== '../public'
+    triggerCoverage: JS_DIR !== '../public',
+    signupAgreement
   }));
 
   log('BeginningServer');

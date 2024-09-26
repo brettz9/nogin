@@ -74,8 +74,8 @@ const UsersView = {
 
   /**
    * @returns {import('./utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   setDeleteAllAccounts () {
     const deleteAllAccountsConfirmDialog = ConfirmDialog.populate({
       type: 'deleteAllAccounts',

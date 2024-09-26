@@ -5,6 +5,15 @@ declare namespace SignupView {
      */
     function getName(): JQuery;
     /**
+     * @returns {JQuery}
+     */
+    function getAccountForm(): JQuery;
+    /**
+     * @returns {import('./utilities/AlertDialog.js').
+     *   JQueryWithModal} `HTMLDivElement`
+     */
+    function setConfirmSignup(): import("./utilities/AlertDialog.js").JQueryWithModal;
+    /**
      * @param {JQuery} accountCreatedAlertDialog `HTMLDivElement`
      * @returns {JQuery} `HTMLFormElement`
      */

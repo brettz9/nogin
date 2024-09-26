@@ -35,6 +35,9 @@ export type RouteConfigFromOptions = {
     SERVE_COVERAGE: boolean;
     disableXSRF: boolean;
     csurfOptions: string;
+    signupAgreement?: string | {
+        [locale: string]: string;
+    };
 };
 export type RouteConfig = RouteConfigFromOptions & {
     log: import("./modules/getLogger.js").Logger;

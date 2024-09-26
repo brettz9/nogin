@@ -4,9 +4,10 @@ import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';
 import AccountValidator from '../form-validators/AccountValidator.js';
 import SignupView from '../views/signup.js';
+import ConfirmDialog from '../views/utilities/ConfirmDialog.js';
 
 const name = SignupView.getName();
-name.focus();
+name.trigger('focus');
 
 const accountForm = SignupView.setAccountSettings();
 
@@ -17,7 +18,31 @@ const redirectToRoot = () => {
 const actionButton = SignupView.getActionForAccountForm(accountForm);
 actionButton.on('click', redirectToRoot);
 
-setupValidationSubmission();
+let confirmed = false;
+
+if (Nogin.signupAgreement) {
+  const confirmSignupDialog = SignupView.setConfirmSignup();
+  ConfirmDialog.getSubmit(
+    confirmSignupDialog
+  ).on('click', () => {
+    if (!confirmed) {
+      confirmed = true;
+      setupValidationSubmission();
+      confirmSignupDialog.modal('hide');
+      accountForm.trigger('submit');
+    }
+  });
+
+  SignupView.getAccountForm().on('submit', (e) => {
+    if (!confirmed) {
+      e.preventDefault();
+      confirmSignupDialog.modal('show');
+    }
+  });
+} else {
+  confirmed = true;
+  setupValidationSubmission();
+}
 
 /**
  * @returns {void}
@@ -29,6 +54,9 @@ function setupValidationSubmission () {
     accountForm,
     {
       checkXSRF: false,
+      beforeSubmit () {
+        return confirmed;
+      },
       validate () {
         av.validateForm();
       },

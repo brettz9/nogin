@@ -65,6 +65,7 @@ const pkg = JSON.parse(
  *   sessionOptions: string|{name: string, secret: string},
  *   transferLimit: string,
  *   rootUser: string[]
+ *   signupAgreement?: string|{[locale: string]: string},
  * }} MainOptionDefinitions
  */
 
@@ -388,6 +389,11 @@ const optionDefinitions = [
     description: 'Options to be supplied to `express.json` and ' +
       '`express.urlencoded`. Defaults to 10mb',
     typeLabel: '{underline limit}'
+  },
+  {
+    name: 'signupAgreement', type: String,
+    description: 'JSON containing locale-keyed signup agreements. ' +
+      'Defaults to no signup agreement.'
   }
 ];
 

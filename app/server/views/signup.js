@@ -1,5 +1,6 @@
 import account from './account.js';
 import alert from './modals/alert.js';
+import confirm from './modals/confirm.js';
 
 /**
  * @param {import('../routeUtils.js').TitleWithLayoutCallback & {
@@ -20,7 +21,8 @@ const signup = ({
         ...account({
           _, user: emptyUser, countries, emailPattern, requireName, title
         }),
-        alert({_})
+        alert({_}),
+        confirm({_, type: 'signupAgreement'})
       ])]
     ],
     scripts: [
@@ -28,6 +30,10 @@ const signup = ({
         src: '/js/controllers/signupController.iife.min.js',
         defer: 'defer'
       }]
+      // ['script', {
+      //   src: '/js/controllers/signupController.js',
+      //   type: 'module'
+      // }]
     ]
   });
 };

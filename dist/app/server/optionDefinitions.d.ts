@@ -59,6 +59,9 @@ export type MainOptionDefinitions = {
     };
     transferLimit: string;
     rootUser: string[];
+    signupAgreement?: string | {
+        [locale: string]: string;
+    };
 };
 /** @type {import('command-line-usage').OptionDefinition[]} */
 declare const optionDefinitions: import("command-line-usage").OptionDefinition[];

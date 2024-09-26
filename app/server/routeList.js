@@ -73,7 +73,8 @@ const routeList = async (app, config) => {
     opts,
     cwd,
     disableXSRF = false,
-    csurfOptions
+    csurfOptions,
+    signupAgreement
   } = config;
 
   const setI18n = i18n(localesBasePath);
@@ -1705,6 +1706,11 @@ window.Nogin = {
   disableXSRF: ${disableXSRF},
   postLoginRedirectPath: ${JSON.stringify(postLoginRedirectPath ?? '')},
   Routes: ${JSON.stringify(routes)},
+  ${signupAgreement
+    ? `signupAgreement: ${
+      JSON.stringify(parseCLIJSON(signupAgreement)[args.resolvedLocale])
+    },`
+    : ''}
   _: IntlDom.i18nServer(${JSON.stringify({
     strings: {
       ...args.strings

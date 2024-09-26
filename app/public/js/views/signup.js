@@ -1,5 +1,6 @@
 /* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
 import AlertDialog from './utilities/AlertDialog.js';
+import ConfirmDialog from './utilities/ConfirmDialog.js';
 import populateForm from './utilities/populateForm.js';
 
 const {_} = Nogin;
@@ -10,6 +11,30 @@ const SignupView = {
    */
   getName () {
     return $('#name-tf');
+  },
+
+  /**
+   * @returns {JQuery}
+   */
+  getAccountForm () {
+    return $('#account-form');
+  },
+
+  /**
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
+   */
+  setConfirmSignup () {
+    return ConfirmDialog.populate({
+      type: 'signupAgreement',
+      header: /** @type {string} */ (_('SignupAgreement')),
+      body: /** @type {Element} */ (
+        // Safe for XSS because obtained from config file only
+        $(`<div>${Nogin.signupAgreement}</div>`)[0]
+      ),
+      cancel: /** @type {string} */ (_('cancel')),
+      submit: /** @type {string} */ (_('agree'))
+    });
   },
 
   /**

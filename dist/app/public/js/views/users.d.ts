@@ -23,8 +23,8 @@ declare namespace UsersView {
     }): import("./utilities/AlertDialog.js").JQueryWithModal;
     /**
      * @returns {import('./utilities/AlertDialog.js').
-    *   JQueryWithModal} `HTMLDivElement`
-    */
+     *   JQueryWithModal} `HTMLDivElement`
+     */
     function setDeleteAllAccounts(): import("./utilities/AlertDialog.js").JQueryWithModal;
     /**
      * @param {object} cfg

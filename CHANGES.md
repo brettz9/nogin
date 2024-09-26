@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.5.0
+
+- feat: add signup agreement option
+
 ## 7.4.0
 
 - feat: add `--transferLimit` option, dropping bodyParser dep.
