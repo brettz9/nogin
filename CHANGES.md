@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 7.6.0
+
+- feat: expose `user` property on `/_privs` (and deprecate `guest`)
+
 ## 7.5.0
 
 - feat: add signup agreement option

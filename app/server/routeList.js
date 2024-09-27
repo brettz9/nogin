@@ -1746,6 +1746,11 @@ window.Nogin = {
     const userPrivs = await getUserPrivs(req);
     const converted = {
       privs: userPrivs === true ? true : [...userPrivs],
+      user: req.session?.user?.user ?? null,
+      // todo[>=8.0.0]: remove this property (and update client code)
+      /**
+       * @deprecated Use inverse of `user` instead.
+       */
       guest: !req.session?.user?.user
     };
 
