@@ -52,7 +52,8 @@ So if you want Node login, use your "nogin"!
 
 While you can see [CHANGES](./CHANGES.md) (or the
 [1.0.0 migration guide](./docs/migration/1.0.0.md))
-to see all of the fixes and enhancements (including security fixes), the
+to see all of the fixes and enhancements (including security fixes),
+over the excellent node-login package, the
 essential change has been to avoid the necessity of directly modifying
 source. This component has been retooled to allow it to be added as an
 npm dependency and provided command-line arguments which customize the
