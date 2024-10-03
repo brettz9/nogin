@@ -332,7 +332,7 @@ const optionDefinitions = [
   },
   {
     name: 'RATE_LIMIT', alias: 'r', type: Number,
-    description: 'Used for mitigating DoS attacks; defaults to 100',
+    description: 'Used for mitigating DoS attacks; defaults to 700',
     typeLabel: '{underline rate limit}'
   },
   {

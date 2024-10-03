@@ -194,7 +194,7 @@ your own `nogin.js` config file.
 - `--disableXSRF` (Boolean; defaults to `false`.)
 - `--noHelmet` (Boolean; defaults to `false`.)
 - `--noHostValidation` (Boolean; defaults to `false`.)
-- `--RATE_LIMIT` (A number defaulting to 100 for a rate limit.)
+- `--RATE_LIMIT` (A number defaulting to 700 for a rate limit.)
 - `--transferLimit` (A string like "50mb" to be passed to `express.json()`
     and `express.urlencoded()`)
 - `--csurfOptions` (A string, or, in config, an object; defaults to
