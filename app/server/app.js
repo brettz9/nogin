@@ -197,7 +197,7 @@ const createServer = async function (options) {
 
   // See https://stackoverflow.com/questions/19917401/error-request-entity-too-large
   app.use(express.json({limit: transferLimit ?? '50mb'}));
-  app.use(express.urlencoded({limit: transferLimit ?? '50mb'}));
+  app.use(express.urlencoded({extended: true, limit: transferLimit ?? '50mb'}));
 
   app.use(
     stylus.middleware({src: join(__dirname, JS_DIR), sourcemap: true})

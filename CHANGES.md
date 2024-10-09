@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## ?
+
+- fix: indicate actual RATE_LIMIT default
+- refactor: provide argument for soon-to-be-against-default behavior
+
 ## 7.6.0
 
 - feat: expose `user` property on `/_privs` (and deprecate `guest`)
