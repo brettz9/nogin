@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 7.6.1
 
 - fix: indicate actual RATE_LIMIT default
 - refactor: provide argument for soon-to-be-against-default behavior
