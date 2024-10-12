@@ -2,10 +2,6 @@
 version: v1.22.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-JQUERYFORM-574783:
-    - jquery-form:
-        reason: Using own patch
-        expires: '2099-09-17T01:57:46.538Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   SNYK-JS-LODASH-567746:

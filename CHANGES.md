@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- refactor: switch to `jquery-form-plus`
+
 ## 7.6.1
 
 - fix: indicate actual RATE_LIMIT default

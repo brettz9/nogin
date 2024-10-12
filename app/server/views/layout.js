@@ -109,7 +109,7 @@ const layout = ({
             defer: 'defer'
           }],
           ['script', {
-            ...securitySourceAttributes('script', 'jquery-form'),
+            ...securitySourceAttributes('script', 'jquery-form-plus'),
             defer: 'defer'
           }],
           /*

@@ -1666,7 +1666,7 @@ const routeList = async (app, config) => {
     'intl-dom',
     'jamilih',
     'jquery',
-    'jquery-form',
+    'jquery-form-plus',
     '@popperjs/core'
   ].forEach((mod) => {
     const path = '/node_modules/' + mod;

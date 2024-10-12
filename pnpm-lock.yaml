@@ -240,9 +240,9 @@ importers:
       jquery:
         specifier: ^3.7.1
         version: 3.7.1
-      jquery-form:
-        specifier: github:brettz9/form#xss
-        version: https://codeload.github.com/brettz9/form/tar.gz/6f65366180b31c49984469ddb1e409f2664a585b
+      jquery-form-plus:
+        specifier: ^1.0.1
+        version: 1.0.1
       jsdoc:
         specifier: ^4.0.3
         version: 4.0.3
@@ -5062,9 +5062,8 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
 
-  jquery-form@https://codeload.github.com/brettz9/form/tar.gz/6f65366180b31c49984469ddb1e409f2664a585b:
-    resolution: {tarball: https://codeload.github.com/brettz9/form/tar.gz/6f65366180b31c49984469ddb1e409f2664a585b}
-    version: 4.3.0
+  jquery-form-plus@1.0.1:
+    resolution: {integrity: sha512-UXPwcgsBXu8F944YTYDkg2Ow6MKgNYV0S5z13BsgXBKSPpZ7kJv8sCp4JL+2efVPyKL8G5FCd5v05hfda4FL5g==}
     engines: {node: '>=8.0.0'}
 
   jquery@3.7.1:
@@ -15279,7 +15278,7 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jquery-form@https://codeload.github.com/brettz9/form/tar.gz/6f65366180b31c49984469ddb1e409f2664a585b:
+  jquery-form-plus@1.0.1:
     dependencies:
       jquery: 3.7.1
 

@@ -187,7 +187,7 @@
     "intl-dom": "^0.20.0",
     "jamilih": "^0.60.0",
     "jquery": "^3.7.1",
-    "jquery-form": "https://github.com/brettz9/form#xss"
+    "jquery-form-plus": "^1.0.1"
   },
   "dependencies": {
     "command-line-basics": "^2.0.1",
@@ -269,7 +269,7 @@
     "husky": "^9.1.6",
     "integrity-matters": "^0.14.0",
     "jquery": "^3.7.1",
-    "jquery-form": "github:brettz9/form#xss",
+    "jquery-form-plus": "^1.0.1",
     "jsdoc": "^4.0.3",
     "license-badger": "^0.21.1",
     "lint-staged": "^15.2.10",

@@ -41,11 +41,11 @@
       "remote": "https://code.jquery.com/jquery-3.7.1.min.js"
     },
     {
-      "name": "jquery-form",
+      "name": "jquery-form-plus",
       "global": "jQuery.fn.ajaxSubmit",
-      "local": "/node_modules/jquery-form/dist/jquery.form.min.js",
-      "integrity": "sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn",
-      "remote": "https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"
+      "local": "/node_modules/jquery-form-plus/dist/jquery.form.min.js",
+      "integrity": "sha384-g2OWrlPcE8gfiz6d6C/HiIGzqGIk+mR9rHbjeERxG8XSx8giI8fWhrh2aW0JiMLG",
+      "remote": "https://unpkg.com/jquery-form-plus@1.0.1/dist/jquery.form.min.js"
     },
     {
       "name": "bootstrap",
