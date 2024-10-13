@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 7.7.0
 
 - refactor: switch to `jquery-form-plus`
 
