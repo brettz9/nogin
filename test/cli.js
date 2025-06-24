@@ -1017,7 +1017,7 @@ describe('CLI', function () {
     });
 
     // Todo: See about fixing/reenabling
-    // eslint-disable-next-line mocha/no-skipped-tests -- Ok
+    // eslint-disable-next-line mocha/no-pending-tests -- Ok
     it.skip('With environment components', async function () {
       this.timeout(40000);
       const {stdout, stderr} = await spawnPromise(cliPath, {

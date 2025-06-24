@@ -1,5 +1,5 @@
 import ashNazg from 'eslint-config-ash-nazg';
-
+const off = 'off'; // Weird behavior from sonarjs
 export default [
   {
     name: 'nogin/ignores',
@@ -42,7 +42,8 @@ export default [
     const cypressRules = {
       'cypress/assertion-before-screenshot': ['error'],
       'cypress/require-data-selectors': ['error'],
-      'cypress/no-force': ['error']
+      'cypress/no-force': ['error'],
+      'sonarjs/no-hardcoded-passwords': off
     };
     return {
       files: ['test/**', 'cypress/**', 'test/*.js'],
@@ -69,7 +70,8 @@ export default [
       '@brettz9/no-use-ignored-vars': 0,
 
       // For modules, we shouldn't need `window`
-      'no-restricted-globals': ['error', 'window']
+      'no-restricted-globals': ['error', 'window'],
+      'unicorn/prefer-global-this': 'off'
     }
   }
 ];

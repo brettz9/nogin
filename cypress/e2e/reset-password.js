@@ -58,7 +58,7 @@ describe('Reset password', function () {
       cy.get('[data-name="reset-pass"]').type(tooShortPassword);
       // cy.get('[data-name="reset-password-submit"]').click();
 
-      // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=15.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
       return cy.get('[data-name="reset-pass"]');

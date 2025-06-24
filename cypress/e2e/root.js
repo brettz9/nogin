@@ -190,7 +190,6 @@ describe('Root (Login)', function () {
       },
       error: 'The "password" argument must be'
     }).then(() => {
-      // eslint-disable-next-line sonarjs/no-hardcoded-credentials -- Testing
       const passwordToPassClientValidation = 'abc123456';
       cy.get('[data-name="user"]').type('bretto');
       cy.get('[data-name="pass"]').type(passwordToPassClientValidation);

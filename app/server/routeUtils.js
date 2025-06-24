@@ -128,10 +128,10 @@ const layoutAndTitleGetter = (config, jml) => {
 
   // todo: Update SHA (and path(s) if necessary) for jquery-form-plus
 
-  // todo[@fortawesome/fontawesome-free@>6.6.0]: Update SHA (and path(s)
+  // todo[@fortawesome/fontawesome-free@>6.7.2]: Update SHA (and path(s)
   //   if necessary)
 
-  // Todo[bootstrap@>5.3.3]: Update SHA (and path(s) if necessary) for
+  // Todo[bootstrap@>5.3.7]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
   //   https://github.com/twbs/bootstrap/blob/main/hugo.yml

@@ -736,7 +736,7 @@ describe('Home', function () {
       cy.clearTypeAndBlur('[data-name="name"]', tooShortOfAName);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=14.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=15.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       cy.get('[data-name="name"]').then((

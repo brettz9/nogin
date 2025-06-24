@@ -70,7 +70,7 @@ case 'add': {
   process.argv.splice(2, 1);
 
   const idx = process.argv.indexOf('--loggerLocale');
-  const loggerLocale = idx > -1
+  const loggerLocale = idx !== -1
     ? process.argv[idx + 1]
     : 'en-US';
 

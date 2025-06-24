@@ -15,6 +15,7 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import stylus from 'stylus';
+// eslint-disable-next-line import/no-named-as-default -- Bug
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
