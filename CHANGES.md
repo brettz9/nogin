@@ -1,5 +1,12 @@
 # CHANGES for nogin
 
+## 8.0.0 (unreleased)
+
+Breaking changes:
+- Requires Node ^20.11.0 || >= 22.0.0
+
+- fix: supply `command-line-basics` notifier info
+
 ## 7.7.0
 
 - refactor: switch to `jquery-form-plus`

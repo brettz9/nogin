@@ -17,7 +17,10 @@ async function getOptions () {
   return /** @type {import('../app/server/optionDefinitions.js').MainOptionDefinitions} */ (
     await cliBasics({
       optionsPath: '../app/server/optionDefinitions.js',
-      cwd: __dirname
+      cwd: __dirname,
+      options: {
+        packageJsonPath: import.meta.dirname + '/../package.json'
+      }
     })
   );
 }

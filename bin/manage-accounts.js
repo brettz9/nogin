@@ -105,7 +105,10 @@ const manageAccounts = async (verb, {loggerLocale}) => {
 
   const options = await cliBasics({
     optionsPath: `./manageAccounts-${verb}-optionDefinitions.js`,
-    cwd: __dirname
+    cwd: __dirname,
+    options: {
+      packageJsonPath: import.meta.dirname + '/../package.json'
+    }
   });
   if (!options) {
     return;
