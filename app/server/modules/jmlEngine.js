@@ -7,7 +7,7 @@ import {jml} from 'jamilih/src/jml-jsdom.js';
 /**
  * @param {string} filePath
  * @param {object} options
- * @param {(err: any, rendered?: string) => void} callback
+ * @param {(err: unknown, rendered?: string) => void} callback
  * @returns {Promise<void>}
  */
 const jmlEngine = async (filePath, options, callback) => {

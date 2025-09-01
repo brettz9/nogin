@@ -131,11 +131,11 @@ const layoutAndTitleGetter = (config, jml) => {
   // todo[@fortawesome/fontawesome-free@>6.7.2]: Update SHA (and path(s)
   //   if necessary)
 
-  // Todo[bootstrap@>5.3.7]: Update SHA (and path(s) if necessary) for
+  // Todo[bootstrap@>5.3.8]: Update SHA (and path(s) if necessary) for
   //   bootstrap css (including RTL), bootstrap js, and @popperjs/core
   // @popperjs/core is a bootstrap dep.; see
-  //   https://github.com/twbs/bootstrap/blob/main/hugo.yml
-  // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/hugo.yml
+  //   https://github.com/twbs/bootstrap/blob/main/config.yml
+  // Get src/integrity at https://github.com/twbs/bootstrap/blob/main/config.yml
 
   // Todo: If keeping, add badge to a demo and make enableable (off
   //   by default) with option
@@ -144,24 +144,24 @@ const layoutAndTitleGetter = (config, jml) => {
   /** @type {SecuritySourceAttributes} */
   const securitySourceAttributes = (type, name) => {
     const base =
-    /**
-     * @type {(LinkScript & {
-     *   noLocalIntegrity?: boolean | undefined;
-     * }) | (LinkScript & {
-     *   global: string;
-     * })}
-     */
-    (integrityMap[type].find(
       /**
-       * @param {{
-       *   name: string
-       * }} cfg
-       * @returns {boolean}
+       * @type {(LinkScript & {
+       *   noLocalIntegrity?: boolean | undefined;
+       * }) | (LinkScript & {
+       *   global: string;
+       * })}
        */
-      ({name: nm}) => {
-        return name === nm;
-      }
-    ));
+      (integrityMap[type].find(
+        /**
+         * @param {{
+         *   name: string
+         * }} cfg
+         * @returns {boolean}
+         */
+        ({name: nm}) => {
+          return name === nm;
+        }
+      ));
     const baseObj = {
       [type === 'link' ? 'href' : 'src']:
         base[localScripts ? 'local' : 'remote'],
@@ -285,7 +285,7 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
             `Localized routes must not use reserved routes (${message})`
           );
         }
-        if (!(/^\/[^./]*$/u).test(message)) {
+        if (!(/^\/[^.\/]*$/v).test(message)) {
           throw new Error(
             'Localized routes must have an initial slash but no dots ' +
               'or slashes afterward.'
@@ -344,14 +344,12 @@ function routeGetter (customRoute) {
         customRoutesObj[_.resolvedLocale][route]
       ) || i18nRoute;
 
-      /* eslint-disable jsdoc/valid-types -- Bug */
       // Add a safe route (since only `customRoutes` should allow URLs)
       //  so if Firefox 2 is detected, client can redirect to that with
       //  location.assign() (since `location.href` not supported).
       o[/** @type {`safe_${Route}`} */ ('safe_' + route)] = i18nRoute;
       return o;
     }, /** @type {Record<Route|`safe_${Route}`, string>} */ ({}));
-    /* eslint-enable jsdoc/valid-types -- Bug */
     routeMap.set(_.resolvedLocale, routeObj);
     return routeObj;
   };

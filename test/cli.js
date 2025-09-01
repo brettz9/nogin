@@ -66,7 +66,7 @@ setEmailConfig({
  * @returns {string}
  */
 const stripPromisesWarning = (s) => {
-  return s.replace(/\(node.*ExperimentalWarning:.*\n/u, '');
+  return s.replace(/\(node.*ExperimentalWarning:.*\n/v, '');
 };
 
 /**
@@ -75,7 +75,7 @@ const stripPromisesWarning = (s) => {
  * @returns {string}
  */
 const stripMongoWarning = (s) => {
-  return s.replace(/\(node.*?\) Warning: Accessing non-existent property 'MongoError' of module exports inside circular dependency\n\(Use `node --trace-warnings \.\.\.` to show where the warning was created\)\n/u, '');
+  return s.replace(/\(node.*?\) Warning: Accessing non-existent property 'MongoError' of module exports inside circular dependency\n\(Use `node --trace-warnings \.\.\.` to show where the warning was created\)\n/v, '');
 };
 
 /**
@@ -107,9 +107,9 @@ const testPort2 = '1234';
  */
 const stripMongoAndServerListeningMessages = (s, port = testPort) => {
   // Todo: Replace this with suppressing db output?
-  return s.replace(/mongodb :: connected to database :: "nogin"\n/u, '').
+  return s.replace(/mongodb :: connected to database :: "nogin"\n/v, '').
     replace(
-      new RegExp(`Express server listening on port ${port}\n`, 'u'),
+      new RegExp(`Express server listening on port ${port}\n`, 'v'),
       ''
     );
 };
@@ -410,7 +410,7 @@ describe('CLI', function () {
             '<link rel="stylesheet" href="stylesheet.css">' +
             '<link rel="stylesheet" href="headPostContent.css">'
           ),
-          'u'
+          'v'
         );
         expect(headLinks).to.match(regex);
 
@@ -423,7 +423,7 @@ describe('CLI', function () {
         expect(headLinksRTL).to.match(
           new RegExp(
             regex.source.replace('bootstrap.min.css', 'bootstrap.rtl.min.css'),
-            'u'
+            'v'
           )
         );
 
@@ -461,7 +461,7 @@ describe('CLI', function () {
           ) + semverNumPattern + escStringRegex(
             '/jquery.form.min.js" crossorigin="anonymous" defer=""></script>'
           ),
-          'u'
+          'v'
         ));
         const headPostScripts = headScripts.slice(-2).join('');
         expect(headPostScripts).to.equal(

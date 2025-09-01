@@ -100,7 +100,7 @@ describe('Programmatic', function () {
       ).to.be.rejectedWith(
         Error,
         // From Node
-        /The "password" argument must be /u
+        /The "password" argument must be /v
       );
     });
   });
@@ -187,7 +187,7 @@ describe('Programmatic', function () {
     // eslint-disable-next-line promise/avoid-new -- Testing
     return new Promise(
       (
-        /** @type {(val?: any) => void} */
+        /** @type {(val?: void) => void} */
         resolve
       ) => {
         // eslint-disable-next-line promise/prefer-await-to-callbacks -- Testing

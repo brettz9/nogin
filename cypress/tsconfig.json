@@ -5,8 +5,8 @@
     "noEmit": true,
     "allowJs": true,
     "checkJs": true,
-    "target": "es2021",
-    "lib": ["es2022", "dom"],
+    "target": "es2024",
+    "lib": ["es2024", "dom"],
     "types": ["cypress", "node"]
   },
   "include": ["e2e/*.js", "../typings/CypressPlugins.d.ts"]

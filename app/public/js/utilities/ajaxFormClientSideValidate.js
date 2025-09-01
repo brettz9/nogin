@@ -6,23 +6,26 @@
 //   new value and this will thereby become invalid.
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
 
+
+/* eslint-disable jsdoc/reject-any-type -- Arbitrary */
 /**
  * @typedef {{
  *   headers?: {[key: string]: string|undefined},
  *   url?: string,
  *   beforeSubmit?: (
  *     arr: {name: string, value: string|boolean}[],
- *     $form: any,
+ *     $form: JQuery,
  *     options: any
  *   ) => boolean|void,
  *   success: (
- *     responseText: string, status: string, xhr: any, $form: JQuery
+ *     responseText: string, status: string, xhr: JQuery.jqXHR, $form: JQuery
  *   ) => void,
  *   error: (cfg: {
  *     responseText: string
  *   }) => void,
  * }} AjaxFormConfig
  */
+/* eslint-enable jsdoc/reject-any-type -- Arbitrary */
 
 /**
  * @typedef {JQuery & {

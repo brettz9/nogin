@@ -752,7 +752,7 @@ const routeList = async (app, config) => {
           _, title, template: 'groups',
           csrfToken: req.csrfToken()
         }),
-        groupsInfo: readGroupsResultValue.sort(
+        groupsInfo: readGroupsResultValue.toSorted(
           ({groupName: gn1, builtin: bi1}, {groupName: gn2, builtin: bi2}) => {
             return bi1 && !bi2
               ? -1
@@ -939,7 +939,7 @@ const routeList = async (app, config) => {
           return undefined;
         }).filter(Boolean))
       };
-    }).sort(
+    }).toSorted(
       ({
         privilegeName: pn1, builtin: bi1}, {privilegeName: pn2, builtin: bi2
       }) => {
@@ -1725,7 +1725,7 @@ window.Nogin = {
     // `location.href` not supported in Firefox 2 per
     //   `eslint-plugin-compat`
     // However, can't test during UI test: https://github.com/cypress-io/cypress/issues/2100
-    !(/Firefox\/2(?=\D)/u).test(userAgent)
+    !(/Firefox\/2(?=\D)/v).test(userAgent)
     ? 'true'
     : 'false'};
     if (permittingXDomainRedirects) {
@@ -1746,12 +1746,7 @@ window.Nogin = {
     const userPrivs = await getUserPrivs(req);
     const converted = {
       privs: userPrivs === true ? true : [...userPrivs],
-      user: req.session?.user?.user ?? null,
-      // todo[>=8.0.0]: remove this property (and update client code)
-      /**
-       * @deprecated Use inverse of `user` instead.
-       */
-      guest: !req.session?.user?.user
+      user: req.session?.user?.user ?? null
     };
 
     if (req.query.format === 'json') {
@@ -1792,14 +1787,14 @@ window.NoginPrivs.hasPrivilege = function (priv) {
 
   app.use((req, _res, next) => {
     req.hasPrivilege =
-    /**
-     * @param {string} priv
-     * @returns {Promise<boolean>}
-     */
-    async (priv) => {
-      const privs = await getUserPrivs(req);
-      return privs === true ? true : privs.has(priv);
-    };
+      /**
+       * @param {string} priv
+       * @returns {Promise<boolean>}
+       */
+      async (priv) => {
+        const privs = await getUserPrivs(req);
+        return privs === true ? true : privs.has(priv);
+      };
 
     next();
   });
@@ -1817,7 +1812,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
    * @returns {string} The route code; empty string if not found
    */
   function getRouteForLocale (routes, locale, req) {
-    const pathBeforeSlashes = /\/[^/]*/u;
+    const pathBeforeSlashes = /\/[^\/]*/v;
     const {pathname} = new URL(req.url, `http://${req.headers.host}`);
     const path = pathname.match(pathBeforeSlashes)?.[0];
 

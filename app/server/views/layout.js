@@ -158,7 +158,7 @@ const layout = ({
                 ) {
                   delete atts.defer;
                   atts.src = atts.src.replace(
-                    /Controller\.iife\.min\.js$/u,
+                    /Controller\.iife\.min\.js$/v,
                     'Controller.js'
                   );
                   atts.type = 'module';

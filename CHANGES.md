@@ -5,6 +5,7 @@
 Breaking changes:
 - Requires Node ^20.11.0 || >= 22.0.0
 
+- feat: remove deprecated `guest` property
 - fix: supply `command-line-basics` notifier info
 
 ## 7.7.0

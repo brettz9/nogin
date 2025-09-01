@@ -31,7 +31,7 @@ const {constants: {
 }} = Runner;
 
 const reporterFile = process.argv[2]
-  ? process.argv[2].replace(/^--/u, '')
+  ? process.argv[2].replace(/^--/v, '')
   : 'spec';
 
 // // eslint-disable-next-line no-unsanitized/method -- Dynamic CLI script

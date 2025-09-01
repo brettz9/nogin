@@ -1,8 +1,11 @@
+// eslint-disable-next-line import/no-unresolved -- Bug
 import {v4 as uuid} from 'uuid';
 
+/* eslint-disable jsdoc/reject-any-type -- Arbitrary */
 /**
  * @typedef {any} AnyValue
  */
+/* eslint-enable jsdoc/reject-any-type -- Arbitrary */
 
 /**
  * @param {AnyValue} o

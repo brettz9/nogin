@@ -538,7 +538,7 @@ class AccountManager {
     const passKey = uuid();
     let o, e;
     try {
-      o = /** @type {import('mongodb').WithId<any> | null} */ (await
+      o = /** @type {import('mongodb').WithId<AccountInfo> | null} */ (await
       /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
         this.accounts
       ).findOneAndUpdate({email}, {$set: {
@@ -1226,7 +1226,9 @@ class AccountManager {
   /**
    * @param {string} passKey
    * @param {string} newPass
-   * @returns {Promise<import('mongodb').WithId<any> | null>}
+   * @returns {Promise<import('mongodb').WithId<
+   *   import('mongodb').Document
+   * > | null>}
    */
   async updatePassword (passKey, newPass) {
     const hash = await saltAndHash(newPass);

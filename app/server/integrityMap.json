@@ -3,14 +3,14 @@
     {
       "name": "bootstrap",
       "local": "/node_modules/bootstrap/dist/css/bootstrap.min.css",
-      "integrity": "sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr",
-      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      "integrity": "sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB",
+      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     },
     {
       "name": "bootstrap-rtl",
       "local": "/node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
-      "integrity": "sha384-Xbg45MqvDIk1e563NLpGEulpX6AvL404DP+/iCgW9eFa2BqztiwTexswJo2jLMue",
-      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.rtl.min.css"
+      "integrity": "sha384-CfCrinSRH2IR6a4e6fy2q6ioOX7O6Mtm1L9vRvFZ1trBncWmMePhzvafv7oIcWiW",
+      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css"
     },
     {
       "name": "@fortawesome/fontawesome-free",
@@ -51,8 +51,8 @@
       "name": "bootstrap",
       "global": "bootstrap",
       "local": "/node_modules/bootstrap/dist/js/bootstrap.min.js",
-      "integrity": "sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK",
-      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+      "integrity": "sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y",
+      "remote": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
     },
     {
       "name": "@popperjs/core",

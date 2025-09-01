@@ -113,9 +113,11 @@ const manageAccounts = async (verb, {loggerLocale}) => {
   if (!options) {
     return;
   }
+  /* eslint-disable jsdoc/reject-any-type -- Arbitrary */
   /**
    * @typedef {any} AnyOptions
    */
+  /* eslint-enable jsdoc/reject-any-type -- Arbitrary */
   try {
     await method(/** @type {AnyOptions} */ (options));
   } catch (err) {

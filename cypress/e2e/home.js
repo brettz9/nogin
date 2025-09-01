@@ -133,7 +133,7 @@ describe('Home', function () {
         ].every((str) => {
           return html.includes(str);
         })).to.be.true;
-        const match = html.match(/activation\?c=(?<activationCode>[^'"]*)/u);
+        const match = html.match(/activation\?c=(?<activationCode>[^'"]*)/v);
         const {activationCode} = (match || {groups: {}}).groups;
         expect(activationCode).to.be.ok;
         cy.visit('/activation?c=' + encodeURIComponent(activationCode));
@@ -233,7 +233,7 @@ describe('Home', function () {
           ].every((str) => {
             return html.includes(str);
           })).to.be.true;
-          const match = html.match(/activation\?c=(?<activationCode>[^'"]*)/u);
+          const match = html.match(/activation\?c=(?<activationCode>[^'"]*)/v);
           const {activationCode} = (match || {groups: {}}).groups;
           expect(activationCode).to.be.ok;
 
@@ -736,7 +736,7 @@ describe('Home', function () {
       cy.clearTypeAndBlur('[data-name="name"]', tooShortOfAName);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=15.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=16.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       cy.get('[data-name="name"]').then((
