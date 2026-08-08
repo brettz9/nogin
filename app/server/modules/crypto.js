@@ -1,9 +1,7 @@
 import {pbkdf2, randomBytes} from 'crypto';
 import safeCompare from 'safe-compare';
 
-/*
-  private encryption & validation methods
-*/
+// private encryption & validation methods
 
 /**
  * @param {string} data
@@ -64,7 +62,7 @@ const saltAndHash = function (data) {
  * @returns {Promise<boolean>}
  */
 const validatePasswordV1 = async function (plainPass, hashedPass) {
-  const [salt] = hashedPass.split('$');
+  const [salt] = hashedPass.split('$', 1);
   const validHash = await pbkdf2Prom(plainPass, salt);
   return safeCompare(hashedPass, validHash);
 };

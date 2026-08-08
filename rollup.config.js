@@ -23,7 +23,7 @@ function getRollupObject ({input, minifying} = {}) {
     output: {
       format: 'iife',
       sourcemap: minifying,
-      file: `${input.replace(/\.js$/u, '.iife')}${minifying ? '.min' : ''}.js`
+      file: `${input.replace(/\.js$/v, '.iife')}${minifying ? '.min' : ''}.js`
     },
     plugins: [
       nodeResolve(),

@@ -50,7 +50,11 @@ export default [
       ...cfg,
       rules: {
         ...cfg.rules,
-        ...(cfg.plugins?.cypress ? cypressRules : {})
+        ...(cfg.plugins?.cypress ? cypressRules : {}),
+        // Convenient
+        'sonarjs/assertions-in-tests': 0,
+        // For cypress
+        'mocha/no-async-in-sync-tests': 0
       }
     };
   }),

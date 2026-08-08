@@ -73,11 +73,7 @@ results.forEach(({suites}) => {
         : tst.fail
           ? EVENT_TEST_FAIL
           // No distinct event for pending vs. skipped?
-          : tst.pending
-            ? EVENT_TEST_PENDING
-            : tst.skipped
-              ? EVENT_TEST_PENDING
-              : null;
+          : tst.pending || tst.skipped ? EVENT_TEST_PENDING : null;
       if (!ev) {
         throw new Error(
           'Unexpected test event (not passing, failing, or pending): ' +

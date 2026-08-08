@@ -104,6 +104,15 @@ class AccountManager {
     return saltAndHash(newData.user + newData.pass);
   }
 
+  /** @type {import('mongodb').Collection|undefined} */
+  accounts;
+
+  /** @type {import('mongodb').Collection<GroupInfo>|undefined} */
+  groups;
+
+  /** @type {import('mongodb').Collection<PrivilegeInfo>|undefined} */
+  privileges;
+
   /**
    * @param {"mongodb"} adapter
    * @param {import('./db-abstraction.js').DBConfigObject} config
@@ -395,9 +404,7 @@ class AccountManager {
     );
   }
 
-  /*
-    login validation methods
-  */
+  // login validation methods
 
   /**
    * @param {string} user
@@ -485,6 +492,8 @@ class AccountManager {
     if (isNullish(o)) {
       throw new Error('user-not-found');
     }
+
+    // eslint-disable-next-line no-useless-assignment -- ESLint bug
     let valid = false;
     // These may throw
     switch (o.passVer) {
@@ -574,9 +583,7 @@ class AccountManager {
     ).findOne({passKey, ip: ipAddress});
   }
 
-  /*
-    record insertion, update & deletion methods
-  */
+  // record insertion, update & deletion methods
 
   /**
    * @param {AccountInfo} newData
@@ -1240,9 +1247,7 @@ class AccountManager {
     }, {upsert: true, returnDocument: 'after'});
   }
 
-  /*
-    account lookup methods
-  */
+  // account lookup methods
 
   /**
    * @returns {Promise<Partial<AccountInfo>[]>}

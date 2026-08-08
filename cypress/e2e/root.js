@@ -30,11 +30,13 @@ describe('Root (Login)', function () {
   let env, NL_EMAIL_USER, NL_EMAIL_PASS;
 
   before(() => {
-    ({
-      env,
-      NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    } = Cypress.env());
+    cy.env([
+      'env', 'NL_EMAIL_USER', 'NL_EMAIL_PASS'
+    ]).then(({user, pass, env: env2}) => {
+      env = env2;
+      NL_EMAIL_PASS = pass;
+      NL_EMAIL_USER = user;
+    });
   });
 
   beforeEach(() => {
@@ -336,7 +338,7 @@ describe('Root (Login)', function () {
   it('Visit auto-logging-in root after initial login', function () {
     cy.log(env);
     // See `hackEnv` on how apparently not working and why we need this hack
-    // const secure = Cypress.env('env') === 'production'
+    // cy.env(['env']).then(({env}) => { const secure = env === 'production'});
     const secure = env === 'production';
     return cy.login({
       user: 'bretto',
@@ -362,7 +364,7 @@ describe('Root (Login)', function () {
     function () {
       cy.log(env);
       // See `hackEnv` on how apparently not working and why we need this hack
-      // const secure = Cypress.env('env') === 'production'
+      // cy.env(['env']).then(({env}) => {const secure = env === 'production'});
       const secure = env === 'production';
       return cy.login({
         user: 'bretto',
@@ -390,7 +392,7 @@ describe('Root (Login)', function () {
     function () {
       cy.log(env);
       // See `hackEnv` on how apparently not working and why we need this hack
-      // const secure = Cypress.env('env') === 'production'
+      // cy.env(['env']).then(({env}) => {const secure = env === 'production'});
       const secure = env === 'production';
       return cy.login({
         user: 'bretto',
@@ -398,7 +400,7 @@ describe('Root (Login)', function () {
         ip,
         secure
       }).then((key) => {
-        cy.visit('/?redirect=http://ignore-redirect-with-colons.com');
+        cy.visit('/?redirect=https://ignore-redirect-with-colons.example.com');
         cy.location('pathname', {
           timeout: 10000
         }).should('eq', '/home');
@@ -426,7 +428,7 @@ describe('Root (Login)', function () {
   );
 
   it('should reject bad login even in proper cookie format', function () {
-    const secure = Cypress.env('env') === 'production';
+    const secure = env === 'production';
     return cy.login({
       user: 'bretto',
       // ipv6 read by Express

@@ -1,5 +1,5 @@
 /* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
-
+/* eslint-disable unicorn/no-this-outside-of-class -- Convenient */
 const LoginView = {
   /**
    * @returns {JQuery} `HTMLDivElement`

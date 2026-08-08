@@ -1,3 +1,4 @@
+import {join} from 'node:path';
 import {cliBasics} from 'command-line-basics';
 import getLogger from '../app/server/modules/getLogger.js';
 import {
@@ -107,7 +108,7 @@ const manageAccounts = async (verb, {loggerLocale}) => {
     optionsPath: `./manageAccounts-${verb}-optionDefinitions.js`,
     cwd: __dirname,
     options: {
-      packageJsonPath: import.meta.dirname + '/../package.json'
+      packageJsonPath: join(import.meta.dirname, '/../package.json')
     }
   });
   if (!options) {

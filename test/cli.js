@@ -148,8 +148,10 @@ describe('CLI', function () {
         });
         // @ts-expect-error It's ok
         const {stdout, stderr} = await cliProm;
-        const doc = (new JSDOM(text)).window.document;
-        const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
+        const {document} = (new JSDOM(text)).window;
+        const headLinks = [
+          ...document.querySelectorAll('head link')
+        ].map((link) => {
           return link.outerHTML;
         }).join('');
         expect(headLinks).to.equal(
@@ -379,8 +381,10 @@ describe('CLI', function () {
           headers.get('x-middleware-gets-options')
         ).to.equal('favicon.ico');
         expect(headers.get('x-middleware-gets-req')).to.equal('/');
-        const doc = (new JSDOM(text)).window.document;
-        const headLinks = [...doc.querySelectorAll('head link')].map((link) => {
+        const {document} = (new JSDOM(text)).window;
+        const headLinks = [
+          ...document.querySelectorAll('head link')
+        ].map((link) => {
           return link.outerHTML;
         }).join('');
         const semverNumPattern =
@@ -416,6 +420,7 @@ describe('CLI', function () {
 
         const docRTL = (new JSDOM(textRTL)).window.document;
         const headLinksRTL = [
+          // eslint-disable-next-line unicorn/prefer-scoped-selector -- Document
           ...docRTL.querySelectorAll('head link')
         ].map((link) => {
           return link.outerHTML;
@@ -428,7 +433,7 @@ describe('CLI', function () {
         );
 
         const headScriptsDOM = /** @type {HTMLScriptElement[]} */ (
-          [...doc.querySelectorAll('head script')]
+          [...document.querySelectorAll('head script')]
         );
         const headScripts = headScriptsDOM.map(
           (script) => {
@@ -478,10 +483,10 @@ describe('CLI', function () {
             headScript.src === '/js/controllers/loginController.js';
         })).to.be.false;
 
-        expect(doc.body.firstElementChild?.outerHTML).to.equal(
+        expect(document.body.firstElementChild?.outerHTML).to.equal(
           '<link rel="stylesheet" href="bodyPreContent.css">'
         );
-        expect(doc.body.lastElementChild?.outerHTML).to.equal(
+        expect(document.body.lastElementChild?.outerHTML).to.equal(
           '<script src="bodyPostContent.js"></script>'
         );
 
@@ -493,6 +498,7 @@ describe('CLI', function () {
 
         const signupDoc = (new JSDOM(signupText)).window.document;
         const countries = [
+          // eslint-disable-next-line unicorn/prefer-scoped-selector -- Document
           ...signupDoc.querySelectorAll('[data-name="country"] option')
         ].map((country) => {
           return country.outerHTML;

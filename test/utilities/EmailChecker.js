@@ -1,4 +1,5 @@
 /* eslint-disable new-cap -- POP3 API */
+/* eslint-disable unicorn/no-top-level-assignment-in-function -- Convenient */
 // Todo: These email methods should be movable into a general utility
 
 import Pop3Command from 'node-pop3'; // , {listify}
@@ -54,9 +55,7 @@ async function connectAndGetMessages () {
   const list = await popActivatedAccount.LIST();
   console.log('list', list);
 
-  return [
-    ...new Map(/** @type {[string, string][]} */ (list)).keys()
-  ];
+  return new Map(/** @type {[string, string][]} */ (list)).keys().toArray();
 }
 
 /**
@@ -77,7 +76,7 @@ async function getEmail (messageNum) {
   //  a slow connection
   await popActivatedAccount.DELE(messageNum);
   console.log('deleted from server');
-  return new Envelope(retrStreamString);
+  return new Envelope(/** @type {string} */ (retrStreamString));
 }
 
 /**

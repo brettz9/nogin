@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import {join} from 'node:path';
 import {cliBasics} from 'command-line-basics';
 import getLogger from '../app/server/modules/getLogger.js';
 import getDirname from '../app/server/modules/getDirname.js';
@@ -19,7 +20,7 @@ async function getOptions () {
       optionsPath: '../app/server/optionDefinitions.js',
       cwd: __dirname,
       options: {
-        packageJsonPath: import.meta.dirname + '/../package.json'
+        packageJsonPath: join(import.meta.dirname, '/../package.json')
       }
     })
   );

@@ -1,5 +1,5 @@
 /* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
-
+/* eslint-disable unicorn/no-top-level-assignment-in-function -- Convenient */
 import '../polyfills/Error.js';
 import '../polyfills/console.js';
 
@@ -392,6 +392,7 @@ function showLockedAlertReload ({type}) {
   lockedAlertDialog.modal('show');
   const refresh = () => {
     // @ts-expect-error Ok
+    // eslint-disable-next-line unicorn/no-invalid-argument-count -- Ok
     location.reload(true);
   };
   PrivilegesView.getLockedAlertButton(
@@ -414,6 +415,7 @@ function showLockedErrorAlert ({type, message}) {
   lockedAlertDialog.modal('show');
   const refresh = () => {
     // @ts-expect-error Ok
+    // eslint-disable-next-line unicorn/no-invalid-argument-count -- Ok
     location.reload(true);
   };
   PrivilegesView.getLockedAlertButton(

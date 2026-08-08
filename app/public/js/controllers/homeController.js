@@ -111,7 +111,7 @@ function setupValidationSubmission () {
       accountForm.submit();
       emailChangeConfirmDialog.modal('hide');
     });
-  }, true);
+  }, {capture: true});
   ajaxFormClientSideValidate(accountForm, {
     validate () {
       av.validateForm();

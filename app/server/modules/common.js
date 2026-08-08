@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved -- Bug
 import {v4 as uuid} from 'uuid';
 
 /* eslint-disable jsdoc/reject-any-type -- Arbitrary */

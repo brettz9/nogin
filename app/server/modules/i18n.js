@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-top-level-side-effects -- Convenient */
 import 'intl-locale-textinfo-polyfill';
 import {readdir} from 'fs/promises';
 import {join} from 'path';
@@ -35,7 +36,6 @@ const availableLocales = await readdir(join(__dirname, '../_locales'));
 const getLangDir = function (_) {
   // Todo: Add `resolvedDirection` to `intl-dom` so can grab that instead here
   const lang = _.resolvedLocale;
-  // @ts-expect-error Polyfill for a new standard
   const {direction} = new Intl.Locale(lang).getTextInfo();
   // Don't bother to make default of "ltr" explicit
   const dir = direction === 'rtl' ? direction : undefined;
@@ -64,7 +64,7 @@ const i18n = function (localesBasePath = join(__dirname, '../')) {
 
     const langKey = JSON.stringify(locales);
     let _;
-    if (!localeMaps[localesBasePath]) {
+    if (!Object.hasOwn(localeMaps, localesBasePath)) {
       localeMaps[localesBasePath] = new Map();
     }
     if (localeMaps[localesBasePath].has(langKey)) {

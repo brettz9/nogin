@@ -3,7 +3,7 @@
  * @typedef {(cfg: {
  *   _: import('../modules/email-dispatcher.js').Internationalizer,
  *   langDir: {dir: "rtl"|"ltr"|undefined, lang: string},
- *   jml: import('jamilih').jml,
+ *   jml: typeof import('jamilih').jml,
  *   baseurl: string,
  *   name: string,
  *   user: string,

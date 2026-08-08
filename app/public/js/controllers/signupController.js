@@ -1,4 +1,5 @@
 /* globals Nogin -- Server-set */
+/* eslint-disable unicorn/no-top-level-assignment-in-function -- Convenient */
 
 import ajaxFormClientSideValidate from
   '../utilities/ajaxFormClientSideValidate.js';
@@ -25,19 +26,23 @@ if (Nogin.signupAgreement) {
   ConfirmDialog.getSubmit(
     confirmSignupDialog
   ).on('click', () => {
-    if (!confirmed) {
-      confirmed = true;
-      setupValidationSubmission();
-      confirmSignupDialog.modal('hide');
-      accountForm.trigger('submit');
+    if (confirmed) {
+      return;
     }
+
+    confirmed = true;
+    setupValidationSubmission();
+    confirmSignupDialog.modal('hide');
+    accountForm.trigger('submit');
   });
 
   SignupView.getAccountForm().on('submit', (e) => {
-    if (!confirmed) {
-      e.preventDefault();
-      confirmSignupDialog.modal('show');
+    if (confirmed) {
+      return;
     }
+
+    e.preventDefault();
+    confirmSignupDialog.modal('show');
   });
 } else {
   confirmed = true;

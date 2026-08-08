@@ -105,7 +105,7 @@ function wrap (elem, content) {
 
 /**
  * @param {import('./app.js').RouteConfig} config
- * @param {import('jamilih').jml} jml
+ * @param {typeof import('jamilih').jml} jml
  * @returns {LayoutAndTitleGetter}
  */
 const layoutAndTitleGetter = (config, jml) => {
@@ -124,7 +124,7 @@ const layoutAndTitleGetter = (config, jml) => {
 
   // Has SHAs at https://code.jquery.com/ ;
   //  see also https://jquery.com/download/
-  // todo[jquery@>3.7.1]: Update SHA (and path(s) if necessary)
+  // todo[jquery@>4.0.0]: Update SHA (and path(s) if necessary)
 
   // todo: Update SHA (and path(s) if necessary) for jquery-form-plus
 
@@ -217,6 +217,8 @@ const layoutAndTitleGetter = (config, jml) => {
             if (typeof val === 'string') {
               container = /** @type {import('jamilih').JamilihArray} */ (
                 /** @type {import('jamilih').JamilihChildType[]} */
+                // eslint-disable-next-line @stylistic/max-len -- Long
+                // eslint-disable-next-line unicorn/better-dom-traversing -- Not DOM
                 (/** @type {import('jamilih').JamilihDoc} */ (
                   jml.toJML(
                     wrap(type, val)
@@ -232,7 +234,7 @@ const layoutAndTitleGetter = (config, jml) => {
           });
         }
         [...headProps, ...bodyProps].forEach((prop) => {
-          injectedHTML[prop] = injectedHTML[prop] || [''];
+          injectedHTML[prop] ||= [''];
         });
 
         return layoutView(
@@ -318,8 +320,8 @@ function routeGetter (customRoute) {
    * @type {CustomRouteObject}
    */
   const customRoutesObj = customRoute.reduce((routes, routeInfo) => {
-    const [locale, route, path] = routeInfo.split('=');
-    if (!routes[locale]) {
+    const [locale, route, path] = routeInfo.split('=', 3);
+    if (!Object.hasOwn(routes, locale)) {
       routes[locale] = {};
     }
     routes[locale][route] = path;

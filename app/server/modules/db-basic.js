@@ -85,13 +85,13 @@ async function getAccounts (options, update) {
   } = options;
   return /** @type {string[]} */ (users).map((user, i) => {
     if (!update) {
-      if (!pass || !pass[i]) {
+      if (!pass || !Object.hasOwn(pass, i)) {
         throw new TypeError(
           `A \`pass\` argument must be provided with \`user\`; ` +
           `for user "${user}" index ${i}`
         );
       }
-      if (!email || !email[i]) {
+      if (!email || !Object.hasOwn(email, i)) {
         throw new TypeError(
           `An \`email\` argument must be provided with \`user\`; ` +
           `for user "${user}" index ${i}`
@@ -115,7 +115,7 @@ async function getAccounts (options, update) {
          * @type {OtherAccountProperty}
          */ (pr);
       const obj = options[prop];
-      if (obj && i in obj) {
+      if (obj && Object.hasOwn(obj, i)) {
         // @ts-expect-error Why is this problematic?
         ret[prop] = obj[i];
       }
@@ -188,7 +188,7 @@ function getAccountInfo (options) {
       /**
        * @type {"user"|OtherAccountProperty}
        */ (pr);
-    if (options[prop]) {
+    if (Object.hasOwn(options, prop)) {
       info[prop] = {$in: options[prop]};
     }
   });

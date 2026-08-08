@@ -15,7 +15,6 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import stylus from 'stylus';
-// eslint-disable-next-line import/no-named-as-default -- Bug
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
@@ -108,7 +107,6 @@ const createServer = async function (options) {
       : null;
   } catch {
     errorLog('noConfigFileDetected', {
-      // eslint-disable-next-line object-shorthand -- TS
       config: /** @type {string} */ (config)
     });
     return;

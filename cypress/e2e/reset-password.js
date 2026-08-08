@@ -6,10 +6,13 @@ describe('Reset password', function () {
   let NL_EMAIL_USER, NL_EMAIL_PASS;
 
   before(() => {
-    ({
-      NL_EMAIL_USER,
-      NL_EMAIL_PASS
-    } = Cypress.env());
+    cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({
+      NL_EMAIL_USER: user,
+      NL_EMAIL_PASS: pass
+    }) => {
+      NL_EMAIL_PASS = pass;
+      NL_EMAIL_USER = user;
+    });
   });
 
   beforeEach(() => {

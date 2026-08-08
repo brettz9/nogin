@@ -4,9 +4,13 @@ describe('Home', function () {
   let NL_EMAIL_PASS, NL_EMAIL_USER;
 
   before(() => {
-    ({
-      NL_EMAIL_PASS, NL_EMAIL_USER
-    } = Cypress.env());
+    cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({
+      NL_EMAIL_USER: user,
+      NL_EMAIL_PASS: pass
+    }) => {
+      NL_EMAIL_PASS = pass;
+      NL_EMAIL_USER = user;
+    });
   });
 
   it('Fails with reuse of old token', function () {

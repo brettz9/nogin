@@ -46,7 +46,7 @@ reasons). You would also need to change if you are changing from port
 ### Cypress environmental variables
 
 Although our Cypress setup also copies some values from `nogin.js`
-onto `Cypress.env` (to avoid redundancy, e.g., in getting at
+onto `cy.env` (to avoid redundancy, e.g., in getting at
 `NL_EMAIL_HOST`), we have also defined the following as our own
 [Cypress-specific environmental variables](https://docs.cypress.io/guides/guides/environment-variables.html#Setting):
 

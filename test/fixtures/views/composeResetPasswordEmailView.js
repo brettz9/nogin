@@ -3,7 +3,7 @@
  * @param {{
 *   _: import('intl-dom').I18NCallback,
 *   langDir: import('../../../app/server/modules/i18n.js').LanguageDirection,
-*   jml: import('jamilih').jml,
+*   jml: typeof import('jamilih').jml,
 *   baseurl: string,
 *   name: string,
 *   user: string,

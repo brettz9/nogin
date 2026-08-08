@@ -137,33 +137,34 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'loginWithSession',
   ({nondefaultEmail} = {}) => {
-    const NL_EMAIL_PASS = Cypress.env('NL_EMAIL_PASS');
-    cy.task('deleteAllAccounts');
-    if (nondefaultEmail) {
-      cy.task('addNondefaultAccount');
-    } else {
-      cy.task('addAccount');
-    }
+    return cy.env(['NL_EMAIL_PASS']).then(({NL_EMAIL_PASS}) => {
+      cy.task('deleteAllAccounts');
+      if (nondefaultEmail) {
+        cy.task('addNondefaultAccount');
+      } else {
+        cy.task('addAccount');
+      }
 
-    const url = '/';
+      const url = '/';
 
-    // Not just login, but get session, so will be shown `/home`
-    //   without redirect upon visit
+      // Not just login, but get session, so will be shown `/home`
+      //   without redirect upon visit
 
-    // It is no longer sufficient to make a request now that we have CSRF, and
-    //   we don't want to expose an API to get the token
-    return cy.getToken(url).then((token) => {
-      return cy.request({
-        url,
-        method: 'POST',
-        timeout: 50000,
-        headers: {
-          'X-XSRF-Token': token
-        },
-        body: {
-          user: 'bretto',
-          pass: NL_EMAIL_PASS
-        }
+      // It is no longer sufficient to make a request now that we have CSRF, and
+      //   we don't want to expose an API to get the token
+      return cy.getToken(url).then((token) => {
+        return cy.request({
+          url,
+          method: 'POST',
+          timeout: 50000,
+          headers: {
+            'X-XSRF-Token': token
+          },
+          body: {
+            user: 'bretto',
+            pass: NL_EMAIL_PASS
+          }
+        });
       });
     });
   }

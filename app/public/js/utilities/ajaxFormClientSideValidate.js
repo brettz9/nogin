@@ -61,13 +61,13 @@ const ajaxFormClientSideValidate = (form, cfg) => {
   form[0].addEventListener('change', (e) => {
     // Provide custom messages of invalidity
     validate(e);
-  }, true);
+  }, {capture: true});
 
   form[0].addEventListener('input', ({target}) => {
     const field = /** @type {HTMLInputElement} */ (target);
     field.setCustomValidity('');
     field.checkValidity();
-  }, true);
+  }, {capture: true});
 
   // istanbul ignore if
   if (checkXSRF && !xsrfCookie && !Nogin.disableXSRF) {

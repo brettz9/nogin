@@ -5,5 +5,7 @@ if (typeof Error === 'undefined') {
    * Error polyfill.
    */
   // @ts-expect-error Ok for browser
+  // eslint-disable-next-line @stylistic/max-len -- Long
+  // eslint-disable-next-line unicorn/no-global-object-property-assignment -- Polyfill
   window.Error = class Error {};
 }

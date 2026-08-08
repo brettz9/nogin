@@ -2,9 +2,11 @@ describe('Generate password key (for `/reset-password`)', function () {
   let NL_EMAIL_USER;
 
   before(() => {
-    ({
-      NL_EMAIL_USER
-    } = Cypress.env());
+    cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({
+      NL_EMAIL_USER: user
+    }) => {
+      NL_EMAIL_USER = user;
+    });
   });
 
   it('Visit reset password (after login)', function () {

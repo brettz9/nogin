@@ -1,4 +1,6 @@
 /* globals $, Nogin -- `$` is jQuery not ESM, `Nogin` is server-set */
+/* eslint-disable unicorn/no-this-outside-of-class -- Convenient */
+
 import AlertDialog from '../utilities/AlertDialog.js';
 
 const {_} = Nogin;

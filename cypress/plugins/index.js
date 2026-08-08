@@ -92,7 +92,7 @@ const exprt = (on, config) => {
     return key;
   }
 
-  config.env = config.env || {};
+  config.env ||= {};
 
   config.env.secret = secret;
   config.env.NL_EMAIL_USER = NL_EMAIL_USER;
@@ -382,7 +382,7 @@ const exprt = (on, config) => {
     getRecords (cfg) {
       // Not as a default param, as `task` serializes to JSONable
       // `null`
-      cfg = cfg || {};
+      cfg ||= {};
       return readAccounts(cfg);
     },
 

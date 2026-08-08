@@ -1,10 +1,10 @@
-// eslint-disable-next-line import/no-unresolved -- https://github.com/import-js/eslint-plugin-import/issues/2495
+// // eslint-disable-next-line import/no-unresolved -- https://github.com/import-js/eslint-plugin-import/issues/2495
 import {SMTPClient} from 'emailjs';
 
 // Todo: Reenable when getting dominum working
 // import JML from 'jamilih/dist/jml-dominum.js';
 // const jml = JML.default;
-import {jml} from 'jamilih/src/jml-jsdom.js';
+import {jml} from 'jamilih';
 
 import composeResetPasswordEmailViewDefault from
   '../views/composeResetPasswordEmail.js';
@@ -72,7 +72,8 @@ class EmailDispatcher {
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
    * @param {import('./i18n.js').LanguageDirection} langDir
-   * @returns {Promise<import('emailjs').Message>}
+   * @returns {Promise<import('emailjs').Message|
+   *   import('emailjs').MessageHeaders>}
    */
   dispatchResetPasswordLink (account, cfg, _, langDir) {
     const attachment = this.composeResetPasswordEmail(account, cfg, _, langDir);
@@ -134,7 +135,8 @@ class EmailDispatcher {
    * @param {FromEmailConfig} cfg
    * @param {Internationalizer} _
    * @param {import('./i18n.js').LanguageDirection} langDir
-   * @returns {Promise<import('emailjs').Message>}
+   * @returns {Promise<import('emailjs').Message|
+   *   import('emailjs').MessageHeaders>}
    */
   dispatchActivationLink (account, cfg, _, langDir) {
     const attachment = this.composeActivationEmail(account, cfg, _, langDir);

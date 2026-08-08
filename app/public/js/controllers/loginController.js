@@ -40,7 +40,7 @@ forgotPassword.on('click', () => {
     retrievePasswordModal.modal('hide');
     setTimeout(() => {
       lostPasswordUsername.focus();
-    });
+    }, 0);
   });
 
   retrievePasswordSubmit.show();

@@ -5,7 +5,7 @@ import {join, resolve as pathResolve} from 'path';
 //  cache the locales)
 
 import express from 'express';
-import {jml} from 'jamilih/src/jml-jsdom.js';
+import {jml} from 'jamilih';
 import csurf from 'csurf';
 
 import {
@@ -586,7 +586,7 @@ const routeList = async (app, config) => {
            * }} cfg
            * @param {number} idx
            * @returns {UserAccount & {
-           *   groupInfo: {}|{
+           *   groupInfo: Record<string, never>|{
            *     group: string,
            *     privileges?:
            *       import('./modules/account-manager.js').PrivilegeInfo[]
@@ -945,9 +945,7 @@ const routeList = async (app, config) => {
       }) => {
         return bi1 && !bi2
           ? 1
-          : bi2 && !bi1
-            ? -1
-            : pn1 < pn2 ? -1 : pn1 > pn2 ? 1 : 0;
+          : (bi2 && !bi1) || (pn1 < pn2) ? -1 : pn1 > pn2 ? 1 : 0;
       }
     );
   };
@@ -1109,7 +1107,9 @@ const routeList = async (app, config) => {
             } catch (e) {
               logErrorProperties(/** @type {Error} */ (e));
               // Cause this `updateAccount` to reject and be handled below
-              throw new Error('problem-dispatching-link');
+              throw new Error('problem-dispatching-link', {
+                cause: e
+              });
             }
           }
         });
@@ -1898,7 +1898,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
 
     if (!error && hasOwn(PostRoutes, route)) {
       await PostRoutes[
-        /** @type {keyof PostRoutes} */
+        /** @type {keyof typeof PostRoutes} */
         (route)
       ](routes, req, res);
       return;
@@ -1914,7 +1914,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
 
     if (!error && hasOwn(GetRoutes, route)) {
       await GetRoutes[
-        /** @type {keyof GetRoutes} */
+        /** @type {keyof typeof GetRoutes} */
         (route)
       ](routes, req, res, next);
       return;
