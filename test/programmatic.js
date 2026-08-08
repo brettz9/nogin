@@ -33,6 +33,7 @@ describe('Programmatic', function () {
       await createServer({
         PORT: 3001,
         config: null,
+        noHostValidation: true,
         sessionOptions: {
           name: 'my.sessionid',
           secret: 'boo'

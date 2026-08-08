@@ -1891,7 +1891,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
   };
 
   // eslint-disable-next-line sonarjs/csrf -- Need to review
-  app.post('*', async function (req, res, next) {
+  app.post('/{*path}', async function (req, res, next) {
     const {
       _, route, routes, error
     } = await i18nAndRoutes(req, res, next, 'post');
@@ -1907,7 +1907,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
     pageNotFound(_, res);
   });
 
-  app.get('*', async function (req, res, next) {
+  app.get('/{*path}', async function (req, res, next) {
     const {
       _, route, routes, error
     } = await i18nAndRoutes(req, res, next, 'get');
