@@ -203,7 +203,7 @@
     "host-validation": "^2.0.1",
     "intl-dom": "^0.21.1",
     "intl-locale-textinfo-polyfill": "^3.0.0",
-    "jamilih": "^0.66.0",
+    "jamilih": "^0.68.0",
     "jsdom": "^30.0.1",
     "mongodb": "^7.5.0",
     "nodemon": "^3.1.14",
