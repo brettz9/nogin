@@ -1,18 +1,12 @@
-export default getLogger;
 export type LoggerOptions = {
-    loggerLocale?: string | undefined;
-    noLogging?: boolean | undefined;
-    errorLog?: boolean | undefined;
+    loggerLocale?: string;
+    noLogging?: boolean;
+    errorLog?: boolean;
 };
-/**
- * `key`
- * `substitutions` - Values for substitution. Defaults to `{}`
- * `other` - Other items to log, e.g., errors.
- */
 export type Logger = ((key: string, substitutions?: {
     [key: string]: string | Element | number;
 } | null, ...other: (string | object)[]) => string | null) & {
-    _: import("../modules/email-dispatcher.js").Internationalizer;
+    _: import('../modules/email-dispatcher.js').Internationalizer;
 };
 /**
 * @typedef {object} LoggerOptions
@@ -36,5 +30,6 @@ export type Logger = ((key: string, substitutions?: {
  * @param {LoggerOptions} options
  * @returns {Promise<Logger>}
  */
-declare function getLogger(options: LoggerOptions): Promise<Logger>;
+declare const getLogger: (options: LoggerOptions) => Promise<Logger>;
+export default getLogger;
 //# sourceMappingURL=getLogger.d.ts.map

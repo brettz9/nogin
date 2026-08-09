@@ -1,4 +1,3 @@
-export default AccountValidatorView;
 export type AccountInfoElements = {
     name: HTMLInputElement;
     email: HTMLInputElement;
@@ -6,23 +5,35 @@ export type AccountInfoElements = {
     pass: HTMLInputElement;
     passConfirm: HTMLInputElement;
 };
-declare namespace AccountValidatorView {
+/**
+ * @typedef {object} AccountInfoElements
+ * @property {HTMLInputElement} name
+ * @property {HTMLInputElement} email
+ * @property {HTMLInputElement} user
+ * @property {HTMLInputElement} pass
+ * @property {HTMLInputElement} passConfirm
+ */
+declare const AccountValidatorView: {
     /**
      * @returns {HTMLFormElement}
      */
-    function getForm(): HTMLFormElement;
+    getForm(): HTMLFormElement;
     /**
      * @returns {JQuery}
      */
-    function getUserId(): JQuery;
+    getUserId(): JQuery;
     /**
      * @returns {AccountInfoElements}
      */
-    function getFormFields(): AccountInfoElements;
-    let errorMessages: {
+    getFormFields(): AccountInfoElements;
+    /**
+     * @type {{[key: string]: {[key: string]: string}}}
+     */
+    errorMessages: {
         [key: string]: {
             [key: string]: string;
         };
     };
-}
+};
+export default AccountValidatorView;
 //# sourceMappingURL=AccountValidatorView.d.ts.map

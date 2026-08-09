@@ -1,4 +1,18 @@
-export default EmailDispatcher;
+import { SMTPClient } from 'emailjs';
+export type EmailInfo = {
+    data: string;
+    alternative: boolean;
+};
+export type UserAccountInfo = {
+    name: string;
+    user: string;
+    passKey: string;
+    email: string;
+};
+export type FromEmailConfig = {
+    fromText: string;
+    fromURL: string;
+};
 export type EmailDispatcherConfig = {
     NL_EMAIL_HOST: string;
     /**
@@ -12,10 +26,10 @@ export type EmailDispatcherConfig = {
     NL_EMAIL_FROM: string;
     NL_SITE_URL: string;
     NS_EMAIL_TIMEOUT: number;
-    composeResetPasswordEmailView: import("../views/composeResetPasswordEmail.js").ComposeResetPasswordEmail;
-    composeActivationEmailView: import("../views/composeActivationEmail.js").ComposeActivationEmail;
+    composeResetPasswordEmailView: import('../views/composeResetPasswordEmail.js').ComposeResetPasswordEmail;
+    composeActivationEmailView: import('../views/composeActivationEmail.js').ComposeActivationEmail;
 };
-export type Internationalizer = import("intl-dom").I18NCallback<string>;
+export type Internationalizer = import('intl-dom').I18NCallback<string>;
 /**
 * @typedef {object} EmailDispatcherConfig
 * @property {string} NL_EMAIL_HOST
@@ -36,32 +50,25 @@ export type Internationalizer = import("intl-dom").I18NCallback<string>;
  * Class to send emails.
  */
 declare class EmailDispatcher {
-    /**
-     * Sets up config and connects to server.
-     * @param {EmailDispatcherConfig} config
-     */
-    constructor(config: EmailDispatcherConfig);
     NL_SITE_URL: string;
     NL_EMAIL_FROM: string;
     composeResetPasswordEmailView: import("../views/composeResetPasswordEmail.js").ComposeResetPasswordEmail;
     composeActivationEmailView: import("../views/composeActivationEmail.js").ComposeActivationEmail;
     smtpClient: SMTPClient;
     /**
+     * Sets up config and connects to server.
+     * @param {EmailDispatcherConfig} config
+     */
+    constructor(config: EmailDispatcherConfig);
+    /**
      * @param {UserAccountInfo} account
      * @param {FromEmailConfig} cfg
      * @param {Internationalizer} _
      * @param {import('./i18n.js').LanguageDirection} langDir
-     * @returns {Promise<import('emailjs').Message>}
+     * @returns {Promise<import('emailjs').Message|
+     *   import('emailjs').MessageHeaders>}
      */
-    dispatchResetPasswordLink(account: {
-        name: string;
-        user: string;
-        passKey: string;
-        email: string;
-    }, cfg: {
-        fromText: string;
-        fromURL: string;
-    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): Promise<import("emailjs").Message>;
+    dispatchResetPasswordLink(account: UserAccountInfo, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders>;
     /**
     * @typedef {object} EmailInfo
     * @property {string} data
@@ -86,18 +93,7 @@ declare class EmailDispatcher {
      * @param {import('./i18n.js').LanguageDirection} langDir
      * @returns {EmailInfo[]}
      */
-    composeResetPasswordEmail({ name, user, passKey }: {
-        name: string;
-        user: string;
-        passKey: string;
-        email: string;
-    }, { fromText, fromURL }: {
-        fromText: string;
-        fromURL: string;
-    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): {
-        data: string;
-        alternative: boolean;
-    }[];
+    composeResetPasswordEmail({ name, user, passKey }: UserAccountInfo, { fromText, fromURL }: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): EmailInfo[];
     /**
      * @param {Partial<import('./account-manager.js').AccountInfo> & {
      *   name: string,
@@ -107,16 +103,14 @@ declare class EmailDispatcher {
      * @param {FromEmailConfig} cfg
      * @param {Internationalizer} _
      * @param {import('./i18n.js').LanguageDirection} langDir
-     * @returns {Promise<import('emailjs').Message>}
+     * @returns {Promise<import('emailjs').Message|
+     *   import('emailjs').MessageHeaders>}
      */
-    dispatchActivationLink(account: Partial<import("./account-manager.js").AccountInfo> & {
+    dispatchActivationLink(account: Partial<import('./account-manager.js').AccountInfo> & {
         name: string;
         user: string;
         activationCode: string;
-    }, cfg: {
-        fromText: string;
-        fromURL: string;
-    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): Promise<import("emailjs").Message>;
+    }, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders>;
     /**
      * @param {Partial<import('./account-manager.js').AccountInfo> & {
      *   name: string,
@@ -128,17 +122,11 @@ declare class EmailDispatcher {
      * @param {import('./i18n.js').LanguageDirection} langDir
      * @returns {EmailInfo[]}
      */
-    composeActivationEmail({ name, user, activationCode }: Partial<import("./account-manager.js").AccountInfo> & {
+    composeActivationEmail({ name, user, activationCode }: Partial<import('./account-manager.js').AccountInfo> & {
         name: string;
         user: string;
         activationCode: string;
-    }, { fromText, fromURL }: {
-        fromText: string;
-        fromURL: string;
-    }, _: Internationalizer, langDir: import("./i18n.js").LanguageDirection): {
-        data: string;
-        alternative: boolean;
-    }[];
+    }, { fromText, fromURL }: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): EmailInfo[];
 }
-import { SMTPClient } from 'emailjs';
+export default EmailDispatcher;
 //# sourceMappingURL=email-dispatcher.d.ts.map

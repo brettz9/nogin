@@ -1,1 +1,1 @@
-{"version":3,"file":"common-definitions.d.ts","sourceRoot":"","sources":["../../bin/common-definitions.js"],"names":[],"mappings":";gCACa;IACR,YAAY,CAAC,EAAE,MAAM,CAAC;IACtB,SAAS,CAAC,EAAE,OAAO,CAAA;CACpB;AAJJ;;;;;GAKG;AACH;;;;;;;;;;;;KAWE"}
+{"version":3,"file":"common-definitions.d.ts","sourceRoot":"","sources":["../../bin/common-definitions.js"],"names":[],"mappings":"AACG,YAGG,iBAAiB,GAHV;IACR,YAAY,CAAC,EAAE,MAAM,CAAC;IACtB,SAAS,CAAC,EAAE,OAAO,CAAA;CACpB,CAAmB;AAJvB;;;;;GAKG;AACH,QAAA,MAAM,iBAAiB;;;;;;;;;;;;IAWtB,CAAC;eAEa,iBAAiB"}

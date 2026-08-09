@@ -1,4 +1,3 @@
-export default doubleInputForm;
 /**
  * @param {{
 *   _: import('intl-dom').I18NCallback,
@@ -9,11 +8,12 @@ export default doubleInputForm;
 * }} cfg
 * @returns {import('jamilih').JamilihArray}
 */
-declare function doubleInputForm({ _, type, inputDirections, descriptionDirections, autocomplete }: {
-    _: import("intl-dom").I18NCallback;
+declare const doubleInputForm: ({ _, type, inputDirections, descriptionDirections, autocomplete }: {
+    _: import('intl-dom').I18NCallback;
     type: string;
     inputDirections: string;
     descriptionDirections: string;
     autocomplete?: string[];
-}): import("jamilih").JamilihArray;
+}) => import('jamilih').JamilihArray;
+export default doubleInputForm;
 //# sourceMappingURL=double-input-form.d.ts.map

@@ -1,4 +1,3 @@
-export default ajaxFormClientSideValidate;
 export type AjaxFormConfig = {
     headers?: {
         [key: string]: string | undefined;
@@ -7,8 +6,8 @@ export type AjaxFormConfig = {
     beforeSubmit?: (arr: {
         name: string;
         value: string | boolean;
-    }[], $form: any, options: any) => boolean | void;
-    success: (responseText: string, status: string, xhr: any, $form: JQuery) => void;
+    }[], $form: JQuery, options: any) => boolean | void;
+    success: (responseText: string, status: string, xhr: JQuery.jqXHR, $form: JQuery) => void;
     error: (cfg: {
         responseText: string;
     }) => void;
@@ -22,11 +21,11 @@ export type JQueryWithAjaxForm = JQuery & {
  *   url?: string,
  *   beforeSubmit?: (
  *     arr: {name: string, value: string|boolean}[],
- *     $form: any,
+ *     $form: JQuery,
  *     options: any
  *   ) => boolean|void,
  *   success: (
- *     responseText: string, status: string, xhr: any, $form: JQuery
+ *     responseText: string, status: string, xhr: JQuery.jqXHR, $form: JQuery
  *   ) => void,
  *   error: (cfg: {
  *     responseText: string
@@ -46,8 +45,9 @@ export type JQueryWithAjaxForm = JQuery & {
  * }} cfg
  * @returns {void}
  */
-declare function ajaxFormClientSideValidate(form: JQueryWithAjaxForm, cfg: AjaxFormConfig & {
+declare const ajaxFormClientSideValidate: (form: JQueryWithAjaxForm, cfg: AjaxFormConfig & {
     validate: (e: Event) => void;
     checkXSRF?: boolean;
-}): void;
+}) => void;
+export default ajaxFormClientSideValidate;
 //# sourceMappingURL=ajaxFormClientSideValidate.d.ts.map

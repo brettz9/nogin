@@ -1,14 +1,17 @@
-export default LoginValidator;
-declare namespace LoginValidator {
+/**
+ * Login validation.
+ */
+declare const LoginValidator: {
     /**
      * @returns {boolean}
      */
-    function validateForm(): boolean;
+    validateForm(): boolean;
     /**
     * Bind a simple alert window to this controller to display any errors.
     * @param {"MismatchUserDataFormat"} [msg]
     * @returns {void}
     */
-    function showLoginError(msg?: "MismatchUserDataFormat" | undefined): void;
-}
+    showLoginError(msg?: "MismatchUserDataFormat"): void;
+};
+export default LoginValidator;
 //# sourceMappingURL=LoginValidator.d.ts.map

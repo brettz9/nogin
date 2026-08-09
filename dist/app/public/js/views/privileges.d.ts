@@ -1,124 +1,123 @@
-export default PrivilegesView;
-declare namespace PrivilegesView {
+declare const PrivilegesView: {
     /**
      * @param {JQuery} lockedAlertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
+    getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getDeletePrivileges(): JQuery<HTMLElement>;
+    getDeletePrivileges(): JQuery<HTMLElement>;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getRemovePrivilegeFromGroup(): JQuery<HTMLElement>;
+    getRemovePrivilegeFromGroup(): JQuery<HTMLElement>;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
     *   JQueryWithModal} `HTMLDivElement`
     */
-    function createPrivilegeModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    createPrivilegeModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
     *   JQueryWithModal} `HTMLDivElement`
     */
-    function editPrivilegeModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    editPrivilegeModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function addPrivilegeToGroupModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    addPrivilegeToGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {JQuery} createPrivilegeModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function createPrivilegeForm(createPrivilegeModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    createPrivilegeForm(createPrivilegeModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} editPrivilegeModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
     *   JQueryWithAjaxForm} `HTMLFormElement`
     */
-    function editPrivilegeForm(editPrivilegeModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    editPrivilegeForm(editPrivilegeModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function addPrivilegeToGroupForm(addPrivilegeToGroupModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    addPrivilegeToGroupForm(addPrivilegeToGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} createPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function createPrivilegeSubmit(createPrivilegeModal: JQuery): JQuery;
+    createPrivilegeSubmit(createPrivilegeModal: JQuery): JQuery;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function addPrivilegeToGroupSubmit(addPrivilegeToGroupModal: JQuery): JQuery;
+    addPrivilegeToGroupSubmit(addPrivilegeToGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} editPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function editPrivilegeSubmit(editPrivilegeModal: JQuery): JQuery;
+    editPrivilegeSubmit(editPrivilegeModal: JQuery): JQuery;
     /**
      * @param {JQuery} createPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function createPrivilegeCancel(createPrivilegeModal: JQuery): JQuery;
+    createPrivilegeCancel(createPrivilegeModal: JQuery): JQuery;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function addPrivilegeToGroupCancel(addPrivilegeToGroupModal: JQuery): JQuery;
+    addPrivilegeToGroupCancel(addPrivilegeToGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} editPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function editPrivilegeCancel(editPrivilegeModal: JQuery): JQuery;
+    editPrivilegeCancel(editPrivilegeModal: JQuery): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getCreatePrivilegeButton(): JQuery;
+    getCreatePrivilegeButton(): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getEditPrivilegeButton(): JQuery;
+    getEditPrivilegeButton(): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getAddPrivilegeToGroupButton(): JQuery;
+    getAddPrivilegeToGroupButton(): JQuery;
     /**
      * @returns {HTMLInputElement}
      */
-    function getCreatePrivilegeName(): HTMLInputElement;
+    getCreatePrivilegeName(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
-    function getCreatePrivilegeDescription(): HTMLInputElement;
+    getCreatePrivilegeDescription(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
-    function getEditPrivilegeDescription(): HTMLInputElement;
+    getEditPrivilegeDescription(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
-    function getAddPrivilegeToGroupGroup(): HTMLInputElement;
+    getAddPrivilegeToGroupGroup(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
-    function getEditPrivilege(): HTMLInputElement;
+    getEditPrivilege(): HTMLInputElement;
     /**
      * @param {string} privilege
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setDeletePrivilege(privilege: string): import("./utilities/AlertDialog.js").JQueryWithModal;
+    setDeletePrivilege(privilege: string): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setRemovePrivilegeFromGroup(): import("./utilities/AlertDialog.js").JQueryWithModal;
+    setRemovePrivilegeFromGroup(): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {object} cfg
      * @param {"privilegeCreated"|"privilegeDeleted"|"privilegeEdited"|
@@ -127,10 +126,10 @@ declare namespace PrivilegesView {
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function onShowLockedAlert({ type, privilege }: {
+    onShowLockedAlert({ type, privilege }: {
         type: "privilegeCreated" | "privilegeDeleted" | "privilegeEdited" | "privilegeRemovedFromGroup" | "privilegeAddedToGroup";
-        privilege?: string | undefined;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
+        privilege?: string;
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {object} cfg
      * @param {string} cfg.privilege
@@ -140,15 +139,19 @@ declare namespace PrivilegesView {
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function onShowLockedErrorAlert({ type, privilege, message }: {
+    onShowLockedErrorAlert({ type, privilege, message }: {
         privilege: string;
-        message?: string | undefined;
-        type?: "ErrorLoggingOut" | "SessionLost" | "ProblemDispatchingLink" | "FailureSubmittingPrivilegeInfo" | undefined;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
-    let errorMessages: {
+        message?: string;
+        type?: "ErrorLoggingOut" | "FailureSubmittingPrivilegeInfo" | "SessionLost" | "ProblemDispatchingLink";
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
+    /**
+     * @type {{[key: string]: {[key: string]: string}}}
+     */
+    errorMessages: {
         [key: string]: {
             [key: string]: string;
         };
     };
-}
+};
+export default PrivilegesView;
 //# sourceMappingURL=privileges.d.ts.map

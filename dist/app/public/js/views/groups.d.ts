@@ -1,154 +1,153 @@
-export default GroupsView;
-declare namespace GroupsView {
+declare const GroupsView: {
     /**
      * @param {JQuery} lockedAlertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
+    getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getDeleteGroups(): JQuery<HTMLElement>;
+    getDeleteGroups(): JQuery<HTMLElement>;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getRemoveUserFromGroup(): JQuery<HTMLElement>;
+    getRemoveUserFromGroup(): JQuery<HTMLElement>;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getAddPrivilegeToGroupButton(): JQuery;
+    getAddPrivilegeToGroupButton(): JQuery;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function addPrivilegeToGroupModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    addPrivilegeToGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function addPrivilegeToGroupForm(addPrivilegeToGroupModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    addPrivilegeToGroupForm(addPrivilegeToGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @returns {HTMLInputElement}
      */
-    function getAddPrivilegeToGroupGroup(): HTMLInputElement;
+    getAddPrivilegeToGroupGroup(): HTMLInputElement;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function addPrivilegeToGroupCancel(addPrivilegeToGroupModal: JQuery): JQuery;
+    addPrivilegeToGroupCancel(addPrivilegeToGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function addPrivilegeToGroupSubmit(addPrivilegeToGroupModal: JQuery): JQuery;
+    addPrivilegeToGroupSubmit(addPrivilegeToGroupModal: JQuery): JQuery;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
     *   JQueryWithModal} `HTMLDivElement`
     */
-    function createGroupModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    createGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
     *   JQueryWithModal} `HTMLDivElement`
     */
-    function renameGroupModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    renameGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function addUserToGroupModal(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    addUserToGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {JQuery} createGroupModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function createGroupForm(createGroupModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    createGroupForm(createGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} renameGroupModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
     *   JQueryWithAjaxForm} `HTMLFormElement`
     */
-    function renameGroupForm(renameGroupModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    renameGroupForm(renameGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} addUserToGroupModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function addUserToGroupForm(addUserToGroupModal: JQuery): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    addUserToGroupForm(addUserToGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} createGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function createGroupSubmit(createGroupModal: JQuery): JQuery;
+    createGroupSubmit(createGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} addUserToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function addUserToGroupSubmit(addUserToGroupModal: JQuery): JQuery;
+    addUserToGroupSubmit(addUserToGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} renameGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function renameGroupSubmit(renameGroupModal: JQuery): JQuery;
+    renameGroupSubmit(renameGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} createGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function createGroupCancel(createGroupModal: JQuery): JQuery;
+    createGroupCancel(createGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} addUserToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function addUserToGroupCancel(addUserToGroupModal: JQuery): JQuery;
+    addUserToGroupCancel(addUserToGroupModal: JQuery): JQuery;
     /**
      * @param {JQuery} renameGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function renameGroupCancel(renameGroupModal: JQuery): JQuery;
+    renameGroupCancel(renameGroupModal: JQuery): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getCreateGroupButton(): JQuery;
+    getCreateGroupButton(): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getRenameGroupButton(): JQuery;
+    getRenameGroupButton(): JQuery;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getAddUserToGroupButton(): JQuery;
+    getAddUserToGroupButton(): JQuery;
     /**
      * @returns {HTMLInputElement}
      */
-    function getCreateGroupName(): HTMLInputElement;
+    getCreateGroupName(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
-    function getAddUserToGroupName(): HTMLInputElement;
+    getAddUserToGroupName(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
-    function getRenameGroupName(): HTMLInputElement;
+    getRenameGroupName(): HTMLInputElement;
     /**
      * @param {string} group
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setDeleteGroup(group: string): import("./utilities/AlertDialog.js").JQueryWithModal;
+    setDeleteGroup(group: string): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('./utilities/AlertDialog.js').
     *   JQueryWithModal} `HTMLDivElement`
     */
-    function setRemoveUserFromGroup(): import("./utilities/AlertDialog.js").JQueryWithModal;
+    setRemoveUserFromGroup(): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getRemovePrivilegeFromGroup(): JQuery<HTMLElement>;
+    getRemovePrivilegeFromGroup(): JQuery<HTMLElement>;
     /**
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setRemovePrivilegeFromGroup(): import("./utilities/AlertDialog.js").JQueryWithModal;
+    setRemovePrivilegeFromGroup(): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {object} cfg
      * @param {"groupCreated"|"groupDeleted"|"groupRenamed"|
@@ -158,10 +157,10 @@ declare namespace GroupsView {
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function onShowLockedAlert({ type, group }: {
+    onShowLockedAlert({ type, group }: {
         type: "groupCreated" | "groupDeleted" | "groupRenamed" | "userRemovedFromGroup" | "userAddedToGroup" | "privilegeAddedToGroup" | "privilegeRemovedFromGroup";
-        group?: string | undefined;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
+        group?: string;
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {object} cfg
      * @param {string} cfg.group
@@ -171,15 +170,19 @@ declare namespace GroupsView {
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function onShowLockedErrorAlert({ type, group, message }: {
+    onShowLockedErrorAlert({ type, group, message }: {
         group: string;
-        message?: string | undefined;
-        type?: "ErrorLoggingOut" | "FailureSubmittingGroupInfo" | "SessionLost" | "ProblemDispatchingLink" | undefined;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
-    let errorMessages: {
+        message?: string;
+        type?: "ErrorLoggingOut" | "FailureSubmittingGroupInfo" | "SessionLost" | "ProblemDispatchingLink";
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
+    /**
+     * @type {{[key: string]: {[key: string]: string}}}
+     */
+    errorMessages: {
         [key: string]: {
             [key: string]: string;
         };
     };
-}
+};
+export default GroupsView;
 //# sourceMappingURL=groups.d.ts.map

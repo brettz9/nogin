@@ -1,9 +1,9 @@
-export default jmlEngine;
 /**
  * @param {string} filePath
  * @param {object} options
- * @param {(err: any, rendered?: string) => void} callback
+ * @param {(err: unknown, rendered?: string) => void} callback
  * @returns {Promise<void>}
  */
-declare function jmlEngine(filePath: string, options: object, callback: (err: any, rendered?: string) => void): Promise<void>;
+declare const jmlEngine: (filePath: string, options: object, callback: (err: unknown, rendered?: string) => void) => Promise<void>;
+export default jmlEngine;
 //# sourceMappingURL=jmlEngine.d.ts.map

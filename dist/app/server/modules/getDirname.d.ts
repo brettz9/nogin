@@ -1,6 +1,6 @@
-export default getDirname;
 /**
  * @param {string} path
  */
-declare function getDirname(path: string): string;
+declare const getDirname: (path: string) => string;
+export default getDirname;
 //# sourceMappingURL=getDirname.d.ts.map

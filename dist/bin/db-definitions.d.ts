@@ -1,4 +1,6 @@
-export default dbDefinitions;
+/**
+ * @typedef {number} Integer
+ */
 export type Integer = number;
 export type DbDefinitions = {
     DB_NAME?: string;
@@ -7,9 +9,6 @@ export type DbDefinitions = {
     DB_USER?: string;
     DB_PASS?: string;
 };
-/**
- * @typedef {number} Integer
- */
 /**
  * @typedef {{
  *   DB_NAME?: string,
@@ -32,4 +31,5 @@ declare const dbDefinitions: ({
     description: string;
     typeLabel: string;
 })[];
+export default dbDefinitions;
 //# sourceMappingURL=db-definitions.d.ts.map

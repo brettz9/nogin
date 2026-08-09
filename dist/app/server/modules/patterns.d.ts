@@ -1,2 +1,3 @@
-export const emailPattern: string;
+declare const emailPattern: string;
+export { emailPattern };
 //# sourceMappingURL=patterns.d.ts.map

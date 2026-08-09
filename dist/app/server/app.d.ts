@@ -1,6 +1,3 @@
-/**
- * These are a subset of the CLI options.
- */
 export type RouteConfigFromOptions = {
     loggerLocale: string;
     NL_EMAIL_USER: string;
@@ -40,10 +37,10 @@ export type RouteConfigFromOptions = {
     };
 };
 export type RouteConfig = RouteConfigFromOptions & {
-    log: import("./modules/getLogger.js").Logger;
+    log: import('./modules/getLogger.js').Logger;
     DB_URL: string;
-    opts: import("./optionDefinitions.js").MainOptionDefinitions;
-    dbOpts: import("./modules/db-factory.js").DbOptions;
+    opts: import('./optionDefinitions.js').MainOptionDefinitions;
+    dbOpts: import('./modules/db-factory.js').DbOptions;
     triggerCoverage: boolean;
 };
 /**
@@ -52,5 +49,6 @@ export type RouteConfig = RouteConfigFromOptions & {
  * } options
  * @returns {Promise<void>}
  */
-export function createServer(options: Partial<import("./optionDefinitions.js").MainOptionDefinitions>): Promise<void>;
+declare const createServer: (options: Partial<import('./optionDefinitions.js').MainOptionDefinitions>) => Promise<void>;
+export { createServer };
 //# sourceMappingURL=app.d.ts.map

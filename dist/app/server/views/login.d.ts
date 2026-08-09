@@ -1,4 +1,3 @@
-export default login;
 /**
  * @param {{
  *   _: import('intl-dom').I18NCallback,
@@ -7,10 +6,11 @@ export default login;
  *   signup: string
  * }} cfg
  */
-declare function login({ _, layout, emailPattern, signup }: {
-    _: import("intl-dom").I18NCallback;
-    layout: import("../routeUtils.js").LayoutCallback;
+declare const login: ({ _, layout, emailPattern, signup }: {
+    _: import('intl-dom').I18NCallback;
+    layout: import('../routeUtils.js').LayoutCallback;
     emailPattern: string;
     signup: string;
-}): Promise<[import("jamilih").JamilihDoc]>;
+}) => Promise<[import("jamilih").JamilihDoc]>;
+export default login;
 //# sourceMappingURL=login.d.ts.map

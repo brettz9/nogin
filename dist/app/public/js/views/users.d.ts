@@ -1,31 +1,30 @@
-export default UsersView;
-declare namespace UsersView {
+declare const UsersView: {
     /**
      * @param {JQuery} lockedAlertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
+    getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getDeleteAccounts(): JQuery<HTMLElement>;
+    getDeleteAccounts(): JQuery<HTMLElement>;
     /**
      * @returns {JQuery<HTMLElement>}
      */
-    function getDeleteAllAccounts(): JQuery<HTMLElement>;
+    getDeleteAllAccounts(): JQuery<HTMLElement>;
     /**
      * @param {{user: string}} info
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setDeleteAccount(info: {
+    setDeleteAccount(info: {
         user: string;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setDeleteAllAccounts(): import("./utilities/AlertDialog.js").JQueryWithModal;
+    setDeleteAllAccounts(): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {object} cfg
      * @param {"userAccountDeleted"|"allUserAccountsDeleted"} cfg.type
@@ -33,10 +32,10 @@ declare namespace UsersView {
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function onShowLockedAlert({ type, user }: {
+    onShowLockedAlert({ type, user }: {
         type: "userAccountDeleted" | "allUserAccountsDeleted";
-        user?: string | undefined;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
+        user?: string;
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {object} cfg
      * @param {string} cfg.user
@@ -46,10 +45,11 @@ declare namespace UsersView {
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function onShowLockedErrorAlert({ type, user, message }: {
+    onShowLockedErrorAlert({ type, user, message }: {
         user: string;
-        message?: string | undefined;
-        type?: "ErrorLoggingOut" | "SessionLost" | "ProblemDispatchingLink" | "FailureSubmittingUserInfo" | undefined;
-    }): import("./utilities/AlertDialog.js").JQueryWithModal;
-}
+        message?: string;
+        type?: "ErrorLoggingOut" | "FailureSubmittingUserInfo" | "SessionLost" | "ProblemDispatchingLink";
+    }): import('./utilities/AlertDialog.js').JQueryWithModal;
+};
+export default UsersView;
 //# sourceMappingURL=users.d.ts.map

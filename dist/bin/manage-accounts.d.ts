@@ -1,5 +1,4 @@
-export default manageAccounts;
-export type ManageAccountVerb = "view" | "read" | "delete" | "remove" | "update" | "listIndexes" | "create" | "add";
+export type ManageAccountVerb = "view" | "read" | "delete" | "remove" | "update" | "listIndexes" | *   "create" | "add";
 /**
  * @typedef {"view"|"read"|"delete"|"remove"|"update"|"listIndexes"|
  *   "create"|"add"} ManageAccountVerb
@@ -9,5 +8,6 @@ export type ManageAccountVerb = "view" | "read" | "delete" | "remove" | "update"
  * @param {import('../app/server/modules/getLogger.js').LoggerOptions} cfg
  * @returns {Promise<void>}
  */
-declare function manageAccounts(verb: ManageAccountVerb, { loggerLocale }: import("../app/server/modules/getLogger.js").LoggerOptions): Promise<void>;
+declare const manageAccounts: (verb: ManageAccountVerb, { loggerLocale }: import('../app/server/modules/getLogger.js').LoggerOptions) => Promise<void>;
+export default manageAccounts;
 //# sourceMappingURL=manage-accounts.d.ts.map

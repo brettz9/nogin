@@ -1,4 +1,4 @@
-export type AddOptionDefinitions = import("./common-definitions.js").CommonDefinitions & import("./db-definitions.js").DbDefinitions & {
+export type AddOptionDefinitions = import('./common-definitions.js').CommonDefinitions & import('./db-definitions.js').DbDefinitions & {
     cwd?: string;
     userFile?: string[];
     user?: string[];
@@ -43,13 +43,13 @@ export type AddOptionDefinitions = import("./common-definitions.js").CommonDefin
  * @type {import('command-line-usage').
  *   OptionDefinition[]}
  */
-declare const optionDefinitions: import("command-line-usage").OptionDefinition[];
+declare const optionDefinitions: import('command-line-usage').OptionDefinition[];
 declare const cliSections: ({
     content: string;
     optionList?: undefined;
 } | {
-    optionList: import("command-line-usage").OptionDefinition[];
     content?: undefined;
+    optionList: import("command-line-usage").OptionDefinition[];
 })[];
 export { optionDefinitions as definitions, cliSections as sections };
 //# sourceMappingURL=manageAccounts-add-optionDefinitions.d.ts.map

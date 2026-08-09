@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 export type AnyValue = any;
 /**
  * @typedef {any} AnyValue
@@ -6,17 +7,16 @@ export type AnyValue = any;
  * @param {AnyValue} o
  * @returns {o is null|undefined}
  */
-export function isNullish(o: AnyValue): o is null | undefined;
-import { v4 as uuid } from 'uuid';
+declare const isNullish: (o: AnyValue) => o is null | undefined;
 /**
  * @param {object} obj
  * @param {string} prop
  * @returns {boolean}
  */
-export function hasOwn(obj: object, prop: string): boolean;
+declare const hasOwn: (obj: object, prop: string) => boolean;
 /**
  * @param {AnyValue} opts
  */
-export function parseCLIJSON(opts: AnyValue): any;
-export { uuid };
+declare const parseCLIJSON: (opts: AnyValue) => any;
+export { isNullish, uuid, hasOwn, parseCLIJSON };
 //# sourceMappingURL=common.d.ts.map

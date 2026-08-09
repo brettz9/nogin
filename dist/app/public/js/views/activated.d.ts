@@ -1,11 +1,10 @@
-export default ActivatedView;
-declare namespace ActivatedView {
+declare const ActivatedView: {
     /**
      * @returns {JQuery & {
      *   modal: (showOrHide: "show"|"hide") => void
      * }} `HTMLDivElement`
      */
-    function accountActivated(): JQuery & {
+    accountActivated(): JQuery & {
         modal: (showOrHide: "show" | "hide") => void;
     };
     /**
@@ -13,6 +12,7 @@ declare namespace ActivatedView {
      *  `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getOKButton(accountFailedActivationAlertDialog: JQuery): JQuery;
-}
+    getOKButton(accountFailedActivationAlertDialog: JQuery): JQuery;
+};
+export default ActivatedView;
 //# sourceMappingURL=activated.d.ts.map

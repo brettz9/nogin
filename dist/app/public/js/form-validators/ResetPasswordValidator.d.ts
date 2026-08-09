@@ -1,19 +1,22 @@
-export default ResetPasswordValidator;
 /**
  * Resetting password validation.
  */
 declare class ResetPasswordValidator {
+    modal: import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    alert: JQuery<HTMLElement>;
     /**
      * @param {HTMLInputElement} pass Password element
      * @returns {boolean}
      */
     static validatePassword(pass: HTMLInputElement): boolean;
-    modal: import("../views/utilities/AlertDialog.js").JQueryWithModal;
-    alert: JQuery<HTMLElement>;
+    /**
+     * Sets up properties.
+     */
+    constructor();
     /**
      * @returns {import('../views/utilities/AlertDialog.js').JQueryWithModal}
      */
-    getPasswordDialog(): import("../views/utilities/AlertDialog.js").JQueryWithModal;
+    getPasswordDialog(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {"bad-session"|undefined} [type]
      * @returns {void}
@@ -28,4 +31,5 @@ declare class ResetPasswordValidator {
      */
     showSuccess(): void;
 }
+export default ResetPasswordValidator;
 //# sourceMappingURL=ResetPasswordValidator.d.ts.map

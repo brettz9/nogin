@@ -1,35 +1,35 @@
-export default ResetPasswordValidatorView;
-declare namespace ResetPasswordValidatorView {
+declare const ResetPasswordValidatorView: {
     /**
      * @returns {import('../utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
-    function setPasswordDialog(): import("../utilities/AlertDialog.js").JQueryWithModal;
+    setPasswordDialog(): import('../utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {JQuery} `HTMLDivElement`
      */
-    function getSetPasswordAlert(): JQuery;
+    getSetPasswordAlert(): JQuery;
     /**
      * @param {JQuery} alertDialog
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getLockedAlertButton(alertDialog: JQuery): JQuery;
+    getLockedAlertButton(alertDialog: JQuery): JQuery;
     /**
      * @returns {void}
      */
-    function showSuccess(): void;
+    showSuccess(): void;
     /**
      * @param {string} msg
      * @returns {void}
      */
-    function addAlert(msg: string): void;
+    addAlert(msg: string): void;
     /**
      * @param {"bad-session"|undefined} type
      * @returns {import('../utilities/AlertDialog.js').JQueryWithModal|void}
      */
-    function showDanger(type: "bad-session" | undefined): import("../utilities/AlertDialog.js").JQueryWithModal | void;
-    namespace messages {
-        let ShouldBeMinimumLength: string | Element;
-    }
-}
+    showDanger(type: "bad-session" | undefined): import('../utilities/AlertDialog.js').JQueryWithModal | void;
+    messages: {
+        ShouldBeMinimumLength: string | Element;
+    };
+};
+export default ResetPasswordValidatorView;
 //# sourceMappingURL=ResetPasswordValidatorView.d.ts.map

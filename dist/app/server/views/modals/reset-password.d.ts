@@ -1,44 +1,11 @@
-export default resetPassword;
 /**
  * @param {{
 *   _: import('intl-dom').I18NCallback
 * }} cfg
 */
-declare function resetPassword({ _ }: {
-    _: import("intl-dom").I18NCallback;
-}): (string | {
-    id: string;
-    class: string;
-    role: string;
-} | (string | {
-    class: string;
-    role: string;
-    'data-name': string;
-} | (string | {
-    class: string;
-} | ((string | {
-    class: string;
-} | ((string | (string | DocumentFragment | Text)[] | {
-    class: string;
-    'data-name': string;
-})[] | (string | {
-    type: string;
-    class: string;
-    'data-dismiss': string;
-    'aria-label': string;
-} | (string | (string | DocumentFragment | Text)[] | {
-    'aria-hidden': string;
-})[][])[])[])[] | (string | {
-    class: string;
-} | (string | {
-    id: string;
-    method: string;
-} | (string | {
-    class: string;
-} | ((string | (string | DocumentFragment | Text)[] | {
-    for: string;
-    'data-name': string;
-})[] | (string | {
+declare const resetPassword: ({ _ }: {
+    _: import('intl-dom').I18NCallback;
+}) => (string | (string | (string | ((string | (string | (string | ((string | {
     type: string;
     autocomplete: string;
     class: string;
@@ -49,13 +16,46 @@ declare function resetPassword({ _ }: {
     minlength: number;
 })[] | (string | {
     class: string;
-})[])[])[][])[][])[] | (string | {
+})[] | (string | (string | DocumentFragment | Text)[] | {
+    for: string;
+    'data-name': string;
+})[])[] | {
     class: string;
-} | (string | (string | DocumentFragment | Text)[] | {
+})[][] | {
+    id: string;
+    method: string;
+})[][] | {
+    class: string;
+})[] | (string | (string | (string | DocumentFragment | Text)[] | {
     id: string;
     class: string;
     'data-name': string;
     type: string;
     form: string;
-})[][])[])[])[][])[][])[];
+})[][] | {
+    class: string;
+})[] | (string | ((string | (string | (string | DocumentFragment | Text)[] | {
+    'aria-hidden': string;
+})[][] | {
+    type: string;
+    class: string;
+    'data-dismiss': string;
+    'aria-label': string;
+})[] | (string | (string | DocumentFragment | Text)[] | {
+    class: string;
+    'data-name': string;
+})[])[] | {
+    class: string;
+})[])[] | {
+    class: string;
+})[][] | {
+    class: string;
+    role: string;
+    'data-name': string;
+})[][] | {
+    id: string;
+    class: string;
+    role: string;
+})[];
+export default resetPassword;
 //# sourceMappingURL=reset-password.d.ts.map

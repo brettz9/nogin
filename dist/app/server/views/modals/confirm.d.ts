@@ -1,4 +1,3 @@
-export default confirm;
 /**
  * @param {{
  *   _: import('intl-dom').I18NCallback,
@@ -6,8 +5,9 @@ export default confirm;
  * }} cfg
  * @returns {import('jamilih').JamilihArray}
  */
-declare function confirm({ _, type }: {
-    _: import("intl-dom").I18NCallback;
+declare const confirm: ({ _, type }: {
+    _: import('intl-dom').I18NCallback;
     type: string;
-}): import("jamilih").JamilihArray;
+}) => import('jamilih').JamilihArray;
+export default confirm;
 //# sourceMappingURL=confirm.d.ts.map

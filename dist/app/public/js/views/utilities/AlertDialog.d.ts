@@ -1,4 +1,3 @@
-export default AlertDialog;
 export type JQueryWithModal = JQuery & {
     modal: (showOrHide: "show" | "hide" | {
         show: boolean;
@@ -6,7 +5,16 @@ export type JQueryWithModal = JQuery & {
         backdrop: boolean | "static";
     }) => JQueryWithModal;
 };
-declare namespace AlertDialog {
+/**
+ * @typedef {JQuery & {
+ *   modal: (showOrHide: "show"|"hide"|{
+ *     show: boolean,
+ *     keyboard: boolean,
+ *     backdrop: boolean|"static"
+ *   }) => JQueryWithModal
+ * }} JQueryWithModal
+ */
+declare const AlertDialog: {
     /**
      * @param {object} cfg
      * @param {string} cfg.heading
@@ -15,11 +23,12 @@ declare namespace AlertDialog {
      * @param {boolean|"static"} cfg.backdrop
      * @returns {JQueryWithModal} `HTMLDivElement`
      */
-    function populate({ heading, body, keyboard, backdrop }: {
+    populate({ heading, body, keyboard, backdrop }: {
         heading: string;
         body: Element | string;
         keyboard: boolean;
         backdrop: boolean | "static";
     }): JQueryWithModal;
-}
+};
+export default AlertDialog;
 //# sourceMappingURL=AlertDialog.d.ts.map

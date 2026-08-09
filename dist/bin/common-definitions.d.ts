@@ -1,4 +1,3 @@
-export default commonDefinitions;
 export type CommonDefinitions = {
     loggerLocale?: string;
     noLogging?: boolean;
@@ -16,10 +15,11 @@ declare const commonDefinitions: ({
     typeLabel: string;
     alias?: undefined;
 } | {
+    typeLabel?: undefined;
     name: string;
     alias: string;
     type: BooleanConstructor;
     description: string;
-    typeLabel?: undefined;
 })[];
+export default commonDefinitions;
 //# sourceMappingURL=common-definitions.d.ts.map

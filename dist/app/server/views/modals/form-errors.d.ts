@@ -1,36 +1,36 @@
-export default formErrors;
 /**
  * @param {{
 *   _: import('intl-dom').I18NCallback
 * }} cfg
 */
-declare function formErrors({ _ }: {
-    _: import("intl-dom").I18NCallback;
-}): (string | {
+declare const formErrors: ({ _ }: {
+    _: import('intl-dom').I18NCallback;
+}) => (string | (string | (string | ((string | (string | (string | DocumentFragment | Text)[] | {
     class: string;
-} | (string | {
+    'data-dismiss': string;
+})[][] | {
     class: string;
-    role: string;
-} | (string | {
-    class: string;
-} | ((string | {
-    class: string;
-} | ((string | (string | DocumentFragment | Text)[] | {
-    class: string;
-    'data-name': string;
-})[] | (string | {
+})[] | (string | ((string | (string | (string | DocumentFragment | Text)[] | {
+    'aria-hidden': string;
+})[][] | {
     type: string;
     class: string;
     'data-dismiss': string;
     'aria-label': string;
-} | (string | (string | DocumentFragment | Text)[] | {
-    'aria-hidden': string;
-})[][])[])[])[] | (string | {
+})[] | (string | (string | DocumentFragment | Text)[] | {
     class: string;
-} | (string | string[] | DocumentFragment | Text)[])[] | (string | {
+    'data-name': string;
+})[])[] | {
     class: string;
-} | (string | (string | DocumentFragment | Text)[] | {
+})[] | (string | (string | string[] | DocumentFragment | Text)[] | {
     class: string;
-    'data-dismiss': string;
-})[][])[])[])[][])[][])[];
+})[])[] | {
+    class: string;
+})[][] | {
+    class: string;
+    role: string;
+})[][] | {
+    class: string;
+})[];
+export default formErrors;
 //# sourceMappingURL=form-errors.d.ts.map

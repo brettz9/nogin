@@ -1,4 +1,3 @@
-export default routeList;
 export type UserAccount = {
     name: string;
     user: string;
@@ -28,5 +27,6 @@ export type CountryInfo = {
  * @param {import('./app.js').RouteConfig} config
  * @returns {Promise<void>}
  */
-declare function routeList(app: import("express").Application, config: import("./app.js").RouteConfig): Promise<void>;
+declare const routeList: (app: import('express').Application, config: import('./app.js').RouteConfig) => Promise<void>;
+export default routeList;
 //# sourceMappingURL=routeList.d.ts.map

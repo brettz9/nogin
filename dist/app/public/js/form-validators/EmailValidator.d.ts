@@ -1,4 +1,3 @@
-export default EmailValidator;
 /**
  * Validator for email addresses.
  */
@@ -26,4 +25,5 @@ declare const EmailValidator: {
      */
     validateEmail(input: HTMLInputElement): boolean;
 };
+export default EmailValidator;
 //# sourceMappingURL=EmailValidator.d.ts.map

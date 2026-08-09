@@ -1,17 +1,17 @@
-export default ResetPasswordView;
-declare namespace ResetPasswordView {
+declare const ResetPasswordView: {
     /**
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
      *   JQueryWithAjaxForm} `HTMLFormElement`
      */
-    function getSetPasswordForm(): import("../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+    getSetPasswordForm(): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @returns {JQuery} `HTMLInputElement`
      */
-    function getPassword(): JQuery;
+    getPassword(): JQuery;
     /**
      * @returns {JQuery} `HTMLButtonElement`
      */
-    function getSetPasswordSubmit(): JQuery;
-}
+    getSetPasswordSubmit(): JQuery;
+};
+export default ResetPasswordView;
 //# sourceMappingURL=reset-password.d.ts.map

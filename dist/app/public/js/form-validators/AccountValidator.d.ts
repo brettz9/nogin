@@ -1,16 +1,7 @@
-export default AccountValidator;
 /**
  * Ensures accounts are valid.
  */
 declare class AccountValidator {
-    /**
-     * Sets up properties and methods.
-     * @param {object} [cfg]
-     * @param {boolean} [cfg.signup]
-     */
-    constructor({ signup }?: {
-        signup?: boolean | undefined;
-    } | undefined);
     signup: boolean | undefined;
     form: HTMLFormElement;
     formFields: import("../views/validators/AccountValidatorView.js").AccountInfoElements;
@@ -26,6 +17,14 @@ declare class AccountValidator {
      */
     userIsLoggedIn: (s: string) => boolean;
     /**
+     * Sets up properties and methods.
+     * @param {object} [cfg]
+     * @param {boolean} [cfg.signup]
+     */
+    constructor({ signup }?: {
+        signup?: boolean;
+    });
+    /**
      * @returns {void}
      */
     showInvalidEmail(): void;
@@ -38,4 +37,5 @@ declare class AccountValidator {
      */
     validateForm(): boolean;
 }
+export default AccountValidator;
 //# sourceMappingURL=AccountValidator.d.ts.map

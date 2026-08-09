@@ -1,11 +1,17 @@
-export default EmailValidatorView;
 export type EmailInfoElements = {
     name: JQuery;
     email: JQuery;
     user: JQuery;
     pass: JQuery;
 };
-declare namespace EmailValidatorView {
+/**
+* @typedef {object} EmailInfoElements
+* @property {JQuery} name
+* @property {JQuery} email
+* @property {JQuery} user
+* @property {JQuery} pass
+*/
+declare const EmailValidatorView: {
     /**
      * @returns {{
      *   retrievePasswordModal: JQuery,
@@ -15,7 +21,7 @@ declare namespace EmailValidatorView {
      *   }
      * }}
      */
-    function getFormFields(): {
+    getFormFields(): {
         retrievePasswordModal: JQuery;
         retrievePasswordAlert: JQuery;
         retrievePasswordForm: JQuery & {
@@ -25,9 +31,10 @@ declare namespace EmailValidatorView {
     /**
      * @param {string} msg
      */
-    function addSuccess(msg: string): void;
-    namespace messages {
-        let PleaseEnterValidEmailAddress: string;
-    }
-}
+    addSuccess(msg: string): void;
+    messages: {
+        PleaseEnterValidEmailAddress: string;
+    };
+};
+export default EmailValidatorView;
 //# sourceMappingURL=EmailValidatorView.d.ts.map

@@ -1,10 +1,12 @@
-export default AccountManager;
+/**
+ * @file Low-level operations on user accounts and groups.
+ */
 export type AccountInfo = {
     /**
      * Auto-set
      */
-    _id?: string | undefined;
-    id?: string | undefined;
+    _id?: string;
+    id?: string;
     user: string;
     name: string;
     email: string;
@@ -16,36 +18,36 @@ export type AccountInfo = {
     /**
      * Auto-generated version.
      */
-    passVer?: number | undefined;
+    passVer?: number;
     /**
      * Auto-generated timestamp.
      */
-    date?: number | undefined;
+    date?: number;
     /**
      * Auto-set
      */
-    activated?: boolean | undefined;
+    activated?: boolean;
     /**
      * Auto-set
      */
-    activationCode?: string | undefined;
-    unactivatedEmail?: string | undefined;
+    activationCode?: string;
+    unactivatedEmail?: string;
     /**
      * Timestamp
      */
-    activationRequestDate?: number | undefined;
+    activationRequestDate?: number;
     /**
      * Auto-set
      */
-    cookie?: string | undefined;
+    cookie?: string;
     /**
      * Auto-set
      */
-    ip?: string | undefined;
+    ip?: string;
     /**
      * Auto-set and unset
      */
-    passKey?: string | undefined;
+    passKey?: string;
 };
 export type AccountInfoFilter = {
     user?: any;
@@ -71,7 +73,7 @@ export type GroupInfo = {
     /**
      * Auto-set
      */
-    _id?: string | undefined;
+    _id?: string;
     groupName: string;
     privilegeIDs: string[];
     userIDs: string[];
@@ -90,7 +92,7 @@ export type PrivilegeInfo = {
     /**
      * Auto-set
      */
-    _id?: string | undefined;
+    _id?: string;
     privilegeName: string;
     description: string;
     builtin: boolean;
@@ -99,28 +101,32 @@ export type PrivilegeInfo = {
      */
     date: number;
 };
+export type ChangedEmailHandler = (acct: Partial<AccountInfo>, user: string) => void;
 /**
  * Manages accounts.
  */
 declare class AccountManager {
+    adapter: import("./db-adapters/MongoDB.js").MongoDB;
     /**
      * @param {AccountInfo} newData
      * @returns {Promise<string>}
      */
     static getAccountHash(newData: AccountInfo): Promise<string>;
+    /** @type {import('mongodb').Collection|undefined} */
+    accounts: import('mongodb').Collection | undefined;
+    /** @type {import('mongodb').Collection<GroupInfo>|undefined} */
+    groups: import('mongodb').Collection<GroupInfo> | undefined;
+    /** @type {import('mongodb').Collection<PrivilegeInfo>|undefined} */
+    privileges: import('mongodb').Collection<PrivilegeInfo> | undefined;
     /**
      * @param {"mongodb"} adapter
      * @param {import('./db-abstraction.js').DBConfigObject} config
      */
-    constructor(adapter: "mongodb", config: import("./db-abstraction.js").DBConfigObject);
-    adapter: import("./db-adapters/MongoDB.js").default;
+    constructor(adapter: "mongodb", config: import('./db-abstraction.js').DBConfigObject);
     /**
      * @returns {Promise<AccountManager>}
      */
     connect(): Promise<AccountManager>;
-    accounts: import("mongodb").Collection<import("mongodb").Document> | undefined;
-    groups: import("mongodb").Collection<GroupInfo> | undefined;
-    privileges: import("mongodb").Collection<PrivilegeInfo> | undefined;
     /**
      * Currently only in use by the CLI.
      * @returns {Promise<void>}
@@ -129,11 +135,11 @@ declare class AccountManager {
     /**
      * @returns {Promise<import('mongodb').BulkWriteResult|void>}
      */
-    addDefaultGroups(): Promise<import("mongodb").BulkWriteResult | void>;
+    addDefaultGroups(): Promise<import('mongodb').BulkWriteResult | void>;
     /**
      * @returns {Promise<import('mongodb').BulkWriteResult|void>}
      */
-    addDefaultPrivileges(): Promise<import("mongodb").BulkWriteResult | void>;
+    addDefaultPrivileges(): Promise<import('mongodb').BulkWriteResult | void>;
     /**
      * @param {string} user
      * @param {string} pass The hashed password
@@ -196,7 +202,7 @@ declare class AccountManager {
      */
     addNewAccount(newData: AccountInfo, { allowCustomPassVer }?: {
         allowCustomPassVer?: boolean;
-    } | undefined): Promise<AccountInfo & {
+    }): Promise<AccountInfo & {
         activationCode: string;
     }>;
     /**
@@ -269,7 +275,7 @@ declare class AccountManager {
      * @returns {Promise<import('mongodb').UpdateResult|
      *   import('mongodb').Document>}
      */
-    activateAccount(activationCode: string): Promise<import("mongodb").UpdateResult | import("mongodb").Document>;
+    activateAccount(activationCode: string): Promise<import('mongodb').UpdateResult | import('mongodb').Document>;
     /**
     * @callback ChangedEmailHandler
     * @param {Partial<AccountInfo>} acct
@@ -290,15 +296,17 @@ declare class AccountManager {
     updateAccount(newData: Partial<AccountInfo> & {
         user: string;
     }, { forceUpdate, changedEmailHandler }: {
-        forceUpdate?: boolean | undefined;
-        changedEmailHandler?: ((acct: Partial<AccountInfo>, user: string) => void) | undefined;
-    }): Promise<import("mongodb").WithId<import("mongodb").Document>>;
+        forceUpdate?: boolean;
+        changedEmailHandler?: ChangedEmailHandler;
+    }): Promise<import('mongodb').WithId<import('mongodb').Document>>;
     /**
      * @param {string} passKey
      * @param {string} newPass
-     * @returns {Promise<import('mongodb').WithId<any> | null>}
+     * @returns {Promise<import('mongodb').WithId<
+     *   import('mongodb').Document
+     * > | null>}
      */
-    updatePassword(passKey: string, newPass: string): Promise<import("mongodb").WithId<any> | null>;
+    updatePassword(passKey: string, newPass: string): Promise<import('mongodb').WithId<import('mongodb').Document> | null>;
     /**
      * @returns {Promise<Partial<AccountInfo>[]>}
      */
@@ -307,12 +315,12 @@ declare class AccountManager {
      * @param {string} id
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAccountById(id: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    deleteAccountById(id: string): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
     /**
      * @param {string} groupName
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteGroupByGroupName(groupName: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    deleteGroupByGroupName(groupName: string): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
     /**
      * @param {string} userID
      * @returns {Promise<void>}
@@ -322,7 +330,7 @@ declare class AccountManager {
      * @param {string} privilegeName
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deletePrivilegeByPrivilegeName(privilegeName: string): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    deletePrivilegeByPrivilegeName(privilegeName: string): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
     /**
      * @param {Partial<PrivilegeInfo> & {newPrivilegeName: string}} data
      * @returns {Promise<void>}
@@ -334,14 +342,15 @@ declare class AccountManager {
      * @param {AccountInfoFilter} acctInfo
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAccounts(acctInfo: AccountInfoFilter): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    deleteAccounts(acctInfo: AccountInfoFilter): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
     /**
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAllAccounts(): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    deleteAllAccounts(): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
     /**
      * @returns {Promise<import('./db-abstraction.js').DeleteWriteOpResult>}
      */
-    deleteAllGroups(): Promise<import("./db-abstraction.js").DeleteWriteOpResult>;
+    deleteAllGroups(): Promise<import('./db-abstraction.js').DeleteWriteOpResult>;
 }
+export default AccountManager;
 //# sourceMappingURL=account-manager.d.ts.map

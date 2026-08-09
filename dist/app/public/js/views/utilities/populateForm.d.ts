@@ -1,4 +1,3 @@
-export default populateForm;
 /**
  * @param {string} sel
  * @param {{
@@ -10,10 +9,11 @@ export default populateForm;
  * @returns {import('../../utilities/ajaxFormClientSideValidate.js').
    *   JQueryWithAjaxForm}
  */
-declare function populateForm(sel: string, { heading, subheading, action1, action2 }: {
+declare const populateForm: (sel: string, { heading, subheading, action1, action2 }: {
     heading: string;
     subheading: string;
     action1: string;
     action2: string;
-}): import("../../utilities/ajaxFormClientSideValidate.js").JQueryWithAjaxForm;
+}) => import('../../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
+export default populateForm;
 //# sourceMappingURL=populateForm.d.ts.map

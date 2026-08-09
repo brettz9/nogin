@@ -1,4 +1,3 @@
-export default groups;
 /**
  * @param {{
 *   _: import('intl-dom').I18NCallback,
@@ -20,9 +19,9 @@ export default groups;
 *   privileges: string[]
 * }} cfg
 */
-declare function groups({ _, layout, hasEditGroupAccess, hasAddUserToGroupAccess, hasRemoveUserFromGroupAccess, hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess, hasReadPrivilegeAccess, hasReadUsersAccess, groupsInfo, users, privileges }: {
-    _: import("intl-dom").I18NCallback;
-    layout: import("../routeUtils.js").LayoutCallback;
+declare const groups: ({ _, layout, hasEditGroupAccess, hasAddUserToGroupAccess, hasRemoveUserFromGroupAccess, hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess, hasReadPrivilegeAccess, hasReadUsersAccess, groupsInfo, users, privileges }: {
+    _: import('intl-dom').I18NCallback;
+    layout: import('../routeUtils.js').LayoutCallback;
     hasEditGroupAccess: boolean;
     hasAddUserToGroupAccess: boolean;
     hasRemoveUserFromGroupAccess: boolean;
@@ -36,10 +35,11 @@ declare function groups({ _, layout, hasEditGroupAccess, hasAddUserToGroupAccess
             user: string;
             _id: string;
         }[];
-        privileges: import("../modules/account-manager.js").PrivilegeInfo[];
+        privileges: import('../modules/account-manager.js').PrivilegeInfo[];
         builtin: boolean;
     }[];
     users: string[];
     privileges: string[];
-}): Promise<[import("jamilih").JamilihDoc]>;
+}) => Promise<[import("jamilih").JamilihDoc]>;
+export default groups;
 //# sourceMappingURL=groups.d.ts.map

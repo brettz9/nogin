@@ -1,9 +1,5 @@
-export type GenerateLoginOptionDefinitions = import("../server/modules/db-factory.js").DbConfig & {
+export type GenerateLoginOptionDefinitions = import('../server/modules/db-factory.js').DbConfig & {
     user: string | string[];
-    ip: string | string[];
-};
-export type GeneratePasswordOptionDefinitions = import("../server/modules/db-factory.js").DbConfig & {
-    email: string | string[];
     ip: string | string[];
 };
 /**
@@ -20,7 +16,11 @@ export type GeneratePasswordOptionDefinitions = import("../server/modules/db-fac
  * @param {GenerateLoginOptionDefinitions} options
  * @returns {Promise<string[]>} Cookies
  */
-export function generateLoginKeys(options: GenerateLoginOptionDefinitions): Promise<string[]>;
+declare const generateLoginKeys: (options: GenerateLoginOptionDefinitions) => Promise<string[]>;
+export type GeneratePasswordOptionDefinitions = import('../server/modules/db-factory.js').DbConfig & {
+    email: string | string[];
+    ip: string | string[];
+};
 /**
  * @typedef {import('../server/modules/db-factory.js').
  *   DbConfig & {
@@ -36,5 +36,6 @@ export function generateLoginKeys(options: GenerateLoginOptionDefinitions): Prom
  * @param {GeneratePasswordOptionDefinitions} options
  * @returns {Promise<string[]>} Cookies
  */
-export function generatePasswordKey(options: GeneratePasswordOptionDefinitions): Promise<string[]>;
+declare const generatePasswordKey: (options: GeneratePasswordOptionDefinitions) => Promise<string[]>;
+export { generateLoginKeys, generatePasswordKey };
 //# sourceMappingURL=db-basic-testing-extensions.d.ts.map
