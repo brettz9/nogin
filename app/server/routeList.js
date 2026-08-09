@@ -227,7 +227,7 @@ const routeList = async (app, config) => {
      * @param {import('./routeUtils.js').Routes} routes
      * @param {import('express').Request} req
      * @param {import('express').Response} res
-     * @returns {Promise<void>}
+     * @returns {Promise<void|false>}
      */
     async root (routes, req, res) {
       const _ = await setI18n(req, res);
@@ -249,6 +249,26 @@ const routeList = async (app, config) => {
       }
 
       /**
+       * @returns {string}
+       */
+      function getPostLoginTarget () {
+        return getSafeQueryRedirect() || postLoginRedirectPath || routes.home;
+      }
+
+      /**
+       * @returns {false|undefined} `false` when caller should allow downstream
+       * handling instead of redirecting (to avoid root->root loop).
+       */
+      function redirectPostLoginOrPassThrough () {
+        const target = getPostLoginTarget();
+        if (target === routes.root) {
+          return false;
+        }
+        res.redirect(target);
+        return undefined;
+      }
+
+      /**
        * @returns {void}
        */
       function login () {
@@ -267,16 +287,13 @@ const routeList = async (app, config) => {
       // If we already have a server session user, this is a valid
       // non-persistent login even when no remember cookie exists.
       if (req.session?.user) {
-        res.redirect(
-          getSafeQueryRedirect() || postLoginRedirectPath || routes.home
-        );
-        return;
+        return redirectPostLoginOrPassThrough();
       }
 
       // check if the user has an auto login key saved in a cookie
       if (req.signedCookies.login === undefined) {
         login();
-        return;
+        return undefined;
       }
       // attempt automatic login
       let o;
@@ -329,13 +346,11 @@ const routeList = async (app, config) => {
            */ (
             req.session
           ).user = _o;
-          res.redirect(
-            getSafeQueryRedirect() || postLoginRedirectPath || routes.home
-          );
-          return;
+          return redirectPostLoginOrPassThrough();
         }
       }
       login();
+      return undefined;
     },
 
     /**
@@ -1926,11 +1941,13 @@ window.NoginPrivs.hasPrivilege = function (priv) {
     } = await i18nAndRoutes(req, res, next, 'get');
 
     if (!error && hasOwn(GetRoutes, route)) {
-      await GetRoutes[
+      const routeResult = await GetRoutes[
         /** @type {keyof typeof GetRoutes} */
         (route)
       ](routes, req, res, next);
-      return;
+      if (/** @type {void|false} */ (routeResult) !== false) {
+        return;
+      }
     }
 
     const notFoundNext = () => {

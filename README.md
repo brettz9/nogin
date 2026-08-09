@@ -266,7 +266,10 @@ for supporting additional routes.
 
 - `--postLoginRedirectPath` (Path/URL to which to redirect after login; defaults
     to home (`/home`) (or locale equivalent), but you should probably set it
-    so that it redirects instead to your root (`/`).
+    so that it redirects instead to your root (`/`). If you set this to the
+    same path as your configured root route, you should also provide `--fallback`
+    (or a `--router` handler for that root path), otherwise logged-in requests
+    may fall through to a 404.
 - `--customRoute` (Multiple strings in format `<locale>=<route>=<path>`); e.g., to change from the default `/` for root login, set `--customRoute en-US=root=/login`
 - `--crossDomainJSRedirects` (Boolean, defaults to `false`.)
 

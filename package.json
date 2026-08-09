@@ -102,6 +102,8 @@
     "server:delayed-start-cov": "run-s delay server:start-cov",
     "start-cov": "run-p -r mongo:start-test server:delayed-start-cov",
     "watch:start": "run-p -r mongo:start-test watch:server-start",
+    "server:start-test-post-login-redirect": "node ./bin/cli.js --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --requireName --SERVE_COVERAGE --disableRateLimit --postLoginRedirectPath=${NOGIN_POST_LOGIN_REDIRECT_PATH:-/}",
+    "start-test-post-login-redirect": "run-p -r mongo:start-test server:start-test-post-login-redirect",
     "start-test": "run-p -r mongo:start-test server:start-test",
     "mongo:start": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
     "server:start": "node ./bin/cli.js --localScripts --requireName --SERVE_COVERAGE --config nogin.js",
