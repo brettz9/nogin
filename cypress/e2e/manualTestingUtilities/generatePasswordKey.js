@@ -9,6 +9,11 @@ describe('Generate password key (for `/reset-password`)', function () {
     });
   });
 
+  beforeEach(() => {
+    cy.task('deleteAllAccounts');
+    cy.task('addAccount');
+  });
+
   it('Visit reset password (after login)', function () {
     return cy.task('generatePasswordKey', {
       email: NL_EMAIL_USER,

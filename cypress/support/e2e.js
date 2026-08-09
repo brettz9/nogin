@@ -36,7 +36,7 @@ import '@cypress/fiddle';
  * COVERAGE.
  * @see https://docs.cypress.io/guides/tooling/code-coverage.html#Install-the-plugin
  */
-import '@cypress/code-coverage/support.js';
+import '@cypress/code-coverage/support';
 
 /**
  * ACCESSIBILITY.

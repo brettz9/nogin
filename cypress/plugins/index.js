@@ -20,7 +20,7 @@ import globals from 'globals';
 import cookieSign from 'cookie-signature';
 
 // import browserify from '@cypress/browserify-preprocessor';
-import codeCoverageTask from '@cypress/code-coverage/task.js';
+import codeCoverageTask from '@cypress/code-coverage/task';
 
 import {
   setEmailConfig, getEmails, deleteEmails, hasEmail,
