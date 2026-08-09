@@ -156,22 +156,47 @@ describe('CLI', function () {
         let cliProm;
         // eslint-disable-next-line promise/avoid-new -- Testing
         const {text} = await new Promise((resolve, reject) => {
+          let settled = false;
+          /**
+           * @param {unknown} result
+           * @returns {void}
+           */
+          const settleResolve = (result) => {
+            if (settled) {
+              return;
+            }
+            settled = true;
+            resolve(result);
+          };
+          /**
+           * @param {unknown} err
+           * @returns {void}
+           */
+          const settleReject = (err) => {
+            if (settled) {
+              return;
+            }
+            settled = true;
+            reject(err);
+          };
           cliProm = spawnCLI([
             '--noBuiltinStylesheets',
             '--secret', secret,
             '--PORT', testPort2,
             '--config', ''
-          ], 80000, async (stdout) => {
+          ], 80000, async (stdout, _data, cli) => {
             if (stdout.includes(
               `Express server listening on port ${testPort}`
             )) {
               try {
                 const res = await fetch(`http://127.0.0.1:${testPort2}`);
-                resolve(
+                settleResolve(
                   {text: await res.text()}
                 );
+                cli?.kill();
               } catch (err) {
-                reject(err);
+                cli?.kill();
+                settleReject(err);
               }
             }
           });
@@ -306,6 +331,29 @@ describe('CLI', function () {
           {homeStatus, homeText}
           // eslint-disable-next-line promise/avoid-new -- Testing
         ] = await new Promise((resolve, reject) => {
+          let settled = false;
+          /**
+           * @param {unknown} result
+           * @returns {void}
+           */
+          const settleResolve = (result) => {
+            if (settled) {
+              return;
+            }
+            settled = true;
+            resolve(result);
+          };
+          /**
+           * @param {unknown} err
+           * @returns {void}
+           */
+          const settleReject = (err) => {
+            if (settled) {
+              return;
+            }
+            settled = true;
+            reject(err);
+          };
           cliProm = spawnCLI([
             '--staticDir', pathResolve(__dirname, './fixtures/'),
             '--userJS', 'userJS.js',
@@ -326,7 +374,7 @@ describe('CLI', function () {
             '--secret', secret,
             '--PORT', testPort,
             '--config', ''
-          ], 200000, async (stdout) => {
+          ], 200000, async (stdout, _data, cli) => {
             if (fetching ||
               !stdout.includes(
                 `Express server listening on port ${testPort}`
@@ -367,7 +415,7 @@ describe('CLI', function () {
                 fetch(`http://127.0.0.1:${testPort}/home`)
               ]);
 
-              resolve([
+              settleResolve([
                 {headers: res.headers, text: await res.text()},
                 {textRTL: await resRTL.text()},
                 {json: await staticRes.json()},
@@ -381,8 +429,10 @@ describe('CLI', function () {
                 {updateAccountText: await updateAccountRes.text()},
                 {homeStatus: homeRes.status, homeText: await homeRes.text()}
               ]);
+              cli?.kill();
             } catch (err) {
-              reject(err);
+              cli?.kill();
+              settleReject(err);
             }
           });
         });
@@ -657,7 +707,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, (stdout) => {
+        ], 40000, async (stdout, _data, cli) => {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
@@ -669,9 +719,9 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-          resolve(
-            fetch(`http://127.0.0.1:${testPort}/_lang`)
-          );
+          const res = await fetch(`http://127.0.0.1:${testPort}/_lang`);
+          resolve(res);
+          cli?.kill();
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
@@ -699,7 +749,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, (stdout) => {
+        ], 40000, async (stdout, _data, cli) => {
           if (fetching ||
             !stdout.includes(
               `Express server listening on port ${testPort}`
@@ -708,9 +758,9 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-          resolve(
-            fetch(`http://127.0.0.1:${testPort}/_lang`)
-          );
+          const res = await fetch(`http://127.0.0.1:${testPort}/_lang`);
+          resolve(res);
+          cli?.kill();
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
@@ -737,7 +787,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, (stdout) => {
+        ], 40000, async (stdout, _data, cli) => {
           if (fetching ||
             !stdout.includes(
               `Express server listening on port ${testPort}`
@@ -746,9 +796,9 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-          resolve(
-            fetch(`http://127.0.0.1:${testPort}/_lang`)
-          );
+          const res = await fetch(`http://127.0.0.1:${testPort}/_lang`);
+          resolve(res);
+          cli?.kill();
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
@@ -777,7 +827,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, (stdout) => {
+        ], 40000, async (stdout, _data, cli) => {
           if (fetching ||
             !stdout.includes(
               `Express server listening on port ${testPort}`
@@ -786,9 +836,9 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-          resolve(
-            fetch(`http://127.0.0.1:${testPort}/_lang`)
-          );
+          const res = await fetch(`http://127.0.0.1:${testPort}/_lang`);
+          resolve(res);
+          cli?.kill();
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
@@ -814,7 +864,7 @@ describe('CLI', function () {
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, (stdout) => {
+        ], 40000, async (stdout, _data, cli) => {
           if (fetching ||
             !stdout.includes(
               `Express server listening on port ${testPort}`
@@ -823,9 +873,9 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-          resolve(
-            fetch(`http://127.0.0.1:${testPort}/_lang`)
-          );
+          const res = await fetch(`http://127.0.0.1:${testPort}/_lang`);
+          resolve(res);
+          cli?.kill();
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
@@ -845,14 +895,14 @@ describe('CLI', function () {
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
-      const [langFF2, langFF25] = await new Promise((resolve) => {
+      const {langFirefox2, langFirefox25} = await new Promise((resolve) => {
         cliProm = spawnCLI([
           '--crossDomainJSRedirects',
           '--localScripts',
           '--secret', secret,
           '--PORT', testPort,
           '--config', ''
-        ], 40000, (stdout) => {
+        ], 40000, async (stdout, _data, cli) => {
           if (fetching ||
             !stdout.includes(
               `Express server listening on port ${testPort}`
@@ -861,7 +911,7 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-          resolve(Promise.all([
+          const [langFF2, langFF25] = await Promise.all([
             fetch(`http://127.0.0.1:${testPort}/_lang`, {
               headers: {
                 'User-Agent': 'Firefox/2.0'
@@ -872,13 +922,16 @@ describe('CLI', function () {
                 'User-Agent': 'Firefox/25.0'
               }
             })
-          ]));
+          ]);
+          const [langFF2Text, langFF25Text] = await Promise.all([
+            langFF2.text(),
+            langFF25.text()
+          ]);
+          resolve({langFirefox2: langFF2Text, langFirefox25: langFF25Text});
+          cli?.kill();
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
-
-      const langFirefox2 = await langFF2.text();
-      const langFirefox25 = await langFF25.text();
 
       expect(langFirefox2).to.contain(
         'permittingXDomainRedirects = false'
