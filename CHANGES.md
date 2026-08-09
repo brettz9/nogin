@@ -5,8 +5,11 @@
 Breaking changes:
 - Requires Node ^20.11.0 || >= 22.0.0
 
+- feat: allow `postLoginRedirectPath` to be same as root route (uses `fallback`)
+- feat: add `disableRateLimit` option
 - feat: remove deprecated `guest` property
 - fix: supply `command-line-basics` notifier info
+- fix: add session but avoid permanent session without "remember me"
 
 ## 7.7.0
 
