@@ -1,5 +1,6 @@
 describe('Signup', function () {
-  let NL_EMAIL_USER, NL_EMAIL_PASS;
+  let NL_EMAIL_USER = '';
+  let NL_EMAIL_PASS = '';
 
   before(() => {
     cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({
@@ -70,7 +71,14 @@ describe('Signup', function () {
       );
     });
 
-    return cy.task('getRecords').then((accts) => {
+    return cy.task('getRecords').then((
+      /**
+       * @type {import('../../app/server/modules/account-manager.js').
+       *   AccountInfo[]
+       * }
+       */
+      accts
+    ) => {
       expect(accts).to.have.lengthOf(1);
       return expect(accts[0].name).to.equal('Nicole');
     });
@@ -109,7 +117,14 @@ describe('Signup', function () {
       );
     });
 
-    return cy.task('getRecords').then((accts) => {
+    return cy.task('getRecords').then((
+      /**
+       * @type {import('../../app/server/modules/account-manager.js').
+       *   AccountInfo[]
+       * }
+       */
+      accts
+    ) => {
       expect(accts).to.have.lengthOf(1);
       return expect(accts[0].name).to.equal('Nicole');
     });
@@ -151,7 +166,14 @@ describe('Signup', function () {
       );
       // Still gets added as just had trouble sending email out
       return cy.task('getRecords');
-    }).then((accts) => {
+    }).then((
+      /**
+       * @type {import('../../app/server/modules/account-manager.js').
+       *   AccountInfo[]
+       * }
+       */
+      accts
+    ) => {
       expect(accts).to.have.lengthOf(1);
       return expect(accts[0].user).to.equal('OkUserName');
     });

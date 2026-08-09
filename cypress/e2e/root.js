@@ -27,7 +27,9 @@ describe('Root (Login) - Accessibility', function () {
 });
 
 describe('Root (Login)', function () {
-  let env, NL_EMAIL_USER, NL_EMAIL_PASS;
+  let env = '';
+  let NL_EMAIL_USER = '';
+  let NL_EMAIL_PASS = '';
 
   before(() => {
     cy.env([
@@ -419,7 +421,14 @@ describe('Root (Login)', function () {
     function () {
       cy.loginWithSession();
       cy.task('updateAccountToInactive');
-      return cy.task('getRecords').then((accts) => {
+      return cy.task('getRecords').then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         expect(accts).to.have.lengthOf(1);
         expect(accts[0].activated).to.be.false;
         return cy.visit('/');

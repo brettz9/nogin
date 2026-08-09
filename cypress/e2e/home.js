@@ -1,7 +1,8 @@
 const expressSessionID = 'connect.sid';
 
 describe('Home', function () {
-  let NL_EMAIL_PASS, NL_EMAIL_USER;
+  let NL_EMAIL_PASS = '';
+  let NL_EMAIL_USER = '';
 
   before(() => {
     cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({
@@ -21,7 +22,7 @@ describe('Home', function () {
     cy.task('addNonActivatedAccount');
 
     const url = '/';
-    let tkn;
+    let tkn = '';
     return cy.getToken(url).then((token) => {
       tkn = token;
       return cy.request({
@@ -110,7 +111,14 @@ describe('Home', function () {
       cy.get(
         '[data-name="modal-alert"] [data-name="ok"]'
       ).click();
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      return cy.task('getRecords', {user: ['bretto']}).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         const {user, name, country, email} = accts[0];
         expect(user).to.equal('bretto');
         // Hasn't been activated yet, so keeps old email for now
@@ -163,7 +171,15 @@ describe('Home', function () {
            *   AccountInfo[]}
            */ (ret)
         );
-      }).then((accts) => {
+      }).then((
+        /**
+         * @type {true|
+         *   import('../../app/server/modules/account-manager.js').
+         *     AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         if (accts === true) {
           // eslint-disable-next-line @stylistic/max-len -- Too long
           // eslint-disable-next-line promise/no-return-wrap, unicorn/no-useless-promise-resolve-reject -- Cypress
@@ -208,7 +224,14 @@ describe('Home', function () {
         cy.get(
           '[data-name="modal-alert"] [data-name="ok"]'
         ).click();
-        return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        return cy.task('getRecords', {user: ['bretto']}).then((
+          /**
+           * @type {import('../../app/server/modules/account-manager.js').
+           *   AccountInfo[]
+           * }
+           */
+          accts
+        ) => {
           const {user, name, country, email} = accts[0];
           expect(user).to.equal('bretto');
           // Hasn't been activated yet, so keeps old email for now
@@ -401,7 +424,14 @@ describe('Home', function () {
 
       // User not deleted here, just not able to delete account when
       //  session was destroyed
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      return cy.task('getRecords', {user: ['bretto']}).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         const {user} = accts[0];
         expect(user).to.equal('bretto');
         // return cy.log(accts);
@@ -431,7 +461,14 @@ describe('Home', function () {
       cy.get(
         '[data-confirm-type="notice"] [data-name="cancel"]'
       ).click();
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      return cy.task('getRecords', {user: ['bretto']}).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         expect(accts).to.have.lengthOf(1);
         expect(accts[0].email).to.equal(NL_EMAIL_USER);
         // return cy.log(accts);
@@ -466,24 +503,35 @@ describe('Home', function () {
 
       cy.get('[data-name="email"]', {
         timeout: 50000
-      }).should((
-        /** @type {JQuery<HTMLInputElement>} */
-        $email
-      ) => {
+      }).should(($email) => {
         return expect(
-          $email[0].validationMessage
+          /** @type {HTMLInputElement} */ ($email[0]).validationMessage
         ).to.contain(
           'That email address is already in use'
         );
       });
 
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      return cy.task('getRecords', {user: ['bretto']}).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         const {user, name, email} = accts[0];
         expect(user).to.equal('bretto');
         expect(email).to.equal(NL_EMAIL_USER);
         expect(name).to.equal('Brett');
         return cy.task('getRecords', {user: ['nicky']});
-      }).then((accts) => {
+      }).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         const {user, name, email} = accts[0];
         expect(user).to.equal('nicky');
         expect(email).to.equal(emailOfAnotherUser);
@@ -525,7 +573,14 @@ describe('Home', function () {
           cy.get('[data-name="ok"]').click();
 
           return cy.task('getRecords', {user: ['bretto']});
-        }).then((accts) => {
+        }).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+          accts
+        ) => {
           const {user, name, country, email, unactivatedEmail} = accts[0];
           expect(user).to.equal('bretto');
           expect(email).to.equal(NL_EMAIL_USER);
@@ -556,7 +611,14 @@ describe('Home', function () {
           ).should('be.hidden');
 
           return cy.task('getRecords', {user: ['bretto']});
-        }).then((accts) => {
+        }).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+          accts
+        ) => {
           const {user, name, country, email, unactivatedEmail} = accts[0];
           expect(user).to.equal('bretto');
           expect(unactivatedEmail).to.equal(validEmail);
@@ -622,7 +684,14 @@ describe('Home', function () {
         timeout: 10000
       }).should('eq', '/');
 
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      return cy.task('getRecords', {user: ['bretto']}).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         const {user, name} = accts[0];
         expect(user).to.equal('bretto');
         return expect(name).to.equal('Brett');
@@ -703,7 +772,14 @@ describe('Home', function () {
         cy.get(
           '[data-name="modal-alert"] [data-name="ok"]'
         ).click();
-        return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+        return cy.task('getRecords', {user: ['bretto']}).then((
+          /**
+           * @type {import('../../app/server/modules/account-manager.js').
+           *   AccountInfo[]
+           * }
+           */
+          accts
+        ) => {
           const {user, name, email, country} = accts[0];
           expect(user).to.equal('bretto');
           expect(email).to.equal(NL_EMAIL_USER);
@@ -725,7 +801,14 @@ describe('Home', function () {
       cy.get('[data-name="action2"]').click();
 
       cy.get('[data-name="email"]:invalid').should('have.length', 1);
-      return cy.task('getRecords', {user: ['bretto']}).then((accts) => {
+      return cy.task('getRecords', {user: ['bretto']}).then((
+        /**
+         * @type {import('../../app/server/modules/account-manager.js').
+         *   AccountInfo[]
+         * }
+         */
+        accts
+      ) => {
         const {user, name, email} = accts[0];
         expect(user).to.equal('bretto');
         expect(email).to.equal(NL_EMAIL_USER);

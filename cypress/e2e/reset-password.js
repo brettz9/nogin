@@ -3,7 +3,8 @@ const ip = '::ffff:127.0.0.1';
 const expressSessionID = 'connect.sid';
 
 describe('Reset password', function () {
-  let NL_EMAIL_USER, NL_EMAIL_PASS;
+  let NL_EMAIL_USER = '';
+  let NL_EMAIL_PASS = '';
 
   before(() => {
     cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({

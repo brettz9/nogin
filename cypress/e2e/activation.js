@@ -49,7 +49,7 @@ describe('Activation', function () {
     cy.task('deleteAllAccounts');
     cy.task('addExtraNonActivatedAccount');
 
-    let activCode;
+    let activCode = '';
     return cy.task('addNonActivatedAccount').then(({activationCode}) => {
       activCode = activationCode;
       return cy.task('getRecords');
@@ -67,7 +67,14 @@ describe('Activation', function () {
       }).should('eq', '/');
     }).then(() => {
       return cy.task('getRecords');
-    }).then((accts) => {
+    }).then((
+      /**
+       * @type {import('../../app/server/modules/account-manager.js').
+       *   AccountInfo[]
+       * }
+       */
+      accts
+    ) => {
       // Should have now cleaned up the unactivated copies.
       expect(accts).to.have.lengthOf(1);
       const {user, activated, activationCode} = accts[0];
