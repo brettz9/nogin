@@ -896,6 +896,33 @@ describe('CLI', function () {
       await removeAccounts({all: true});
       await deleteEmails();
 
+      /**
+       * Poll mailbox until a matching message appears or timeout elapses.
+       * @param {{subject: string, html: string[]}} cfg
+       * @param {number} timeoutMs
+       * @param {number} intervalMs
+       * @returns {Promise<boolean>}
+       */
+      const waitForEmail = (cfg, timeoutMs, intervalMs) => {
+        const deadline = Date.now() + timeoutMs;
+        /** @returns {Promise<boolean>} */
+        const check = async () => {
+          try {
+            if (await hasEmail(cfg)) {
+              return true;
+            }
+          } catch {
+            // Retry transient mailbox/network failures during polling.
+          }
+          if (Date.now() >= deadline) {
+            return false;
+          }
+          await delay(intervalMs);
+          return check();
+        };
+        return check();
+      };
+
       /** @type {boolean} */
       let fetching;
       let cliProm;
@@ -903,7 +930,30 @@ describe('CLI', function () {
         {badURLPostStatus, badURLPostText},
         {signupPostStatus}
       // eslint-disable-next-line promise/avoid-new -- Testing
-      ] = await new Promise((resolve) => {
+      ] = await new Promise((resolve, reject) => {
+        let settled = false;
+        /**
+         * @param {unknown} result
+         * @returns {void}
+         */
+        const settleResolve = (result) => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          resolve(result);
+        };
+        /**
+         * @param {unknown} err
+         * @returns {void}
+         */
+        const settleReject = (err) => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          reject(err);
+        };
         cliProm = spawnCLI([
           '--localScripts',
           '--secret', secret,
@@ -929,7 +979,7 @@ describe('CLI', function () {
           '--NL_EMAIL_PASS',
           NL_EMAIL_PASS,
           '--config', ''
-        ], 200000, async (stdout) => {
+        ], 200000, async (stdout, _data, cli) => {
           if (fetching ||
             !stdout.includes(
               `Express server listening on port ${testPort}`
@@ -939,100 +989,101 @@ describe('CLI', function () {
             return;
           }
           fetching = true;
-
-          const [
-            postRes,
-            signupPostRes
-          ] = await Promise.all([
-            // Check bad POST coverage
-            fetch(`http://127.0.0.1:${testPort}/bad-url`, {
-              method: 'POST'
-            }),
-            // Check for custom `composeResetPasswordEmailView`
-            fetch(`http://127.0.0.1:${testPort}/signup`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                name: 'Brett',
-                email: NL_EMAIL_USER,
-                user: 'bretto',
-                pass: NL_EMAIL_PASS,
-                country: 'US'
+          try {
+            const [
+              postRes,
+              signupPostRes
+            ] = await Promise.all([
+              // Check bad POST coverage
+              fetch(`http://127.0.0.1:${testPort}/bad-url`, {
+                method: 'POST'
+              }),
+              // Check for custom `composeResetPasswordEmailView`
+              fetch(`http://127.0.0.1:${testPort}/signup`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  name: 'Brett',
+                  email: NL_EMAIL_USER,
+                  user: 'bretto',
+                  pass: NL_EMAIL_PASS,
+                  country: 'US'
+                })
               })
-            })
-          ]);
-          console.log('FETCHED 2...');
+            ]);
+            console.log('FETCHED 2...');
 
-          // Retrieving emails separately
-          const emailsWillHaveProbablyArrived = 15000;
-          await delay(emailsWillHaveProbablyArrived);
-          const hasAccountActivation = await hasEmail({
-            subject: 'Account Activation',
-            html: [
-              'See you later alligator',
-              'Please click here to activate your account',
-              '<a href=',
-              'activation?c='
-            ]
-          });
-          console.log('HAS-EMAIL-RESULT 1', hasAccountActivation);
-          expect(hasAccountActivation).to.be.true;
-          await deleteEmails();
-          console.log('EMAILS DELETED');
+            const hasAccountActivation = await waitForEmail({
+              subject: 'Account Activation',
+              html: [
+                'See you later alligator',
+                'Please click here to activate your account',
+                '<a href=',
+                'activation?c='
+              ]
+            }, 90000, 5000);
+            console.log('HAS-EMAIL-RESULT 1', hasAccountActivation);
+            expect(hasAccountActivation).to.be.true;
+            await deleteEmails();
+            console.log('EMAILS DELETED');
 
-          console.log('signupPostRes.status', signupPostRes.status);
-          console.log('signupPostRes', await signupPostRes.text());
+            console.log('signupPostRes.status', signupPostRes.status);
+            console.log('signupPostRes', await signupPostRes.text());
 
-          // So lost password can be requested
-          await updateAccounts({
-            user: ['bretto'],
-            email: [NL_EMAIL_USER],
-            activated: [true],
-            DB_NAME: testDBName
-          });
+            // So lost password can be requested
+            await updateAccounts({
+              user: ['bretto'],
+              email: [NL_EMAIL_USER],
+              activated: [true],
+              DB_NAME: testDBName
+            });
 
-          // Check for custom `composeActivationEmailView`
-          const lostPasswordPostRes = await fetch(
-            `http://127.0.0.1:${testPort}/lost-password`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
+            // Check for custom `composeActivationEmailView`
+            const lostPasswordPostRes = await fetch(
+              `http://127.0.0.1:${testPort}/lost-password`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  email: NL_EMAIL_USER
+                })
+              }
+            );
+            const lostPasswordPostStatus = lostPasswordPostRes.status;
+
+            expect(lostPasswordPostStatus).to.equal(200);
+            console.log('STATUS RESULT');
+
+            const hasPasswordReset = await waitForEmail({
+              subject: 'Password Reset',
+              html: [
+                'See you later alligator',
+                'Click here to reset your password',
+                '<a href=',
+                'reset-password?key='
+              ]
+            }, 90000, 5000);
+            console.log('HAS-EMAIL-RESULT 2', hasPasswordReset);
+            expect(hasPasswordReset).to.be.true;
+
+            settleResolve([
+              {
+                badURLPostStatus: postRes.status,
+                badURLPostText: await postRes.text()
               },
-              body: JSON.stringify({
-                email: NL_EMAIL_USER
-              })
-            }
-          );
-          const lostPasswordPostStatus = lostPasswordPostRes.status;
-
-          expect(lostPasswordPostStatus).to.equal(200);
-          console.log('STATUS RESULT');
-
-          await delay(emailsWillHaveProbablyArrived);
-          const hasPasswordReset = await hasEmail({
-            subject: 'Password Reset',
-            html: [
-              'See you later alligator',
-              'Click here to reset your password',
-              '<a href=',
-              'reset-password?key='
-            ]
-          });
-          console.log('HAS-EMAIL-RESULT 2', hasPasswordReset);
-          expect(hasPasswordReset).to.be.true;
-
-          resolve([
-            {
-              badURLPostStatus: postRes.status,
-              badURLPostText: await postRes.text()
-            },
-            {
-              signupPostStatus: signupPostRes.status
-            }
-          ]);
+              {
+                signupPostStatus: signupPostRes.status
+              }
+            ]);
+            cli?.kill();
+          } catch (err) {
+            cli?.kill();
+            settleReject(err);
+          }
         });
       });
       /* const {stdout, stderr} = */ await cliProm;
