@@ -22,7 +22,7 @@ const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
 
 // User name field
 const name = HomeView.getName();
-name.focus();
+name.trigger('focus');
 
 // Disable user field
 const user = HomeView.getUser();
@@ -108,7 +108,7 @@ function setupValidationSubmission () {
       emailChangeConfirmDialog
     ).on('click', () => {
       confirmed = true;
-      accountForm.submit();
+      accountForm.trigger('submit');
       emailChangeConfirmDialog.modal('hide');
     });
   }, {capture: true});

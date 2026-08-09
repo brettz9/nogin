@@ -6,10 +6,10 @@ const accountActivatedAlertDialog = ActivatedView.accountActivated();
 accountActivatedAlertDialog.modal('show');
 
 const okButton = ActivatedView.getOKButton(accountActivatedAlertDialog);
-okButton.on('click', function () {
+okButton.on('click', () => {
   // Redirect to homepage on account activation, adding short delay so user
   //   can read alert window
-  setTimeout(function () {
+  setTimeout(() => {
     Nogin.redirect('root');
   }, 3000);
 });

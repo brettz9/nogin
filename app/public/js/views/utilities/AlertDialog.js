@@ -33,7 +33,9 @@ const AlertDialog = {
       heading
     );
     $('[data-name=modal-alert] [data-name=modal-body] p').empty().append(body);
-    $('[data-name=modal-alert] button').on('click', (e) => {
+    $('[data-name=modal-alert] button').on('click', (
+      /** @type {JQuery.Event} */ e
+    ) => {
       e.preventDefault();
       modal.modal('hide');
     });
