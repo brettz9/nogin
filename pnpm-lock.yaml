@@ -8895,7 +8895,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.7
+      browserslist: 4.28.8
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -8903,7 +8903,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 8.0.0
       '@babel/helper-validator-option': 8.0.0
-      browserslist: 4.28.7
+      browserslist: 4.28.8
       lru-cache: 11.5.2
       semver: 7.8.5
 
@@ -10382,7 +10382,7 @@ snapshots:
       '@babel/plugin-transform-typeof-symbol': 7.29.7(@babel/core@7.4.5)
       '@babel/plugin-transform-unicode-regex': 7.29.7(@babel/core@7.4.5)
       '@babel/types': 7.29.8
-      browserslist: 4.28.7
+      browserslist: 4.28.8
       core-js-compat: 3.50.0
       invariant: 2.2.4
       js-levenshtein: 1.1.6
