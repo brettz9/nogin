@@ -1,6 +1,6 @@
 describe('Users', function () {
-  before(function () {
-    // Login as rootUser so session grants access eve
+  beforeEach(function () {
+    // Login as rootUser so session grants access even
     //   after accounts are deleted
     cy.loginWithSession({rootUser: true});
   });
@@ -17,49 +17,34 @@ describe('Users', function () {
     cy.task('addAccountWithMissingNameAndCountry');
     cy.visit('/users');
 
-    cy.get('[data-name=users] tr:nth-child(1) td:nth-child(1)').contains('1');
-    cy.get('[data-name=users] tr:nth-child(1) td:nth-child(2)').contains(
-      'Brett'
-    );
-    cy.get('[data-name=users] tr:nth-child(1) td:nth-child(3)').contains(
-      'bretto'
-    );
-    cy.get('[data-name=users] tr:nth-child(1) td:nth-child(4)').contains(
-      'United States'
-    );
-    cy.get('[data-name=users] tr:nth-child(1) td:nth-child(5)').contains(
-      /\w+, \w+ \d{1,2}, \d{4}/v
-    );
+    cy.get('[data-name=users] tbody tr').should('have.length', 3);
 
-    cy.get('[data-name=users] tr:nth-child(2) td:nth-child(1)').contains('2');
-    cy.get('[data-name=users] tr:nth-child(2) td:nth-child(2)').contains(
-      'Nicole'
-    );
-    cy.get('[data-name=users] tr:nth-child(2) td:nth-child(3)').contains(
-      'nicky'
-    );
-    cy.get('[data-name=users] tr:nth-child(2) td:nth-child(4)').contains(
-      'Iran'
-    );
-    cy.get('[data-name=users] tr:nth-child(2) td:nth-child(5)').contains(
-      /\w+, \w+ \d{1,2}, \d{4}/v
-    );
+    cy.get('[data-name=users] tbody tr').eq(0).should(($row) => {
+      const text = $row.text();
+      expect(text).to.match(/1/v);
+      expect(text).to.match(/Brett/v);
+      expect(text).to.match(/bretto/v);
+      expect(text).to.match(/United States/v);
+      expect(text).to.match(/\w+, \w+ \d{1,2}, \d{4}/v);
+    });
 
-    cy.get('[data-name=users] tr:nth-child(3) td:nth-child(1)').contains('3');
-    cy.get(
-      '[data-name=users] tr:nth-child(3) td:nth-child(2)'
-    ).should('be.empty');
-    cy.get('[data-name=users] tr:nth-child(3) td:nth-child(3)').contains(
-      'Joe'
-    );
-    cy.get(
-      '[data-name=users] tr:nth-child(3) td:nth-child(4)'
-    ).should('be.empty');
-    cy.get('[data-name=users] tr:nth-child(3) td:nth-child(5)').contains(
-      /\w+, \w+ \d{1,2}, \d{4}/v
-    );
+    cy.get('[data-name=users] tbody tr').eq(1).should(($row) => {
+      const text = $row.text();
+      expect(text).to.match(/2/v);
+      expect(text).to.match(/Nicole/v);
+      expect(text).to.match(/nicky/v);
+      expect(text).to.match(/Iran/v);
+      expect(text).to.match(/\w+, \w+ \d{1,2}, \d{4}/v);
+    });
 
-    cy.get('[data-name=users] tbody tr:nth-child(4)').should('not.exist');
+    cy.get('[data-name=users] tbody tr').eq(2).should(($row) => {
+      const text = $row.text();
+      expect(text).to.match(/3/v);
+      expect(text).to.match(/Joe/v);
+      expect(text).to.match(/\w+, \w+ \d{1,2}, \d{4}/v);
+      expect(text).to.not.match(/Brett/v);
+      expect(text).to.not.match(/Nicole/v);
+    });
   });
 
   // https://www.npmjs.com/package/cypress-axe
