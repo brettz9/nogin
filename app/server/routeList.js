@@ -1704,11 +1704,11 @@ const routeList = async (app, config) => {
 window.Nogin = {
   disableXSRF: ${disableXSRF},
   postLoginRedirectPath: ${JSON.stringify(postLoginRedirectPath ?? '')},
-  Routes: ${JSON.stringify(routes)},
-  ${signupAgreement
-    ? `signupAgreement: ${
-      JSON.stringify(parseCLIJSON(signupAgreement)[args.resolvedLocale])
-    },`
+  Routes: ${JSON.stringify(routes)},${signupAgreement
+    ? `
+  signupAgreement: ${
+    JSON.stringify(parseCLIJSON(signupAgreement)[args.resolvedLocale])
+  },`
     : ''}
   _: IntlDom.i18nServer(${JSON.stringify({
     strings: {

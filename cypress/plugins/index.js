@@ -481,7 +481,11 @@ const exprt = (on, config) => {
             'no-restricted-globals': 0,
 
             // location.href (could instead add to settings.polyfills)
-            'compat/compat': 0
+            'compat/compat': 0,
+
+            'unicorn/no-global-object-property-assignment': 0,
+            'unicorn/prefer-location-assign': 0,
+            'unicorn/no-this-outside-of-class': 0
           }
         }
       });
