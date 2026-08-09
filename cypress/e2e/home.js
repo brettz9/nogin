@@ -816,7 +816,10 @@ describe('Home', function () {
       });
     });
 
-    it('Attempt bad client-side input', function () {
+    // todo[cypress@>=16.0.0]: Re-enable when fixed:
+    // https://github.com/cypress-io/cypress/issues/6678
+    // eslint-disable-next-line mocha/no-pending-tests -- Cypress bug
+    it.skip('Attempt bad client-side input', function () {
       const tooShortOfAName = 'a';
       cy.clearAndType('[data-name="email"]', NL_EMAIL_USER);
       cy.clearAndType('[data-name="pass"]', 'boo123456');
