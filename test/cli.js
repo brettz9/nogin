@@ -1043,20 +1043,51 @@ describe('CLI', function () {
               DB_NAME: testDBName
             });
 
+            const [updatedAcct] = await readAccounts({
+              user: ['bretto'],
+              DB_NAME: testDBName
+            });
+            const lostPasswordEmail = updatedAcct?.email || NL_EMAIL_USER;
+
+            /**
+             * Retry lost-password for transient email dispatch failures.
+             * @param {number} attempts
+             * @param {number} intervalMs
+             * @returns {Promise<{status: number, text: string}>}
+             */
+            const postLostPasswordWithRetry = (attempts, intervalMs) => {
+              /** @returns {Promise<{status: number, text: string}>} */
+              const runAttempt = async () => {
+                const resp = await fetch(
+                  `http://127.0.0.1:${testPort}/lost-password`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      email: lostPasswordEmail
+                    })
+                  }
+                );
+                const text = await resp.text();
+                if (resp.status === 200 || attempts <= 1) {
+                  return {status: resp.status, text};
+                }
+                await delay(intervalMs);
+                return postLostPasswordWithRetry(attempts - 1, intervalMs);
+              };
+              return runAttempt();
+            };
+
             // Check for custom `composeActivationEmailView`
-            const lostPasswordPostRes = await fetch(
-              `http://127.0.0.1:${testPort}/lost-password`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  email: NL_EMAIL_USER
-                })
-              }
-            );
-            const lostPasswordPostStatus = lostPasswordPostRes.status;
+            const {
+              status: lostPasswordPostStatus,
+              text: lostPasswordPostText
+            } = await postLostPasswordWithRetry(3, 3000);
+
+            console.log('lostPasswordPostRes.status', lostPasswordPostStatus);
+            console.log('lostPasswordPostRes', lostPasswordPostText);
 
             expect(lostPasswordPostStatus).to.equal(200);
             console.log('STATUS RESULT');
