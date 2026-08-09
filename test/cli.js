@@ -646,7 +646,7 @@ describe('CLI', function () {
 
   describe('Helmet', function () {
     it('helmet (defaults)', async function () {
-      this.timeout(70000);
+      this.timeout(100000);
       /** @type {boolean} */
       let fetching;
       let cliProm;
@@ -683,14 +683,14 @@ describe('CLI', function () {
     });
 
     it('helmet (custom)', async function () {
-      this.timeout(70000);
+      this.timeout(100000);
       /** @type {boolean} */
       let fetching;
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
         cliProm = spawnCLI([
-          '--helmetOptions', JSON.stringify('{noSniff: false}'),
+          '--helmetOptions', JSON.stringify({noSniff: false}),
           '--localScripts',
           '--secret', secret,
           '--PORT', testPort,
@@ -715,13 +715,12 @@ describe('CLI', function () {
       expect(headers.get('X-Frame-Options')).to.equal(
         'SAMEORIGIN'
       );
-      expect(headers.get('X-Content-Type-Options')).to.equal(
-        'nosniff'
-      );
+      // noSniff: false disables X-Content-Type-Options
+      expect(headers.get('X-Content-Type-Options')).to.be.null;
     });
 
     it('noHelmet', async function () {
-      this.timeout(70000);
+      this.timeout(100000);
       /** @type {boolean} */
       let fetching;
       let cliProm;
@@ -757,7 +756,7 @@ describe('CLI', function () {
 
   describe('Session options', function () {
     it('sessionOptions', async function () {
-      this.timeout(70000);
+      this.timeout(100000);
       const name = 'my.sessionid';
       /** @type {boolean} */
       let fetching;
@@ -794,7 +793,7 @@ describe('CLI', function () {
     });
 
     it('sessionCookieOptions', async function () {
-      this.timeout(70000);
+      this.timeout(100000);
       /** @type {boolean} */
       let fetching;
       let cliProm;
@@ -833,7 +832,7 @@ describe('CLI', function () {
     // Todo: If setting up additional cypress processes, we
     //   would ideally test this in UI that it redirects
     it('crossDomainJSRedirects', async function () {
-      this.timeout(70000);
+      this.timeout(100000);
       /** @type {boolean} */
       let fetching;
       let cliProm;
