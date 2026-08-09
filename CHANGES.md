@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## 8.0.0 (unreleased)
+## 8.0.0
 
 Breaking changes:
 - Requires Node ^20.11.0 || >= 22.0.0
