@@ -107,11 +107,20 @@ describe('Root (Login)', function () {
   });
 
   it('Visit root and login with Remember Me button disabled', function () {
+    cy.intercept('POST', '/').as('postLoginNoRemember');
     cy.get('[data-name=btn_remember]').click();
     cy.get('[data-name="user"]').type('bretto');
     cy.get('[data-name="pass"]').type(NL_EMAIL_PASS);
     cy.get('[data-name="btn_sign_in"]').click();
+    cy.wait('@postLoginNoRemember').its(
+      'response.statusCode'
+    ).should('eq', 200);
     cy.getCookie('login').should('not.exist');
+
+    cy.location('pathname', {
+      timeout: 10000
+    }).should('eq', '/home');
+    cy.get('[data-name=account-form]').should('be.visible');
 
     cy.get('[data-name=account-form] .btn-danger').click();
     cy.get('[data-name=modal-confirm] .btn-danger').click();

@@ -2,7 +2,7 @@ describe('Generate password key (for `/reset-password`)', function () {
   let NL_EMAIL_USER;
 
   before(() => {
-    cy.env(['NL_EMAIL_USER', 'NL_EMAIL_PASS']).then(({
+    cy.env(['NL_EMAIL_USER']).then(({
       NL_EMAIL_USER: user
     }) => {
       NL_EMAIL_USER = user;

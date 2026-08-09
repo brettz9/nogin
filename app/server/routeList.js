@@ -233,6 +233,22 @@ const routeList = async (app, config) => {
       const _ = await setI18n(req, res);
 
       /**
+       * @returns {string}
+       */
+      function getSafeQueryRedirect () {
+        let queryRedirect = /** @type {string} */ (req.query[
+          _('query_redirect')
+        ]);
+        // Using user value should not be a security concern, as
+        //  all GET requests should be idempotent and validate credentials;
+        //  however, if some XSS uses this, avoid open redirects.
+        if (queryRedirect && queryRedirect.includes(':')) {
+          queryRedirect = '';
+        }
+        return queryRedirect;
+      }
+
+      /**
        * @returns {void}
        */
       function login () {
@@ -247,6 +263,16 @@ const routeList = async (app, config) => {
           signup
         });
       }
+
+      // If we already have a server session user, this is a valid
+      // non-persistent login even when no remember cookie exists.
+      if (req.session?.user) {
+        res.redirect(
+          getSafeQueryRedirect() || postLoginRedirectPath || routes.home
+        );
+        return;
+      }
+
       // check if the user has an auto login key saved in a cookie
       if (req.signedCookies.login === undefined) {
         login();
@@ -303,20 +329,8 @@ const routeList = async (app, config) => {
            */ (
             req.session
           ).user = _o;
-          let queryRedirect = /** @type {string} */ (req.query[
-            _('query_redirect')
-          ]);
-          // Using user value should not be a security concern, as
-          //  all GET requests should be idempotent and validate
-          //  credentials; however, if some XSS uses this, the user
-          //  may think they are still on the same domain after
-          //  the redirect and mistakenly believe it safe to offer
-          //  credentials.
-          if (queryRedirect && queryRedirect.includes(':')) {
-            queryRedirect = '';
-          }
           res.redirect(
-            queryRedirect || postLoginRedirectPath || routes.home
+            getSafeQueryRedirect() || postLoginRedirectPath || routes.home
           );
           return;
         }
