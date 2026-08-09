@@ -1148,7 +1148,7 @@ describe('CLI', function () {
 
   describe('Adding', function () {
     beforeEach(async () => {
-      await removeAccounts({all: true});
+      await removeAccounts({all: true, DB_NAME: testDBName});
     });
 
     it('add', async function () {
