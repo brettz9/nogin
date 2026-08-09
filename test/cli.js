@@ -95,6 +95,36 @@ const stripWarnings = (s) => {
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = '1234';
 const testPort2 = '1234';
+const testDBName = 'nogin-cli-test';
+
+// Injects --DB_NAME into CLI spawns to isolate from Cypress test data
+// eslint-disable-next-line @stylistic/max-len -- typedef import
+/** @typedef {import('./utilities/spawnPromise.js').EventWatcher} EventWatcher */
+/**
+ * @param {object|string[]} optsOrArgs
+ * @param {string[]|number} [argsOrKillDelay]
+ * @param {number|EventWatcher|null} [killDelayOrWatchEvents]
+ * @param {EventWatcher|null} [watchEvents]
+ * @returns {Promise<SpawnResults>}
+ */
+const spawnCLI = (
+  optsOrArgs, argsOrKillDelay, killDelayOrWatchEvents, watchEvents
+) => {
+  if (Array.isArray(optsOrArgs)) {
+    return spawnPromise(
+      cliPath, [...optsOrArgs, '--DB_NAME', testDBName],
+      argsOrKillDelay, killDelayOrWatchEvents, watchEvents
+    );
+  }
+  return spawnPromise(
+    cliPath, optsOrArgs,
+    /** @type {string[]} */ ([
+      .../** @type {string[]} */(argsOrKillDelay),
+      '--DB_NAME', testDBName
+    ]),
+    killDelayOrWatchEvents, watchEvents
+  );
+};
 
 /**
  * @typedef {number} Integer
@@ -107,7 +137,8 @@ const testPort2 = '1234';
  */
 const stripMongoAndServerListeningMessages = (s, port = testPort) => {
   // Todo: Replace this with suppressing db output?
-  return s.replace(/mongodb :: connected to database :: "nogin"\n/v, '').
+  const dbMsg = `mongodb :: connected to database :: "${testDBName}"\n`;
+  return s.replace(new RegExp(dbMsg, 'v'), '').
     replace(
       new RegExp(`Express server listening on port ${port}\n`, 'v'),
       ''
@@ -125,7 +156,7 @@ describe('CLI', function () {
         let cliProm;
         // eslint-disable-next-line promise/avoid-new -- Testing
         const {text} = await new Promise((resolve, reject) => {
-          cliProm = spawnPromise(cliPath, [
+          cliProm = spawnCLI([
             '--noBuiltinStylesheets',
             '--secret', secret,
             '--PORT', testPort2,
@@ -172,7 +203,7 @@ describe('CLI', function () {
 
     it('--noLogging option and bad config', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--noLogging',
@@ -187,7 +218,7 @@ describe('CLI', function () {
     // Above with bad config didn't seem to give coverage for some reason
     it('--noLogging option and null config', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--noLogging',
@@ -200,7 +231,7 @@ describe('CLI', function () {
 
     it('Default config', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort
@@ -214,7 +245,7 @@ describe('CLI', function () {
 
     it('Null config', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort,
@@ -234,7 +265,7 @@ describe('CLI', function () {
         '(passed on to `DBFactory.getURL`)',
       async function () {
         this.timeout(30000);
-        const {stdout, stderr} = await spawnPromise(cliPath, [
+        const {stdout, stderr} = await spawnCLI([
           '--adapter', 'badAdapter',
           '--localScripts',
           '--secret', secret,
@@ -276,7 +307,7 @@ describe('CLI', function () {
           {homeStatus, homeText}
           // eslint-disable-next-line promise/avoid-new -- Testing
         ] = await new Promise((resolve, reject) => {
-          cliProm = spawnPromise(cliPath, [
+          cliProm = spawnCLI([
             '--staticDir', pathResolve(__dirname, './fixtures/'),
             '--userJS', 'userJS.js',
             '--userJSModule', 'userJSModule.js',
@@ -540,7 +571,7 @@ describe('CLI', function () {
   describe('Erring with bad locale routes', function () {
     it('Throw with non-distinct route paths', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort,
@@ -558,7 +589,7 @@ describe('CLI', function () {
 
     it('Throw with reserved routes', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort,
@@ -576,7 +607,7 @@ describe('CLI', function () {
 
     it('Throw with paths possessing dots', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort,
@@ -595,7 +626,7 @@ describe('CLI', function () {
 
     it('Throw with paths possessing extra slashes', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         '--localScripts',
         '--secret', secret,
         '--PORT', testPort,
@@ -621,7 +652,7 @@ describe('CLI', function () {
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--localScripts',
           '--secret', secret,
           '--PORT', testPort,
@@ -658,7 +689,7 @@ describe('CLI', function () {
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--helmetOptions', JSON.stringify('{noSniff: false}'),
           '--localScripts',
           '--secret', secret,
@@ -696,7 +727,7 @@ describe('CLI', function () {
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const helmetResp = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--noHelmet',
           '--localScripts',
           '--secret', secret,
@@ -733,7 +764,7 @@ describe('CLI', function () {
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const resp = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--sessionOptions', JSON.stringify({
             name
           }),
@@ -769,7 +800,7 @@ describe('CLI', function () {
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const resp = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--sessionCookieOptions', JSON.stringify({
             httpOnly: false
           }),
@@ -808,7 +839,7 @@ describe('CLI', function () {
       let cliProm;
       // eslint-disable-next-line promise/avoid-new -- Testing
       const [langFF2, langFF25] = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--crossDomainJSRedirects',
           '--localScripts',
           '--secret', secret,
@@ -865,7 +896,7 @@ describe('CLI', function () {
         {signupPostStatus}
       // eslint-disable-next-line promise/avoid-new -- Testing
       ] = await new Promise((resolve) => {
-        cliProm = spawnPromise(cliPath, [
+        cliProm = spawnCLI([
           '--localScripts',
           '--secret', secret,
           '--PORT', testPort,
@@ -1010,7 +1041,7 @@ describe('CLI', function () {
   describe('Environmental components', function () {
     it('Missing environment components', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, {
+      const {stdout, stderr} = await spawnCLI({
         env: {
           // eslint-disable-next-line n/no-process-env -- Testing env.
           ...process.env,
@@ -1032,7 +1063,7 @@ describe('CLI', function () {
     // eslint-disable-next-line mocha/no-pending-tests -- Ok
     it.skip('With environment components', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, {
+      const {stdout, stderr} = await spawnCLI({
         env: {
           // eslint-disable-next-line n/no-process-env -- Testing env.
           ...process.env,
@@ -1058,7 +1089,7 @@ describe('CLI', function () {
   describe('Help', function () {
     it('help', async function () {
       this.timeout(20000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'help'
       ]);
       expect(stripMongoAndServerListeningMessages(stdout)).to.contain(
@@ -1069,7 +1100,7 @@ describe('CLI', function () {
 
     it('help add', async function () {
       this.timeout(20000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'help',
         'add'
       ]);
@@ -1081,7 +1112,7 @@ describe('CLI', function () {
 
     it('help create (with explicit locale)', async function () {
       this.timeout(20000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'help',
         'create',
         '--loggerLocale'
@@ -1094,7 +1125,7 @@ describe('CLI', function () {
 
     it('help (bad verb)', async function () {
       this.timeout(20000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'help',
         'noSuchVerb'
       ]);
@@ -1112,7 +1143,7 @@ describe('CLI', function () {
 
     it('add', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'add',
         '--userFile',
         'test/fixtures/addUsers.json'
@@ -1131,7 +1162,7 @@ describe('CLI', function () {
 
     it('add (flags)', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'add',
         '--user',
         'testUser',
@@ -1172,7 +1203,7 @@ describe('CLI', function () {
         pass: ['myPass12345'],
         activated: [false]
       });
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'add',
         '--user',
         'testUser',
@@ -1207,7 +1238,7 @@ describe('CLI', function () {
 
     it('add (erring --userFile)', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'add',
         '--userFile',
         'nonexistent-file.json'
@@ -1220,7 +1251,7 @@ describe('CLI', function () {
 
     it('add (erring due to missing pass)', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'add',
         '--user',
         'testUser'
@@ -1234,7 +1265,7 @@ describe('CLI', function () {
 
     it('add (erring due to missing email)', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'add',
         '--user',
         'testUser',
@@ -1260,7 +1291,7 @@ describe('CLI', function () {
     ['read', 'view'].forEach((prop) => {
       it(prop, async function () {
         this.timeout(40000);
-        const {stdout, stderr} = await spawnPromise(cliPath, [
+        const {stdout, stderr} = await spawnCLI([
           prop,
           '--user',
           'brett'
@@ -1284,7 +1315,7 @@ describe('CLI', function () {
     ['delete', 'remove'].forEach((prop) => {
       it(prop, async function () {
         this.timeout(40000);
-        const {stdout, stderr} = await spawnPromise(cliPath, [
+        const {stdout, stderr} = await spawnCLI([
           prop,
           '--user',
           'brett'
@@ -1304,7 +1335,7 @@ describe('CLI', function () {
 
     it('listIndexes', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'listIndexes'
       ], 20000);
 
@@ -1319,7 +1350,7 @@ describe('CLI', function () {
 
     it('update', async function () {
       this.timeout(30000);
-      const {stdout, stderr} = await spawnPromise(cliPath, [
+      const {stdout, stderr} = await spawnCLI([
         'update',
         '--user',
         'brett',
