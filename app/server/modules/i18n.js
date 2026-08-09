@@ -36,7 +36,11 @@ const availableLocales = await readdir(join(__dirname, '../_locales'));
 const getLangDir = function (_) {
   // Todo: Add `resolvedDirection` to `intl-dom` so can grab that instead here
   const lang = _.resolvedLocale;
-  const {direction} = new Intl.Locale(lang).getTextInfo();
+  const locale = new Intl.Locale(lang);
+  // `textInfo` is older; `getTextInfo()` is the newer method
+  // Todo[engine:node@>24]: Remove the `locale.textInfo` check
+  // @ts-expect-error For older Node compatibility
+  const {direction} = locale.textInfo ?? locale.getTextInfo();
   // Don't bother to make default of "ltr" explicit
   const dir = direction === 'rtl' ? direction : undefined;
   return {

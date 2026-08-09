@@ -212,7 +212,7 @@ const createServer = async function (options) {
     ));
   }
 
-  if (!noHostValidation) {
+  if (!noHostValidation && NL_SITE_URL) {
     app.use(hostValidation({hosts: [
       new URL(NL_SITE_URL).host
     ]}));

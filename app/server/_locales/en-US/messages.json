@@ -613,7 +613,7 @@
       "message": "c"
     },
     "route_root": {
-      "message": "/login"
+      "message": "/"
     },
     "route_logout": {
       "message": "/logout"
