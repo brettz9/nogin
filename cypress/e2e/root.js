@@ -34,7 +34,9 @@ describe('Root (Login)', function () {
   before(() => {
     cy.env([
       'env', 'NL_EMAIL_USER', 'NL_EMAIL_PASS'
-    ]).then(({user, pass, env: env2}) => {
+    ]).then(({
+      NL_EMAIL_USER: user, NL_EMAIL_PASS: pass, env: env2
+    }) => {
       env = env2;
       NL_EMAIL_PASS = pass;
       NL_EMAIL_USER = user;
@@ -254,7 +256,7 @@ describe('Root (Login)', function () {
         return expect(/** @type {HTMLInputElement} */ (
           user[0]
         ).validationMessage).to.contain(
-          'Please include an \'@\' in the email address'
+          'Please enter a valid email address'
         );
       });
     }
