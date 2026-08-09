@@ -118,8 +118,10 @@ mongod
 ...and from within the nogin directory in another terminal, start the server:
 
 ```sh
-nogin --localScripts --config nogin.js
+nogin --localScripts --config nogin.js --customRoute en-US=root=/login
 ```
+
+The last argument puts the login page at `/login` instead of `/`.
 
 You will most likely also want to use the `--router` and possibly `--fallback`, as
 well as `--postLoginRedirectPath /` arguments. See these options for more details.
@@ -264,7 +266,7 @@ for supporting additional routes.
 - `--postLoginRedirectPath` (Path/URL to which to redirect after login; defaults
     to home (`/home`) (or locale equivalent), but you should probably set it
     so that it redirects instead to your root (`/`).
-- `--customRoute` (Multiple strings in format `<locale>=<route>=<path>`)
+- `--customRoute` (Multiple strings in format `<locale>=<route>=<path>`); e.g., to change from the default `/` for root login, set `--customRoute en-US=root=/login`
 - `--crossDomainJSRedirects` (Boolean, defaults to `false`.)
 
 ##### Adding routes
