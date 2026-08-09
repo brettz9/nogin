@@ -48,16 +48,20 @@ let verb =
    */ (process.argv[2]);
 switch (verb) {
 case 'help':
-  verb =
+  {
+    const helpVerb =
     /**
      * @type {import('./manage-accounts.js').ManageAccountVerb|"help"}
      */ (
-      process.argv[3]
-    );
-  if (!verb) {
-    process.argv[2] = '--help';
-    await noVerb();
-    break;
+        process.argv[3]
+      );
+    // Allow top-level help with trailing flags (e.g., injected test flags).
+    if (!helpVerb || helpVerb.startsWith('-')) {
+      process.argv[2] = '--help';
+      await noVerb();
+      break;
+    }
+    verb = helpVerb;
   }
   process.argv[2] = verb;
   process.argv[3] = '--help';
