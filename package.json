@@ -265,7 +265,7 @@
     "husky": "^9.1.7",
     "integrity-matters": "^0.14.0",
     "jquery": "^4.0.0",
-    "jquery-form-plus": "^1.0.1",
+    "jquery-form-plus": "^2.0.1",
     "jsdoc": "^4.0.5",
     "license-badger": "^0.23.0",
     "lint-staged": "^17.3.0",

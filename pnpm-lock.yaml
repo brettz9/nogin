@@ -235,8 +235,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       jquery-form-plus:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^2.0.1
+        version: 2.0.1
       jsdoc:
         specifier: ^4.0.5
         version: 4.0.5
@@ -5634,8 +5634,8 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
 
-  jquery-form-plus@1.0.1:
-    resolution: {integrity: sha512-UXPwcgsBXu8F944YTYDkg2Ow6MKgNYV0S5z13BsgXBKSPpZ7kJv8sCp4JL+2efVPyKL8G5FCd5v05hfda4FL5g==}
+  jquery-form-plus@2.0.1:
+    resolution: {integrity: sha512-U9zYz2lcmQ011T9Zkw8fpk1974WWNqj0n5I7XdeShVqWcvjgsOUQQlFTC6wvjDmAUSXTviazNHcczYWvekispQ==}
     engines: {node: '>=8.0.0'}
 
   jquery@4.0.0:
@@ -15396,7 +15396,7 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jquery-form-plus@1.0.1:
+  jquery-form-plus@2.0.1:
     dependencies:
       jquery: 4.0.0
 
