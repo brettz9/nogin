@@ -400,6 +400,11 @@ describe('CLI', function () {
             '/css/fontawesome.css" crossorigin="anonymous">'
           ) +
           escStringRegex(
+            '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v'
+          ) + semverNumPattern + escStringRegex(
+            '/css/solid.css" crossorigin="anonymous">'
+          ) +
+          escStringRegex(
             '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@'
           ) + semverNumPattern + escStringRegex(
             '/dist/css/bootstrap.min.css" crossorigin="anonymous">'
@@ -462,9 +467,10 @@ describe('CLI', function () {
               'defer=""></script>'
           ) +
           escStringRegex(
-            '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/'
+            '<script src="https://unpkg.com/jquery-form-plus@'
           ) + semverNumPattern + escStringRegex(
-            '/jquery.form.min.js" crossorigin="anonymous" defer=""></script>'
+            '/dist/jquery.form.min.js" crossorigin="anonymous" ' +
+            'defer=""></script>'
           ),
           'v'
         ));
