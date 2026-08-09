@@ -136,10 +136,14 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'loginWithSession',
-  ({nondefaultEmail} = {}) => {
-    return cy.env(['NL_EMAIL_PASS']).then(({NL_EMAIL_PASS}) => {
+  ({nondefaultEmail, rootUser} = {}) => {
+    return cy.env(['NL_EMAIL_PASS', 'ROOT_USER']).then(({
+      NL_EMAIL_PASS, ROOT_USER
+    }) => {
       cy.task('deleteAllAccounts');
-      if (nondefaultEmail) {
+      if (rootUser) {
+        cy.task('addRootAccount');
+      } else if (nondefaultEmail) {
         cy.task('addNondefaultAccount');
       } else {
         cy.task('addAccount');
@@ -161,7 +165,7 @@ Cypress.Commands.add(
             'X-XSRF-Token': token
           },
           body: {
-            user: 'bretto',
+            user: rootUser ? ROOT_USER : 'bretto',
             pass: NL_EMAIL_PASS
           }
         });

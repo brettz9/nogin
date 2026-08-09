@@ -1,4 +1,10 @@
 describe('Users', function () {
+  before(function () {
+    // Login as rootUser so session grants access eve
+    //   after accounts are deleted
+    cy.loginWithSession({rootUser: true});
+  });
+
   it('Visit Users (Empty)', function () {
     cy.task('deleteAllAccounts');
     cy.visit('/users');

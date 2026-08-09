@@ -97,6 +97,7 @@ const exprt = (on, config) => {
   config.env.secret = secret;
   config.env.NL_EMAIL_USER = NL_EMAIL_USER;
   config.env.NL_EMAIL_PASS = NL_EMAIL_PASS;
+  config.env.ROOT_USER = noginConfig.rootUser?.[0];
 
   // We want `process.env` for login credentials
   // Default in the same way as `app.get('env')`
@@ -181,6 +182,28 @@ const exprt = (on, config) => {
      */
     deleteAllAccounts () {
       return removeAccounts({all: true});
+    },
+
+    /**
+     * @returns {Promise<
+     *   import("../../app/server/modules/account-manager.js").
+     *   AccountInfo
+     * >}
+     */
+    async addRootAccount () {
+      const [rootUser] = noginConfig.rootUser;
+      return (await addAccounts({
+        name: ['Root'],
+        email: ['root@example.name'],
+        user: [rootUser],
+        pass: [NL_EMAIL_PASS],
+        country: ['US'],
+        activationCode: [
+          // eslint-disable-next-line @stylistic/max-len -- Long
+          '0bb6ab8966ef06be4bea394871138169$f5eb3f8e56b03d24d5dd025c480daa51e55360cd674c0b31bb20993e153a6cb1'
+        ],
+        activated: [true]
+      }))[0];
     },
     /**
      * Simulates POST to `/signup` and subsequent visit to `/activation?c=`
