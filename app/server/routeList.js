@@ -965,7 +965,6 @@ const routeList = async (app, config) => {
     // console.log('records', records);
 
     return await Promise.all(groups.map(async (group) => {
-      console.log('group', group);
       return {
         success: true,
         groupName: group.groupName,
