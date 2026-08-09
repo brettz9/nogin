@@ -243,7 +243,6 @@
     "@types/uuid": "^11.0.0",
     "acorn": "^8.18.0",
     "axe-core": "^4.13.0",
-    "babel-plugin-transform-async-to-promises": "^0.8.18",
     "bootstrap": "^5.3.8",
     "chai": "^6.2.2",
     "chai-as-promised": "^8.0.2",
