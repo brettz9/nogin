@@ -162,10 +162,9 @@ describe('CLI', function () {
             '--PORT', testPort2,
             '--config', ''
           ], 80000, async (stdout) => {
-            // if (stdout.includes(
-            //   `Express server listening on port ${testPort2}`)
-            // ) {
-            if (stdout.includes('Beginning server...')) {
+            if (stdout.includes(
+              `Express server listening on port ${testPort}`
+            )) {
               try {
                 const res = await fetch(`http://127.0.0.1:${testPort2}`);
                 resolve(
@@ -328,10 +327,11 @@ describe('CLI', function () {
             '--PORT', testPort,
             '--config', ''
           ], 200000, async (stdout) => {
-            // if (stdout.includes(
-            //  `Express server listening on port ${testPort}`)
-            // ) {
-            if (fetching || !stdout.includes('Beginning server...')) {
+            if (fetching ||
+              !stdout.includes(
+                `Express server listening on port ${testPort}`
+              )
+            ) {
               return;
             }
             fetching = true;
@@ -661,7 +661,11 @@ describe('CLI', function () {
           // if (stdout.includes(
           //  `Express server listening on port ${testPort}`)
           // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             return;
           }
           fetching = true;
@@ -696,10 +700,11 @@ describe('CLI', function () {
           '--PORT', testPort,
           '--config', ''
         ], 40000, (stdout) => {
-          // if (stdout.includes(
-          //  `Express server listening on port ${testPort}`)
-          // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             return;
           }
           fetching = true;
@@ -733,10 +738,11 @@ describe('CLI', function () {
           '--PORT', testPort,
           '--config', ''
         ], 40000, (stdout) => {
-          // if (stdout.includes(
-          //  `Express server listening on port ${testPort}`)
-          // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             return;
           }
           fetching = true;
@@ -772,10 +778,11 @@ describe('CLI', function () {
           '--PORT', testPort,
           '--config', ''
         ], 40000, (stdout) => {
-          // if (stdout.includes(
-          //  `Express server listening on port ${testPort}`)
-          // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             return;
           }
           fetching = true;
@@ -808,10 +815,11 @@ describe('CLI', function () {
           '--PORT', testPort,
           '--config', ''
         ], 40000, (stdout) => {
-          // if (stdout.includes(
-          //  `Express server listening on port ${testPort}`)
-          // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             return;
           }
           fetching = true;
@@ -845,10 +853,11 @@ describe('CLI', function () {
           '--PORT', testPort,
           '--config', ''
         ], 40000, (stdout) => {
-          // if (stdout.includes(
-          //  `Express server listening on port ${testPort}`)
-          // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             return;
           }
           fetching = true;
@@ -921,10 +930,11 @@ describe('CLI', function () {
           NL_EMAIL_PASS,
           '--config', ''
         ], 200000, async (stdout) => {
-          // if (stdout.includes(
-          //  `Express server listening on port ${testPort}`)
-          // ) {
-          if (fetching || !stdout.includes('Beginning server...')) {
+          if (fetching ||
+            !stdout.includes(
+              `Express server listening on port ${testPort}`
+            )
+          ) {
             console.log('ssss', stdout);
             return;
           }
