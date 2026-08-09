@@ -893,7 +893,7 @@ describe('CLI', function () {
 
       // SETUP
       // Adding to ensure there is a fresh `signup` below
-      await removeAccounts({all: true});
+      await removeAccounts({all: true, DB_NAME: testDBName});
       await deleteEmails();
 
       /**
@@ -1015,6 +1015,12 @@ describe('CLI', function () {
             ]);
             console.log('FETCHED 2...');
 
+            const signupStatus = signupPostRes.status;
+            const signupPostText = await signupPostRes.text();
+            console.log('signupPostRes.status', signupStatus);
+            console.log('signupPostRes', signupPostText);
+            expect(signupStatus).to.equal(200);
+
             const hasAccountActivation = await waitForEmail({
               subject: 'Account Activation',
               html: [
@@ -1023,14 +1029,11 @@ describe('CLI', function () {
                 '<a href=',
                 'activation?c='
               ]
-            }, 90000, 5000);
+            }, 90000, 10000);
             console.log('HAS-EMAIL-RESULT 1', hasAccountActivation);
             expect(hasAccountActivation).to.be.true;
             await deleteEmails();
             console.log('EMAILS DELETED');
-
-            console.log('signupPostRes.status', signupPostRes.status);
-            console.log('signupPostRes', await signupPostRes.text());
 
             // So lost password can be requested
             await updateAccounts({
@@ -1076,7 +1079,7 @@ describe('CLI', function () {
                 badURLPostText: await postRes.text()
               },
               {
-                signupPostStatus: signupPostRes.status
+                signupPostStatus: signupStatus
               }
             ]);
             cli?.kill();
