@@ -156,6 +156,7 @@ const createServer = async function (options) {
     crossDomainJSRedirects,
     noHelmet,
     noHostValidation,
+    disableRateLimit,
     disableXSRF,
     transferLimit,
     sessionCookieOptions = {
@@ -176,10 +177,13 @@ const createServer = async function (options) {
   const dbOpts = DBFactory.getDefaults(opts);
 
   // Doubles as limiting automated login attempts!
-  const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: RATE_LIMIT
-  });
+  const limiter = disableRateLimit
+    ? null
+    // istanbul ignore next
+    : rateLimit({
+      windowMs: 1 * 60 * 1000, // 1 minute
+      max: RATE_LIMIT
+    });
 
   app.locals.pretty = true;
 
@@ -190,7 +194,9 @@ const createServer = async function (options) {
   app.set('views', join(__dirname, '/views'));
   app.set('view engine', 'js');
 
-  app.use(limiter);
+  if (limiter) {
+    app.use(limiter);
+  }
   // Todo: Use https://github.com/ebourmalo/cookie-encrypter also?
   app.use(cookieParser(secret));
 

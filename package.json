@@ -79,7 +79,7 @@
     "stop-mongo": "kill -2 `pgrep mongo`",
     "mongo:start-test": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
     "watch:server-start": "nodemon ./bin/cli.js -- --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --requireName --SERVE_COVERAGE",
-    "server:start-test": "node ./bin/cli.js --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --requireName --SERVE_COVERAGE",
+    "server:start-test": "node ./bin/cli.js --noPolyfill --useESM --localScripts --config nogin.js --fromURL=https://github.com/brettz9/nogin --fromText=brettz9 --requireName --SERVE_COVERAGE --disableRateLimit",
     "watch:server:start-production": "NODE_ENV=production npm run watch:server:start",
     "server:start-production": "NODE_ENV=production npm run server:start-test",
     "css-stylus": "stylus --sourcemap-inline app/public/css/style.styl",

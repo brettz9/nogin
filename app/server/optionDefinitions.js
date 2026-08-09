@@ -54,6 +54,7 @@ const pkg = JSON.parse(
  *   fromURL: string,
  *   SERVE_COVERAGE: boolean,
  *   RATE_LIMIT: number,
+ *   disableRateLimit: boolean,
  *   disableXSRF: boolean,
  *   noHelmet: boolean,
  *   noHostValidation: boolean,
@@ -334,6 +335,11 @@ const optionDefinitions = [
     name: 'RATE_LIMIT', alias: 'r', type: Number,
     description: 'Used for mitigating DoS attacks; defaults to 700',
     typeLabel: '{underline rate limit}'
+  },
+  {
+    name: 'disableRateLimit', type: Boolean,
+    description: 'Disable rate limiting entirely. Should not be used ' +
+      'in production.'
   },
   {
     name: 'disableXSRF', type: Boolean,
