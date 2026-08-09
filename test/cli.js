@@ -989,7 +989,8 @@ describe('CLI', function () {
           await updateAccounts({
             user: ['bretto'],
             email: [NL_EMAIL_USER],
-            activated: [true]
+            activated: [true],
+            DB_NAME: testDBName
           });
 
           // Check for custom `composeActivationEmailView`
@@ -1199,7 +1200,7 @@ describe('CLI', function () {
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Added 1 accounts: testUser!\n'
       );
-      const accts = await readAccounts();
+      const accts = await readAccounts({DB_NAME: testDBName});
       expect(accts).to.have.lengthOf(1);
       expect(accts[0].user).to.equal('testUser');
     });
@@ -1210,7 +1211,8 @@ describe('CLI', function () {
         user: ['testUser'],
         email: ['test@example.name'],
         pass: ['myPass12345'],
-        activated: [false]
+        activated: [false],
+        DB_NAME: testDBName
       });
       const {stdout, stderr} = await spawnCLI([
         'add',
@@ -1240,7 +1242,7 @@ describe('CLI', function () {
       expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
         'Added 1 accounts: testUser!\n'
       );
-      const accts = await readAccounts();
+      const accts = await readAccounts({DB_NAME: testDBName});
       expect(accts).to.have.lengthOf(1);
       expect(accts[0].user).to.equal('testUser');
     });
@@ -1291,10 +1293,10 @@ describe('CLI', function () {
 
   describe('Read, listIndexes, update, delete existing', function () {
     beforeEach(async () => {
-      await removeAccounts({all: true});
+      await removeAccounts({all: true, DB_NAME: testDBName});
       // Todo: Note that this JSON file wouldn't work if we needed to
       //  test against a working (and private) email as we do for login tests
-      await addAccounts({userFile: ['test/fixtures/addUsers.json']});
+      await addAccounts({userFile: ['test/fixtures/addUsers.json'], DB_NAME: testDBName});
     });
 
     ['read', 'view'].forEach((prop) => {
@@ -1336,7 +1338,7 @@ describe('CLI', function () {
 
         expect(strippedStdout).to.equal(expected);
 
-        const accts = await readAccounts();
+        const accts = await readAccounts({DB_NAME: testDBName});
         expect(accts).to.have.lengthOf(1);
         expect(accts[0].user).to.equal('coco');
       });
@@ -1373,7 +1375,7 @@ describe('CLI', function () {
 
       expect(strippedStdout).to.equal(expected);
 
-      const accts = await readAccounts();
+      const accts = await readAccounts({DB_NAME: testDBName});
       expect(accts).to.have.lengthOf(2);
       try {
         expect(accts[0].user).to.equal('brett');
