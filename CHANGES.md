@@ -10,6 +10,7 @@ Breaking changes:
 - feat: remove deprecated `guest` property
 - fix: supply `command-line-basics` notifier info
 - fix: add session but avoid permanent session without "remember me"
+- fix: switch to more maintained csrf package
 
 ## 7.7.0
 

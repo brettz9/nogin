@@ -6,7 +6,7 @@ import {join, resolve as pathResolve} from 'path';
 
 import express from 'express';
 import {jml} from 'jamilih';
-import csurf from 'csurf';
+import csurfModule from '@dr.pogodin/csurf';
 
 import {
   checkLocaleRoutes, routeGetter, layoutAndTitleGetter
@@ -1900,25 +1900,27 @@ window.NoginPrivs.hasPrivilege = function (priv) {
       //  a dynamic route (we could pre-build if examining all locales in
       //  beginning, but this would need to take into account locales
       //  reusing the same name).
-      const csrf = csurf(
-        parseCLIJSON(csurfOptions)
-      );
+      /* eslint-disable jsdoc/reject-any-type -- Work around package typing */
+      const csrf = /** @type {any} */ (
+        // istanbul ignore next -- Apparent bug with @dr.pogodin/csurf types
+        csurfModule
+      )(parseCLIJSON(csurfOptions));
 
       // Passing `next` here causes problems; we are no longer in middleware,
       //   so make our own `next`
       // eslint-disable-next-line @stylistic/max-len -- Long
       // eslint-disable-next-line promise/prefer-await-to-callbacks -- Middleware
-      csrf(req, res, (err) => {
+      csrf(req, res, (/** @type {any} */ err) => {
         if (err) {
           error = err;
         }
       });
+      /* eslint-enable jsdoc/reject-any-type -- Work around package typing */
     }
 
     return {_, route, routes, error};
   };
 
-  // eslint-disable-next-line sonarjs/csrf -- Need to review
   app.post('/{*path}', async function (req, res, next) {
     const {
       _, route, routes, error

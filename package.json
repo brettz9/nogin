@@ -190,10 +190,10 @@
     "jquery-form-plus": "^1.0.1"
   },
   "dependencies": {
+    "@dr.pogodin/csurf": "^1.17.1",
     "command-line-basics": "^3.0.0",
     "connect-mongo": "^6.0.0",
     "cookie-parser": "^1.4.7",
-    "csurf": "^1.11.0",
     "emailjs": "^5.0.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",
@@ -231,7 +231,6 @@
     "@types/command-line-args": "^5.2.3",
     "@types/command-line-usage": "^5.0.4",
     "@types/cookie-parser": "^1.4.10",
-    "@types/csurf": "^1.11.5",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
     "@types/file-fetch": "^1.6.6",

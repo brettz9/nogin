@@ -364,7 +364,7 @@ const optionDefinitions = [
   },
   {
     name: 'csurfOptions', type: String,
-    description: 'Options to be supplied to csurf. Defaults to ' +
+    description: 'Options to be supplied to @dr.pogodin/csurf. Defaults to ' +
       getChalkTemplateEscape(
         '`{cookie: {signed: true, sameSite: "lax"}`'
       ) +
