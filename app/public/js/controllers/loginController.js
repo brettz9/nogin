@@ -28,7 +28,7 @@ const retrievePasswordSubmit = LoginView.retrievePasswordSubmit(
 
 // bind event listeners to button clicks
 retrievePasswordSubmit.on('click', () => {
-  retrievePasswordForm.submit();
+  retrievePasswordForm.trigger('submit');
 });
 forgotPassword.on('click', () => {
   const retrievePasswordCancel = LoginView.setRetrievePasswordCancel(
@@ -39,7 +39,7 @@ forgotPassword.on('click', () => {
   retrievePasswordCancel.on('click', () => {
     retrievePasswordModal.modal('hide');
     setTimeout(() => {
-      lostPasswordUsername.focus();
+      lostPasswordUsername.trigger('focus');
     }, 0);
   });
 

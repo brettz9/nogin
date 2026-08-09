@@ -1,9 +1,8 @@
 {
   "presets": [
-    ["@babel/preset-env"]
+    ["@babel/preset-env", {}]
   ],
   "plugins": [
-    ["babel-plugin-transform-async-to-promises"],
-    ["@babel/plugin-syntax-top-level-await"]
+    ["babel-plugin-transform-async-to-promises", {}]
   ]
 }

@@ -1296,7 +1296,10 @@ describe('CLI', function () {
       await removeAccounts({all: true, DB_NAME: testDBName});
       // Todo: Note that this JSON file wouldn't work if we needed to
       //  test against a working (and private) email as we do for login tests
-      await addAccounts({userFile: ['test/fixtures/addUsers.json'], DB_NAME: testDBName});
+      await addAccounts({
+        userFile: ['test/fixtures/addUsers.json'],
+        DB_NAME: testDBName
+      });
     });
 
     ['read', 'view'].forEach((prop) => {
