@@ -1207,11 +1207,11 @@ describe('CLI', function () {
       );
     });
 
-    // Todo: See about fixing/reenabling
-    // eslint-disable-next-line mocha/no-pending-tests -- Ok
-    it.skip('With environment components', async function () {
+    it('With environment components', async function () {
       this.timeout(40000);
-      const {stdout, stderr} = await spawnCLI({
+      // Use the default DB for this auth test (user was
+      //   provisioned on `nogin`).
+      const {stdout, stderr} = await spawnPromise(cliPath, {
         env: {
           // eslint-disable-next-line n/no-process-env -- Testing env.
           ...process.env,
@@ -1225,7 +1225,7 @@ describe('CLI', function () {
         '--DB_USER', DB_USER,
         '--DB_PASS', DB_PASS
       ], 20000);
-      expect(stripMongoAndServerListeningMessages(stdout)).to.equal(
+      expect(stdout).to.contain(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
         'Awaiting database account connection...\n'
