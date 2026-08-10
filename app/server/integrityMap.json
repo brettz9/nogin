@@ -15,14 +15,14 @@
     {
       "name": "@fortawesome/fontawesome-free",
       "local": "/node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
-      "integrity": "sha384-AGSGRaBRodcsy1n0F2zMm+LfXuZry/ZJ6nfio36UgMuNBs/AOC8ciJ7py4SgkpoY",
-      "remote": "https://use.fontawesome.com/releases/v6.7.2/css/fontawesome.css"
+      "integrity": "sha384-m8DKa0MtZAZlyNgF18TSkQRYTPDY0sEELpwK2YijfYnVFH8kxiaO6hvopM168nue",
+      "remote": "https://use.fontawesome.com/releases/v7.3.1/css/fontawesome.css"
     },
     {
       "name": "@fortawesome/fontawesome-free/solid",
       "local": "/node_modules/@fortawesome/fontawesome-free/css/solid.min.css",
-      "integrity": "sha384-H/BU8KfYKZ0VK4RJyclToSd6x8TmMY4/Rym2YtHXnGQOUZAoLIYIaOxkIfyTAuVh",
-      "remote": "https://use.fontawesome.com/releases/v6.7.2/css/solid.css"
+      "integrity": "sha384-p/nJzgOJxEnSeUkMQ0nk5oPsUT5x8eOWi6pxU2ls9qcO9B78dCvZk0JSAOXWXUQN",
+      "remote": "https://use.fontawesome.com/releases/v7.3.1/css/solid.css"
     },
     {
       "name": "github-fork-ribbon-css",
@@ -44,8 +44,8 @@
       "name": "jquery-form-plus",
       "global": "jQuery.fn.ajaxSubmit",
       "local": "/node_modules/jquery-form-plus/dist/jquery.form.min.js",
-      "integrity": "sha384-g2OWrlPcE8gfiz6d6C/HiIGzqGIk+mR9rHbjeERxG8XSx8giI8fWhrh2aW0JiMLG",
-      "remote": "https://unpkg.com/jquery-form-plus@2.0.0/dist/jquery.form.min.js"
+      "integrity": "sha384-D3BZtcAHORNR0Rgvtjb14KPFLqWJh4tQNgTYf1kl8pNkGNSKNYbW9B2nL/mS4voy",
+      "remote": "https://unpkg.com/jquery-form-plus@3.0.0/dist/jquery.form.min.js"
     },
     {
       "name": "bootstrap",

@@ -126,7 +126,8 @@ const layoutAndTitleGetter = (config, jml) => {
   //  see also https://jquery.com/download/
   // todo[jquery@>4.0.0]: Update SHA (and path(s) if necessary)
 
-  // todo: Update SHA (and path(s) if necessary) for jquery-form-plus
+  // todo[jquery-form-plus@>3.0.0]: Update SHA (and path(s) if necessary)
+  //   for jquery-form-plus
 
   // todo[@fortawesome/fontawesome-free@>6.7.2]: Update SHA (and path(s)
   //   if necessary)
