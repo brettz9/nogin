@@ -19,3 +19,4 @@ minimumReleaseAgeExclude:
   - eslint-config-ash-nazg@42.2.0
   - eslint-plugin-jsdoc@64.0.2
   - jsdoc-type-pratt-parser@9.0.1
+  - envelope-ts@2.1.0

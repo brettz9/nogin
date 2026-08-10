@@ -201,9 +201,9 @@ importers:
       doiuse:
         specifier: ^6.0.6
         version: 6.0.6
-      envelope:
-        specifier: github:brettz9/node-envelope#ts
-        version: https://codeload.github.com/brettz9/node-envelope/tar.gz/c1bea1473ed42670643bac994f23af55ae6838d5
+      envelope-ts:
+        specifier: ^2.1.0
+        version: 2.1.0
       es-file-traverse:
         specifier: ^3.0.0
         version: 3.0.0(eslint-plugin-import-x@4.17.1(eslint-import-resolver-node@0.3.9(supports-color@5.5.0))(eslint@10.8.1(supports-color@5.5.0))(supports-color@5.5.0))(eslint-plugin-import@2.32.0)(eslint@10.8.1(supports-color@5.5.0))(supports-color@5.5.0)
@@ -4092,9 +4092,8 @@ packages:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
 
-  envelope@https://codeload.github.com/brettz9/node-envelope/tar.gz/c1bea1473ed42670643bac994f23af55ae6838d5:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/brettz9/node-envelope/tar.gz/c1bea1473ed42670643bac994f23af55ae6838d5}
-    version: 2.1.0
+  envelope-ts@2.1.0:
+    resolution: {integrity: sha512-9wNbWp6x/+Jqm3+wkuKcz6WUg7huA4ZtIifjwaf3WdyTIe0FIBfxUbAOb3jI68PfuWeBCKebXbLIz6qNklnpOA==}
     engines: {node: '>=8.0.0'}
 
   environment@1.1.0:
@@ -13533,7 +13532,7 @@ snapshots:
 
   env-paths@2.2.1: {}
 
-  envelope@https://codeload.github.com/brettz9/node-envelope/tar.gz/c1bea1473ed42670643bac994f23af55ae6838d5:
+  envelope-ts@2.1.0:
     dependencies:
       content-disposition: 0.5.4
       content-type: 1.0.5

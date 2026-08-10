@@ -3,6 +3,7 @@
 ## ?
 
 - chore: update jquery-form-plus, font-awesome/free, jamilih
+- test: avoid remaining github-based package
 
 ## 8.0.0
 

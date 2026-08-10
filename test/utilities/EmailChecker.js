@@ -3,7 +3,7 @@
 // Todo: These email methods should be movable into a general utility
 
 import Pop3Command from 'node-pop3'; // , {listify}
-import Envelope from 'envelope';
+import Envelope from 'envelope-ts';
 
 /**
  * @typedef {object} HTMLAndSubject
@@ -65,7 +65,7 @@ async function connectAndGetMessages () {
 
 /**
  * @param {number} messageNum
- * @returns {Promise<import('envelope')>}
+ * @returns {Promise<import('envelope-ts')>}
  */
 async function getEmail (messageNum) {
   const retrStreamString = await popActivatedAccount.RETR(messageNum);
@@ -83,7 +83,7 @@ async function getEmail (messageNum) {
  * Probably only needed in testing, not from command line API.
  * @param {object} [cfg]
  * @param {boolean} [cfg.lastItem]
- * @returns {Promise<import('envelope')[]>}
+ * @returns {Promise<import('envelope-ts')[]>}
  */
 export async function getEmails ({lastItem} = {}) {
   let messageNums = await connectAndGetMessages();
@@ -160,7 +160,7 @@ export async function hasEmail (cfg) {
 }
 
 /**
- * @param {import('envelope')[]} parsedMessages
+ * @param {import('envelope-ts')[]} parsedMessages
  * @param {object} cfg
  * @param {string} cfg.subject
  * @param {string[]} cfg.html

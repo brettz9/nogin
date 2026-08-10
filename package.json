@@ -256,7 +256,7 @@
     "delay": "^7.0.0",
     "delay-cli": "^3.0.0",
     "doiuse": "^6.0.6",
-    "envelope": "github:brettz9/node-envelope#ts",
+    "envelope-ts": "^2.1.0",
     "es-file-traverse": "^3.0.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^10.8.1",
