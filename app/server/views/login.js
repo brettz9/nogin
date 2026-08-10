@@ -55,7 +55,8 @@ const login = ({_, layout, emailPattern, signup}) => {
               'data-name': 'btn_sign_in',
               class: 'btn btn-primary'
             }, [
-              ['span', {class: 'fa fa-lock'}, [_('SignIn')]]
+              ['span', {class: 'fa fa-lock'}],
+              _('SignIn')
             ]]
           ]],
           ['hr'],
