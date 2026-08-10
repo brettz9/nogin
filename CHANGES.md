@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- chore: update jquery-form-plus, font-awesome/free, jamilih
+
 ## 8.0.0
 
 Breaking changes:
