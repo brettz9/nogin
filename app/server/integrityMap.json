@@ -44,8 +44,8 @@
       "name": "jquery-form-plus",
       "global": "jQuery.fn.ajaxSubmit",
       "local": "/node_modules/jquery-form-plus/dist/jquery.form.min.js",
-      "integrity": "sha384-D3BZtcAHORNR0Rgvtjb14KPFLqWJh4tQNgTYf1kl8pNkGNSKNYbW9B2nL/mS4voy",
-      "remote": "https://unpkg.com/jquery-form-plus@3.0.0/dist/jquery.form.min.js"
+      "integrity": "sha384-rjqMYu5jvl9bVapWOPMzniYjEqJUgSDMO4rqslEjXRaHXz8aBUl8HCpdtaY24uMg",
+      "remote": "https://unpkg.com/jquery-form-plus@3.1.1/dist/jquery.form.min.js"
     },
     {
       "name": "bootstrap",

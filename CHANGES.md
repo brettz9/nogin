@@ -1,8 +1,9 @@
 # CHANGES for nogin
 
-## ?
+## 8.0.1
 
 - chore: update jquery-form-plus, font-awesome/free, jamilih
+- chore: update peerDeps. and integrity map; lint
 - test: avoid remaining github-based package
 
 ## 8.0.0

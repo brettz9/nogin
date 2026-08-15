@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -180,14 +180,14 @@
   "homepage": "https://github.com/brettz9/nogin",
   "bugs": "https://github.com/brettz9/nogin/issues",
   "peerDependencies": {
-    "@fortawesome/fontawesome-free": "^6.6.0",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "@popperjs/core": "^2.11.8",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.8",
     "github-fork-ribbon-css": "^0.2.3",
-    "intl-dom": "^0.20.0",
-    "jamilih": "^0.60.0",
-    "jquery": "^3.7.1",
-    "jquery-form-plus": "^1.0.1"
+    "intl-dom": "^0.21.1",
+    "jamilih": "^0.68.0",
+    "jquery": "^4.0.0",
+    "jquery-form-plus": "^3.1.1"
   },
   "dependencies": {
     "@dr.pogodin/csurf": "^1.17.1",
