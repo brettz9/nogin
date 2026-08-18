@@ -2,12 +2,12 @@
 /* eslint-disable unicorn/no-this-outside-of-class -- Convenient */
 
 /**
-* @typedef {object} EmailInfoElements
-* @property {JQuery} name
-* @property {JQuery} email
-* @property {JQuery} user
-* @property {JQuery} pass
-*/
+ * @typedef {object} EmailInfoElements
+ * @property {JQuery} name
+ * @property {JQuery} email
+ * @property {JQuery} user
+ * @property {JQuery} pass
+ */
 
 const EmailValidatorView = {
   /**

@@ -9,7 +9,7 @@
  *   action2: string
  * }} cfg
  * @returns {import('../../utilities/ajaxFormClientSideValidate.js').
-   *   JQueryWithAjaxForm}
+ *   JQueryWithAjaxForm}
  */
 const populateForm = (sel, {
   heading,

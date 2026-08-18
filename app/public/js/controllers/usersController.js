@@ -196,7 +196,7 @@ function showLockedAlertRedirect ({type}) {
  *   "FailureSubmittingUserInfo"} [cfg.type]
  * @param {string} [cfg.message]
  * @returns {void}
-*/
+ */
 function showLockedErrorAlert ({type, message}) {
   const lockedAlertDialog = UsersView.onShowLockedErrorAlert({
     type, message, user: info.user

@@ -31,18 +31,18 @@ export type EmailDispatcherConfig = {
 };
 export type Internationalizer = import('intl-dom').I18NCallback<string>;
 /**
-* @typedef {object} EmailDispatcherConfig
-* @property {string} NL_EMAIL_HOST
-* @property {string} NL_EMAIL_USER E.g., your-email-address@example.name
-* @property {string} NL_EMAIL_PASS E.g., 1234
-* @property {string} NL_EMAIL_FROM
-* @property {string} NL_SITE_URL
-* @property {number} NS_EMAIL_TIMEOUT
-* @property {import('../views/composeResetPasswordEmail.js').
-*   ComposeResetPasswordEmail} composeResetPasswordEmailView
-* @property {import('../views/composeActivationEmail.js').
-*   ComposeActivationEmail} composeActivationEmailView
-*/
+ * @typedef {object} EmailDispatcherConfig
+ * @property {string} NL_EMAIL_HOST
+ * @property {string} NL_EMAIL_USER E.g., your-email-address@example.name
+ * @property {string} NL_EMAIL_PASS E.g., 1234
+ * @property {string} NL_EMAIL_FROM
+ * @property {string} NL_SITE_URL
+ * @property {number} NS_EMAIL_TIMEOUT
+ * @property {import('../views/composeResetPasswordEmail.js').
+ *   ComposeResetPasswordEmail} composeResetPasswordEmailView
+ * @property {import('../views/composeActivationEmail.js').
+ *   ComposeActivationEmail} composeActivationEmailView
+ */
 /**
  * @typedef {import('intl-dom').I18NCallback<string>} Internationalizer
  */
@@ -70,10 +70,10 @@ declare class EmailDispatcher {
      */
     dispatchResetPasswordLink(account: UserAccountInfo, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders>;
     /**
-    * @typedef {object} EmailInfo
-    * @property {string} data
-    * @property {boolean} alternative
-    */
+     * @typedef {object} EmailInfo
+     * @property {string} data
+     * @property {boolean} alternative
+     */
     /**
      * @typedef {object} UserAccountInfo
      * @property {string} name

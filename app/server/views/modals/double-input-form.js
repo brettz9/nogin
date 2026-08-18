@@ -2,14 +2,14 @@ import singleInputForm from './single-input-form.js';
 
 /**
  * @param {{
-*   _: import('intl-dom').I18NCallback,
-*   type: string,
-*   inputDirections: string,
-*   descriptionDirections: string,
-*   autocomplete?: string[]
-* }} cfg
-* @returns {import('jamilih').JamilihArray}
-*/
+ *   _: import('intl-dom').I18NCallback,
+ *   type: string,
+ *   inputDirections: string,
+ *   descriptionDirections: string,
+ *   autocomplete?: string[]
+ * }} cfg
+ * @returns {import('jamilih').JamilihArray}
+ */
 const doubleInputForm = ({
   _, type, inputDirections, descriptionDirections, autocomplete
 }) => {

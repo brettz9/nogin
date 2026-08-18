@@ -5,12 +5,12 @@ export type EmailInfoElements = {
     pass: JQuery;
 };
 /**
-* @typedef {object} EmailInfoElements
-* @property {JQuery} name
-* @property {JQuery} email
-* @property {JQuery} user
-* @property {JQuery} pass
-*/
+ * @typedef {object} EmailInfoElements
+ * @property {JQuery} name
+ * @property {JQuery} email
+ * @property {JQuery} user
+ * @property {JQuery} pass
+ */
 declare const EmailValidatorView: {
     /**
      * @returns {{

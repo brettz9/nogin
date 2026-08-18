@@ -39,7 +39,7 @@ export function setEmailConfig ({
 
 /**
  * @returns {Promise<string[]>} Message numbers
-*/
+ */
 async function connectAndGetMessages () {
   popActivatedAccount = new Pop3Command({
     host: NL_EMAIL_HOST,
@@ -59,9 +59,9 @@ async function connectAndGetMessages () {
 }
 
 /**
-* @external EnvelopeMessage
-* @see https://github.com/jhermsmeier/node-envelope#user-content-parsing-an-email
-*/
+ * @external EnvelopeMessage
+ * @see https://github.com/jhermsmeier/node-envelope#user-content-parsing-an-email
+ */
 
 /**
  * @param {number} messageNum

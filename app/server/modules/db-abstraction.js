@@ -7,10 +7,10 @@
  */
 
 /**
-* Has other properties, but not required here.
-* @typedef {import('mongodb').InsertOneResult} InsertOneWriteOpResult
-* @see https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html#~insertOneWriteOpResult
-*/
+ * Has other properties, but not required here.
+ * @typedef {import('mongodb').InsertOneResult} InsertOneWriteOpResult
+ * @see https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html#~insertOneWriteOpResult
+ */
 
 /**
  * Has other properties, but not required here.
@@ -28,12 +28,12 @@
  */
 
 /**
-* @typedef {object} DBConfigObject
-* @property {string} DB_NAME
-* @property {string} DB_URL
-* @property {import('./getLogger.js').Logger} [log]
-* @property {import('./email-dispatcher.js').Internationalizer} _
-*/
+ * @typedef {object} DBConfigObject
+ * @property {string} DB_NAME
+ * @property {string} DB_URL
+ * @property {import('./getLogger.js').Logger} [log]
+ * @property {import('./email-dispatcher.js').Internationalizer} _
+ */
 
 /**
  * Class for abstracting out database calls.

@@ -1,9 +1,9 @@
 /**
  * @param {{
-*   _: import('intl-dom').I18NCallback,
-*   emailPattern: string
-* }} cfg
-*/
+ *   _: import('intl-dom').I18NCallback,
+ *   emailPattern: string
+ * }} cfg
+ */
 declare const lostPassword: ({ _, emailPattern }: {
     _: import('intl-dom').I18NCallback;
     emailPattern: string;

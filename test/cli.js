@@ -87,10 +87,10 @@ const stripWarnings = (s) => {
 };
 
 /**
-* @typedef {object} SpawnResults
-* @property {string} stdout
-* @property {string} stderr
-*/
+ * @typedef {object} SpawnResults
+ * @property {string} stdout
+ * @property {string} stderr
+ */
 
 const cliPath = pathResolve(__dirname, '../bin/cli.js');
 const testPort = '1234';

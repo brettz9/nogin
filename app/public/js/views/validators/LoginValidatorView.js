@@ -3,10 +3,10 @@
 const {_} = Nogin;
 
 /**
-* @typedef {object} LoginInfoElements
-* @property {HTMLInputElement} user
-* @property {HTMLInputElement} pass
-*/
+ * @typedef {object} LoginInfoElements
+ * @property {HTMLInputElement} user
+ * @property {HTMLInputElement} pass
+ */
 
 const LoginValidatorView = {
   /**

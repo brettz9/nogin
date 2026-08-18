@@ -3,7 +3,7 @@
 /**
  * Original project: https://github.com/braitsch/node-login.
  * @copyright (c) 2013-2018 Stephen Braitsch
-*/
+ */
 
 import * as http from 'http';
 import {join, resolve as pathResolve} from 'path';

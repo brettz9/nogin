@@ -277,11 +277,11 @@ declare class AccountManager {
      */
     activateAccount(activationCode: string): Promise<import('mongodb').UpdateResult | import('mongodb').Document>;
     /**
-    * @callback ChangedEmailHandler
-    * @param {Partial<AccountInfo>} acct
-    * @param {string} user Since not provided on `acct`
-    * @returns {void}
-    */
+     * @callback ChangedEmailHandler
+     * @param {Partial<AccountInfo>} acct
+     * @param {string} user Since not provided on `acct`
+     * @returns {void}
+     */
     /**
      * @param {Partial<AccountInfo> & {
      *   user: string

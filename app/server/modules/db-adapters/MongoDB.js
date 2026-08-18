@@ -88,11 +88,11 @@ class MongoDB extends DBAbstraction {
 
   /**
    * @returns {Promise<
-  *   import('mongodb').Collection<
-  *     import('../account-manager.js').PrivilegeInfo
-  *   >
-  * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
-  */
+   *   import('mongodb').Collection<
+   *     import('../account-manager.js').PrivilegeInfo
+   *   >
+   * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+   */
   async getPrivileges () {
     // eslint-disable-next-line @stylistic/max-len -- Long
     const privileges = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (

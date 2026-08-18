@@ -259,7 +259,7 @@ function showLockedAlert ({type}) {
  *   "FailureSubmittingUserInfo"} [cfg.type]
  * @param {string} [cfg.message]
  * @returns {void}
-*/
+ */
 function showLockedErrorAlert ({type, message}) {
   const lockedAlertDialog = HomeView.onShowLockedErrorAlert({type, message});
   lockedAlertDialog.modal('show');

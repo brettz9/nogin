@@ -1,8 +1,8 @@
 /**
  * @param {{
-*   _: import('intl-dom').I18NCallback
-* }} cfg
-*/
+ *   _: import('intl-dom').I18NCallback
+ * }} cfg
+ */
 const formErrors = ({_}) => {
   return ['div', {class: 'modal-form-errors modal fade'}, [
     ['div', {class: 'modal-dialog', role: 'dialog'}, [

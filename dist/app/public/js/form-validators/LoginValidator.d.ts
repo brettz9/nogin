@@ -7,10 +7,10 @@ declare const LoginValidator: {
      */
     validateForm(): boolean;
     /**
-    * Bind a simple alert window to this controller to display any errors.
-    * @param {"MismatchUserDataFormat"} [msg]
-    * @returns {void}
-    */
+     * Bind a simple alert window to this controller to display any errors.
+     * @param {"MismatchUserDataFormat"} [msg]
+     * @returns {void}
+     */
     showLoginError(msg?: "MismatchUserDataFormat"): void;
 };
 export default LoginValidator;

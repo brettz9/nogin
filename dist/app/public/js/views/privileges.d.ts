@@ -14,13 +14,13 @@ declare const PrivilegesView: {
     getRemovePrivilegeFromGroup(): JQuery<HTMLElement>;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
-    *   JQueryWithModal} `HTMLDivElement`
-    */
+     *   JQueryWithModal} `HTMLDivElement`
+     */
     createPrivilegeModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
-    *   JQueryWithModal} `HTMLDivElement`
-    */
+     *   JQueryWithModal} `HTMLDivElement`
+     */
     editPrivilegeModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
@@ -36,8 +36,8 @@ declare const PrivilegesView: {
     /**
      * @param {JQuery} editPrivilegeModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
-    *   JQueryWithAjaxForm} `HTMLFormElement`
-    */
+     *   JQueryWithAjaxForm} `HTMLFormElement`
+     */
     editPrivilegeForm(editPrivilegeModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`

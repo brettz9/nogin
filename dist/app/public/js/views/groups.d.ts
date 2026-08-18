@@ -43,13 +43,13 @@ declare const GroupsView: {
     addPrivilegeToGroupSubmit(addPrivilegeToGroupModal: JQuery): JQuery;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
-    *   JQueryWithModal} `HTMLDivElement`
-    */
+     *   JQueryWithModal} `HTMLDivElement`
+     */
     createGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
-    *   JQueryWithModal} `HTMLDivElement`
-    */
+     *   JQueryWithModal} `HTMLDivElement`
+     */
     renameGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('../views/utilities/AlertDialog.js').
@@ -65,8 +65,8 @@ declare const GroupsView: {
     /**
      * @param {JQuery} renameGroupModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
-    *   JQueryWithAjaxForm} `HTMLFormElement`
-    */
+     *   JQueryWithAjaxForm} `HTMLFormElement`
+     */
     renameGroupForm(renameGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
      * @param {JQuery} addUserToGroupModal `HTMLDivElement`
@@ -136,8 +136,8 @@ declare const GroupsView: {
     setDeleteGroup(group: string): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {import('./utilities/AlertDialog.js').
-    *   JQueryWithModal} `HTMLDivElement`
-    */
+     *   JQueryWithModal} `HTMLDivElement`
+     */
     setRemoveUserFromGroup(): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @returns {JQuery<HTMLElement>}

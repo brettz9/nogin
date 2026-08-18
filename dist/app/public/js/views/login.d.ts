@@ -50,24 +50,24 @@ declare const LoginView: {
      */
     getForgotPassword(loginModal: JQuery): JQuery;
     /**
-    * @param {JQuery} loginModal
-    * @returns {JQuery} `HTMLButtonElement`
-    */
+     * @param {JQuery} loginModal
+     * @returns {JQuery} `HTMLButtonElement`
+     */
     getRememberMeButton(loginModal: JQuery): JQuery;
     /**
-    * @param {JQuery} loginModal
-    * @returns {boolean}
-    */
+     * @param {JQuery} loginModal
+     * @returns {boolean}
+     */
     isRememberMeChecked(loginModal: JQuery): boolean;
     /**
-    * @param {JQuery} retrievePasswordModal `HTMLDivElement`
-    * @returns {JQuery}
-    */
+     * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+     * @returns {JQuery}
+     */
     setRetrievePasswordCancel(retrievePasswordModal: JQuery): JQuery;
     /**
-    * @param {JQuery} loginModal
-    * @returns {void}
-    */
+     * @param {JQuery} loginModal
+     * @returns {void}
+     */
     toggleCheckSquare(loginModal: JQuery): void;
     /**
      * @param {JQuery} retrievePasswordModal `HTMLDivElement`

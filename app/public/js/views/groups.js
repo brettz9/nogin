@@ -125,14 +125,14 @@ const GroupsView = {
 
   /**
    * @returns {import('../views/utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   createGroupModal () {
     const createGroupModal =
       /**
-      * @type {import('../views/utilities/AlertDialog.js').
-      *   JQueryWithModal}
-      */ (
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
         $('#createGroup')
       );
     createGroupModal.modal({
@@ -143,14 +143,14 @@ const GroupsView = {
 
   /**
    * @returns {import('../views/utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   renameGroupModal () {
     const renameGroupModal =
       /**
-      * @type {import('../views/utilities/AlertDialog.js').
-      *   JQueryWithModal}
-      */ (
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
         $('#renameGroup')
       );
     renameGroupModal.modal({
@@ -166,9 +166,9 @@ const GroupsView = {
   addUserToGroupModal () {
     const addUserToGroupModal =
       /**
-      * @type {import('../views/utilities/AlertDialog.js').
-      *   JQueryWithModal}
-      */ (
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
         $('#addUserToGroup')
       );
     addUserToGroupModal.modal({
@@ -195,14 +195,14 @@ const GroupsView = {
   /**
    * @param {JQuery} renameGroupModal `HTMLDivElement`
    * @returns {import('../utilities/ajaxFormClientSideValidate.js').
-  *   JQueryWithAjaxForm} `HTMLFormElement`
-  */
+   *   JQueryWithAjaxForm} `HTMLFormElement`
+   */
   renameGroupForm (renameGroupModal) {
     return (
       /**
-      * @type {import('../utilities/ajaxFormClientSideValidate.js').
-      * JQueryWithAjaxForm}
-      */
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       * JQueryWithAjaxForm}
+       */
       (renameGroupModal.find('#renameGroup-form'))
     );
   },
@@ -215,9 +215,9 @@ const GroupsView = {
   addUserToGroupForm (addUserToGroupModal) {
     return (
       /**
-      * @type {import('../utilities/ajaxFormClientSideValidate.js').
-      * JQueryWithAjaxForm}
-      */
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       * JQueryWithAjaxForm}
+       */
       (addUserToGroupModal.find('#addUserToGroup-form'))
     );
   },
@@ -335,8 +335,8 @@ const GroupsView = {
 
   /**
    * @returns {import('./utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   setRemoveUserFromGroup () {
     const removeUserFromGroupConfirmDialog = ConfirmDialog.populate({
       type: 'removeUserFromGroup',

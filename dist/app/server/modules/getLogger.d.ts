@@ -9,11 +9,11 @@ export type Logger = ((key: string, substitutions?: {
     _: import('../modules/email-dispatcher.js').Internationalizer;
 };
 /**
-* @typedef {object} LoggerOptions
-* @property {string} [loggerLocale="en-US"]
-* @property {boolean} [noLogging=false]
-* @property {boolean} [errorLog=false]
-*/
+ * @typedef {object} LoggerOptions
+ * @property {string} [loggerLocale="en-US"]
+ * @property {boolean} [noLogging=false]
+ * @property {boolean} [errorLog=false]
+ */
 /**
  * `key`
  * `substitutions` - Values for substitution. Defaults to `{}`

@@ -1,1 +1,1 @@
-{"version":3,"file":"accessAPI.d.ts","sourceRoot":"","sources":["../../../../app/server/views/accessAPI.js"],"names":[],"mappings":"AAAA;;;;;EAKE;AACF,QAAA,MAAM,SAAS,kBALJ;IACP,CAAC,EAAE,OAAO,UAAU,EAAE,YAAY,CAAC;IACnC,MAAM,EAAE,OAAO,kBAAkB,EAAE,cAAc,CAAA;CAClD,4CAeF,CAAC;eAEa,SAAS"}
+{"version":3,"file":"accessAPI.d.ts","sourceRoot":"","sources":["../../../../app/server/views/accessAPI.js"],"names":[],"mappings":"AAAA;;;;;GAKG;AACH,QAAA,MAAM,SAAS,kBALJ;IACN,CAAC,EAAE,OAAO,UAAU,EAAE,YAAY,CAAC;IACnC,MAAM,EAAE,OAAO,kBAAkB,EAAE,cAAc,CAAA;CAClD,4CAeH,CAAC;eAEa,SAAS"}

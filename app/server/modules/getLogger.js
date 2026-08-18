@@ -3,11 +3,11 @@ import {i18n} from './i18n.js';
 const setI18n = i18n();
 
 /**
-* @typedef {object} LoggerOptions
-* @property {string} [loggerLocale="en-US"]
-* @property {boolean} [noLogging=false]
-* @property {boolean} [errorLog=false]
-*/
+ * @typedef {object} LoggerOptions
+ * @property {string} [loggerLocale="en-US"]
+ * @property {boolean} [noLogging=false]
+ * @property {boolean} [errorLog=false]
+ */
 
 /**
  * `key`

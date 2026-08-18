@@ -35,11 +35,11 @@ declare class MongoDB extends DBAbstraction {
     getGroups(): Promise<import('mongodb').Collection<import('../account-manager.js').GroupInfo>>;
     /**
      * @returns {Promise<
-    *   import('mongodb').Collection<
-    *     import('../account-manager.js').PrivilegeInfo
-    *   >
-    * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
-    */
+     *   import('mongodb').Collection<
+     *     import('../account-manager.js').PrivilegeInfo
+     *   >
+     * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
+     */
     getPrivileges(): Promise<import('mongodb').Collection<import('../account-manager.js').PrivilegeInfo>>;
 }
 export default MongoDB;

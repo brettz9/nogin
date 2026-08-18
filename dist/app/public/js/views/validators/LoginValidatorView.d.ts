@@ -3,10 +3,10 @@ export type LoginInfoElements = {
     pass: HTMLInputElement;
 };
 /**
-* @typedef {object} LoginInfoElements
-* @property {HTMLInputElement} user
-* @property {HTMLInputElement} pass
-*/
+ * @typedef {object} LoginInfoElements
+ * @property {HTMLInputElement} user
+ * @property {HTMLInputElement} pass
+ */
 declare const LoginValidatorView: {
     /**
      * @returns {LoginInfoElements}

@@ -35,7 +35,7 @@ declare const HomeView: {
      * @param {"AppearsChangingEmail"} cfg.type
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
-    */
+     */
     onShowConfirmation({ type }: {
         type: "AppearsChangingEmail";
     }): import('./utilities/AlertDialog.js').JQueryWithModal;

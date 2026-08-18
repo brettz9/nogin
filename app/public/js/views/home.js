@@ -82,7 +82,7 @@ const HomeView = {
    * @param {"AppearsChangingEmail"} cfg.type
    * @returns {import('./utilities/AlertDialog.js').
    *   JQueryWithModal} `HTMLDivElement`
-  */
+   */
   onShowConfirmation ({type}) {
     return ConfirmDialog.populate({
       type: 'notice',

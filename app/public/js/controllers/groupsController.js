@@ -500,7 +500,7 @@ function showLockedAlertReload ({type}) {
  *   "FailureSubmittingGroupInfo"} [cfg.type]
  * @param {string} [cfg.message]
  * @returns {void}
-*/
+ */
 function showLockedErrorAlert ({type, message}) {
   const lockedAlertDialog = GroupsView.onShowLockedErrorAlert({
     type, message, group

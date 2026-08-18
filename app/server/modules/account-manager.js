@@ -30,40 +30,40 @@ const builtInPrivileges = new Set([
 ]);
 
 /**
-  * @typedef {object} AccountInfo
-  * @property {string} [_id] Auto-set
-  * @property {string} [id]
-  * @property {string} user
-  * @property {string} name
-  * @property {string} email
-  * @property {string} country
-  * @property {string} pass Will be overwritten with hash
-  * @property {number} [passVer] Auto-generated version.
-  * @property {number} [date] Auto-generated timestamp.
-  * @property {boolean} [activated] Auto-set
-  * @property {string} [activationCode] Auto-set
-  * @property {string} [unactivatedEmail]
-  * @property {number} [activationRequestDate] Timestamp
-  * @property {string} [cookie] Auto-set
-  * @property {string} [ip] Auto-set
-  * @property {string} [passKey] Auto-set and unset
-  */
+ * @typedef {object} AccountInfo
+ * @property {string} [_id] Auto-set
+ * @property {string} [id]
+ * @property {string} user
+ * @property {string} name
+ * @property {string} email
+ * @property {string} country
+ * @property {string} pass Will be overwritten with hash
+ * @property {number} [passVer] Auto-generated version.
+ * @property {number} [date] Auto-generated timestamp.
+ * @property {boolean} [activated] Auto-set
+ * @property {string} [activationCode] Auto-set
+ * @property {string} [unactivatedEmail]
+ * @property {number} [activationRequestDate] Timestamp
+ * @property {string} [cookie] Auto-set
+ * @property {string} [ip] Auto-set
+ * @property {string} [passKey] Auto-set and unset
+ */
 
 /**
-  * @typedef {object} AccountInfoFilter
-  * @property {Object<"$in",string[]>} [user]
-  * @property {Object<"$in",string[]>} [_id]
-  * @property {Object<"$in",string[]>} [name]
-  * @property {Object<"$in",string[]>} [email]
-  * @property {Object<"$in",string[]>} [country]
-  * @property {Object<"$in",string[]>} [pass]
-  * @property {Object<"$in",number[]>} [passVer]
-  * @property {Object<"$in",number[]>} [date] Timestamp
-  * @property {Object<"$in",boolean[]>} [activated]
-  * @property {Object<"$in",string[]>} [activationCode]
-  * @property {Object<"$in",string[]>} [unactivatedEmail]
-  * @property {Object<"$in",number[]>} [activationRequestDate] Timestamp
-  */
+ * @typedef {object} AccountInfoFilter
+ * @property {Object<"$in",string[]>} [user]
+ * @property {Object<"$in",string[]>} [_id]
+ * @property {Object<"$in",string[]>} [name]
+ * @property {Object<"$in",string[]>} [email]
+ * @property {Object<"$in",string[]>} [country]
+ * @property {Object<"$in",string[]>} [pass]
+ * @property {Object<"$in",number[]>} [passVer]
+ * @property {Object<"$in",number[]>} [date] Timestamp
+ * @property {Object<"$in",boolean[]>} [activated]
+ * @property {Object<"$in",string[]>} [activationCode]
+ * @property {Object<"$in",string[]>} [unactivatedEmail]
+ * @property {Object<"$in",number[]>} [activationRequestDate] Timestamp
+ */
 
 /**
  * @typedef {object} GroupInfo
@@ -1089,11 +1089,11 @@ class AccountManager {
   }
 
   /**
-  * @callback ChangedEmailHandler
-  * @param {Partial<AccountInfo>} acct
-  * @param {string} user Since not provided on `acct`
-  * @returns {void}
-  */
+   * @callback ChangedEmailHandler
+   * @param {Partial<AccountInfo>} acct
+   * @param {string} user Since not provided on `acct`
+   * @returns {void}
+   */
 
   /**
    * @param {Partial<AccountInfo> & {

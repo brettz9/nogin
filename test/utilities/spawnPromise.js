@@ -1,12 +1,12 @@
 import {spawn} from 'child_process';
 
 /**
-* @callback EventWatcher
-* @param {string} stdout Aggregate stdout
-* @param {string} [data]
-* @param {import('node:child_process').ChildProcess} [cli]
-* @returns {void|Promise<void>}
-*/
+ * @callback EventWatcher
+ * @param {string} stdout Aggregate stdout
+ * @param {string} [data]
+ * @param {import('node:child_process').ChildProcess} [cli]
+ * @returns {void|Promise<void>}
+ */
 
 /**
  * @typedef {number} Integer

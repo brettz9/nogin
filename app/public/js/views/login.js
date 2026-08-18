@@ -102,17 +102,17 @@ const LoginView = {
   },
 
   /**
-  * @param {JQuery} loginModal
-  * @returns {JQuery} `HTMLButtonElement`
-  */
+   * @param {JQuery} loginModal
+   * @returns {JQuery} `HTMLButtonElement`
+   */
   getRememberMeButton (loginModal) {
     return loginModal.find('button.remember-me');
   },
 
   /**
-  * @param {JQuery} loginModal
-  * @returns {boolean}
-  */
+   * @param {JQuery} loginModal
+   * @returns {boolean}
+   */
   isRememberMeChecked (loginModal) {
     return this.getRememberMeButton(loginModal).find('span').hasClass(
       'fa-square-check'
@@ -120,9 +120,9 @@ const LoginView = {
   },
 
   /**
-  * @param {JQuery} retrievePasswordModal `HTMLDivElement`
-  * @returns {JQuery}
-  */
+   * @param {JQuery} retrievePasswordModal `HTMLDivElement`
+   * @returns {JQuery}
+   */
   setRetrievePasswordCancel (retrievePasswordModal) {
     return this.retrievePasswordCancel(retrievePasswordModal).text(
       /** @type {string} */ (Nogin._('Cancel'))
@@ -130,9 +130,9 @@ const LoginView = {
   },
 
   /**
-  * @param {JQuery} loginModal
-  * @returns {void}
-  */
+   * @param {JQuery} loginModal
+   * @returns {void}
+   */
   toggleCheckSquare (loginModal) {
     const span = this.getRememberMeButton(loginModal).find('span');
     // todo[cypress@>=16.0.0]: class checking: remove this disabling of

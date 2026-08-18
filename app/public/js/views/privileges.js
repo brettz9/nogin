@@ -58,14 +58,14 @@ const PrivilegesView = {
 
   /**
    * @returns {import('../views/utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   createPrivilegeModal () {
     const createPrivilegeModal =
       /**
-      * @type {import('../views/utilities/AlertDialog.js').
-      *   JQueryWithModal}
-      */ (
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
         $('#createPrivilege')
       );
     createPrivilegeModal.modal({
@@ -76,14 +76,14 @@ const PrivilegesView = {
 
   /**
    * @returns {import('../views/utilities/AlertDialog.js').
-  *   JQueryWithModal} `HTMLDivElement`
-  */
+   *   JQueryWithModal} `HTMLDivElement`
+   */
   editPrivilegeModal () {
     const editPrivilegeModal =
       /**
-      * @type {import('../views/utilities/AlertDialog.js').
-      *   JQueryWithModal}
-      */ (
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
         $('#editPrivilege')
       );
     editPrivilegeModal.modal({
@@ -99,9 +99,9 @@ const PrivilegesView = {
   addPrivilegeToGroupModal () {
     const addPrivilegeToGroupModal =
       /**
-      * @type {import('../views/utilities/AlertDialog.js').
-      *   JQueryWithModal}
-      */ (
+       * @type {import('../views/utilities/AlertDialog.js').
+       *   JQueryWithModal}
+       */ (
         $('#addPrivilegeToGroup')
       );
     addPrivilegeToGroupModal.modal({
@@ -128,14 +128,14 @@ const PrivilegesView = {
   /**
    * @param {JQuery} editPrivilegeModal `HTMLDivElement`
    * @returns {import('../utilities/ajaxFormClientSideValidate.js').
-  *   JQueryWithAjaxForm} `HTMLFormElement`
-  */
+   *   JQueryWithAjaxForm} `HTMLFormElement`
+   */
   editPrivilegeForm (editPrivilegeModal) {
     return (
       /**
-      * @type {import('../utilities/ajaxFormClientSideValidate.js').
-      * JQueryWithAjaxForm}
-      */
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       * JQueryWithAjaxForm}
+       */
       (editPrivilegeModal.find('#editPrivilege-form'))
     );
   },
@@ -148,9 +148,9 @@ const PrivilegesView = {
   addPrivilegeToGroupForm (addPrivilegeToGroupModal) {
     return (
       /**
-      * @type {import('../utilities/ajaxFormClientSideValidate.js').
-      * JQueryWithAjaxForm}
-      */
+       * @type {import('../utilities/ajaxFormClientSideValidate.js').
+       * JQueryWithAjaxForm}
+       */
       (addPrivilegeToGroupModal.find('#addPrivilegeToGroup-form'))
     );
   },

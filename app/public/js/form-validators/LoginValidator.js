@@ -33,10 +33,10 @@ const LoginValidator = {
   },
 
   /**
-  * Bind a simple alert window to this controller to display any errors.
-  * @param {"MismatchUserDataFormat"} [msg]
-  * @returns {void}
-  */
+   * Bind a simple alert window to this controller to display any errors.
+   * @param {"MismatchUserDataFormat"} [msg]
+   * @returns {void}
+   */
   showLoginError (msg) {
     const loginErrors = AlertDialog.populate({
       heading: LoginValidatorView.errorMessages.LoginFailure,

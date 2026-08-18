@@ -1,8 +1,8 @@
 /**
  * @param {{
-*   _: import('intl-dom').I18NCallback
-* }} cfg
-*/
+ *   _: import('intl-dom').I18NCallback
+ * }} cfg
+ */
 declare const resetPassword: ({ _ }: {
     _: import('intl-dom').I18NCallback;
 }) => (string | (string | (string | ((string | (string | (string | ((string | {

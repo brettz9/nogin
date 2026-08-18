@@ -407,7 +407,7 @@ function showLockedAlertReload ({type}) {
  *   "FailureSubmittingPrivilegeInfo"} [cfg.type]
  * @param {string} [cfg.message]
  * @returns {void}
-*/
+ */
 function showLockedErrorAlert ({type, message}) {
   const lockedAlertDialog = PrivilegesView.onShowLockedErrorAlert({
     type, message, privilege

@@ -40,14 +40,14 @@ import {
 import noginConfig from '../../nogin.js';
 
 /**
-* @external CypressOn
-* @see https://docs.cypress.io/api/plugins/writing-a-plugin.html#on
-*/
+ * @external CypressOn
+ * @see https://docs.cypress.io/api/plugins/writing-a-plugin.html#on
+ */
 
 /**
-* @external CypressConfig
-* @see https://docs.cypress.io/api/plugins/writing-a-plugin.html#config
-*/
+ * @external CypressConfig
+ * @see https://docs.cypress.io/api/plugins/writing-a-plugin.html#config
+ */
 
 /**
  * @param {CypressOn} on See {@link https://docs.cypress.io/api/plugins/writing-a-plugin.html#on}
@@ -470,9 +470,9 @@ const exprt = (on, config) => {
     },
 
     /**
-    * @external ESLintMessage
-    * @see https://eslint.org/docs/developer-guide/nodejs-api#cliengineexecuteonfiles
-    */
+     * @external ESLintMessage
+     * @see https://eslint.org/docs/developer-guide/nodejs-api#cliengineexecuteonfiles
+     */
 
     /**
      * @param {string} text

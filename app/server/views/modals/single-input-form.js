@@ -1,13 +1,13 @@
 /**
  * @param {{
-*   _: import('intl-dom').I18NCallback,
-*   type: string,
-*   inputDirections: string
-*   autocomplete?: string[]
-*   additionalFields?: import('jamilih').JamilihArray[]
-* }} cfg
-* @returns {import('jamilih').JamilihArray}
-*/
+ *   _: import('intl-dom').I18NCallback,
+ *   type: string,
+ *   inputDirections: string
+ *   autocomplete?: string[]
+ *   additionalFields?: import('jamilih').JamilihArray[]
+ * }} cfg
+ * @returns {import('jamilih').JamilihArray}
+ */
 const singleInputForm = ({
   _, type, inputDirections, autocomplete,
   additionalFields = []

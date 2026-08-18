@@ -558,10 +558,10 @@ const routeList = async (app, config) => {
 
       const accounts =
         /**
-        * @type {(import('./modules/account-manager.js').AccountInfo & {
-        *   date: string
-        * })[]}
-        */
+         * @type {(import('./modules/account-manager.js').AccountInfo & {
+         *   date: string
+         * })[]}
+         */
         (getAllRecordsResult.value) ?? [];
 
       // If adding adding/edit features, ensure have privileges of
@@ -1095,10 +1095,12 @@ const routeList = async (app, config) => {
       let o;
       try {
         const sess = /**
-         * @type {import('express-session').Session & {
-         *   user: import('./modules/account-manager.js').AccountInfo
-         * }}
-         */ (req.session);
+                      * @type {import('express-session').Session & {
+                      *   user: import(
+                      *     './modules/account-manager.js'
+                      *   ).AccountInfo
+                      * }}
+                      */ (req.session);
         o = await am.updateAccount({
           id: sess.user._id,
           user: sess.user.user,
