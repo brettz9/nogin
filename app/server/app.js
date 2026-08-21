@@ -7,6 +7,8 @@
 
 import * as http from 'node:http';
 import {join, resolve as pathResolve} from 'node:path';
+
+import {Passport} from '@passport-next/passport';
 import express from 'express';
 import session from 'express-session';
 // Though not needed for `express-session`, `cookie-parser` is needed for
@@ -193,6 +195,9 @@ const createServer = async function (options) {
   app.set('port', PORT);
   app.set('views', join(__dirname, '/views'));
   app.set('view engine', 'js');
+
+  const passport = new Passport();
+  app.use(passport.initialize());
 
   if (limiter) {
     app.use(limiter);

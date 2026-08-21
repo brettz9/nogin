@@ -818,7 +818,7 @@ describe('Home', function () {
       });
     });
 
-    // todo[cypress@>=16.0.0]: Re-enable when fixed:
+    // todo[cypress@>=17.0.0]: Re-enable when fixed:
     // https://github.com/cypress-io/cypress/issues/6678
     // eslint-disable-next-line mocha/no-pending-tests -- Cypress bug
     it.skip('Attempt bad client-side input', function () {
@@ -828,7 +828,7 @@ describe('Home', function () {
       cy.clearTypeAndBlur('[data-name="name"]', tooShortOfAName);
       cy.get('[data-name="action2"]').click();
 
-      // todo[cypress@>=16.0.0]: `:invalid`: see if fixed:
+      // todo[cypress@>=17.0.0]: `:invalid`: see if fixed:
       //   https://github.com/cypress-io/cypress/issues/6678
       cy.get('[data-name="name"]:invalid').should('have.length', 1);
       cy.get('[data-name="name"]').then((

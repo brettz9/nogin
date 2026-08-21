@@ -16,8 +16,8 @@ minimumReleaseAgeExclude:
   - license-types@3.3.0
   - jquery-form-plus@2.0.0 || 2.0.1 || 3.0.0 || 3.1.0 || 3.1.1
   - '@es-joy/jsdoccomment@0.93.2 || 0.95.1'
-  - eslint-config-ash-nazg@42.2.0 || 42.5.0 || 42.6.0
-  - eslint-plugin-jsdoc@64.0.2 || 64.2.1
+  - eslint-config-ash-nazg@42.2.0 || 42.5.0 || 42.6.0 || 43.1.6
+  - eslint-plugin-jsdoc@64.0.2 || 64.2.1 || 64.3.3
   - jsdoc-type-pratt-parser@9.0.1 || 9.1.2
   - envelope-ts@2.1.0
   - uuid@14.0.2
@@ -47,3 +47,5 @@ minimumReleaseAgeExclude:
   - '@rollup/rollup-win32-x64-gnu@4.62.5'
   - '@rollup/rollup-win32-x64-msvc@4.62.5'
   - rollup@4.62.5
+  - cypress@16.0.0
+  - globals@17.12.0

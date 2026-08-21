@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- chore: bump emailjs, express-rate-limit, mongodb, devDeps.
+
 ## 8.0.2
 
 - fix: update peerDepencies for jamilih
