@@ -1,5 +1,5 @@
-import {readFile} from 'fs/promises';
-import {join, resolve as pathResolve} from 'path';
+import {readFile} from 'node:fs/promises';
+import {join, resolve as pathResolve} from 'node:path';
 
 // Could forego this and don't i18nize server responses (do on client) or
 //  cache the locales)

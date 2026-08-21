@@ -1,7 +1,9 @@
 /* eslint-disable unicorn/no-top-level-side-effects -- Convenient */
 import 'intl-locale-textinfo-polyfill';
-import {readdir} from 'fs/promises';
-import {join} from 'path';
+
+import {readdir} from 'node:fs/promises';
+import {join} from 'node:path';
+
 import {JSDOM} from 'jsdom';
 import {i18n as intl, getMatchingLocale, setFetch, setDocument} from 'intl-dom';
 import fileFetch from 'file-fetch'; // For `intl-dom`

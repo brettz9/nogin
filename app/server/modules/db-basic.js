@@ -5,9 +5,9 @@
  * @todo Add methods for group creation/editing
  */
 
-import {readFile as readFileOrig} from 'fs';
-import {resolve as pathResolve} from 'path';
-import {promisify} from 'util';
+import {readFile} from 'node:fs/promises';
+import {resolve as pathResolve} from 'node:path';
+
 import AccountManager from './account-manager.js';
 import DBFactory from './db-factory.js';
 import getLogger from './getLogger.js';
@@ -20,8 +20,6 @@ import {i18n} from './i18n.js';
  */
 
 const setI18n = i18n();
-
-const readFile = promisify(readFileOrig);
 
 /**
  * @param {import('./db-factory.js').DbConfig &

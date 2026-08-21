@@ -1,4 +1,4 @@
-import {readFile} from 'fs/promises';
+import {readFile} from 'node:fs/promises';
 
 import commonDefinitions from '../../bin/common-definitions.js';
 import dbDefinitions from '../../bin/db-definitions.js';

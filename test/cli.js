@@ -1,11 +1,11 @@
 // Use to get complete coverage if any guarding code not actually
 //   reachable via UI; have server-side do too?;
 
-import {readFile} from 'fs/promises';
+import {readFile} from 'node:fs/promises';
 
-import {dirname, resolve as pathResolve} from 'path';
+import {dirname, resolve as pathResolve} from 'node:path';
 
-import {fileURLToPath} from 'url';
+import {fileURLToPath} from 'node:url';
 
 import {expect} from 'chai';
 

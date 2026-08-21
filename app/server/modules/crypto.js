@@ -1,4 +1,4 @@
-import {pbkdf2, randomBytes} from 'crypto';
+import {pbkdf2, randomBytes} from 'node:crypto';
 import safeCompare from 'safe-compare';
 
 // private encryption & validation methods

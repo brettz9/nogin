@@ -5,8 +5,8 @@
  * @copyright (c) 2013-2018 Stephen Braitsch
  */
 
-import * as http from 'http';
-import {join, resolve as pathResolve} from 'path';
+import * as http from 'node:http';
+import {join, resolve as pathResolve} from 'node:path';
 import express from 'express';
 import session from 'express-session';
 // Though not needed for `express-session`, `cookie-parser` is needed for
