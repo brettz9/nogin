@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2024"],
-    "types": ["mocha", "jquery"],
+    "types": ["jquery"],
     "moduleResolution": "nodenext",
     "module": "NodeNext",
     "allowJs": true,
