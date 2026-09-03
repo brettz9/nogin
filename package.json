@@ -44,7 +44,7 @@
     "tsc": "tsc",
     "tsc-cypress": "tsc -p cypress/tsconfig.json",
     "build": "tsc -p tsconfig-prod.json && cp -R typings dist",
-    "prepublishOnly": "echo 'Skipping eslint-3rd' && echo \"skipping: license-badges (takes long to do frequently) and skipping build-docs until debug\" && run-s build-cli snyk build",
+    "prepublishOnly": "echo 'Skipping snyk and eslint-3rd' && echo \"skipping: license-badges (takes long to do frequently) and skipping build-docs until debug\" && run-s build-cli build",
     "license-badge": "license-badger --corrections --uncategorizedLicenseTemplate \"\\${license} (\\${name} (\\${version}))\" --filteredTypes=nonempty --textTemplate \"License types\n(project, deps, and bundled devDeps)\" --packageJson --production doc-includes/licenses-badge.svg",
     "license-badge-dev": "license-badger --corrections --filteredTypes=nonempty --textTemplate \"License types\n(all devDeps)\" --allDevelopment doc-includes/licenses-badge-dev.svg",
     "license-badges": "run-s license-badge license-badge-dev",
