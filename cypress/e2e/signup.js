@@ -26,7 +26,7 @@ describe('Signup', function () {
     const tooShortUser = 'a';
     cy.get('[data-name="user"]').type(tooShortUser);
     cy.get('[data-name="action2"]').click();
-    // todo[cypress@>=16.0.0]: `:invalid`: see if fixed:
+    // todo[cypress@>=17.0.0]: `:invalid`: see if fixed:
     //   https://github.com/cypress-io/cypress/issues/6678
     cy.get('[data-name="user"]:invalid').should('have.length', 1);
     const tooShortName = 'b';

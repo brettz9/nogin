@@ -9,7 +9,6 @@
     "noEmit": true,
     "declaration": true,
     "declarationMap": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
     "target": "es2024",
     "outDir": "dist"

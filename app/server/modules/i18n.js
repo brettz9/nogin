@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/no-top-level-side-effects -- Convenient */
-import 'intl-locale-textinfo-polyfill';
+// await import to avoid type problems
+await import('intl-locale-textinfo-polyfill/lib/polyfill.js');
 
 import {readdir} from 'node:fs/promises';
 import {join} from 'node:path';

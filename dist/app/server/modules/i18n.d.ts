@@ -1,4 +1,3 @@
-import 'intl-locale-textinfo-polyfill';
 export type LanguageDirection = {
     lang: string;
     dir: "ltr" | "rtl" | undefined;

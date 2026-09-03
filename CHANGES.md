@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 8.0.3
+
+- fix(types): avoid unbundled dependency
+
 ## 8.0.2
 
 - fix: update peerDepencies for jamilih
