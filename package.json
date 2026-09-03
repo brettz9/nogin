@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -185,7 +185,7 @@
     "bootstrap": "^5.3.8",
     "github-fork-ribbon-css": "^0.2.3",
     "intl-dom": "^0.21.1",
-    "jamilih": "^0.68.0",
+    "jamilih": "^0.69.0",
     "jquery": "^4.0.0",
     "jquery-form-plus": "^3.1.1"
   },

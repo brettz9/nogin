@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 8.0.2
+
+- fix: update peerDepencies for jamilih
+
 ## 8.0.1
 
 - chore: update jquery-form-plus, font-awesome/free, jamilih
