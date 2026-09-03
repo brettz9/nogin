@@ -1,8 +1,9 @@
 # CHANGES for nogin
 
-## ?
+## 8.0.4
 
 - fix: make types/jquery a peer dep.
+- chore: avoid "mocha" for regular tsconfig
 
 ## 8.0.3
 
