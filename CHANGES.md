@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- fix: make types/jquery a peer dep.
+
 ## 8.0.3
 
 - fix(types): avoid unbundled dependency
