@@ -135,7 +135,7 @@ well as `--postLoginRedirectPath /` arguments. See these options for more detail
     assign groups to users as relevant. Use dots as namespaces in privilege and
     group names. Note that the built-in groups `nogin.loggedInUsers` and
     `nogin.guests` will apply to all who are logged in or not, respectfully. The
-    privilegs should be additive from the level of guest to logged in user to
+    privileges should be additive from the level of guest to logged in user to
     regular user to root user.
 
 10. Check the privileges in your app. You can check the privileges from
