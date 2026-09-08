@@ -245,11 +245,36 @@ const PrivilegesView = {
   },
 
   /**
+   * @returns {HTMLSelectElement}
+   */
+  getCreatePrivilegeType () {
+    return /** @type {HTMLSelectElement} */ (
+      $('#createPrivilege-type-input')[0]
+    );
+  },
+
+  /**
    * @returns {HTMLInputElement}
    */
   getEditPrivilegeDescription () {
     return /** @type {HTMLInputElement} */ (
       $('#editPrivilege-description-input')[0]
+    );
+  },
+
+  /**
+   * @returns {HTMLSelectElement}
+   */
+  getEditPrivilegeType () {
+    return /** @type {HTMLSelectElement} */ ($('#editPrivilege-type-input')[0]);
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
+  getAddPrivilegeToGroupValue () {
+    return /** @type {HTMLInputElement} */ (
+      $('#addPrivilegeToGroup-value-input')[0]
     );
   },
 

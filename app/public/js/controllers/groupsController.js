@@ -187,6 +187,7 @@ addPrivilegeToGroupForm.on('submit', function (e) {
 });
 addPrivilegeToGroupButton.on('click', (e) => {
   const privilegeToAdd = GroupsView.getAddPrivilegeToGroupGroup();
+  const privilegeValue = GroupsView.getAddPrivilegeToGroupValue();
   const groupName = /** @type {string} */ (e.target.dataset.group);
 
   const addPrivilegeToGroupCancel = GroupsView.addPrivilegeToGroupCancel(
@@ -212,7 +213,9 @@ addPrivilegeToGroupButton.on('click', (e) => {
         ).reportValidity();
         return;
       }
-      await addPrivilegeToGroup(groupName, privilegeToAdd.value);
+      await addPrivilegeToGroup(
+        groupName, privilegeToAdd.value, privilegeValue.value
+      );
     } catch (er) {
       addPrivilegeToGroupModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
@@ -234,12 +237,13 @@ addPrivilegeToGroupButton.on('click', (e) => {
 /**
  * @param {string} groupName
  * @param {string} privilegeName
+ * @param {string} value
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function addPrivilegeToGroup (groupName, privilegeName) {
+async function addPrivilegeToGroup (groupName, privilegeName, value) {
   await post(Nogin.Routes.accessAPI, {
-    verb: 'addPrivilegeToGroup', groupName, privilegeName
+    verb: 'addPrivilegeToGroup', groupName, privilegeName, value
   });
   addPrivilegeToGroupModal.modal('hide');
   showLockedAlertReload({type: 'privilegeAddedToGroup'});

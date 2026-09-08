@@ -13,5 +13,7 @@ export async function getPrivileges () {
  */
 export async function hasPrivilege (priv) {
   const {privs} = await getPrivileges();
-  return privs === true ? true : privs.includes(priv);
+  return privs === true
+    ? true
+    : Object.prototype.hasOwnProperty.call(privs, priv);
 }

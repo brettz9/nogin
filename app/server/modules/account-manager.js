@@ -66,10 +66,20 @@ const builtInPrivileges = new Set([
  */
 
 /**
+ * @typedef {"boolean"|"string"|"number"} PrivilegeType
+ */
+
+/**
+ * @typedef {object} PrivilegeAssignment
+ * @property {string} privilegeName
+ * @property {string|number} value
+ */
+
+/**
  * @typedef {object} GroupInfo
  * @property {string} [_id] Auto-set
  * @property {string} groupName
- * @property {string[]} privilegeIDs
+ * @property {(string|PrivilegeAssignment)[]} privilegeIDs
  * @property {string[]} userIDs
  * @property {boolean} builtin
  * @property {number} date Auto-generated timestamp
@@ -85,6 +95,8 @@ const builtInPrivileges = new Set([
  * @property {string} [_id] Auto-set
  * @property {string} privilegeName
  * @property {string} description
+ * @property {PrivilegeType} [type] Defaults to `boolean`
+ * @property {string|number} [value] Present on an effective typed assignment
  * @property {boolean} builtin
  * @property {number} date Auto-generated timestamp
  */
@@ -860,6 +872,10 @@ class AccountManager {
     if (typeof data.description !== 'string') {
       throw new TypeError('bad-privilege-description');
     }
+    const type = data.type || 'boolean';
+    if (!['boolean', 'string', 'number'].includes(type)) {
+      throw new TypeError('bad-privilege-type');
+    }
 
     let o;
     try {
@@ -877,6 +893,7 @@ class AccountManager {
     const newData = {
       privilegeName: data.privilegeName,
       description: data.description,
+      type,
       builtin: false,
       // Append date stamp when record was created
       date: Date.now()
@@ -894,24 +911,33 @@ class AccountManager {
    * @returns {Promise<void>}
    */
   async removePrivilegeIDFromGroup (privilege) {
-    const filter = {
-      privilegeIDs: {$in: [privilege]}
-    };
-
     await /** @type {import('mongodb').Collection<GroupInfo>} */ (
       this.groups
-    ).findOneAndUpdate(
-      filter,
+    ).updateMany(
+      {privilegeIDs: {$in: [privilege]}},
       {
         $pull: {privilegeIDs: privilege},
         $set: {date: Date.now()}
       },
-      {upsert: false, returnDocument: 'after'}
+      {upsert: false}
+    );
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).updateMany(
+      {'privilegeIDs.privilegeName': privilege},
+      {
+        $pull: {privilegeIDs: {privilegeName: privilege}},
+        $set: {date: Date.now()}
+      },
+      {upsert: false}
     );
   }
 
   /**
-   * @param {Partial<GroupInfo> & {privilegeName: string}} data
+   * @param {Partial<GroupInfo> & {
+   *   privilegeName: string,
+   *   value?: string|number
+   * }} data
    * @returns {Promise<void>}
    */
   async addPrivilegeToGroup (data) {
@@ -935,16 +961,40 @@ class AccountManager {
       throw new Error('privilege-missing');
     }
 
+    const type = _o.type || 'boolean';
+    if (type !== 'boolean' && (
+      typeof data.value !== type ||
+      (type === 'number' && !Number.isFinite(data.value))
+    )) {
+      throw new TypeError('bad-privilege-value');
+    }
+    const assignment = type === 'boolean'
+      ? data.privilegeName
+      : {
+        privilegeName: data.privilegeName,
+        value: /** @type {string|number} */ (data.value)
+      };
+
     const filterAdd = {
       groupName: data.groupName
     };
 
     await /** @type {import('mongodb').Collection<GroupInfo>} */ (
       this.groups
+    ).updateOne(filterAdd, {
+      $pull: {privilegeIDs: {
+        privilegeName: data.privilegeName
+      }}
+    });
+
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
     ).findOneAndUpdate(
       filterAdd,
       {
-        $addToSet: {privilegeIDs: data.privilegeName},
+        $addToSet: {
+          privilegeIDs: assignment
+        },
         $set: {date: Date.now()}
       },
       {upsert: false, returnDocument: 'after'}
@@ -982,13 +1032,23 @@ class AccountManager {
 
     await /** @type {import('mongodb').Collection<GroupInfo>} */ (
       this.groups
-    ).findOneAndUpdate(
+    ).updateOne(
       filter,
       {
         $pull: {privilegeIDs: data.privilegeName},
         $set: {date: Date.now()}
       },
-      {upsert: false, returnDocument: 'after'}
+      {upsert: false}
+    );
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).updateOne(
+      filter,
+      {
+        $pull: {privilegeIDs: {privilegeName: data.privilegeName}},
+        $set: {date: Date.now()}
+      },
+      {upsert: false}
     );
   }
 
@@ -1027,17 +1087,22 @@ class AccountManager {
       throw new Error('group-not-found');
     }
 
-    return await Promise.all(/** @type {Promise<PrivilegeInfo>[]} */ (
-      /** @type {string[]} */
-      (o.privilegeIDs).map(async (privilegeName) => {
+    return /** @type {PrivilegeInfo[]} */ (await Promise.all(
+      (o.privilegeIDs || []).map(async (assignment) => {
+        const privilegeName = typeof assignment === 'string'
+          ? assignment
+          : assignment.privilegeName;
         // eslint-disable-next-line @stylistic/max-len -- Long
-        return await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+        const privilege = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
           this.privileges
         ).findOne({
           privilegeName
         });
-      }).filter(Boolean)
-    ));
+        return privilege && typeof assignment !== 'string'
+          ? {...privilege, value: assignment.value}
+          : privilege;
+      })
+    )).filter(Boolean);
   }
 
   /**
@@ -1327,6 +1392,7 @@ class AccountManager {
       throw new Error('bad-privilegename');
     }
 
+    await this.removePrivilegeIDFromGroup(privilegeName);
     return await
     /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
       this.privileges
@@ -1351,6 +1417,16 @@ class AccountManager {
     if (typeof data.description !== 'string') {
       throw new TypeError('bad-privilege-description');
     }
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    const existingPrivilege = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+      this.privileges
+    ).findOne({
+      privilegeName: data.privilegeName
+    });
+    if (!existingPrivilege) {
+      throw new Error('bad-old-privilegename');
+    }
+    const type = existingPrivilege.type || 'boolean';
 
     // User may also be just editing description
     if (data.newPrivilegeName !== data.privilegeName) {
@@ -1374,6 +1450,7 @@ class AccountManager {
     const newData = {
       privilegeName: data.newPrivilegeName,
       description: data.description,
+      type,
       // Append date stamp when record was modified
       date: Date.now()
     };
@@ -1389,6 +1466,25 @@ class AccountManager {
       },
       {upsert: false, returnDocument: 'after'}
     );
+    if (data.newPrivilegeName !== data.privilegeName) {
+      await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+        this.groups
+      ).updateMany(
+        {privilegeIDs: data.privilegeName},
+        {$set: {'privilegeIDs.$': data.newPrivilegeName}}
+      );
+      await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+        this.groups
+      ).updateMany(
+        {'privilegeIDs.privilegeName': data.privilegeName},
+        {$set: {
+          'privilegeIDs.$[assignment].privilegeName': data.newPrivilegeName
+        }},
+        {arrayFilters: [{
+          'assignment.privilegeName': data.privilegeName
+        }]}
+      );
+    }
   }
 
   /**

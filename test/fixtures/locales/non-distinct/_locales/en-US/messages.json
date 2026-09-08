@@ -476,6 +476,27 @@
     "Description": {
       "message": "Description"
     },
+    "PrivilegeType": {
+      "message": "Type"
+    },
+    "PrivilegeValue": {
+      "message": "Value (required for string and number privileges)"
+    },
+    "BooleanPrivilege": {
+      "message": "Boolean"
+    },
+    "StringPrivilege": {
+      "message": "String"
+    },
+    "NumberPrivilege": {
+      "message": "Number"
+    },
+    "bad-privilege-type": {
+      "message": "Bad privilege type"
+    },
+    "bad-privilege-value": {
+      "message": "Bad privilege value"
+    },
     "removePrivilegeFromGroup": {
       "message": "Remove privilege from group"
     },

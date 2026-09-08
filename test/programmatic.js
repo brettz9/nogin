@@ -17,6 +17,8 @@ import {i18n as setI18n} from '../app/server/modules/i18n.js';
 
 import jmlEngine from '../app/server/modules/jmlEngine.js';
 import {createServer} from '../app/server/app.js';
+import {getPrivilegeValues} from '../app/server/routeList.js';
+import privilegesView from '../app/server/views/privileges.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -24,6 +26,70 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 chai.use(chaiAsPromised);
 
 describe('Programmatic', function () {
+  it('serializes boolean, string, and numeric privileges', function () {
+    const privileges = getPrivilegeValues([
+      {
+        privilegeName: 'canPublish',
+        description: 'Can publish',
+        builtin: false,
+        date: Date.now()
+      },
+      {
+        privilegeName: 'userDatabase',
+        description: 'User database',
+        type: 'string',
+        value: 'myDatabase',
+        builtin: false,
+        date: Date.now()
+      },
+      {
+        privilegeName: 'uploadLimit',
+        description: 'Upload limit',
+        type: 'number',
+        value: 25,
+        builtin: false,
+        date: Date.now()
+      }
+    ]);
+
+    expect(Object.fromEntries(privileges)).to.deep.equal({
+      canPublish: true,
+      userDatabase: 'myDatabase',
+      uploadLimit: 25
+    });
+  });
+
+  it('shows privilege types but not values in the management UI',
+    async function () {
+      const rendered = JSON.stringify(await privilegesView({
+      // @ts-expect-error Minimal i18n test double
+        _ (key) {
+          return Array.isArray(key) ? key[0] : key;
+        },
+        // @ts-expect-error Minimal layout test double
+        layout: (content) => Promise.resolve([content]),
+        hasEditPrivilegeAccess: true,
+        hasAddPrivilegeToGroupAccess: true,
+        hasRemovePrivilegeFromGroupAccess: true,
+        hasReadGroupAccess: true,
+        hasReadUsersAccess: true,
+        privilegesInfo: [{
+          privilegeName: 'userDatabase',
+          description: 'User database',
+          type: 'string',
+          // @ts-expect-error Ensure assignment values are not rendered
+          value: 'privateDatabase',
+          builtin: false,
+          groupsInfo: []
+        }],
+        groups: []
+      }));
+
+      expect(rendered).to.include('createPrivilege-type-input');
+      expect(rendered).to.include('StringPrivilege');
+      expect(rendered).not.to.include('privateDatabase');
+    });
+
   describe('createServer', function () {
     it('Allows JSON options as objects', async function () {
       let i = 0;
@@ -106,6 +172,80 @@ describe('Programmatic', function () {
   });
 
   describe('AccountManager', function () {
+    it('stores typed privilege values on group assignments', async function () {
+      this.timeout(30000);
+      const DB_NAME = 'nogin-typed-privileges-test';
+      const _ = await setI18n()({
+        // @ts-expect-error Why isn't the first overload accepted?
+        acceptsLanguages: () => ['en-US']
+      });
+      const am = await new AccountManager('mongodb', {
+        DB_URL: DBFactory.getURL('mongodb', false, {
+          DB_HOST: '127.0.0.1', DB_PORT: 27017, DB_NAME
+        }),
+        DB_NAME,
+        _
+      }).connect();
+
+      try {
+        await am.addNewGroup({groupName: 'typed'});
+        await Promise.all([
+          am.addNewPrivilege({
+            privilegeName: 'canPublish',
+            description: 'Can publish'
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'userDatabase',
+            description: 'User database',
+            type: 'string'
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'uploadLimit',
+            description: 'Upload limit',
+            type: 'number'
+          })
+        ]);
+        await Promise.all([
+          am.addPrivilegeToGroup({
+            groupName: 'typed', privilegeName: 'canPublish'
+          }),
+          am.addPrivilegeToGroup({
+            groupName: 'typed', privilegeName: 'userDatabase',
+            value: 'myDatabase'
+          }),
+          am.addPrivilegeToGroup({
+            groupName: 'typed', privilegeName: 'uploadLimit', value: 25
+          })
+        ]);
+
+        const privileges = await am.getPrivilegesForGroup('typed');
+        expect(
+          Object.fromEntries(getPrivilegeValues(privileges))
+        ).to.deep.equal({
+          canPublish: true, userDatabase: 'myDatabase', uploadLimit: 25
+        });
+        await am.editPrivilege({
+          privilegeName: 'userDatabase',
+          newPrivilegeName: 'primaryDatabase',
+          description: 'Primary database'
+        });
+        const renamedPrivileges = await am.getPrivilegesForGroup('typed');
+        expect(
+          Object.fromEntries(getPrivilegeValues(renamedPrivileges))
+        ).to.deep.equal({
+          canPublish: true, primaryDatabase: 'myDatabase', uploadLimit: 25
+        });
+        await expect(am.addPrivilegeToGroup({
+          groupName: 'typed', privilegeName: 'uploadLimit', value: '25'
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
+      } finally {
+        await Promise.all([
+          am.groups?.deleteMany({}),
+          am.privileges?.deleteMany({})
+        ]);
+      }
+    });
+
     it(
       'AccountManager with bad `adapter` (passed to ' +
         '`DBFactory.createInstance`)',

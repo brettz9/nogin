@@ -24,6 +24,24 @@ import getDirname from './modules/getDirname.js';
 const __dirname = getDirname(import.meta.url);
 
 /**
+ * @param {(import('./modules/account-manager.js').PrivilegeInfo|null)[]} infos
+ * @returns {Map<string, boolean|string|number>}
+ */
+const getPrivilegeValues = (infos) => {
+  return infos.reduce((privileges, info) => {
+    if (info) {
+      privileges.set(
+        info.privilegeName,
+        info.type && info.type !== 'boolean'
+          ? /** @type {string|number} */ (info.value)
+          : true
+      );
+    }
+    return privileges;
+  }, new Map());
+};
+
+/**
  * @typedef {{
  *   name: string,
  *   user: string,
@@ -194,14 +212,7 @@ const routeList = async (app, config) => {
         : null
     ])).flat();
 
-    const privSet = privInfos.reduce((set, item) => {
-      if (item) {
-        set.add(item.privilegeName);
-      }
-      return set;
-    }, /** @type {Set<string>} */ (new Set()));
-
-    return privSet;
+    return getPrivilegeValues(privInfos);
   };
 
   /**
@@ -923,6 +934,7 @@ const routeList = async (app, config) => {
    *   privilegeName: string,
    *   builtin: boolean,
    *   description: string,
+   *   type: import('./modules/account-manager.js').PrivilegeType,
    *   groupsInfo: {
    *     groupName: string,
    *     builtin: boolean,
@@ -938,10 +950,13 @@ const routeList = async (app, config) => {
 
     const groups = await readGroups();
 
-    return privileges.map(({privilegeName, description, builtin}) => {
+    return privileges.map(({
+      privilegeName, description, builtin, type = 'boolean'
+    }) => {
       return {
         privilegeName,
         description,
+        type,
         builtin,
         groupsInfo:
         /**
@@ -1006,14 +1021,7 @@ const routeList = async (app, config) => {
             })
           ).map(({user: usr, _id}) => ({user: usr, _id}))[0];
         })),
-        privileges: await Promise.all(group.privilegeIDs.map(
-          async (privilegeID) => {
-            // eslint-disable-next-line @stylistic/max-len -- Long
-            return /** @type {import('./modules/account-manager.js').PrivilegeInfo} */ (
-              await am.getPrivilege(privilegeID)
-            );
-          }
-        ))
+        privileges: await am.getPrivilegesForGroup(group.groupName)
       };
     }));
   };
@@ -1421,7 +1429,9 @@ const routeList = async (app, config) => {
         userID,
         privilegeName,
         description,
-        newPrivilegeName
+        newPrivilegeName,
+        type,
+        value
       } = req.body;
 
       /**
@@ -1582,11 +1592,11 @@ const routeList = async (app, config) => {
         }
         try {
           await am.addNewPrivilege({
-            privilegeName, description
+            privilegeName, description, type
           });
         } catch (err) {
           if ([
-            'bad-privilegename', 'privilegename-taken'
+            'bad-privilegename', 'privilegename-taken', 'bad-privilege-type'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
           } else {
@@ -1622,12 +1632,13 @@ const routeList = async (app, config) => {
           await am.editPrivilege({
             privilegeName,
             newPrivilegeName,
-            description
+            description,
+            type
           });
         } catch (err) {
           if ([
             'bad-privilegename', 'privilegename-taken',
-            'bad-old-privilegename'
+            'bad-old-privilegename', 'bad-privilege-type'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
           } else {
@@ -1642,13 +1653,17 @@ const routeList = async (app, config) => {
           return;
         }
         try {
+          const privilege = await am.getPrivilege(privilegeName);
           await am.addPrivilegeToGroup({
             groupName,
-            privilegeName
+            privilegeName,
+            value: value !== '' && privilege?.type === 'number'
+              ? Number(value)
+              : value
           });
         } catch (err) {
           if ([
-            'bad-groupname', 'privilege-missing'
+            'bad-groupname', 'privilege-missing', 'bad-privilege-value'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
           } else {
@@ -1775,7 +1790,7 @@ window.Nogin = {
   app.get('/_privs', async function (req, res) {
     const userPrivs = await getUserPrivs(req);
     const converted = {
-      privs: userPrivs === true ? true : [...userPrivs],
+      privs: userPrivs === true ? true : Object.fromEntries(userPrivs),
       user: req.session?.user?.user ?? null
     };
 
@@ -1793,7 +1808,9 @@ window.Nogin = {
     res.type('.js');
     res.status(200).send(`window.NoginPrivs = ${JSON.stringify(converted)};
 window.NoginPrivs.hasPrivilege = function (priv) {
-  return this.privs === true ? true : this.privs.includes(priv);
+  return this.privs === true ? true : Object.prototype.hasOwnProperty.call(
+    this.privs, priv
+  );
 };
 `);
   });
@@ -1987,4 +2004,5 @@ window.NoginPrivs.hasPrivilege = function (priv) {
   */
 };
 
+export {getPrivilegeValues};
 export default routeList;

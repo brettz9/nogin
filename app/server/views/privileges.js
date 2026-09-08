@@ -15,6 +15,7 @@ import doubleInputForm from './modals/double-input-form.js';
  *   privilegesInfo: {
  *     privilegeName: string,
  *     description: string,
+ *     type: import('../modules/account-manager.js').PrivilegeType,
  *     builtin: boolean,
  *     groupsInfo: {
  *       groupName: string,
@@ -50,6 +51,7 @@ const privileges = ({
               ['th', {class: 'privileges number'}, [_('NumberAbbreviated')]],
               ['th', {class: 'privileges privilege'}, [_('Privilege')]],
               ['th', {class: 'privileges description'}, [_('Description')]],
+              ['th', {class: 'privileges type'}, [_('PrivilegeType')]],
               ['th', {class: 'privileges group'}, [_('Group')]],
               hasAddPrivilegeToGroupAccess
                 ? ['th', {class: 'privileges addPrivilegeToGroup'}, [
@@ -64,7 +66,7 @@ const privileges = ({
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
             privilegesInfo.map((
-              {privilegeName, description, builtin, groupsInfo}, i
+              {privilegeName, description, type, builtin, groupsInfo}, i
             ) => {
               return ['tr', [
                 ['td', {class: 'groups group'}, [i + 1]],
@@ -80,6 +82,9 @@ const privileges = ({
                 ['td', [
                   description
                 ]],
+                ['td', [_(
+                  `${type[0].toUpperCase()}${type.slice(1)}Privilege`
+                )]],
                 hasRemovePrivilegeFromGroupAccess
                   ? ['td', groupsInfo.map(
                     ({groupName, usersInfo}) => {
@@ -110,7 +115,8 @@ const privileges = ({
                   ? ['td', [
                     ['button', {
                       class: 'addPrivilegeToGroup btn btn-primary',
-                      'data-privilege': privilegeName
+                      'data-privilege': privilegeName,
+                      'data-type': type
                     }, ['+']]
                   ]]
                   : '',
@@ -125,7 +131,8 @@ const privileges = ({
                         ['button', {
                           class: 'editPrivilege',
                           'data-privilege': privilegeName,
-                          'data-description': description
+                          'data-description': description,
+                          'data-type': type
                         }, ['e']]
                       ]]
                       : '',
@@ -152,17 +159,30 @@ const privileges = ({
         doubleInputForm({
           _, type: 'createPrivilege',
           inputDirections: 'PleaseInputPrivilegeToCreate',
-          descriptionDirections: 'PleaseInputADescriptionForPrivilege'
+          descriptionDirections: 'PleaseInputADescriptionForPrivilege',
+          includePrivilegeType: true
         }),
         doubleInputForm({
           _, type: 'editPrivilege',
           inputDirections: 'PleaseInputPrivilegeToEdit',
-          descriptionDirections: 'PleaseInputADescriptionForPrivilege'
+          descriptionDirections: 'PleaseInputADescriptionForPrivilege',
+          includePrivilegeType: true
         }),
         singleInputForm({
           _, type: 'addPrivilegeToGroup',
           inputDirections: 'PleaseInputGroupToWhichToAddPrivilege',
-          autocomplete: groups
+          autocomplete: groups,
+          additionalFields: [
+            ['label', {
+              for: 'addPrivilegeToGroup-value-input'
+            }, [_('PrivilegeValue')]],
+            ['input', {
+              class: 'form-control',
+              id: 'addPrivilegeToGroup-value-input',
+              'data-name': 'privilege-value',
+              name: 'value'
+            }]
+          ]
         })
       ]]
     ],

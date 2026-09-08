@@ -104,6 +104,15 @@ const GroupsView = {
   },
 
   /**
+   * @returns {HTMLInputElement}
+   */
+  getAddPrivilegeToGroupValue () {
+    return /** @type {HTMLInputElement} */ (
+      $('#addPrivilegeToGroup-value-input')[0]
+    );
+  },
+
+  /**
    * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
    * @returns {JQuery} `HTMLButtonElement`
    */

@@ -184,7 +184,18 @@ const groups = ({
         singleInputForm({
           _, type: 'addPrivilegeToGroup',
           inputDirections: 'PleaseInputPrivilegeToAddToGroup',
-          autocomplete: privileges
+          autocomplete: privileges,
+          additionalFields: [
+            ['label', {
+              for: 'addPrivilegeToGroup-value-input'
+            }, [_('PrivilegeValue')]],
+            ['input', {
+              class: 'form-control',
+              id: 'addPrivilegeToGroup-value-input',
+              'data-name': 'privilege-value',
+              name: 'value'
+            }]
+          ]
         })
       ]]
     ],

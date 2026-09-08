@@ -51,7 +51,10 @@ createPrivilegeButton.on('click', () => {
         return;
       }
       const description = PrivilegesView.getCreatePrivilegeDescription();
-      await createPrivilege(privilegeToCreate.value, description.value);
+      const type = PrivilegesView.getCreatePrivilegeType();
+      await createPrivilege(
+        privilegeToCreate.value, description.value, type.value
+      );
     } catch (er) {
       createPrivilegeModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
@@ -84,6 +87,7 @@ editPrivilegeForm.on('submit', function (e) {
 editPrivilegeButton.on('click', (e) => {
   const privilegeName = /** @type {string} */ (e.target.dataset.privilege);
   const descriptionVal = /** @type {string} */ (e.target.dataset.description);
+  const typeVal = /** @type {string} */ (e.target.dataset.type);
   const privilegeToEdit = PrivilegesView.getEditPrivilege();
 
   const editPrivilegeCancel = PrivilegesView.editPrivilegeCancel(
@@ -98,6 +102,9 @@ editPrivilegeButton.on('click', (e) => {
 
   const privilegeDescription = PrivilegesView.getEditPrivilegeDescription();
   privilegeDescription.value = descriptionVal;
+  const privilegeType = PrivilegesView.getEditPrivilegeType();
+  privilegeType.value = typeVal;
+  privilegeType.disabled = true;
 
   const editPrivilegeSubmit = PrivilegesView.editPrivilegeSubmit(
     editPrivilegeModal
@@ -113,7 +120,9 @@ editPrivilegeButton.on('click', (e) => {
       }
       const newPrivilegeName = privilegeToEdit.value;
       const description = privilegeDescription.value;
-      await editPrivilege(privilegeName, newPrivilegeName, description);
+      await editPrivilege(
+        privilegeName, newPrivilegeName, description, privilegeType.value
+      );
     } catch (er) {
       editPrivilegeModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
@@ -145,7 +154,13 @@ addPrivilegeToGroupForm.on('submit', function (e) {
 });
 addPrivilegeToGroupButton.on('click', (e) => {
   const privilegeToAdd = /** @type {string} */ (e.target.dataset.privilege);
+  const privilegeType = /** @type {string} */ (e.target.dataset.type);
   const groupName = PrivilegesView.getAddPrivilegeToGroupGroup();
+  const privilegeValue = PrivilegesView.getAddPrivilegeToGroupValue();
+  privilegeValue.value = '';
+  privilegeValue.disabled = privilegeType === 'boolean';
+  privilegeValue.required = privilegeType !== 'boolean';
+  privilegeValue.type = privilegeType === 'number' ? 'number' : 'text';
 
   const addPrivilegeToGroupCancel = PrivilegesView.addPrivilegeToGroupCancel(
     addPrivilegeToGroupModal
@@ -170,7 +185,13 @@ addPrivilegeToGroupButton.on('click', (e) => {
         ).reportValidity();
         return;
       }
-      await addPrivilegeToGroup(groupName.value, privilegeToAdd);
+      await addPrivilegeToGroup(
+        groupName.value,
+        privilegeToAdd,
+        privilegeType === 'number'
+          ? Number(privilegeValue.value)
+          : privilegeValue.value
+      );
     } catch (er) {
       addPrivilegeToGroupModal.modal('hide');
       const err = /** @type {AjaxPostError} */ (er);
@@ -324,14 +345,16 @@ async function removePrivilegeFromGroup (groupName, privilegeName) {
 /**
  * @param {string} privilegeToCreate
  * @param {string} description
+ * @param {string} type
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function createPrivilege (privilegeToCreate, description) {
+async function createPrivilege (privilegeToCreate, description, type) {
   await post(Nogin.Routes.accessAPI, {
     verb: 'createPrivilege',
     privilegeName: privilegeToCreate,
-    description
+    description,
+    type
   });
   createPrivilegeModal.modal('hide');
   showLockedAlertReload({type: 'privilegeCreated'});
@@ -341,12 +364,15 @@ async function createPrivilege (privilegeToCreate, description) {
  * @param {string} privilegeName
  * @param {string} newPrivilegeName
  * @param {string} description
+ * @param {string} type
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function editPrivilege (privilegeName, newPrivilegeName, description) {
+async function editPrivilege (
+  privilegeName, newPrivilegeName, description, type
+) {
   await post(Nogin.Routes.accessAPI, {
-    verb: 'editPrivilege', privilegeName, newPrivilegeName, description
+    verb: 'editPrivilege', privilegeName, newPrivilegeName, description, type
   });
   editPrivilegeModal.modal('hide');
   showLockedAlertReload({type: 'privilegeEdited'});
@@ -355,12 +381,13 @@ async function editPrivilege (privilegeName, newPrivilegeName, description) {
 /**
  * @param {string} groupName
  * @param {string} privilegeName
+ * @param {string|number} value
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function addPrivilegeToGroup (groupName, privilegeName) {
+async function addPrivilegeToGroup (groupName, privilegeName, value) {
   await post(Nogin.Routes.accessAPI, {
-    verb: 'addPrivilegeToGroup', groupName, privilegeName
+    verb: 'addPrivilegeToGroup', groupName, privilegeName, value
   });
   addPrivilegeToGroupModal.modal('hide');
   showLockedAlertReload({type: 'privilegeAddedToGroup'});
