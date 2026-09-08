@@ -37,7 +37,8 @@ const reporterFile = process.argv[2]
   : 'spec';
 
 // // eslint-disable-next-line no-unsanitized/method -- Dynamic CLI script
-const MochaReporter = await import(`mocha/lib/reporters/${reporterFile}.js`);
+// eslint-disable-next-line @stylistic/max-len -- Long
+const MochaReporter = (await import(`mocha/lib/reporters/${reporterFile}.js`)).default;
 
 const runner = new Runner(
   new Suite('', null, true)
