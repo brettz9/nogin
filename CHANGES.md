@@ -1,5 +1,10 @@
 # CHANGES for nogin
 
+## 8.1.0
+
+- feat: string and numeric per-user privileges
+- feat: per user privileges (boolean, string, number)
+
 ## 8.0.4
 
 - fix: make types/jquery a peer dep.
