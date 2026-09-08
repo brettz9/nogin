@@ -1,5 +1,6 @@
 import {readFile} from 'node:fs/promises';
 import {join, resolve as pathResolve} from 'node:path';
+import {takeCoverage} from 'node:v8';
 
 // Could forego this and don't i18nize server responses (do on client) or
 //  cache the locales)
@@ -1833,6 +1834,14 @@ const routeList = async (app, config) => {
   // istanbul ignore else
   if (SERVE_COVERAGE) {
     // See https://github.com/cypress-io/code-coverage
+
+    app.get('/__coverage__', (_req, _res, next) => {
+      // eslint-disable-next-line n/no-process-env -- Flush test coverage
+      if (process.env.NODE_V8_COVERAGE) {
+        takeCoverage();
+      }
+      next();
+    });
 
     // ADD APP
     /* eslint-disable n/no-unpublished-import -- Only for testing */
