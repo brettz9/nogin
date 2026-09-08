@@ -4381,8 +4381,8 @@ packages:
     resolution: {integrity: sha512-HGYWWS/ehqTV3xN10i23tkPkpH46MLCIMFNCaaKNavAXTF1RkqxawEPtnjnGZ6XKSInBKkiOA5BKS+aZiY3AvA==}
     engines: {node: '>=8'}
 
-  itermcolors-to-hex@1.0.1:
-    resolution: {integrity: sha512-DGcY7JCmmPL9oLQKUW+vOcnlnwhUmcK2upZVAg5htz0sK3/a0sF4n/X01vC5N+vzRxI9tWR92RdW0aDpu/urDA==}
+  itermcolors-to-hex@1.0.2:
+    resolution: {integrity: sha512-Eh6qc9m0NWNkcVV3nUF+9w0U7sbLQ55xelzphbZTAbw3ZLEhaNJs4xIUan66cAAxaP++TugcLz/qbxI06VDNvg==}
 
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
@@ -6266,8 +6266,8 @@ packages:
     resolution: {integrity: sha512-WHkws2ZflZe41zj6AolvvmaTrWds/VuyeYr9iPVv/oQeaIoVxMKaushfFWpOGDT+GuBrM/sVqF8KUCYQlSSTdQ==}
     engines: {node: '>=18'}
 
-  super-split@1.1.0:
-    resolution: {integrity: sha512-I4bA5mgcb6Fw5UJ+EkpzqXfiuvVGS/7MuND+oBxNFmxu3ugLNrdIatzBLfhFRMVMLxgSsRy+TjIktgkF9RFSNQ==}
+  super-split@1.1.1:
+    resolution: {integrity: sha512-PS4Y0/jEdPIivDVTdy4IxLYF67YAHcpbdVEw7g4Lp8kAvoH8j4EHir7cMvTyMf31EqoSHGakHIBUqg5oji+ELg==}
 
   supports-color@2.0.0:
     resolution: {integrity: sha512-KKNVtd6pCYgPIKU4cp2733HWYCpplQhddZLBUryaAHou723x+FRzQ5Df824Fj+IyyuiQTRoub4SnIFfIcrp70g==}
@@ -8855,7 +8855,7 @@ snapshots:
   ansi-to@1.5.2:
     dependencies:
       deepmerge: 2.2.1
-      itermcolors-to-hex: 1.0.1
+      itermcolors-to-hex: 1.0.2
       parse-ansi: 1.0.4
 
   anymatch@3.1.3:
@@ -11434,7 +11434,7 @@ snapshots:
       html-escaper: 2.0.2
       istanbul-lib-report: 3.0.1
 
-  itermcolors-to-hex@1.0.1:
+  itermcolors-to-hex@1.0.2:
     dependencies:
       plist: 3.1.1
       rgb-hex: 2.1.0
@@ -12722,7 +12722,7 @@ snapshots:
       array-uniq: 1.0.3
       deepmerge: 2.2.1
       strip-ansi: 4.0.0
-      super-split: 1.1.0
+      super-split: 1.1.1
 
   parse-conflict-json@5.0.1:
     dependencies:
@@ -13633,7 +13633,7 @@ snapshots:
       make-asynchronous: 1.1.0
       time-span: 5.1.0
 
-  super-split@1.1.0: {}
+  super-split@1.1.1: {}
 
   supports-color@2.0.0: {}
 
