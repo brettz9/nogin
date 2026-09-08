@@ -688,13 +688,7 @@ const routeList = async (app, config) => {
      */
     async coverage (_routes, req, res, next) {
       if (SERVE_COVERAGE) {
-        // Tried just this, but apparently must be used with `app.use`
-        // express.static(join(__dirname, '../../coverage'))(req, res, next);
-
-        // SHOW COVERAGE HTML ON SERVER
-        // We could add this in a separate file, but we'll leverage express here
-        app.use(req.url, express.static(join(__dirname, '../../coverage')));
-        next(); // Now check static
+        next();
         return;
       }
 
@@ -1834,6 +1828,11 @@ const routeList = async (app, config) => {
   // istanbul ignore else
   if (SERVE_COVERAGE) {
     // See https://github.com/cypress-io/code-coverage
+
+    app.use(
+      '/coverage',
+      express.static(join(__dirname, '../../coverage'))
+    );
 
     app.get('/__coverage__', (_req, _res, next) => {
       // eslint-disable-next-line n/no-process-env -- Flush test coverage
