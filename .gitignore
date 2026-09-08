@@ -11,6 +11,8 @@ coverage/**
 instrumented/**
 .nyc_output
 .c8_output
+.c8_server_output
+.server_coverage
 db
 
 docs/typedoc
