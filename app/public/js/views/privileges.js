@@ -352,6 +352,15 @@ const PrivilegesView = {
   },
 
   /**
+   * @returns {HTMLTextAreaElement}
+   */
+  getAddPrivilegeToGroupValueTextarea () {
+    return /** @type {HTMLTextAreaElement} */ (
+      $('#addPrivilegeToGroup-value-textarea')[0]
+    );
+  },
+
+  /**
    * @returns {HTMLInputElement}
    */
   getAddPrivilegeToUserUser () {
@@ -364,6 +373,15 @@ const PrivilegesView = {
   getAddPrivilegeToUserValue () {
     return /** @type {HTMLInputElement} */ (
       $('#addPrivilegeToUser-value-input')[0]
+    );
+  },
+
+  /**
+   * @returns {HTMLTextAreaElement}
+   */
+  getAddPrivilegeToUserValueTextarea () {
+    return /** @type {HTMLTextAreaElement} */ (
+      $('#addPrivilegeToUser-value-textarea')[0]
     );
   },
 
@@ -472,9 +490,6 @@ const PrivilegesView = {
   errorMessages: {
     name: {
       PleaseEnterName: /** @type {string} */ (_('PleaseEnterName'))
-    },
-    value: {
-      PleaseEnterValidJSON: /** @type {string} */ (_('PleaseEnterValidJSON'))
     }
   }
 };

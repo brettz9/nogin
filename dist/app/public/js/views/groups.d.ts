@@ -36,6 +36,10 @@ declare const GroupsView: {
      */
     getAddPrivilegeToGroupValue(): HTMLInputElement;
     /**
+     * @returns {HTMLTextAreaElement}
+     */
+    getAddPrivilegeToGroupValueTextarea(): HTMLTextAreaElement;
+    /**
      * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */

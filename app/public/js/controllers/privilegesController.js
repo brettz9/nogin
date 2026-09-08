@@ -5,6 +5,9 @@ import '../polyfills/console.js';
 
 import ConfirmDialog from '../views/utilities/ConfirmDialog.js';
 import PrivilegesView from '../views/privileges.js';
+import {
+  prepareValueField, validatePrivilegeJSON
+} from '../views/utilities/privilegeValue.js';
 
 /**
  * @typedef {Error & {
@@ -15,35 +18,6 @@ import PrivilegesView from '../views/privileges.js';
  */
 
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
-
-/**
- * Validates that a privilege value input holds JSON text which parses to the
- * expected `type` (`"array"` or `"object"`), setting a custom validity
- * message when it does not.
- * @param {HTMLInputElement} input
- * @param {"array"|"object"} type
- * @returns {boolean}
- */
-function validatePrivilegeJSON (input, type) {
-  input.setCustomValidity('');
-  let parsed;
-  let parseSucceeded = true;
-  try {
-    parsed = JSON.parse(input.value);
-  } catch (err) {
-    parseSucceeded = false;
-  }
-  const valid = parseSucceeded && (type === 'array'
-    ? Array.isArray(parsed)
-    : typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed));
-  if (!valid) {
-    input.setCustomValidity(
-      PrivilegesView.errorMessages.value.PleaseEnterValidJSON
-    );
-    return false;
-  }
-  return true;
-}
 
 const createPrivilegeButton = PrivilegesView.getCreatePrivilegeButton();
 const createPrivilegeModal = PrivilegesView.createPrivilegeModal();
@@ -191,11 +165,11 @@ addPrivilegeToUserButton.on('click', (e) => {
   const privilegeName = /** @type {string} */ (e.target.dataset.privilege);
   const privilegeType = /** @type {string} */ (e.target.dataset.type);
   const user = PrivilegesView.getAddPrivilegeToUserUser();
-  const privilegeValue = PrivilegesView.getAddPrivilegeToUserValue();
-  privilegeValue.value = '';
-  privilegeValue.disabled = privilegeType === 'boolean';
-  privilegeValue.required = privilegeType !== 'boolean';
-  privilegeValue.type = privilegeType === 'number' ? 'number' : 'text';
+  const privilegeValue = prepareValueField(
+    PrivilegesView.getAddPrivilegeToUserValue(),
+    PrivilegesView.getAddPrivilegeToUserValueTextarea(),
+    privilegeType
+  );
 
   PrivilegesView.addPrivilegeToUserCancel(
     addPrivilegeToUserModal
@@ -217,10 +191,7 @@ addPrivilegeToUserButton.on('click', (e) => {
         ).reportValidity();
         return;
       }
-      if (
-        (privilegeType === 'array' || privilegeType === 'object') &&
-        !validatePrivilegeJSON(privilegeValue, privilegeType)
-      ) {
+      if (!validatePrivilegeJSON(privilegeValue, privilegeType)) {
         /** @type {HTMLFormElement} */ (
           addPrivilegeToUserForm[0]
         ).reportValidity();
@@ -254,11 +225,11 @@ addPrivilegeToGroupButton.on('click', (e) => {
   const privilegeToAdd = /** @type {string} */ (e.target.dataset.privilege);
   const privilegeType = /** @type {string} */ (e.target.dataset.type);
   const groupName = PrivilegesView.getAddPrivilegeToGroupGroup();
-  const privilegeValue = PrivilegesView.getAddPrivilegeToGroupValue();
-  privilegeValue.value = '';
-  privilegeValue.disabled = privilegeType === 'boolean';
-  privilegeValue.required = privilegeType !== 'boolean';
-  privilegeValue.type = privilegeType === 'number' ? 'number' : 'text';
+  const privilegeValue = prepareValueField(
+    PrivilegesView.getAddPrivilegeToGroupValue(),
+    PrivilegesView.getAddPrivilegeToGroupValueTextarea(),
+    privilegeType
+  );
 
   const addPrivilegeToGroupCancel = PrivilegesView.addPrivilegeToGroupCancel(
     addPrivilegeToGroupModal
@@ -283,10 +254,7 @@ addPrivilegeToGroupButton.on('click', (e) => {
         ).reportValidity();
         return;
       }
-      if (
-        (privilegeType === 'array' || privilegeType === 'object') &&
-        !validatePrivilegeJSON(privilegeValue, privilegeType)
-      ) {
+      if (!validatePrivilegeJSON(privilegeValue, privilegeType)) {
         /** @type {HTMLFormElement} */ (
           addPrivilegeToGroupForm[0]
         ).reportValidity();

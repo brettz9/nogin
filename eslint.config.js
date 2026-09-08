@@ -26,6 +26,10 @@ export default [
 
         // Supplied by core-js
         'Array.isArray',
+        // `eslint-plugin-compat` cannot statically tell the receiver is an
+        //   array, so it reports `[].includes()` under the id `Array.includes`
+        //   (not `Array.prototype.includes`); that is the id it matches here.
+        'Array.includes',
         'Object.values',
         'Promise',
 

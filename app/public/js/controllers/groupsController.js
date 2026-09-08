@@ -5,6 +5,9 @@ import '../polyfills/console.js';
 
 import ConfirmDialog from '../views/utilities/ConfirmDialog.js';
 import GroupsView from '../views/groups.js';
+import {
+  prepareValueField, validatePrivilegeJSON
+} from '../views/utilities/privilegeValue.js';
 
 /**
  * @typedef {Error & {
@@ -187,8 +190,32 @@ addPrivilegeToGroupForm.on('submit', function (e) {
 });
 addPrivilegeToGroupButton.on('click', (e) => {
   const privilegeToAdd = GroupsView.getAddPrivilegeToGroupGroup();
-  const privilegeValue = GroupsView.getAddPrivilegeToGroupValue();
+  const valueInput = GroupsView.getAddPrivilegeToGroupValue();
+  const valueTextarea = GroupsView.getAddPrivilegeToGroupValueTextarea();
   const groupName = /** @type {string} */ (e.target.dataset.group);
+
+  // Unlike the privileges page, the privilege (and thus its type) is not known
+  //   until the user picks one, so resolve the type from the typed name via
+  //   the name→type map the server placed on the value field.
+  /** @type {{[key: string]: string}} */
+  const privilegeTypes = JSON.parse(
+    valueInput.dataset.privilegeTypes || '{}'
+  );
+  const currentPrivilegeType = () => {
+    return privilegeTypes[privilegeToAdd.value] || 'boolean';
+  };
+
+  let privilegeValue = prepareValueField(
+    valueInput, valueTextarea, currentPrivilegeType()
+  );
+  $(privilegeToAdd).off('input.noginPrivilegeValue').on(
+    'input.noginPrivilegeValue',
+    () => {
+      privilegeValue = prepareValueField(
+        valueInput, valueTextarea, currentPrivilegeType()
+      );
+    }
+  );
 
   const addPrivilegeToGroupCancel = GroupsView.addPrivilegeToGroupCancel(
     addPrivilegeToGroupModal
@@ -208,6 +235,12 @@ addPrivilegeToGroupButton.on('click', (e) => {
         privilegeToAdd.setCustomValidity(
           GroupsView.errorMessages.name.PleaseEnterName
         );
+        /** @type {HTMLFormElement} */ (
+          addPrivilegeToGroupForm[0]
+        ).reportValidity();
+        return;
+      }
+      if (!validatePrivilegeJSON(privilegeValue, currentPrivilegeType())) {
         /** @type {HTMLFormElement} */ (
           addPrivilegeToGroupForm[0]
         ).reportValidity();

@@ -836,6 +836,13 @@ const routeList = async (app, config) => {
             return !userVarying;
           }).map(({privilegeName}) => privilegeName)
           : [],
+        privilegeTypes: hasAddPrivilegeToGroupAccess
+          ? Object.fromEntries(privilegesInfo.value.filter(({userVarying}) => {
+            return !userVarying;
+          }).map(({privilegeName, type = 'boolean'}) => {
+            return [privilegeName, type];
+          }))
+          : {},
         users: hasReadUsersAccess || hasAddUserToGroupAccess
           ? getAllRecords.value.map(
             ({user}) => /** @type {string} */ (user)

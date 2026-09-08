@@ -149,6 +149,10 @@ declare const PrivilegesView: {
      */
     getAddPrivilegeToGroupValue(): HTMLInputElement;
     /**
+     * @returns {HTMLTextAreaElement}
+     */
+    getAddPrivilegeToGroupValueTextarea(): HTMLTextAreaElement;
+    /**
      * @returns {HTMLInputElement}
      */
     getAddPrivilegeToUserUser(): HTMLInputElement;
@@ -156,6 +160,10 @@ declare const PrivilegesView: {
      * @returns {HTMLInputElement}
      */
     getAddPrivilegeToUserValue(): HTMLInputElement;
+    /**
+     * @returns {HTMLTextAreaElement}
+     */
+    getAddPrivilegeToUserValueTextarea(): HTMLTextAreaElement;
     /**
      * @returns {HTMLInputElement}
      */

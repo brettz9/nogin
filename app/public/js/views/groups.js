@@ -113,6 +113,15 @@ const GroupsView = {
   },
 
   /**
+   * @returns {HTMLTextAreaElement}
+   */
+  getAddPrivilegeToGroupValueTextarea () {
+    return /** @type {HTMLTextAreaElement} */ (
+      $('#addPrivilegeToGroup-value-textarea')[0]
+    );
+  },
+
+  /**
    * @param {JQuery} addPrivilegeToGroupModal `HTMLDivElement`
    * @returns {JQuery} `HTMLButtonElement`
    */

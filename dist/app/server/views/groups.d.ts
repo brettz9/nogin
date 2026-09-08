@@ -16,10 +16,14 @@
  *     builtin: boolean
  *   }[],
  *   users: string[],
- *   privileges: string[]
+ *   privileges: string[],
+ *   privilegeTypes: {
+ *     [key: string]:
+ *       import('../modules/account-manager.js').PrivilegeType
+ *   }
  * }} cfg
  */
-declare const groups: ({ _, layout, hasEditGroupAccess, hasAddUserToGroupAccess, hasRemoveUserFromGroupAccess, hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess, hasReadPrivilegeAccess, hasReadUsersAccess, groupsInfo, users, privileges }: {
+declare const groups: ({ _, layout, hasEditGroupAccess, hasAddUserToGroupAccess, hasRemoveUserFromGroupAccess, hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess, hasReadPrivilegeAccess, hasReadUsersAccess, groupsInfo, users, privileges, privilegeTypes }: {
     _: import('intl-dom').I18NCallback;
     layout: import('../routeUtils.js').LayoutCallback;
     hasEditGroupAccess: boolean;
@@ -40,6 +44,9 @@ declare const groups: ({ _, layout, hasEditGroupAccess, hasAddUserToGroupAccess,
     }[];
     users: string[];
     privileges: string[];
+    privilegeTypes: {
+        [key: string]: import('../modules/account-manager.js').PrivilegeType;
+    };
 }) => Promise<[import("jamilih").JamilihDoc]>;
 export default groups;
 //# sourceMappingURL=groups.d.ts.map

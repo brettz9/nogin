@@ -3,6 +3,9 @@
 ## 8.2.0
 
 - feat: add object and array JSON privileges
+- feat: use a textarea (instead of an input) for string, array, and object
+    privilege values, with pre-submit `JSON.parse` validation on both the
+    privileges and groups pages
 
 ## 8.1.0
 

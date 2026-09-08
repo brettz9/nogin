@@ -2,6 +2,7 @@ import alert from './modals/alert.js';
 import confirm from './modals/confirm.js';
 import singleInputForm from './modals/single-input-form.js';
 import doubleInputForm from './modals/double-input-form.js';
+import privilegeValueFields from './modals/privilege-value-fields.js';
 
 /**
  * @param {{
@@ -222,33 +223,17 @@ const privileges = ({
           _, type: 'addPrivilegeToGroup',
           inputDirections: 'PleaseInputGroupToWhichToAddPrivilege',
           autocomplete: groups,
-          additionalFields: [
-            ['label', {
-              for: 'addPrivilegeToGroup-value-input'
-            }, [_('PrivilegeValue')]],
-            ['input', {
-              class: 'form-control',
-              id: 'addPrivilegeToGroup-value-input',
-              'data-name': 'privilege-value',
-              name: 'value'
-            }]
-          ]
+          additionalFields: privilegeValueFields({
+            _, type: 'addPrivilegeToGroup'
+          })
         }),
         singleInputForm({
           _, type: 'addPrivilegeToUser',
           inputDirections: 'PleaseInputUserToWhichToAddPrivilege',
           autocomplete: users,
-          additionalFields: [
-            ['label', {
-              for: 'addPrivilegeToUser-value-input'
-            }, [_('PrivilegeValue')]],
-            ['input', {
-              class: 'form-control',
-              id: 'addPrivilegeToUser-value-input',
-              'data-name': 'privilege-value',
-              name: 'value'
-            }]
-          ]
+          additionalFields: privilegeValueFields({
+            _, type: 'addPrivilegeToUser'
+          })
         })
       ]]
     ],

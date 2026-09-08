@@ -117,6 +117,8 @@ describe('Programmatic', function () {
       expect(rendered).to.include('NotApplicable');
       expect(rendered).to.include('typedUser');
       expect(rendered).to.include('addPrivilegeToUser btn btn-primary');
+      expect(rendered).to.include('addPrivilegeToUser-value-textarea');
+      expect(rendered).to.include('addPrivilegeToGroup-value-textarea');
       expect(rendered).not.to.include(
         'addPrivilegeToGroup btn btn-primary","data-privilege":' +
         '"userDatabase'

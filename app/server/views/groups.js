@@ -1,6 +1,7 @@
 import alert from './modals/alert.js';
 import confirm from './modals/confirm.js';
 import singleInputForm from './modals/single-input-form.js';
+import privilegeValueFields from './modals/privilege-value-fields.js';
 
 /**
  * @param {{
@@ -20,7 +21,11 @@ import singleInputForm from './modals/single-input-form.js';
  *     builtin: boolean
  *   }[],
  *   users: string[],
- *   privileges: string[]
+ *   privileges: string[],
+ *   privilegeTypes: {
+ *     [key: string]:
+ *       import('../modules/account-manager.js').PrivilegeType
+ *   }
  * }} cfg
  */
 const groups = ({
@@ -32,7 +37,7 @@ const groups = ({
   hasRemovePrivilegeFromGroupAccess,
   hasReadPrivilegeAccess,
   hasReadUsersAccess,
-  groupsInfo, users, privileges
+  groupsInfo, users, privileges, privilegeTypes
 }) => {
   return layout({
     content: [
@@ -185,17 +190,12 @@ const groups = ({
           _, type: 'addPrivilegeToGroup',
           inputDirections: 'PleaseInputPrivilegeToAddToGroup',
           autocomplete: privileges,
-          additionalFields: [
-            ['label', {
-              for: 'addPrivilegeToGroup-value-input'
-            }, [_('PrivilegeValue')]],
-            ['input', {
-              class: 'form-control',
-              id: 'addPrivilegeToGroup-value-input',
-              'data-name': 'privilege-value',
-              name: 'value'
-            }]
-          ]
+          additionalFields: privilegeValueFields({
+            _, type: 'addPrivilegeToGroup',
+            extraInputAttributes: {
+              'data-privilege-types': JSON.stringify(privilegeTypes)
+            }
+          })
         })
       ]]
     ],
