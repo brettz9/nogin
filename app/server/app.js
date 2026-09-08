@@ -336,10 +336,17 @@ const createServer = async function (options) {
   }));
 
   log('BeginningServer');
-  http.createServer(app).listen(app.get('port'), () => {
-    // Todo: Add more (i18nized) logging messages
-    //   also make i18n tool for `optionDefinitions` definitions?
-    log('express_server_listening', {port: String(app.get('port'))});
+  // eslint-disable-next-line promise/avoid-new -- Await server startup errors
+  await new Promise((resolve, reject) => {
+    const server = http.createServer(app);
+    server.once('error', reject);
+    server.listen(app.get('port'), () => {
+      server.removeListener('error', reject);
+      // Todo: Add more (i18nized) logging messages
+      //   also make i18n tool for `optionDefinitions` definitions?
+      log('express_server_listening', {port: String(app.get('port'))});
+      resolve(undefined);
+    });
   });
 };
 

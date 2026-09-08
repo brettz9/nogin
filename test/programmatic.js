@@ -149,6 +149,12 @@ describe('Programmatic', function () {
           }
         }
       });
+
+      await expect(createServer({
+        PORT: 3001,
+        config: null,
+        noHostValidation: true
+      })).to.be.rejectedWith('EADDRINUSE');
     });
   });
 
