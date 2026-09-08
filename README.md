@@ -5,6 +5,7 @@
 [![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/brettz9/nogin/badge.svg)](https://snyk.io/test/github/brettz9/nogin)
+[![CodeQL Advanced](https://github.com/brettz9/nogin/actions/workflows/codeql.yml/badge.svg)](https://github.com/brettz9/nogin/actions/workflows/codeql.yml)
 
 [![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge.svg?sanitize=true)](doc-includes/licenses-badge.svg)
 
