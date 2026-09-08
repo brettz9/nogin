@@ -10,6 +10,7 @@ import {fileURLToPath} from 'node:url';
 import {expect} from 'chai';
 
 import {JSDOM} from 'jsdom';
+import mongodb from 'mongodb';
 
 // eslint-disable-next-line @stylistic/max-len -- Long
 // Todo[engine:node@>22]: Remove `node-fetch` when globally available and non-experimental
@@ -30,6 +31,8 @@ import {
 } from './utilities/EmailChecker.js';
 import spawnPromise from './utilities/spawnPromise.js';
 
+const {MongoClient} = mongodb;
+
 const addUsersJSON = JSON.parse(
   // @ts-expect-error It's ok
   await readFile(
@@ -39,14 +42,7 @@ const addUsersJSON = JSON.parse(
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-/* eslint-disable @stylistic/max-len -- Long */
-// Would add this to config file but would interfere with other tests
-// 1. `mongod`
-// 2. `mongo`
-// 3. `use nogin`
-// 4. Add `db.createUser({user: "brett", pwd: "123456", roles: [{ role: "readWrite", db: "nogin" }]});`
-/* eslint-enable @stylistic/max-len -- Long */
-const DB_USER = 'brett';
+const DB_USER = `nogin-cli-test-${process.pid}`;
 const DB_PASS = '123456';
 
 const {
@@ -1209,22 +1205,38 @@ describe('CLI', function () {
 
     it('With environment components', async function () {
       this.timeout(40000);
-      // Use the default DB for this auth test (user was
-      //   provisioned on `nogin`).
-      const {stdout, stderr} = await spawnPromise(cliPath, {
-        env: {
-          // eslint-disable-next-line n/no-process-env -- Testing env.
-          ...process.env,
-          NODE_ENV: 'production'
-        }
-      }, [
-        '--localScripts',
-        '--secret', secret,
-        '--PORT', testPort,
-        '--config', '',
-        '--DB_USER', DB_USER,
-        '--DB_PASS', DB_PASS
-      ], 20000);
+      const mongoClient = await MongoClient.connect(
+        `mongodb://127.0.0.1:27017/${testDBName}`
+      );
+      const db = mongoClient.db(testDBName);
+      await db.command({
+        createUser: DB_USER,
+        pwd: DB_PASS,
+        roles: [{role: 'readWrite', db: testDBName}]
+      });
+
+      /** @type {SpawnResults} */
+      let result;
+      try {
+        result = await spawnCLI({
+          env: {
+            // eslint-disable-next-line n/no-process-env -- Testing env.
+            ...process.env,
+            NODE_ENV: 'production'
+          }
+        }, [
+          '--localScripts',
+          '--secret', secret,
+          '--PORT', testPort,
+          '--config', '',
+          '--DB_USER', DB_USER,
+          '--DB_PASS', DB_PASS
+        ], 20000);
+      } finally {
+        await db.command({dropUser: DB_USER});
+        await mongoClient.close();
+      }
+      const {stdout, stderr} = result;
       expect(stdout).to.contain(
         'Beginning routes...\n' +
         'Awaiting internationalization and logging...\n' +
