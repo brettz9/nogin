@@ -6,6 +6,9 @@ export default [
     ignores: [
       'instrumented/**',
       'coverage/**',
+      '.c8_output/**',
+      '.c8_server_output/**',
+      '.server_coverage/**',
       'mochawesome-report/**',
       'cypress/results/**',
       'docs/typedoc',
