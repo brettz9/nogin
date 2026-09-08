@@ -12,7 +12,6 @@ export default defineConfig({
   env: {
     disableEmailChecking: true
   },
-  allowCypressEnv: false,
   video: false,
   e2e: {
     // We've imported your old cypress plugins here.
