@@ -7,6 +7,7 @@ cypress.json
 
 coverage/**
 .nyc_output
+.c8_output
 instrumented/**
 
 mochawesome-report/**

@@ -10,6 +10,7 @@ cypress.env.json
 coverage/**
 instrumented/**
 .nyc_output
+.c8_output
 db
 
 docs/typedoc
