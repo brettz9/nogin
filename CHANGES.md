@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 8.2.0
+
+- feat: add object and array JSON privileges
+
 ## 8.1.0
 
 - feat: string and numeric per-user privileges

@@ -70,10 +70,13 @@ export type AccountInfoFilter = {
      */
     activationRequestDate?: any;
 };
-export type PrivilegeType = "boolean" | "string" | "number";
+export type PrivilegeType = "boolean" | "string" | "number" | "array" | "object";
+export type PrivilegeValue = string | number | unknown[] | {
+    [key: string]: unknown;
+};
 export type PrivilegeAssignment = {
     privilegeName: string;
-    value: string | number;
+    value: PrivilegeValue;
 };
 export type GroupInfo = {
     /**
@@ -112,7 +115,7 @@ export type PrivilegeInfo = {
     /**
      * Present on an effective typed assignment
      */
-    value?: string | number;
+    value?: PrivilegeValue;
     builtin: boolean;
     /**
      * Auto-generated timestamp
@@ -272,13 +275,13 @@ declare class AccountManager {
     /**
      * @param {Partial<GroupInfo> & {
      *   privilegeName: string,
-     *   value?: string|number
+     *   value?: PrivilegeValue
      * }} data
      * @returns {Promise<void>}
      */
     addPrivilegeToGroup(data: Partial<GroupInfo> & {
         privilegeName: string;
-        value?: string | number;
+        value?: PrivilegeValue;
     }): Promise<void>;
     /**
      * @param {Partial<GroupInfo> & {privilegeName: string}} data
@@ -301,14 +304,14 @@ declare class AccountManager {
      * @param {{
      *   userID: string,
      *   privilegeName: string,
-     *   value?: string|number
+     *   value?: PrivilegeValue
      * }} data
      * @returns {Promise<void>}
      */
     addPrivilegeToUser(data: {
         userID: string;
         privilegeName: string;
-        value?: string | number;
+        value?: PrivilegeValue;
     }): Promise<void>;
     /**
      * @param {{userID: string, privilegeName: string}} data

@@ -26,38 +26,59 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 chai.use(chaiAsPromised);
 
 describe('Programmatic', function () {
-  it('serializes boolean, string, and numeric privileges', function () {
-    const privileges = getPrivilegeValues([
-      {
-        privilegeName: 'canPublish',
-        description: 'Can publish',
-        builtin: false,
-        date: Date.now()
-      },
-      {
-        privilegeName: 'userDatabase',
-        description: 'User database',
-        type: 'string',
-        value: 'myDatabase',
-        builtin: false,
-        date: Date.now()
-      },
-      {
-        privilegeName: 'uploadLimit',
-        description: 'Upload limit',
-        type: 'number',
-        value: 25,
-        builtin: false,
-        date: Date.now()
-      }
-    ]);
+  it(
+    'serializes boolean, string, numeric, array, and object privileges',
+    function () {
+      const privileges = getPrivilegeValues([
+        {
+          privilegeName: 'canPublish',
+          description: 'Can publish',
+          builtin: false,
+          date: Date.now()
+        },
+        {
+          privilegeName: 'userDatabase',
+          description: 'User database',
+          type: 'string',
+          value: 'myDatabase',
+          builtin: false,
+          date: Date.now()
+        },
+        {
+          privilegeName: 'uploadLimit',
+          description: 'Upload limit',
+          type: 'number',
+          value: 25,
+          builtin: false,
+          date: Date.now()
+        },
+        {
+          privilegeName: 'allowedTags',
+          description: 'Allowed tags',
+          type: 'array',
+          value: ['news', 'sports'],
+          builtin: false,
+          date: Date.now()
+        },
+        {
+          privilegeName: 'quota',
+          description: 'Quota',
+          type: 'object',
+          value: {daily: 100},
+          builtin: false,
+          date: Date.now()
+        }
+      ]);
 
-    expect(Object.fromEntries(privileges)).to.deep.equal({
-      canPublish: true,
-      userDatabase: 'myDatabase',
-      uploadLimit: 25
-    });
-  });
+      expect(Object.fromEntries(privileges)).to.deep.equal({
+        canPublish: true,
+        userDatabase: 'myDatabase',
+        uploadLimit: 25,
+        allowedTags: ['news', 'sports'],
+        quota: {daily: 100}
+      });
+    }
+  );
 
   it('shows privilege types but not values in the management UI',
     async function () {
@@ -90,6 +111,8 @@ describe('Programmatic', function () {
 
       expect(rendered).to.include('createPrivilege-type-input');
       expect(rendered).to.include('createPrivilege-user-varying-input');
+      expect(rendered).to.include('ArrayPrivilege');
+      expect(rendered).to.include('ObjectPrivilege');
       expect(rendered).to.include('StringPrivilege');
       expect(rendered).to.include('NotApplicable');
       expect(rendered).to.include('typedUser');
@@ -238,6 +261,17 @@ describe('Programmatic', function () {
             description: 'User score',
             type: 'number',
             userVarying: true
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'allowedTags',
+            description: 'Allowed tags',
+            type: 'array'
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'quota',
+            description: 'Quota',
+            type: 'object',
+            userVarying: true
           })
         ]);
         await Promise.all([
@@ -246,6 +280,10 @@ describe('Programmatic', function () {
           }),
           am.addPrivilegeToGroup({
             groupName: 'typed', privilegeName: 'uploadLimit', value: 25
+          }),
+          am.addPrivilegeToGroup({
+            groupName: 'typed', privilegeName: 'allowedTags',
+            value: ['news', 'sports']
           }),
           am.addPrivilegeToUser({
             userID: 'typedUser', privilegeName: 'userDatabase',
@@ -256,6 +294,9 @@ describe('Programmatic', function () {
           }),
           am.addPrivilegeToUser({
             userID: 'typedUser', privilegeName: 'userScore', value: 42
+          }),
+          am.addPrivilegeToUser({
+            userID: 'typedUser', privilegeName: 'quota', value: {daily: 100}
           })
         ]);
 
@@ -263,13 +304,14 @@ describe('Programmatic', function () {
         expect(
           Object.fromEntries(getPrivilegeValues(privileges))
         ).to.deep.equal({
-          canPublish: true, uploadLimit: 25
+          canPublish: true, uploadLimit: 25, allowedTags: ['news', 'sports']
         });
         const userPrivileges = await am.getPrivilegesForUser('typedUser');
         expect(
           Object.fromEntries(getPrivilegeValues(userPrivileges))
         ).to.deep.equal({
-          userDatabase: 'myDatabase', betaUser: true, userScore: 42
+          userDatabase: 'myDatabase', betaUser: true, userScore: 42,
+          quota: {daily: 100}
         });
         await expect(am.addPrivilegeToGroup({
           groupName: 'typed', privilegeName: 'userDatabase',
@@ -287,10 +329,17 @@ describe('Programmatic', function () {
         expect(
           Object.fromEntries(getPrivilegeValues(renamedPrivileges))
         ).to.deep.equal({
-          primaryDatabase: 'myDatabase', betaUser: true, userScore: 42
+          primaryDatabase: 'myDatabase', betaUser: true, userScore: 42,
+          quota: {daily: 100}
         });
         await expect(am.addPrivilegeToGroup({
           groupName: 'typed', privilegeName: 'uploadLimit', value: '25'
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
+        await expect(am.addPrivilegeToGroup({
+          groupName: 'typed', privilegeName: 'allowedTags', value: {}
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
+        await expect(am.addPrivilegeToUser({
+          userID: 'typedUser', privilegeName: 'quota', value: [1, 2]
         })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
       } finally {
         await Promise.all([

@@ -16,6 +16,35 @@ import PrivilegesView from '../views/privileges.js';
 
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
 
+/**
+ * Validates that a privilege value input holds JSON text which parses to the
+ * expected `type` (`"array"` or `"object"`), setting a custom validity
+ * message when it does not.
+ * @param {HTMLInputElement} input
+ * @param {"array"|"object"} type
+ * @returns {boolean}
+ */
+function validatePrivilegeJSON (input, type) {
+  input.setCustomValidity('');
+  let parsed;
+  let parseSucceeded = true;
+  try {
+    parsed = JSON.parse(input.value);
+  } catch (err) {
+    parseSucceeded = false;
+  }
+  const valid = parseSucceeded && (type === 'array'
+    ? Array.isArray(parsed)
+    : typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed));
+  if (!valid) {
+    input.setCustomValidity(
+      PrivilegesView.errorMessages.value.PleaseEnterValidJSON
+    );
+    return false;
+  }
+  return true;
+}
+
 const createPrivilegeButton = PrivilegesView.getCreatePrivilegeButton();
 const createPrivilegeModal = PrivilegesView.createPrivilegeModal();
 const createPrivilegeForm = PrivilegesView.createPrivilegeForm(
@@ -188,6 +217,15 @@ addPrivilegeToUserButton.on('click', (e) => {
         ).reportValidity();
         return;
       }
+      if (
+        (privilegeType === 'array' || privilegeType === 'object') &&
+        !validatePrivilegeJSON(privilegeValue, privilegeType)
+      ) {
+        /** @type {HTMLFormElement} */ (
+          addPrivilegeToUserForm[0]
+        ).reportValidity();
+        return;
+      }
       await addPrivilegeToUser(
         user.value,
         privilegeName,
@@ -240,6 +278,15 @@ addPrivilegeToGroupButton.on('click', (e) => {
         groupName.setCustomValidity(
           PrivilegesView.errorMessages.name.PleaseEnterName
         );
+        /** @type {HTMLFormElement} */ (
+          addPrivilegeToGroupForm[0]
+        ).reportValidity();
+        return;
+      }
+      if (
+        (privilegeType === 'array' || privilegeType === 'object') &&
+        !validatePrivilegeJSON(privilegeValue, privilegeType)
+      ) {
         /** @type {HTMLFormElement} */ (
           addPrivilegeToGroupForm[0]
         ).reportValidity();

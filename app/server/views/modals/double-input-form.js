@@ -28,7 +28,9 @@ const doubleInputForm = ({
         }, [
           ['option', {value: 'boolean'}, [_('BooleanPrivilege')]],
           ['option', {value: 'string'}, [_('StringPrivilege')]],
-          ['option', {value: 'number'}, [_('NumberPrivilege')]]
+          ['option', {value: 'number'}, [_('NumberPrivilege')]],
+          ['option', {value: 'array'}, [_('ArrayPrivilege')]],
+          ['option', {value: 'object'}, [_('ObjectPrivilege')]]
         ]]
       ]
       : []

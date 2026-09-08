@@ -67,14 +67,46 @@ const builtInPrivileges = new Set([
  */
 
 /**
- * @typedef {"boolean"|"string"|"number"} PrivilegeType
+ * @typedef {"boolean"|"string"|"number"|"array"|"object"} PrivilegeType
+ */
+
+/**
+ * @typedef {string|number|unknown[]|{[key: string]: unknown}} PrivilegeValue
  */
 
 /**
  * @typedef {object} PrivilegeAssignment
  * @property {string} privilegeName
- * @property {string|number} value
+ * @property {PrivilegeValue} value
  */
+
+const privilegeTypes = new Set([
+  'boolean', 'string', 'number', 'array', 'object'
+]);
+
+/**
+ * Checks whether `value` is a valid assignment value for the given non-boolean
+ * privilege `type`. Array and object privileges accept any parsed JSON of the
+ * matching kind.
+ * @param {PrivilegeType} type
+ * @param {unknown} value
+ * @returns {boolean}
+ */
+const isValidPrivilegeValue = (type, value) => {
+  switch (type) {
+  case 'string':
+    return typeof value === 'string';
+  case 'number':
+    return typeof value === 'number' && Number.isFinite(value);
+  case 'array':
+    return Array.isArray(value);
+  case 'object':
+    return typeof value === 'object' && value !== null &&
+      !Array.isArray(value);
+  default:
+    return false;
+  }
+};
 
 /**
  * @typedef {object} GroupInfo
@@ -98,7 +130,7 @@ const builtInPrivileges = new Set([
  * @property {string} description
  * @property {PrivilegeType} [type] Defaults to `boolean`
  * @property {boolean} [userVarying] Defaults to `false`
- * @property {string|number} [value] Present on an effective typed assignment
+ * @property {PrivilegeValue} [value] Present on an effective typed assignment
  * @property {boolean} builtin
  * @property {number} date Auto-generated timestamp
  */
@@ -875,7 +907,7 @@ class AccountManager {
       throw new TypeError('bad-privilege-description');
     }
     const type = data.type || 'boolean';
-    if (!['boolean', 'string', 'number'].includes(type)) {
+    if (!privilegeTypes.has(type)) {
       throw new TypeError('bad-privilege-type');
     }
 
@@ -958,7 +990,7 @@ class AccountManager {
   /**
    * @param {Partial<GroupInfo> & {
    *   privilegeName: string,
-   *   value?: string|number
+   *   value?: PrivilegeValue
    * }} data
    * @returns {Promise<void>}
    */
@@ -987,17 +1019,14 @@ class AccountManager {
     }
 
     const type = _o.type || 'boolean';
-    if (type !== 'boolean' && (
-      typeof data.value !== type ||
-      (type === 'number' && !Number.isFinite(data.value))
-    )) {
+    if (type !== 'boolean' && !isValidPrivilegeValue(type, data.value)) {
       throw new TypeError('bad-privilege-value');
     }
     const assignment = type === 'boolean'
       ? data.privilegeName
       : {
         privilegeName: data.privilegeName,
-        value: /** @type {string|number} */ (data.value)
+        value: /** @type {PrivilegeValue} */ (data.value)
       };
 
     const filterAdd = {
@@ -1134,7 +1163,7 @@ class AccountManager {
    * @param {{
    *   userID: string,
    *   privilegeName: string,
-   *   value?: string|number
+   *   value?: PrivilegeValue
    * }} data
    * @returns {Promise<void>}
    */
@@ -1158,17 +1187,14 @@ class AccountManager {
     }
 
     const type = privilege.type || 'boolean';
-    if (type !== 'boolean' && (
-      typeof data.value !== type ||
-      (type === 'number' && !Number.isFinite(data.value))
-    )) {
+    if (type !== 'boolean' && !isValidPrivilegeValue(type, data.value)) {
       throw new TypeError('bad-privilege-value');
     }
     const assignment = type === 'boolean'
       ? data.privilegeName
       : {
         privilegeName: data.privilegeName,
-        value: /** @type {string|number} */ (data.value)
+        value: /** @type {PrivilegeValue} */ (data.value)
       };
     const userFilter = {user: data.userID};
     // eslint-disable-next-line @stylistic/max-len -- Type cast

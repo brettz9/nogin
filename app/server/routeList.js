@@ -24,8 +24,16 @@ import getDirname from './modules/getDirname.js';
 const __dirname = getDirname(import.meta.url);
 
 /**
+ * @typedef {import('./modules/account-manager.js').PrivilegeType} PrivilegeType
+ */
+/**
+ * @typedef {import('./modules/account-manager.js').
+ *   PrivilegeValue} PrivilegeValue
+ */
+
+/**
  * @param {(import('./modules/account-manager.js').PrivilegeInfo|null)[]} infos
- * @returns {Map<string, boolean|string|number>}
+ * @returns {Map<string, PrivilegeValue|boolean>}
  */
 const getPrivilegeValues = (infos) => {
   return infos.reduce((privileges, info) => {
@@ -33,12 +41,34 @@ const getPrivilegeValues = (infos) => {
       privileges.set(
         info.privilegeName,
         info.type && info.type !== 'boolean'
-          ? /** @type {string|number} */ (info.value)
+          ? /** @type {PrivilegeValue} */ (info.value)
           : true
       );
     }
     return privileges;
   }, new Map());
+};
+
+/**
+ * Coerces the raw string `value` submitted from a privileges form into the
+ * runtime type expected for the privilege's `type`. Array and object
+ * privileges are parsed from JSON text; a parse failure throws `SyntaxError`.
+ * @param {PrivilegeType|undefined} type
+ * @param {string} value
+ * @returns {PrivilegeValue}
+ */
+const coercePrivilegeValue = (type, value) => {
+  if (value === '') {
+    return value;
+  }
+  switch (type) {
+  case 'number':
+    return Number(value);
+  case 'array': case 'object':
+    return JSON.parse(value);
+  default:
+    return value;
+  }
 };
 
 /**
@@ -1679,12 +1709,16 @@ const routeList = async (app, config) => {
         }
         try {
           const privilege = await am.getPrivilege(privilegeName);
+          let coercedValue;
+          try {
+            coercedValue = coercePrivilegeValue(privilege?.type, value);
+          } catch {
+            throw new Error('bad-privilege-value');
+          }
           await am.addPrivilegeToGroup({
             groupName,
             privilegeName,
-            value: value !== '' && privilege?.type === 'number'
-              ? Number(value)
-              : value
+            value: coercedValue
           });
         } catch (err) {
           if ([
@@ -1704,12 +1738,16 @@ const routeList = async (app, config) => {
         }
         try {
           const privilege = await am.getPrivilege(privilegeName);
+          let coercedValue;
+          try {
+            coercedValue = coercePrivilegeValue(privilege?.type, value);
+          } catch {
+            throw new Error('bad-privilege-value');
+          }
           await am.addPrivilegeToUser({
             userID,
             privilegeName,
-            value: value !== '' && privilege?.type === 'number'
-              ? Number(value)
-              : value
+            value: coercedValue
           });
         } catch (err) {
           if ([

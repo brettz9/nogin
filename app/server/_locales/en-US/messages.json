@@ -494,7 +494,10 @@
       "message": "Type"
     },
     "PrivilegeValue": {
-      "message": "Value (required for string and number privileges)"
+      "message": "Value (required for string, number, array, and object privileges; arrays and objects as JSON)"
+    },
+    "PleaseEnterValidJSON": {
+      "message": "Please enter a valid JSON value of the expected type"
     },
     "VariesByUser": {
       "message": "Varies by user"
@@ -534,6 +537,12 @@
     },
     "NumberPrivilege": {
       "message": "Number"
+    },
+    "ArrayPrivilege": {
+      "message": "Array"
+    },
+    "ObjectPrivilege": {
+      "message": "Object"
     },
     "bad-privilege-type": {
       "message": "Bad privilege type"

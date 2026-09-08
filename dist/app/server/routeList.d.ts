@@ -1,8 +1,17 @@
+export type PrivilegeType = import('./modules/account-manager.js').PrivilegeType;
+export type PrivilegeValue = import('./modules/account-manager.js').PrivilegeValue;
+/**
+ * @typedef {import('./modules/account-manager.js').PrivilegeType} PrivilegeType
+ */
+/**
+ * @typedef {import('./modules/account-manager.js').
+ *   PrivilegeValue} PrivilegeValue
+ */
 /**
  * @param {(import('./modules/account-manager.js').PrivilegeInfo|null)[]} infos
- * @returns {Map<string, boolean|string|number>}
+ * @returns {Map<string, PrivilegeValue|boolean>}
  */
-declare const getPrivilegeValues: (infos: (import('./modules/account-manager.js').PrivilegeInfo | null)[]) => Map<string, boolean | string | number>;
+declare const getPrivilegeValues: (infos: (import('./modules/account-manager.js').PrivilegeInfo | null)[]) => Map<string, PrivilegeValue | boolean>;
 export type UserAccount = {
     name: string;
     user: string;

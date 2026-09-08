@@ -25,6 +25,7 @@ export default [
         //  which would auto-insert wherever used.
 
         // Supplied by core-js
+        'Array.isArray',
         'Object.values',
         'Promise',
 

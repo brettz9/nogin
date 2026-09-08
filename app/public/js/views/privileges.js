@@ -472,6 +472,9 @@ const PrivilegesView = {
   errorMessages: {
     name: {
       PleaseEnterName: /** @type {string} */ (_('PleaseEnterName'))
+    },
+    value: {
+      PleaseEnterValidJSON: /** @type {string} */ (_('PleaseEnterValidJSON'))
     }
   }
 };
