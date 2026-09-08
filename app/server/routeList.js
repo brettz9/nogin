@@ -1829,16 +1829,15 @@ const routeList = async (app, config) => {
     );
   });
 
-  // Following to exclude as will always be present when
-  //   instrumented; see https://github.com/cypress-io/code-coverage#instrument-backend-code
+  // See https://github.com/cypress-io/code-coverage#instrument-backend-code
   // istanbul ignore else
-  if (typeof __coverage__ !== 'undefined') {
+  if (SERVE_COVERAGE) {
     // See https://github.com/cypress-io/code-coverage
 
     // ADD APP
     /* eslint-disable n/no-unpublished-import -- Only for testing */
     // @ts-expect-error Not bothering
-    (await import('@cypress/code-coverage/middleware/express.js')).default(app);
+    (await import('@cypress/code-coverage/middleware/express')).default(app);
     /* eslint-enable n/no-unpublished-import -- Only for testing */
   }
 
