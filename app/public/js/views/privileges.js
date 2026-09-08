@@ -57,6 +57,13 @@ const PrivilegesView = {
   },
 
   /**
+   * @returns {JQuery<HTMLElement>}
+   */
+  getRemovePrivilegeFromUser () {
+    return $('button.removePrivilegeFromUser');
+  },
+
+  /**
    * @returns {import('../views/utilities/AlertDialog.js').
    *   JQueryWithModal} `HTMLDivElement`
    */
@@ -111,6 +118,19 @@ const PrivilegesView = {
   },
 
   /**
+   * @returns {import('../views/utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
+   */
+  addPrivilegeToUserModal () {
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    const modal = /** @type {import('../views/utilities/AlertDialog.js').JQueryWithModal} */ (
+      $('#addPrivilegeToUser')
+    );
+    modal.modal({show: false, keyboard: true, backdrop: true});
+    return modal;
+  },
+
+  /**
    * @param {JQuery} createPrivilegeModal `HTMLDivElement`
    * @returns {import('../utilities/ajaxFormClientSideValidate.js').
    *   JQueryWithAjaxForm} `HTMLFormElement`
@@ -156,6 +176,18 @@ const PrivilegesView = {
   },
 
   /**
+   * @param {JQuery} modal `HTMLDivElement`
+   * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+   *   JQueryWithAjaxForm} `HTMLFormElement`
+   */
+  addPrivilegeToUserForm (modal) {
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    return /** @type {import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm} */ (
+      modal.find('#addPrivilegeToUser-form')
+    );
+  },
+
+  /**
    * @param {JQuery} createPrivilegeModal `HTMLDivElement`
    * @returns {JQuery} `HTMLButtonElement`
    */
@@ -171,6 +203,14 @@ const PrivilegesView = {
     return addPrivilegeToGroupModal.find(
       '[data-name=addPrivilegeToGroup-submit]'
     );
+  },
+
+  /**
+   * @param {JQuery} modal `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
+   */
+  addPrivilegeToUserSubmit (modal) {
+    return modal.find('[data-name=addPrivilegeToUser-submit]');
   },
 
   /**
@@ -197,6 +237,14 @@ const PrivilegesView = {
     return addPrivilegeToGroupModal.find(
       '[data-name=addPrivilegeToGroup-cancel]'
     );
+  },
+
+  /**
+   * @param {JQuery} modal `HTMLDivElement`
+   * @returns {JQuery} `HTMLButtonElement`
+   */
+  addPrivilegeToUserCancel (modal) {
+    return modal.find('[data-name=addPrivilegeToUser-cancel]');
   },
 
   /**
@@ -229,6 +277,13 @@ const PrivilegesView = {
   },
 
   /**
+   * @returns {JQuery} `HTMLDivElement`
+   */
+  getAddPrivilegeToUserButton () {
+    return $('button.addPrivilegeToUser');
+  },
+
+  /**
    * @returns {HTMLInputElement}
    */
   getCreatePrivilegeName () {
@@ -256,6 +311,15 @@ const PrivilegesView = {
   /**
    * @returns {HTMLInputElement}
    */
+  getCreatePrivilegeUserVarying () {
+    return /** @type {HTMLInputElement} */ (
+      $('#createPrivilege-user-varying-input')[0]
+    );
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
   getEditPrivilegeDescription () {
     return /** @type {HTMLInputElement} */ (
       $('#editPrivilege-description-input')[0]
@@ -272,9 +336,34 @@ const PrivilegesView = {
   /**
    * @returns {HTMLInputElement}
    */
+  getEditPrivilegeUserVarying () {
+    return /** @type {HTMLInputElement} */ (
+      $('#editPrivilege-user-varying-input')[0]
+    );
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
   getAddPrivilegeToGroupValue () {
     return /** @type {HTMLInputElement} */ (
       $('#addPrivilegeToGroup-value-input')[0]
+    );
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
+  getAddPrivilegeToUserUser () {
+    return /** @type {HTMLInputElement} */ ($('#addPrivilegeToUser-input')[0]);
+  },
+
+  /**
+   * @returns {HTMLInputElement}
+   */
+  getAddPrivilegeToUserValue () {
+    return /** @type {HTMLInputElement} */ (
+      $('#addPrivilegeToUser-value-input')[0]
     );
   },
 
@@ -334,9 +423,28 @@ const PrivilegesView = {
   },
 
   /**
+   * @returns {import('./utilities/AlertDialog.js').
+   *   JQueryWithModal} `HTMLDivElement`
+   */
+  setRemovePrivilegeFromUser () {
+    const dialog = ConfirmDialog.populate({
+      type: 'removePrivilegeFromUser',
+      header: /** @type {string} */ (_('removePrivilegeFromUser')),
+      body: /** @type {string} */ (_('reallyWantRemovePrivilegeFromUser')),
+      cancel: /** @type {string} */ (_('cancel')),
+      submit: /** @type {string} */ (_('delete'))
+    });
+    dialog.find('.submit').addClass('btn-danger');
+    return /** @type {import('./utilities/AlertDialog.js').JQueryWithModal} */ (
+      dialog
+    );
+  },
+
+  /**
    * @param {object} cfg
    * @param {"privilegeCreated"|"privilegeDeleted"|"privilegeEdited"|
-   *   "privilegeRemovedFromGroup"|"privilegeAddedToGroup"} cfg.type
+   *   "privilegeRemovedFromGroup"|"privilegeAddedToGroup"|
+   *   "privilegeRemovedFromUser"|"privilegeAddedToUser"} cfg.type
    * @param {string} [cfg.privilege]
    * @returns {import('./utilities/AlertDialog.js').
    *   JQueryWithModal} `HTMLDivElement`

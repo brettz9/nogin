@@ -47,6 +47,7 @@ const builtInPrivileges = new Set([
  * @property {string} [cookie] Auto-set
  * @property {string} [ip] Auto-set
  * @property {string} [passKey] Auto-set and unset
+ * @property {(string|PrivilegeAssignment)[]} [privilegeIDs]
  */
 
 /**
@@ -96,6 +97,7 @@ const builtInPrivileges = new Set([
  * @property {string} privilegeName
  * @property {string} description
  * @property {PrivilegeType} [type] Defaults to `boolean`
+ * @property {boolean} [userVarying] Defaults to `false`
  * @property {string|number} [value] Present on an effective typed assignment
  * @property {boolean} builtin
  * @property {number} date Auto-generated timestamp
@@ -894,6 +896,7 @@ class AccountManager {
       privilegeName: data.privilegeName,
       description: data.description,
       type,
+      userVarying: Boolean(data.userVarying),
       builtin: false,
       // Append date stamp when record was created
       date: Date.now()
@@ -934,6 +937,25 @@ class AccountManager {
   }
 
   /**
+   * @param {string} privilege
+   * @returns {Promise<void>}
+   */
+  async removePrivilegeIDFromUsers (privilege) {
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {privilegeIDs: {$in: [privilege]}},
+      {$pull: {privilegeIDs: privilege}}
+    );
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {'privilegeIDs.privilegeName': privilege},
+      {$pull: {privilegeIDs: {privilegeName: privilege}}}
+    );
+  }
+
+  /**
    * @param {Partial<GroupInfo> & {
    *   privilegeName: string,
    *   value?: string|number
@@ -959,6 +981,9 @@ class AccountManager {
     } catch {}
     if (!_o) {
       throw new Error('privilege-missing');
+    }
+    if (_o.userVarying) {
+      throw new Error('bad-privilege-scope');
     }
 
     const type = _o.type || 'boolean';
@@ -1098,6 +1123,114 @@ class AccountManager {
         ).findOne({
           privilegeName
         });
+        return privilege && typeof assignment !== 'string'
+          ? {...privilege, value: assignment.value}
+          : privilege;
+      })
+    )).filter(Boolean);
+  }
+
+  /**
+   * @param {{
+   *   userID: string,
+   *   privilegeName: string,
+   *   value?: string|number
+   * }} data
+   * @returns {Promise<void>}
+   */
+  async addPrivilegeToUser (data) {
+    if (typeof data.userID !== 'string' || !data.userID) {
+      throw new Error('bad-user');
+    }
+    if (typeof data.privilegeName !== 'string' || !data.privilegeName) {
+      throw new Error('bad-privilegename');
+    }
+
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    const privilege = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+      this.privileges
+    ).findOne({privilegeName: data.privilegeName});
+    if (!privilege) {
+      throw new Error('privilege-missing');
+    }
+    if (!privilege.userVarying) {
+      throw new Error('bad-privilege-scope');
+    }
+
+    const type = privilege.type || 'boolean';
+    if (type !== 'boolean' && (
+      typeof data.value !== type ||
+      (type === 'number' && !Number.isFinite(data.value))
+    )) {
+      throw new TypeError('bad-privilege-value');
+    }
+    const assignment = type === 'boolean'
+      ? data.privilegeName
+      : {
+        privilegeName: data.privilegeName,
+        value: /** @type {string|number} */ (data.value)
+      };
+    const userFilter = {user: data.userID};
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    const user = await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).findOne(userFilter);
+    if (!user) {
+      throw new Error('user-missing');
+    }
+
+
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne(userFilter, {$pull: {privilegeIDs: {
+      privilegeName: data.privilegeName
+    }}});
+
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne(userFilter, {
+      $addToSet: {privilegeIDs: assignment}
+    });
+  }
+
+  /**
+   * @param {{userID: string, privilegeName: string}} data
+   * @returns {Promise<void>}
+   */
+  async removePrivilegeFromUser (data) {
+    const userFilter = {user: data.userID};
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne(userFilter, {$pull: {privilegeIDs: data.privilegeName}});
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne(userFilter, {$pull: {privilegeIDs: {
+      privilegeName: data.privilegeName
+    }}});
+  }
+
+  /**
+   * @param {string} userID
+   * @returns {Promise<PrivilegeInfo[]>}
+   */
+  async getPrivilegesForUser (userID) {
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    const user = await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).findOne({user: userID});
+    if (!user) {
+      throw new Error('user-missing');
+    }
+
+    return /** @type {PrivilegeInfo[]} */ (await Promise.all(
+      (user.privilegeIDs || []).map(async (assignment) => {
+        const privilegeName = typeof assignment === 'string'
+          ? assignment
+          : assignment.privilegeName;
+        // eslint-disable-next-line @stylistic/max-len -- Type cast
+        const privilege = await /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
+          this.privileges
+        ).findOne({privilegeName});
         return privilege && typeof assignment !== 'string'
           ? {...privilege, value: assignment.value}
           : privilege;
@@ -1393,6 +1526,7 @@ class AccountManager {
     }
 
     await this.removePrivilegeIDFromGroup(privilegeName);
+    await this.removePrivilegeIDFromUsers(privilegeName);
     return await
     /** @type {import('mongodb').Collection<PrivilegeInfo>} */ (
       this.privileges
@@ -1475,6 +1609,23 @@ class AccountManager {
       );
       await /** @type {import('mongodb').Collection<GroupInfo>} */ (
         this.groups
+      ).updateMany(
+        {'privilegeIDs.privilegeName': data.privilegeName},
+        {$set: {
+          'privilegeIDs.$[assignment].privilegeName': data.newPrivilegeName
+        }},
+        {arrayFilters: [{
+          'assignment.privilegeName': data.privilegeName
+        }]}
+      );
+      await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+        this.accounts
+      ).updateMany(
+        {privilegeIDs: data.privilegeName},
+        {$set: {'privilegeIDs.$': data.newPrivilegeName}}
+      );
+      await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+        this.accounts
       ).updateMany(
         {'privilegeIDs.privilegeName': data.privilegeName},
         {$set: {

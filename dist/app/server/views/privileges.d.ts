@@ -10,7 +10,10 @@
  *   privilegesInfo: {
  *     privilegeName: string,
  *     description: string,
+ *     type: import('../modules/account-manager.js').PrivilegeType,
+ *     userVarying: boolean,
  *     builtin: boolean,
+ *     usersInfo: {user: string}[],
  *     groupsInfo: {
  *       groupName: string,
  *       builtin: boolean,
@@ -20,10 +23,11 @@
  *       }[]
  *     }[]
  *   }[],
- *   groups: string[]
+ *   groups: string[],
+ *   users: string[]
  * }} cfg
  */
-declare const privileges: ({ _, layout, hasEditPrivilegeAccess, hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess, hasReadGroupAccess, hasReadUsersAccess, privilegesInfo, groups }: {
+declare const privileges: ({ _, layout, hasEditPrivilegeAccess, hasAddPrivilegeToGroupAccess, hasRemovePrivilegeFromGroupAccess, hasReadGroupAccess, hasReadUsersAccess, privilegesInfo, groups, users }: {
     _: import('intl-dom').I18NCallback;
     layout: import('../routeUtils.js').LayoutCallback;
     hasEditPrivilegeAccess: boolean;
@@ -34,7 +38,12 @@ declare const privileges: ({ _, layout, hasEditPrivilegeAccess, hasAddPrivilegeT
     privilegesInfo: {
         privilegeName: string;
         description: string;
+        type: import('../modules/account-manager.js').PrivilegeType;
+        userVarying: boolean;
         builtin: boolean;
+        usersInfo: {
+            user: string;
+        }[];
         groupsInfo: {
             groupName: string;
             builtin: boolean;
@@ -45,6 +54,7 @@ declare const privileges: ({ _, layout, hasEditPrivilegeAccess, hasAddPrivilegeT
         }[];
     }[];
     groups: string[];
+    users: string[];
 }) => Promise<[import("jamilih").JamilihDoc]>;
 export default privileges;
 //# sourceMappingURL=privileges.d.ts.map

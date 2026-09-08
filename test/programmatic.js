@@ -77,16 +77,27 @@ describe('Programmatic', function () {
           privilegeName: 'userDatabase',
           description: 'User database',
           type: 'string',
+          userVarying: true,
           // @ts-expect-error Ensure assignment values are not rendered
           value: 'privateDatabase',
           builtin: false,
-          groupsInfo: []
+          groupsInfo: [],
+          usersInfo: [{user: 'typedUser'}]
         }],
-        groups: []
+        groups: [],
+        users: ['typedUser']
       }));
 
       expect(rendered).to.include('createPrivilege-type-input');
+      expect(rendered).to.include('createPrivilege-user-varying-input');
       expect(rendered).to.include('StringPrivilege');
+      expect(rendered).to.include('NotApplicable');
+      expect(rendered).to.include('typedUser');
+      expect(rendered).to.include('addPrivilegeToUser btn btn-primary');
+      expect(rendered).not.to.include(
+        'addPrivilegeToGroup btn btn-primary","data-privilege":' +
+        '"userDatabase'
+      );
       expect(rendered).not.to.include('privateDatabase');
     });
 
@@ -172,7 +183,7 @@ describe('Programmatic', function () {
   });
 
   describe('AccountManager', function () {
-    it('stores typed privilege values on group assignments', async function () {
+    it('stores typed privilege values by group and user', async function () {
       this.timeout(30000);
       const DB_NAME = 'nogin-typed-privileges-test';
       const _ = await setI18n()({
@@ -189,20 +200,36 @@ describe('Programmatic', function () {
 
       try {
         await am.addNewGroup({groupName: 'typed'});
+        await am.addNewAccount({
+          user: 'typedUser', email: 'typed@example.name', pass: '123456',
+          name: '', country: 'US', activated: true
+        });
         await Promise.all([
           am.addNewPrivilege({
             privilegeName: 'canPublish',
             description: 'Can publish'
           }),
           am.addNewPrivilege({
-            privilegeName: 'userDatabase',
-            description: 'User database',
-            type: 'string'
-          }),
-          am.addNewPrivilege({
             privilegeName: 'uploadLimit',
             description: 'Upload limit',
             type: 'number'
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'userDatabase',
+            description: 'User database',
+            type: 'string',
+            userVarying: true
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'betaUser',
+            description: 'Beta user',
+            userVarying: true
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'userScore',
+            description: 'User score',
+            type: 'number',
+            userVarying: true
           })
         ]);
         await Promise.all([
@@ -210,11 +237,17 @@ describe('Programmatic', function () {
             groupName: 'typed', privilegeName: 'canPublish'
           }),
           am.addPrivilegeToGroup({
-            groupName: 'typed', privilegeName: 'userDatabase',
+            groupName: 'typed', privilegeName: 'uploadLimit', value: 25
+          }),
+          am.addPrivilegeToUser({
+            userID: 'typedUser', privilegeName: 'userDatabase',
             value: 'myDatabase'
           }),
-          am.addPrivilegeToGroup({
-            groupName: 'typed', privilegeName: 'uploadLimit', value: 25
+          am.addPrivilegeToUser({
+            userID: 'typedUser', privilegeName: 'betaUser'
+          }),
+          am.addPrivilegeToUser({
+            userID: 'typedUser', privilegeName: 'userScore', value: 42
           })
         ]);
 
@@ -222,24 +255,38 @@ describe('Programmatic', function () {
         expect(
           Object.fromEntries(getPrivilegeValues(privileges))
         ).to.deep.equal({
-          canPublish: true, userDatabase: 'myDatabase', uploadLimit: 25
+          canPublish: true, uploadLimit: 25
         });
+        const userPrivileges = await am.getPrivilegesForUser('typedUser');
+        expect(
+          Object.fromEntries(getPrivilegeValues(userPrivileges))
+        ).to.deep.equal({
+          userDatabase: 'myDatabase', betaUser: true, userScore: 42
+        });
+        await expect(am.addPrivilegeToGroup({
+          groupName: 'typed', privilegeName: 'userDatabase',
+          value: 'myDatabase'
+        })).to.be.rejectedWith(Error, 'bad-privilege-scope');
+        await expect(am.addPrivilegeToUser({
+          userID: 'typedUser', privilegeName: 'uploadLimit', value: 25
+        })).to.be.rejectedWith(Error, 'bad-privilege-scope');
         await am.editPrivilege({
           privilegeName: 'userDatabase',
           newPrivilegeName: 'primaryDatabase',
           description: 'Primary database'
         });
-        const renamedPrivileges = await am.getPrivilegesForGroup('typed');
+        const renamedPrivileges = await am.getPrivilegesForUser('typedUser');
         expect(
           Object.fromEntries(getPrivilegeValues(renamedPrivileges))
         ).to.deep.equal({
-          canPublish: true, primaryDatabase: 'myDatabase', uploadLimit: 25
+          primaryDatabase: 'myDatabase', betaUser: true, userScore: 42
         });
         await expect(am.addPrivilegeToGroup({
           groupName: 'typed', privilegeName: 'uploadLimit', value: '25'
         })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
       } finally {
         await Promise.all([
+          am.accounts?.deleteMany({}),
           am.groups?.deleteMany({}),
           am.privileges?.deleteMany({})
         ]);

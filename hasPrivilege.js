@@ -12,8 +12,8 @@ export async function getPrivileges () {
  * @param {string} priv
  */
 export async function hasPrivilege (priv) {
-  const {privs} = await getPrivileges();
-  return privs === true
+  const {privs, root} = await getPrivileges();
+  return root
     ? true
     : Object.prototype.hasOwnProperty.call(privs, priv);
 }

@@ -16,7 +16,9 @@ import doubleInputForm from './modals/double-input-form.js';
  *     privilegeName: string,
  *     description: string,
  *     type: import('../modules/account-manager.js').PrivilegeType,
+ *     userVarying: boolean,
  *     builtin: boolean,
+ *     usersInfo: {user: string}[],
  *     groupsInfo: {
  *       groupName: string,
  *       builtin: boolean,
@@ -26,7 +28,8 @@ import doubleInputForm from './modals/double-input-form.js';
  *       }[]
  *     }[]
  *   }[],
- *   groups: string[]
+ *   groups: string[],
+ *   users: string[]
  * }} cfg
  */
 const privileges = ({
@@ -35,7 +38,7 @@ const privileges = ({
   hasRemovePrivilegeFromGroupAccess,
   hasReadGroupAccess,
   hasReadUsersAccess,
-  privilegesInfo, groups
+  privilegesInfo, groups, users
 }) => {
   return layout({
     content: [
@@ -52,10 +55,19 @@ const privileges = ({
               ['th', {class: 'privileges privilege'}, [_('Privilege')]],
               ['th', {class: 'privileges description'}, [_('Description')]],
               ['th', {class: 'privileges type'}, [_('PrivilegeType')]],
+              ['th', {class: 'privileges scope'}, [_('VariesByUser')]],
               ['th', {class: 'privileges group'}, [_('Group')]],
               hasAddPrivilegeToGroupAccess
                 ? ['th', {class: 'privileges addPrivilegeToGroup'}, [
                   _('addPrivilegeToGroup')
+                ]]
+                : '',
+              hasReadUsersAccess
+                ? ['th', {class: 'privileges users'}, [_('Users')]]
+                : '',
+              hasEditPrivilegeAccess && hasReadUsersAccess
+                ? ['th', {class: 'privileges addPrivilegeToUser'}, [
+                  _('addPrivilegeToUser')
                 ]]
                 : '',
               hasEditPrivilegeAccess
@@ -66,7 +78,10 @@ const privileges = ({
           ]],
           ['tbody', /** @type {import('jamilih').JamilihChildren} */ (
             privilegesInfo.map((
-              {privilegeName, description, type, builtin, groupsInfo}, i
+              {
+                privilegeName, description, type, userVarying,
+                builtin, groupsInfo, usersInfo
+              }, i
             ) => {
               return ['tr', [
                 ['td', {class: 'groups group'}, [i + 1]],
@@ -85,40 +100,71 @@ const privileges = ({
                 ['td', [_(
                   `${type[0].toUpperCase()}${type.slice(1)}Privilege`
                 )]],
+                ['td', [_(userVarying ? 'Yes' : 'No')]],
                 hasRemovePrivilegeFromGroupAccess
-                  ? ['td', groupsInfo.map(
-                    ({groupName, usersInfo}) => {
-                      return ['button', {
-                        class: 'removePrivilegeFromGroup',
-                        'data-privilege': privilegeName,
-                        'data-group': groupName,
-                        title: hasReadUsersAccess
-                          ? usersInfo.map(({user}) => {
-                            return user;
-                          }).join(', ')
-                          : undefined
-                      }, [
-                        `${groupName} ☒`
-                      ]];
-                    }
-                  )]
-                  : hasReadGroupAccess
-                    ? ['td', groupsInfo.map(
-                      ({groupName}) => {
-                        return ['span', [
-                          groupName
+                  ? ['td', userVarying
+                    ? [_('NotApplicable')]
+                    : groupsInfo.map(
+                      ({groupName, usersInfo: groupUsersInfo}) => {
+                        return ['button', {
+                          class: 'removePrivilegeFromGroup',
+                          'data-privilege': privilegeName,
+                          'data-group': groupName,
+                          title: hasReadUsersAccess
+                            ? groupUsersInfo.map(({user}) => {
+                              return user;
+                            }).join(', ')
+                            : undefined
+                        }, [
+                          `${groupName} ☒`
                         ]];
                       }
                     )]
+                  : hasReadGroupAccess
+                    ? ['td', userVarying
+                      ? [_('NotApplicable')]
+                      : groupsInfo.map(
+                        ({groupName}) => {
+                          return ['span', [
+                            groupName
+                          ]];
+                        }
+                      )]
                     : '',
                 hasAddPrivilegeToGroupAccess
-                  ? ['td', [
-                    ['button', {
-                      class: 'addPrivilegeToGroup btn btn-primary',
-                      'data-privilege': privilegeName,
-                      'data-type': type
-                    }, ['+']]
-                  ]]
+                  ? ['td', userVarying
+                    ? []
+                    : [
+                      ['button', {
+                        class: 'addPrivilegeToGroup btn btn-primary',
+                        'data-privilege': privilegeName,
+                        'data-type': type
+                      }, ['+']]
+                    ]]
+                  : '',
+                hasReadUsersAccess
+                  ? ['td', userVarying
+                    ? usersInfo.map(({user}) => {
+                      return hasEditPrivilegeAccess
+                        ? ['button', {
+                          class: 'removePrivilegeFromUser',
+                          'data-privilege': privilegeName,
+                          'data-user': user
+                        }, [`${user} ☒`]]
+                        : ['span', [user]];
+                    })
+                    : [_('NotApplicable')]]
+                  : '',
+                hasEditPrivilegeAccess && hasReadUsersAccess
+                  ? ['td', userVarying
+                    ? [
+                      ['button', {
+                        class: 'addPrivilegeToUser btn btn-primary',
+                        'data-privilege': privilegeName,
+                        'data-type': type
+                      }, ['+']]
+                    ]
+                    : []]
                   : '',
                 ...builtin
                   ? [
@@ -132,7 +178,8 @@ const privileges = ({
                           class: 'editPrivilege',
                           'data-privilege': privilegeName,
                           'data-description': description,
-                          'data-type': type
+                          'data-type': type,
+                          'data-user-varying': userVarying
                         }, ['e']]
                       ]]
                       : '',
@@ -156,17 +203,20 @@ const privileges = ({
         alert({_}),
         confirm({_, type: 'deletePrivilege'}),
         confirm({_, type: 'removePrivilegeFromGroup'}),
+        confirm({_, type: 'removePrivilegeFromUser'}),
         doubleInputForm({
           _, type: 'createPrivilege',
           inputDirections: 'PleaseInputPrivilegeToCreate',
           descriptionDirections: 'PleaseInputADescriptionForPrivilege',
-          includePrivilegeType: true
+          includePrivilegeType: true,
+          includeUserVarying: true
         }),
         doubleInputForm({
           _, type: 'editPrivilege',
           inputDirections: 'PleaseInputPrivilegeToEdit',
           descriptionDirections: 'PleaseInputADescriptionForPrivilege',
-          includePrivilegeType: true
+          includePrivilegeType: true,
+          includeUserVarying: true
         }),
         singleInputForm({
           _, type: 'addPrivilegeToGroup',
@@ -179,6 +229,22 @@ const privileges = ({
             ['input', {
               class: 'form-control',
               id: 'addPrivilegeToGroup-value-input',
+              'data-name': 'privilege-value',
+              name: 'value'
+            }]
+          ]
+        }),
+        singleInputForm({
+          _, type: 'addPrivilegeToUser',
+          inputDirections: 'PleaseInputUserToWhichToAddPrivilege',
+          autocomplete: users,
+          additionalFields: [
+            ['label', {
+              for: 'addPrivilegeToUser-value-input'
+            }, [_('PrivilegeValue')]],
+            ['input', {
+              class: 'form-control',
+              id: 'addPrivilegeToUser-value-input',
               'data-name': 'privilege-value',
               name: 'value'
             }]

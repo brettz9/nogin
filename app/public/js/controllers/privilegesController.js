@@ -52,8 +52,10 @@ createPrivilegeButton.on('click', () => {
       }
       const description = PrivilegesView.getCreatePrivilegeDescription();
       const type = PrivilegesView.getCreatePrivilegeType();
+      const userVarying = PrivilegesView.getCreatePrivilegeUserVarying();
       await createPrivilege(
-        privilegeToCreate.value, description.value, type.value
+        privilegeToCreate.value, description.value, type.value,
+        userVarying.checked
       );
     } catch (er) {
       createPrivilegeModal.modal('hide');
@@ -88,6 +90,7 @@ editPrivilegeButton.on('click', (e) => {
   const privilegeName = /** @type {string} */ (e.target.dataset.privilege);
   const descriptionVal = /** @type {string} */ (e.target.dataset.description);
   const typeVal = /** @type {string} */ (e.target.dataset.type);
+  const userVaryingVal = e.target.dataset.userVarying === 'true';
   const privilegeToEdit = PrivilegesView.getEditPrivilege();
 
   const editPrivilegeCancel = PrivilegesView.editPrivilegeCancel(
@@ -105,6 +108,9 @@ editPrivilegeButton.on('click', (e) => {
   const privilegeType = PrivilegesView.getEditPrivilegeType();
   privilegeType.value = typeVal;
   privilegeType.disabled = true;
+  const userVarying = PrivilegesView.getEditPrivilegeUserVarying();
+  userVarying.checked = userVaryingVal;
+  userVarying.disabled = true;
 
   const editPrivilegeSubmit = PrivilegesView.editPrivilegeSubmit(
     editPrivilegeModal
@@ -138,6 +144,60 @@ editPrivilegeButton.on('click', (e) => {
           ''
       }));
       // However, should already be internationalized by server
+      showLockedErrorAlert({message: err.text});
+    }
+  });
+});
+
+const addPrivilegeToUserButton = PrivilegesView.getAddPrivilegeToUserButton();
+const addPrivilegeToUserModal = PrivilegesView.addPrivilegeToUserModal();
+const addPrivilegeToUserForm = PrivilegesView.addPrivilegeToUserForm(
+  addPrivilegeToUserModal
+);
+
+addPrivilegeToUserForm.on('submit', function (e) {
+  e.preventDefault();
+});
+addPrivilegeToUserButton.on('click', (e) => {
+  const privilegeName = /** @type {string} */ (e.target.dataset.privilege);
+  const privilegeType = /** @type {string} */ (e.target.dataset.type);
+  const user = PrivilegesView.getAddPrivilegeToUserUser();
+  const privilegeValue = PrivilegesView.getAddPrivilegeToUserValue();
+  privilegeValue.value = '';
+  privilegeValue.disabled = privilegeType === 'boolean';
+  privilegeValue.required = privilegeType !== 'boolean';
+  privilegeValue.type = privilegeType === 'number' ? 'number' : 'text';
+
+  PrivilegesView.addPrivilegeToUserCancel(
+    addPrivilegeToUserModal
+  ).on('click', () => {
+    addPrivilegeToUserModal.modal('hide');
+  });
+  addPrivilegeToUserModal.modal('show');
+
+  PrivilegesView.addPrivilegeToUserSubmit(
+    addPrivilegeToUserModal
+  ).on('click', async () => {
+    try {
+      if (user.validity.tooShort) {
+        user.setCustomValidity(
+          PrivilegesView.errorMessages.name.PleaseEnterName
+        );
+        /** @type {HTMLFormElement} */ (
+          addPrivilegeToUserForm[0]
+        ).reportValidity();
+        return;
+      }
+      await addPrivilegeToUser(
+        user.value,
+        privilegeName,
+        privilegeType === 'number'
+          ? Number(privilegeValue.value)
+          : privilegeValue.value
+      );
+    } catch (er) {
+      addPrivilegeToUserModal.modal('hide');
+      const err = /** @type {AjaxPostError} */ (er);
       showLockedErrorAlert({message: err.text});
     }
   });
@@ -272,6 +332,24 @@ PrivilegesView.getRemovePrivilegeFromGroup().on('click', (e) => {
   removePrivilegeFromGroupConfirmDialog.modal('show');
 });
 
+const removePrivilegeFromUserConfirmDialog =
+  PrivilegesView.setRemovePrivilegeFromUser();
+PrivilegesView.getRemovePrivilegeFromUser().on('click', (e) => {
+  const userID = /** @type {string} */ (e.target.dataset.user);
+  const privilegeName = /** @type {string} */ (e.target.dataset.privilege);
+  ConfirmDialog.getSubmit(
+    removePrivilegeFromUserConfirmDialog
+  ).on('click', async () => {
+    try {
+      await removePrivilegeFromUser(userID, privilegeName);
+    } catch (er) {
+      const err = /** @type {AjaxPostError} */ (er);
+      showLockedErrorAlert({message: err.text});
+    }
+  });
+  removePrivilegeFromUserConfirmDialog.modal('show');
+});
+
 /**
  * @param {string} url
  * @param {object} [data]
@@ -346,15 +424,19 @@ async function removePrivilegeFromGroup (groupName, privilegeName) {
  * @param {string} privilegeToCreate
  * @param {string} description
  * @param {string} type
+ * @param {boolean} userVarying
  * @throws {Error}
  * @returns {Promise<void>}
  */
-async function createPrivilege (privilegeToCreate, description, type) {
+async function createPrivilege (
+  privilegeToCreate, description, type, userVarying
+) {
   await post(Nogin.Routes.accessAPI, {
     verb: 'createPrivilege',
     privilegeName: privilegeToCreate,
     description,
-    type
+    type,
+    userVarying
   });
   createPrivilegeModal.modal('hide');
   showLockedAlertReload({type: 'privilegeCreated'});
@@ -394,6 +476,33 @@ async function addPrivilegeToGroup (groupName, privilegeName, value) {
 }
 
 /**
+ * @param {string} userID
+ * @param {string} privilegeName
+ * @param {string|number} value
+ * @returns {Promise<void>}
+ */
+async function addPrivilegeToUser (userID, privilegeName, value) {
+  await post(Nogin.Routes.accessAPI, {
+    verb: 'addPrivilegeToUser', userID, privilegeName, value
+  });
+  addPrivilegeToUserModal.modal('hide');
+  showLockedAlertReload({type: 'privilegeAddedToUser'});
+}
+
+/**
+ * @param {string} userID
+ * @param {string} privilegeName
+ * @returns {Promise<void>}
+ */
+async function removePrivilegeFromUser (userID, privilegeName) {
+  removePrivilegeFromUserConfirmDialog.modal('hide');
+  await post(Nogin.Routes.accessAPI, {
+    verb: 'removePrivilegeFromUser', userID, privilegeName
+  });
+  showLockedAlertReload({type: 'privilegeRemovedFromUser'});
+}
+
+/**
  * @throws {Error}
  * @returns {Promise<void>}
  */
@@ -408,7 +517,8 @@ async function deletePrivilege () {
 /**
  * @param {object} cfg
  * @param {"privilegeCreated"|"privilegeDeleted"|"privilegeEdited"|
- *   "privilegeRemovedFromGroup"|"privilegeAddedToGroup"} cfg.type
+ *   "privilegeRemovedFromGroup"|"privilegeAddedToGroup"|
+ *   "privilegeRemovedFromUser"|"privilegeAddedToUser"} cfg.type
  * @returns {void}
  */
 function showLockedAlertReload ({type}) {

@@ -136,13 +136,32 @@ well as `--postLoginRedirectPath /` arguments. See these options for more detail
     group names. Note that the built-in groups `nogin.loggedInUsers` and
     `nogin.guests` will apply to all who are logged in or not, respectfully. The
     privileges should be additive from the level of guest to logged in user to
-    regular user to root user.
+    regular user to root user. Privileges may be boolean (the default), string,
+    or number values. A privilege definition may be group-scoped or marked as
+    varying by user. Assign string and number values when adding the privilege
+    to its group or user.
 
 10. Check the privileges in your app. You can check the privileges from
     `req.hasPrivilege(...)` regardless of whether the user is logged in
     or a guest. You can also get the privileges from `/_privs`
     JavaScript. If you want live results, you can make a GET request to
-    `/_privs?format=json` (or just import the helper `nogin/hasPrivilege.js`).
+        `/_privs?format=json` (or just import the helper `nogin/hasPrivilege.js`).
+        The `privs` object maps boolean privileges to `true` and typed privileges
+        to their assigned value. The `root` flag indicates that all boolean
+        privilege checks should pass, while any personal typed values remain in
+        `privs`. For example:
+
+        ```json
+        {
+            "privs": {
+                "canPublish": true,
+                "userDatabase": "myDatabase",
+                "uploadLimit": 25
+            },
+            "root": false,
+            "user": "exampleUser"
+        }
+        ```
 
 ## Steps for getting port that may block Mongo DB
 
@@ -563,7 +582,7 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
     to one page?
 1. "blockedIPs" pseudo-group to which one can add IPs (as distinct from
     "nogin.guests")
-1. Add types like number, string, and array (of strings) privileges?
+1. Add types like array (of strings) privileges?
 1. Add "local" boolean flag to privileges (if delivered by default in JavaScript)?
 1. Add `/user/<username>` (GET) script for admins and others
 1. Add `/group/<groupname>` (GET) script for admins and others

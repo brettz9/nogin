@@ -7,13 +7,14 @@ import singleInputForm from './single-input-form.js';
  *   inputDirections: string,
  *   descriptionDirections: string,
  *   autocomplete?: string[],
- *   includePrivilegeType?: boolean
+ *   includePrivilegeType?: boolean,
+ *   includeUserVarying?: boolean
  * }} cfg
  * @returns {import('jamilih').JamilihArray}
  */
 const doubleInputForm = ({
   _, type, inputDirections, descriptionDirections, autocomplete,
-  includePrivilegeType = false
+  includePrivilegeType = false, includeUserVarying = false
 }) => {
   const privilegeTypeFields = /** @type {import('jamilih').JamilihArray[]} */ (
     includePrivilegeType
@@ -44,7 +45,24 @@ const doubleInputForm = ({
         'data-description': type,
         name: type + 'description'
       }],
-      ...privilegeTypeFields
+      ...privilegeTypeFields,
+      ...(includeUserVarying
+        ? /** @type {import('jamilih').JamilihArray[]} */ ([
+          ['div', {class: 'form-check'}, [
+            ['input', {
+              class: 'form-check-input',
+              type: 'checkbox',
+              id: type + '-user-varying-input',
+              'data-user-varying': type,
+              name: type + 'userVarying'
+            }],
+            ['label', {
+              class: 'form-check-label',
+              for: type + '-user-varying-input'
+            }, [_('VariesByUser')]]
+          ]]
+        ])
+        : [])
     ]
   });
 };

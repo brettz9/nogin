@@ -496,6 +496,36 @@
     "PrivilegeValue": {
       "message": "Value (required for string and number privileges)"
     },
+    "VariesByUser": {
+      "message": "Varies by user"
+    },
+    "Yes": {
+      "message": "Yes"
+    },
+    "No": {
+      "message": "No"
+    },
+    "NotApplicable": {
+      "message": "N/A"
+    },
+    "addPrivilegeToUser": {
+      "message": "Add privilege to user"
+    },
+    "removePrivilegeFromUser": {
+      "message": "Remove privilege from user"
+    },
+    "PleaseInputUserToWhichToAddPrivilege": {
+      "message": "Please input the user to whom to add the privilege"
+    },
+    "reallyWantRemovePrivilegeFromUser": {
+      "message": "Do you really want to remove the privilege from the user?"
+    },
+    "privilegeAddedToUser": {
+      "message": "Privilege added to user"
+    },
+    "privilegeRemovedFromUser": {
+      "message": "Privilege removed from user"
+    },
     "BooleanPrivilege": {
       "message": "Boolean"
     },
@@ -510,6 +540,12 @@
     },
     "bad-privilege-value": {
       "message": "Bad privilege value"
+    },
+    "bad-privilege-scope": {
+      "message": "Privilege cannot be assigned at this scope"
+    },
+    "bad-user": {
+      "message": "Bad user"
     },
     "removePrivilegeFromGroup": {
       "message": "Remove privilege from group"

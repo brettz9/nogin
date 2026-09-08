@@ -1,3 +1,8 @@
+/**
+ * @param {(import('./modules/account-manager.js').PrivilegeInfo|null)[]} infos
+ * @returns {Map<string, boolean|string|number>}
+ */
+declare const getPrivilegeValues: (infos: (import('./modules/account-manager.js').PrivilegeInfo | null)[]) => Map<string, boolean | string | number>;
 export type UserAccount = {
     name: string;
     user: string;
@@ -28,5 +33,6 @@ export type CountryInfo = {
  * @returns {Promise<void>}
  */
 declare const routeList: (app: import('express').Application, config: import('./app.js').RouteConfig) => Promise<void>;
+export { getPrivilegeValues };
 export default routeList;
 //# sourceMappingURL=routeList.d.ts.map

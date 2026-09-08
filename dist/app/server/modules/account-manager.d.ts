@@ -48,6 +48,7 @@ export type AccountInfo = {
      * Auto-set and unset
      */
     passKey?: string;
+    privilegeIDs?: (string | PrivilegeAssignment)[];
 };
 export type AccountInfoFilter = {
     user?: any;
@@ -69,13 +70,18 @@ export type AccountInfoFilter = {
      */
     activationRequestDate?: any;
 };
+export type PrivilegeType = "boolean" | "string" | "number";
+export type PrivilegeAssignment = {
+    privilegeName: string;
+    value: string | number;
+};
 export type GroupInfo = {
     /**
      * Auto-set
      */
     _id?: string;
     groupName: string;
-    privilegeIDs: string[];
+    privilegeIDs: (string | PrivilegeAssignment)[];
     userIDs: string[];
     builtin: boolean;
     /**
@@ -95,6 +101,18 @@ export type PrivilegeInfo = {
     _id?: string;
     privilegeName: string;
     description: string;
+    /**
+     * Defaults to `boolean`
+     */
+    type?: PrivilegeType;
+    /**
+     * Defaults to `false`
+     */
+    userVarying?: boolean;
+    /**
+     * Present on an effective typed assignment
+     */
+    value?: string | number;
     builtin: boolean;
     /**
      * Auto-generated timestamp
@@ -247,11 +265,20 @@ declare class AccountManager {
      */
     removePrivilegeIDFromGroup(privilege: string): Promise<void>;
     /**
-     * @param {Partial<GroupInfo> & {privilegeName: string}} data
+     * @param {string} privilege
+     * @returns {Promise<void>}
+     */
+    removePrivilegeIDFromUsers(privilege: string): Promise<void>;
+    /**
+     * @param {Partial<GroupInfo> & {
+     *   privilegeName: string,
+     *   value?: string|number
+     * }} data
      * @returns {Promise<void>}
      */
     addPrivilegeToGroup(data: Partial<GroupInfo> & {
         privilegeName: string;
+        value?: string | number;
     }): Promise<void>;
     /**
      * @param {Partial<GroupInfo> & {privilegeName: string}} data
@@ -270,6 +297,32 @@ declare class AccountManager {
      * @returns {Promise<PrivilegeInfo[]>}
      */
     getPrivilegesForGroup(groupName: string): Promise<PrivilegeInfo[]>;
+    /**
+     * @param {{
+     *   userID: string,
+     *   privilegeName: string,
+     *   value?: string|number
+     * }} data
+     * @returns {Promise<void>}
+     */
+    addPrivilegeToUser(data: {
+        userID: string;
+        privilegeName: string;
+        value?: string | number;
+    }): Promise<void>;
+    /**
+     * @param {{userID: string, privilegeName: string}} data
+     * @returns {Promise<void>}
+     */
+    removePrivilegeFromUser(data: {
+        userID: string;
+        privilegeName: string;
+    }): Promise<void>;
+    /**
+     * @param {string} userID
+     * @returns {Promise<PrivilegeInfo[]>}
+     */
+    getPrivilegesForUser(userID: string): Promise<PrivilegeInfo[]>;
     /**
      * @param {string} activationCode
      * @returns {Promise<import('mongodb').UpdateResult|

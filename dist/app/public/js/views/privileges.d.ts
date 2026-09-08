@@ -13,6 +13,10 @@ declare const PrivilegesView: {
      */
     getRemovePrivilegeFromGroup(): JQuery<HTMLElement>;
     /**
+     * @returns {JQuery<HTMLElement>}
+     */
+    getRemovePrivilegeFromUser(): JQuery<HTMLElement>;
+    /**
      * @returns {import('../views/utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
@@ -27,6 +31,11 @@ declare const PrivilegesView: {
      *   JQueryWithModal} `HTMLDivElement`
      */
     addPrivilegeToGroupModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
+    /**
+     * @returns {import('../views/utilities/AlertDialog.js').
+     *   JQueryWithModal} `HTMLDivElement`
+     */
+    addPrivilegeToUserModal(): import('../views/utilities/AlertDialog.js').JQueryWithModal;
     /**
      * @param {JQuery} createPrivilegeModal `HTMLDivElement`
      * @returns {import('../utilities/ajaxFormClientSideValidate.js').
@@ -46,6 +55,12 @@ declare const PrivilegesView: {
      */
     addPrivilegeToGroupForm(addPrivilegeToGroupModal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
     /**
+     * @param {JQuery} modal `HTMLDivElement`
+     * @returns {import('../utilities/ajaxFormClientSideValidate.js').
+     *   JQueryWithAjaxForm} `HTMLFormElement`
+     */
+    addPrivilegeToUserForm(modal: JQuery): import('../utilities/ajaxFormClientSideValidate.js').JQueryWithAjaxForm;
+    /**
      * @param {JQuery} createPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
      */
@@ -55,6 +70,11 @@ declare const PrivilegesView: {
      * @returns {JQuery} `HTMLButtonElement`
      */
     addPrivilegeToGroupSubmit(addPrivilegeToGroupModal: JQuery): JQuery;
+    /**
+     * @param {JQuery} modal `HTMLDivElement`
+     * @returns {JQuery} `HTMLButtonElement`
+     */
+    addPrivilegeToUserSubmit(modal: JQuery): JQuery;
     /**
      * @param {JQuery} editPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
@@ -70,6 +90,11 @@ declare const PrivilegesView: {
      * @returns {JQuery} `HTMLButtonElement`
      */
     addPrivilegeToGroupCancel(addPrivilegeToGroupModal: JQuery): JQuery;
+    /**
+     * @param {JQuery} modal `HTMLDivElement`
+     * @returns {JQuery} `HTMLButtonElement`
+     */
+    addPrivilegeToUserCancel(modal: JQuery): JQuery;
     /**
      * @param {JQuery} editPrivilegeModal `HTMLDivElement`
      * @returns {JQuery} `HTMLButtonElement`
@@ -88,6 +113,10 @@ declare const PrivilegesView: {
      */
     getAddPrivilegeToGroupButton(): JQuery;
     /**
+     * @returns {JQuery} `HTMLDivElement`
+     */
+    getAddPrivilegeToUserButton(): JQuery;
+    /**
      * @returns {HTMLInputElement}
      */
     getCreatePrivilegeName(): HTMLInputElement;
@@ -96,9 +125,37 @@ declare const PrivilegesView: {
      */
     getCreatePrivilegeDescription(): HTMLInputElement;
     /**
+     * @returns {HTMLSelectElement}
+     */
+    getCreatePrivilegeType(): HTMLSelectElement;
+    /**
+     * @returns {HTMLInputElement}
+     */
+    getCreatePrivilegeUserVarying(): HTMLInputElement;
+    /**
      * @returns {HTMLInputElement}
      */
     getEditPrivilegeDescription(): HTMLInputElement;
+    /**
+     * @returns {HTMLSelectElement}
+     */
+    getEditPrivilegeType(): HTMLSelectElement;
+    /**
+     * @returns {HTMLInputElement}
+     */
+    getEditPrivilegeUserVarying(): HTMLInputElement;
+    /**
+     * @returns {HTMLInputElement}
+     */
+    getAddPrivilegeToGroupValue(): HTMLInputElement;
+    /**
+     * @returns {HTMLInputElement}
+     */
+    getAddPrivilegeToUserUser(): HTMLInputElement;
+    /**
+     * @returns {HTMLInputElement}
+     */
+    getAddPrivilegeToUserValue(): HTMLInputElement;
     /**
      * @returns {HTMLInputElement}
      */
@@ -119,15 +176,21 @@ declare const PrivilegesView: {
      */
     setRemovePrivilegeFromGroup(): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**
+     * @returns {import('./utilities/AlertDialog.js').
+     *   JQueryWithModal} `HTMLDivElement`
+     */
+    setRemovePrivilegeFromUser(): import('./utilities/AlertDialog.js').JQueryWithModal;
+    /**
      * @param {object} cfg
      * @param {"privilegeCreated"|"privilegeDeleted"|"privilegeEdited"|
-     *   "privilegeRemovedFromGroup"|"privilegeAddedToGroup"} cfg.type
+     *   "privilegeRemovedFromGroup"|"privilegeAddedToGroup"|
+     *   "privilegeRemovedFromUser"|"privilegeAddedToUser"} cfg.type
      * @param {string} [cfg.privilege]
      * @returns {import('./utilities/AlertDialog.js').
      *   JQueryWithModal} `HTMLDivElement`
      */
     onShowLockedAlert({ type, privilege }: {
-        type: "privilegeCreated" | "privilegeDeleted" | "privilegeEdited" | "privilegeRemovedFromGroup" | "privilegeAddedToGroup";
+        type: "privilegeCreated" | "privilegeDeleted" | "privilegeEdited" | "privilegeRemovedFromGroup" | "privilegeAddedToGroup" | "privilegeRemovedFromUser" | "privilegeAddedToUser";
         privilege?: string;
     }): import('./utilities/AlertDialog.js').JQueryWithModal;
     /**

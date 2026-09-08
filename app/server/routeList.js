@@ -191,11 +191,6 @@ const routeList = async (app, config) => {
    * @param {import('express').Request} req
    */
   const getUserPrivs = async (req) => {
-    const rootAccess = hasRootAccess(req);
-    if (rootAccess) {
-      return true;
-    }
-
     const user = req.session?.user?.user;
 
     const privInfos = (await Promise.all([
@@ -209,7 +204,8 @@ const routeList = async (app, config) => {
           }
           return am.getPrivilegesForGroup(groupName);
         })
-        : null
+        : null,
+      user ? am.getPrivilegesForUser(user) : null
     ])).flat();
 
     return getPrivilegeValues(privInfos);
@@ -220,13 +216,10 @@ const routeList = async (app, config) => {
    * @param {string[]} privs
    */
   const getUserAccess = async (req, privs) => {
-    const privSet = await getUserPrivs(req);
-    if (privSet === true) {
-      return privs.map(() => {
-        return true;
-      });
+    if (hasRootAccess(req)) {
+      return privs.map(() => true);
     }
-
+    const privSet = await getUserPrivs(req);
     return privs.map((priv) => {
       return privSet.has(priv);
     });
@@ -809,9 +802,9 @@ const routeList = async (app, config) => {
         hasReadPrivilegeAccess,
         hasReadUsersAccess,
         privileges: hasAddPrivilegeToGroupAccess // Implies priv read access
-          ? privilegesInfo.value.map(({
-            privilegeName
-          }) => privilegeName)
+          ? privilegesInfo.value.filter(({userVarying}) => {
+            return !userVarying;
+          }).map(({privilegeName}) => privilegeName)
           : [],
         users: hasReadUsersAccess || hasAddUserToGroupAccess
           ? getAllRecords.value.map(
@@ -880,6 +873,9 @@ const routeList = async (app, config) => {
        *   privilegeName: string;
        *   builtin: boolean;
        *   description: string;
+       *   type: import('./modules/account-manager.js').PrivilegeType;
+       *   userVarying: boolean;
+       *   usersInfo?: {user: string}[];
        *   groupsInfo?: {
        *     groupName: string;
        *     builtin: boolean;
@@ -909,6 +905,12 @@ const routeList = async (app, config) => {
           };
         });
       }
+      if (!hasReadUsersAccess) {
+        readPrivilegesResultValue = readPrivilegesResultValue.map((val) => {
+          delete val.usersInfo;
+          return val;
+        });
+      }
 
       const title = _('Privileges');
       res.render('privileges', {
@@ -924,6 +926,9 @@ const routeList = async (app, config) => {
         privilegesInfo: readPrivilegesResultValue,
         groups: hasAddPrivilegeToGroupAccess
           ? (await am.getAllGroups()).map(({groupName}) => groupName)
+          : [],
+        users: hasEditPrivilegeAccess && hasReadUsersAccess
+          ? (await am.getAllRecords()).map(({user}) => user)
           : []
       });
     }
@@ -935,6 +940,8 @@ const routeList = async (app, config) => {
    *   builtin: boolean,
    *   description: string,
    *   type: import('./modules/account-manager.js').PrivilegeType,
+   *   userVarying: boolean,
+   *   usersInfo: {user: string}[],
    *   groupsInfo: {
    *     groupName: string,
    *     builtin: boolean,
@@ -948,16 +955,30 @@ const routeList = async (app, config) => {
   const readPrivileges = async () => {
     const privileges = await am.getAllPrivileges();
 
-    const groups = await readGroups();
+    const [groups, accounts] = await Promise.all([
+      readGroups(),
+      am.getAllRecords()
+    ]);
 
     return privileges.map(({
-      privilegeName, description, builtin, type = 'boolean'
+      privilegeName, description, builtin, type = 'boolean',
+      userVarying = false
     }) => {
       return {
         privilegeName,
         description,
         type,
+        userVarying,
         builtin,
+        usersInfo: userVarying
+          ? accounts.filter(({privilegeIDs = []}) => {
+            return privilegeIDs.some((assignment) => {
+              return (typeof assignment === 'string'
+                ? assignment
+                : assignment.privilegeName) === privilegeName;
+            });
+          }).map(({user}) => ({user: /** @type {string} */ (user)}))
+          : [],
         groupsInfo:
         /**
          * @type {{
@@ -1431,7 +1452,8 @@ const routeList = async (app, config) => {
         description,
         newPrivilegeName,
         type,
-        value
+        value,
+        userVarying
       } = req.body;
 
       /**
@@ -1592,7 +1614,10 @@ const routeList = async (app, config) => {
         }
         try {
           await am.addNewPrivilege({
-            privilegeName, description, type
+            privilegeName,
+            description,
+            type,
+            userVarying: userVarying === true || userVarying === 'true'
           });
         } catch (err) {
           if ([
@@ -1669,6 +1694,44 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          return;
+        }
+        break;
+      case 'addPrivilegeToUser':
+        if (!hasEditPrivilegeAccess) {
+          pageNotFound(_, res);
+          return;
+        }
+        try {
+          const privilege = await am.getPrivilege(privilegeName);
+          await am.addPrivilegeToUser({
+            userID,
+            privilegeName,
+            value: value !== '' && privilege?.type === 'number'
+              ? Number(value)
+              : value
+          });
+        } catch (err) {
+          if ([
+            'bad-user', 'user-missing', 'privilege-missing',
+            'bad-privilege-scope', 'bad-privilege-value'
+          ].includes(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          return;
+        }
+        break;
+      case 'removePrivilegeFromUser':
+        if (!hasEditPrivilegeAccess) {
+          pageNotFound(_, res);
+          return;
+        }
+        try {
+          await am.removePrivilegeFromUser({userID, privilegeName});
+        } catch (err) {
+          res.status(400).send(/** @type {Error} */ (err).message);
           return;
         }
         break;
@@ -1790,7 +1853,8 @@ window.Nogin = {
   app.get('/_privs', async function (req, res) {
     const userPrivs = await getUserPrivs(req);
     const converted = {
-      privs: userPrivs === true ? true : Object.fromEntries(userPrivs),
+      privs: Object.fromEntries(userPrivs),
+      root: hasRootAccess(req),
       user: req.session?.user?.user ?? null
     };
 
@@ -1808,7 +1872,7 @@ window.Nogin = {
     res.type('.js');
     res.status(200).send(`window.NoginPrivs = ${JSON.stringify(converted)};
 window.NoginPrivs.hasPrivilege = function (priv) {
-  return this.privs === true ? true : Object.prototype.hasOwnProperty.call(
+  return this.root ? true : Object.prototype.hasOwnProperty.call(
     this.privs, priv
   );
 };
@@ -1840,7 +1904,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
        */
       async (priv) => {
         const privs = await getUserPrivs(req);
-        return privs === true ? true : privs.has(priv);
+        return hasRootAccess(req) || privs.has(priv);
       };
 
     next();
