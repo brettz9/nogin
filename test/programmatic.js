@@ -154,17 +154,24 @@ describe('Programmatic', function () {
   });
 
   describe('validUserPassword', function () {
+    const DB_NAME = 'nogin-password-validation-test';
+
     beforeEach(async () => {
-      await removeAccounts({all: true});
+      await removeAccounts({all: true, DB_NAME});
       // Todo: Note that this JSON file wouldn't work if we needed to
       //  test against a working (and private) email as we do for login tests
       await addAccounts({
         user: ['brett'],
         email: ['brettz9@example.name'],
         pass: ['123456'],
-        activated: [true]
+        activated: [true],
+        DB_NAME
       });
       console.log('done before');
+    });
+
+    afterEach(async () => {
+      await removeAccounts({all: true, DB_NAME});
     });
 
     it('throws with bad password', function () {
@@ -172,7 +179,8 @@ describe('Programmatic', function () {
         validUserPassword({
           user: 'brett',
           // @ts-expect-error Testing bad argument
-          pass: null
+          pass: null,
+          DB_NAME
         })
       ).to.be.rejectedWith(
         Error,

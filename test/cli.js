@@ -312,7 +312,7 @@ describe('CLI', function () {
 
         // SETUP
         // Adding to ensure there is a fresh `signup` below
-        await removeAccounts({all: true});
+        await removeAccounts({all: true, DB_NAME: testDBName});
         await deleteEmails();
 
         /** @type {Promise<SpawnResults>} */
