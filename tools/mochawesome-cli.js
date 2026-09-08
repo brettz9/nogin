@@ -18,7 +18,7 @@ import Suite from 'mocha/lib/suite.js';
 import Test from 'mocha/lib/test.js';
 import Runner from 'mocha/lib/runner.js';
 
-import {results, stats} from '../mochawesome.json';
+import {results, stats} from '../mochawesome.json' with {type: 'json'};
 
 const {constants: {
   EVENT_RUN_BEGIN,
