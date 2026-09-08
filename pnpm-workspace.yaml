@@ -8,7 +8,7 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@brettz9/ansi-to-html@0.6.11'
   - '@types/jsdom@30.0.0'
-  - '@types/node@26.2.0'
+  - '@types/node@26.2.0 || 26.5.0'
   - command-line-publish@2.0.0
   - eslint@10.8.1
   - intl-dom@0.21.1
@@ -48,3 +48,5 @@ minimumReleaseAgeExclude:
   - '@rollup/rollup-win32-x64-msvc@4.62.5'
   - rollup@4.62.5
   - intl-locale-textinfo-polyfill@3.0.1
+  - mocha-badge-generator@0.13.0
+  - snyk@1.1307.1
