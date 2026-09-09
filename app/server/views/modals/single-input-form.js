@@ -63,6 +63,7 @@ const singleInputForm = ({
         ]],
         ['div', {class: 'modal-footer'}, [
           ['button', {
+            type: 'button',
             id: type + '-cancel',
             'data-name': type + '-cancel',
             class: 'btn btn-outline-dark',

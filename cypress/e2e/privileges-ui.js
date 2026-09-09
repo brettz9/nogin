@@ -23,6 +23,35 @@ describe('Privileges (controller UI)', function () {
   //   generous retry window rides that reload out.
   const RELOADED = {timeout: 15000};
 
+  /**
+   * @param {string} modalSelector
+   * @param {() => Cypress.Chainable} open
+   * @returns {Cypress.Chainable}
+   */
+  const openModal = (modalSelector, open) => {
+    return cy.get(modalSelector).then(($modal) => {
+      const shown = new Cypress.Promise((resolve) => {
+        $modal.one('shown.bs.modal', resolve);
+      });
+      return open().then(() => shown);
+    });
+  };
+
+  /**
+   * @param {string} modalSelector
+   * @param {string} cancelSelector
+   * @returns {Cypress.Chainable}
+   */
+  const cancelModal = (modalSelector, cancelSelector) => {
+    return cy.get(modalSelector).then(($modal) => {
+      const hidden = new Cypress.Promise((resolve) => {
+        $modal.one('hidden.bs.modal', resolve);
+      });
+      cy.get(cancelSelector).click();
+      return cy.wrap(hidden);
+    });
+  };
+
   it('creates a privilege', function () {
     cy.visit('/privileges');
     cy.get('button.createPrivilege').click();
@@ -44,19 +73,26 @@ describe('Privileges (controller UI)', function () {
       });
       cy.visit('/privileges');
 
-      cy.get('button.createPrivilege').click();
-      cy.get('[data-name=createPrivilege-cancel]').click();
-      cy.get('#createPrivilege').should('not.be.visible');
+      openModal(
+        '#createPrivilege',
+        () => cy.get('button.createPrivilege').click()
+      );
+      cancelModal(
+        '#createPrivilege', '[data-name=createPrivilege-cancel]'
+      );
 
-      cy.contains('.table-bordered tr', 'canX').find(
-        'button.editPrivilege'
-      ).click();
-      cy.get('[data-name=editPrivilege-cancel]').click();
-      cy.get('#editPrivilege').should('not.be.visible');
+      openModal('#editPrivilege', () => {
+        return cy.contains('.table-bordered tr', 'canX').find(
+          'button.editPrivilege'
+        ).click();
+      });
+      cancelModal('#editPrivilege', '[data-name=editPrivilege-cancel]');
 
-      cy.contains('.table-bordered tr', 'canX').find(
-        'button.editPrivilege'
-      ).click();
+      openModal('#editPrivilege', () => {
+        return cy.contains('.table-bordered tr', 'canX').find(
+          'button.editPrivilege'
+        ).click();
+      });
       cy.get('#editPrivilege-input').clear();
       cy.get('#editPrivilege-input').type('ab');
       cy.get('[data-name=editPrivilege-submit]').click();
@@ -64,43 +100,60 @@ describe('Privileges (controller UI)', function () {
         const input = /** @type {HTMLInputElement} */ ($input[0]);
         expect(input.validationMessage).not.to.be.empty;
       });
-      cy.get('[data-name=editPrivilege-cancel]').click();
+      cancelModal('#editPrivilege', '[data-name=editPrivilege-cancel]');
 
-      cy.contains('.table-bordered tr', 'canX').find(
-        'button.addPrivilegeToGroup'
-      ).click();
-      cy.get('[data-name=addPrivilegeToGroup-cancel]').click();
-      cy.get('#addPrivilegeToGroup').should('not.be.visible');
+      openModal('#addPrivilegeToGroup', () => {
+        return cy.contains('.table-bordered tr', 'canX').find(
+          'button.addPrivilegeToGroup'
+        ).click();
+      });
+      cancelModal(
+        '#addPrivilegeToGroup', '[data-name=addPrivilegeToGroup-cancel]'
+      );
 
-      cy.contains('.table-bordered tr', 'canX').find(
-        'button.addPrivilegeToGroup'
-      ).click();
+      openModal('#addPrivilegeToGroup', () => {
+        return cy.contains('.table-bordered tr', 'canX').find(
+          'button.addPrivilegeToGroup'
+        ).click();
+      });
       cy.get('#addPrivilegeToGroup-input').type('ab');
       cy.get('[data-name=addPrivilegeToGroup-submit]').click();
       cy.get('#addPrivilegeToGroup-input').should(($input) => {
         const input = /** @type {HTMLInputElement} */ ($input[0]);
         expect(input.validationMessage).not.to.be.empty;
       });
-      cy.get('[data-name=addPrivilegeToGroup-cancel]').click();
+      cancelModal(
+        '#addPrivilegeToGroup', '[data-name=addPrivilegeToGroup-cancel]'
+      );
 
-      cy.contains('.table-bordered tr', 'betaFlag').find(
-        'button.addPrivilegeToUser'
-      ).click();
-      cy.get('[data-name=addPrivilegeToUser-cancel]').click();
-      cy.get('#addPrivilegeToUser').should('not.be.visible');
+      openModal('#addPrivilegeToUser', () => {
+        return cy.contains('.table-bordered tr', 'betaFlag').find(
+          'button.addPrivilegeToUser'
+        ).click();
+      });
+      cancelModal(
+        '#addPrivilegeToUser', '[data-name=addPrivilegeToUser-cancel]'
+      );
 
-      cy.contains('.table-bordered tr', 'betaFlag').find(
-        'button.addPrivilegeToUser'
-      ).click();
+      openModal('#addPrivilegeToUser', () => {
+        return cy.contains('.table-bordered tr', 'betaFlag').find(
+          'button.addPrivilegeToUser'
+        ).click();
+      });
       cy.get('#addPrivilegeToUser-input').type('ab');
       cy.get('[data-name=addPrivilegeToUser-submit]').click();
       cy.get('#addPrivilegeToUser-input').should(($input) => {
         const input = /** @type {HTMLInputElement} */ ($input[0]);
         expect(input.validationMessage).not.to.be.empty;
       });
-      cy.get('[data-name=addPrivilegeToUser-cancel]').click();
+      cancelModal(
+        '#addPrivilegeToUser', '[data-name=addPrivilegeToUser-cancel]'
+      );
 
-      cy.get('button.createPrivilege').click();
+      openModal(
+        '#createPrivilege',
+        () => cy.get('button.createPrivilege').click()
+      );
       cy.get('#createPrivilege-input').type('ab');
       cy.get('#createPrivilege-description-input').type('Too short');
       cy.get('[data-name=createPrivilege-submit]').click();
@@ -121,7 +174,7 @@ describe('Privileges (controller UI)', function () {
     cy.get('#createPrivilege-description-input').type('Duplicate privilege');
     cy.get('[data-name=createPrivilege-submit]').click();
 
-    expectAlert('already in use');
+    expectAlert('already taken');
   });
 
   it('edits a privilege', function () {
@@ -155,7 +208,9 @@ describe('Privileges (controller UI)', function () {
     cy.task('addPrivilege', {privilegeName: 'canX', description: 'd'});
     cy.visit('/privileges');
 
-    cy.get('button.addPrivilegeToGroup').click();
+    cy.contains('.table-bordered tr', 'canX').find(
+      'button.addPrivilegeToGroup'
+    ).click();
     cy.get('#addPrivilegeToGroup').should('be.visible');
     cy.get('#addPrivilegeToGroup-input').type('team');
     cy.get('[data-name=addPrivilegeToGroup-submit]').click();

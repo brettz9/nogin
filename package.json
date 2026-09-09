@@ -128,7 +128,7 @@
     "cypress:run-only-electron": "cypress run --browser=chrome --reporter=mocha-multi-reporters --reporter-options configFile=mmr.json --spec=\"cypress/e2e/*.js\" -b electron",
     "cypress:run-only-firefox": "cypress run --browser=chrome --reporter=mocha-multi-reporters --reporter-options configFile=mmr.json --spec=\"cypress/e2e/*.js\" -b firefox",
     "unit-and-cypress-run": "run-s -c delayed-unit-only-cov cypress:run-only",
-    "cypress:run-args": "npm run cypress:run-remove && cypress run --browser=chrome --reporter=mocha-multi-reporters --reporter-options configFile=mmr.json",
+    "cypress:run-args": "node tools/cypress-run.js",
     "cypress:run-remove": "run-p -c cypress:remove-mochaawesome cypress:remove-nyc-output",
     "cypress:run": "run-s -c cypress:run-remove unit-and-cypress-run cypress:merge",
     "cypress:run-no-unit": "run-s -c cypress:run-remove cypress:run-only cypress:merge",

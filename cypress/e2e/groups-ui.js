@@ -21,6 +21,35 @@ describe('Groups (controller UI)', function () {
 
   const RELOADED = {timeout: 15000};
 
+  /**
+   * @param {string} modalSelector
+   * @param {() => Cypress.Chainable} open
+   * @returns {Cypress.Chainable}
+   */
+  const openModal = (modalSelector, open) => {
+    return cy.get(modalSelector).then(($modal) => {
+      const shown = new Cypress.Promise((resolve) => {
+        $modal.one('shown.bs.modal', resolve);
+      });
+      return open().then(() => shown);
+    });
+  };
+
+  /**
+   * @param {string} modalSelector
+   * @param {string} cancelSelector
+   * @returns {Cypress.Chainable}
+   */
+  const cancelModal = (modalSelector, cancelSelector) => {
+    return cy.get(modalSelector).then(($modal) => {
+      const hidden = new Cypress.Promise((resolve) => {
+        $modal.one('hidden.bs.modal', resolve);
+      });
+      cy.get(cancelSelector).click();
+      return cy.wrap(hidden);
+    });
+  };
+
   it('creates, renames, and deletes a group', function () {
     cy.visit('/groups');
     cy.get('button.createGroup').click();
@@ -120,29 +149,33 @@ describe('Groups (controller UI)', function () {
     cy.task('addPrivilege', {privilegeName: 'canX', description: 'Can X'});
     cy.visit('/groups');
 
-    cy.get('button.createGroup').click();
-    cy.get('[data-name=createGroup-cancel]').click();
-    cy.get('#createGroup').should('not.be.visible');
+    openModal('#createGroup', () => cy.get('button.createGroup').click());
+    cancelModal('#createGroup', '[data-name=createGroup-cancel]');
 
-    cy.contains('.table-bordered tr', 'team').find(
-      'button.renameGroup'
-    ).click();
-    cy.get('[data-name=renameGroup-cancel]').click();
-    cy.get('#renameGroup').should('not.be.visible');
+    openModal('#renameGroup', () => {
+      return cy.contains('.table-bordered tr', 'team').find(
+        'button.renameGroup'
+      ).click();
+    });
+    cancelModal('#renameGroup', '[data-name=renameGroup-cancel]');
 
-    cy.contains('.table-bordered tr', 'team').find(
-      'button.addUserToGroup'
-    ).click();
-    cy.get('[data-name=addUserToGroup-cancel]').click();
-    cy.get('#addUserToGroup').should('not.be.visible');
+    openModal('#addUserToGroup', () => {
+      return cy.contains('.table-bordered tr', 'team').find(
+        'button.addUserToGroup'
+      ).click();
+    });
+    cancelModal('#addUserToGroup', '[data-name=addUserToGroup-cancel]');
 
-    cy.contains('.table-bordered tr', 'team').find(
-      'button.addPrivilegeToGroup'
-    ).click();
-    cy.get('[data-name=addPrivilegeToGroup-cancel]').click();
-    cy.get('#addPrivilegeToGroup').should('not.be.visible');
+    openModal('#addPrivilegeToGroup', () => {
+      return cy.contains('.table-bordered tr', 'team').find(
+        'button.addPrivilegeToGroup'
+      ).click();
+    });
+    cancelModal(
+      '#addPrivilegeToGroup', '[data-name=addPrivilegeToGroup-cancel]'
+    );
 
-    cy.get('button.createGroup').click();
+    openModal('#createGroup', () => cy.get('button.createGroup').click());
     cy.get('#createGroup-input').type('ab');
     cy.get('[data-name=createGroup-submit]').click();
     cy.get('#createGroup-input').should(($input) => {

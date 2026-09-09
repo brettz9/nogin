@@ -18,6 +18,7 @@ import {
  */
 
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
+const tooShort = 3;
 
 const createGroupButton = GroupsView.getCreateGroupButton();
 const createGroupModal = GroupsView.createGroupModal();
@@ -33,7 +34,8 @@ createGroupButton.on('click', () => {
     createGroupModal
   );
 
-  createGroupCancel.on('click', () => {
+  createGroupCancel.off('.noginModal');
+  createGroupCancel.on('click.noginModal', () => {
     createGroupModal.modal('hide');
   });
   createGroupModal.modal('show');
@@ -41,10 +43,13 @@ createGroupButton.on('click', () => {
   const createGroupSubmit = GroupsView.createGroupSubmit(
     createGroupModal
   );
-  createGroupSubmit.on('click', async () => {
+  createGroupSubmit.off('.noginModal');
+  createGroupSubmit.on('click.noginModal', async () => {
     try {
       const groupToCreate = GroupsView.getCreateGroupName();
-      if (groupToCreate.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (groupToCreate.validity.tooShort) {
+      if (groupToCreate.value.length < tooShort) {
         groupToCreate.setCustomValidity(
           GroupsView.errorMessages.name.PleaseEnterName
         );
@@ -87,7 +92,8 @@ renameGroupButton.on('click', (e) => {
     renameGroupModal
   );
 
-  renameGroupCancel.on('click', () => {
+  renameGroupCancel.off('.noginModal');
+  renameGroupCancel.on('click.noginModal', () => {
     renameGroupModal.modal('hide');
   });
   renameGroupModal.modal('show');
@@ -96,9 +102,12 @@ renameGroupButton.on('click', (e) => {
   const renameGroupSubmit = GroupsView.renameGroupSubmit(
     renameGroupModal
   );
-  renameGroupSubmit.on('click', async () => {
+  renameGroupSubmit.off('.noginModal');
+  renameGroupSubmit.on('click.noginModal', async () => {
     try {
-      if (groupToRename.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (groupToRename.validity.tooShort) {
+      if (groupToRename.value.length < tooShort) {
         groupToRename.setCustomValidity(
           GroupsView.errorMessages.name.PleaseEnterName
         );
@@ -142,7 +151,8 @@ addUserToGroupButton.on('click', (e) => {
     addUserToGroupModal
   );
 
-  addUserToGroupCancel.on('click', () => {
+  addUserToGroupCancel.off('.noginModal');
+  addUserToGroupCancel.on('click.noginModal', () => {
     addUserToGroupModal.modal('hide');
   });
   addUserToGroupModal.modal('show');
@@ -150,9 +160,12 @@ addUserToGroupButton.on('click', (e) => {
   const addUserToGroupSubmit = GroupsView.addUserToGroupSubmit(
     addUserToGroupModal
   );
-  addUserToGroupSubmit.on('click', async () => {
+  addUserToGroupSubmit.off('.noginModal');
+  addUserToGroupSubmit.on('click.noginModal', async () => {
     try {
-      if (userToAdd.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (userToAdd.validity.tooShort) {
+      if (userToAdd.value.length < tooShort) {
         userToAdd.setCustomValidity(
           GroupsView.errorMessages.name.PleaseEnterName
         );
@@ -221,7 +234,8 @@ addPrivilegeToGroupButton.on('click', (e) => {
     addPrivilegeToGroupModal
   );
 
-  addPrivilegeToGroupCancel.on('click', () => {
+  addPrivilegeToGroupCancel.off('.noginModal');
+  addPrivilegeToGroupCancel.on('click.noginModal', () => {
     addPrivilegeToGroupModal.modal('hide');
   });
   addPrivilegeToGroupModal.modal('show');
@@ -229,9 +243,12 @@ addPrivilegeToGroupButton.on('click', (e) => {
   const addPrivilegeToGroupSubmit = GroupsView.addPrivilegeToGroupSubmit(
     addPrivilegeToGroupModal
   );
-  addPrivilegeToGroupSubmit.on('click', async () => {
+  addPrivilegeToGroupSubmit.off('.noginModal');
+  addPrivilegeToGroupSubmit.on('click.noginModal', async () => {
     try {
-      if (privilegeToAdd.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (privilegeToAdd.validity.tooShort) {
+      if (privilegeToAdd.value.length < tooShort) {
         privilegeToAdd.setCustomValidity(
           GroupsView.errorMessages.name.PleaseEnterName
         );

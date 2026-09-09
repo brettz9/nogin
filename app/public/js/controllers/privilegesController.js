@@ -18,6 +18,7 @@ import {
  */
 
 const xsrfCookie = $('meta[name="csrf-token"]').attr('content');
+const tooShort = 3;
 
 const createPrivilegeButton = PrivilegesView.getCreatePrivilegeButton();
 const createPrivilegeModal = PrivilegesView.createPrivilegeModal();
@@ -33,7 +34,8 @@ createPrivilegeButton.on('click', () => {
     createPrivilegeModal
   );
 
-  createPrivilegeCancel.on('click', () => {
+  createPrivilegeCancel.off('.noginModal');
+  createPrivilegeCancel.on('click.noginModal', () => {
     createPrivilegeModal.modal('hide');
   });
   createPrivilegeModal.modal('show');
@@ -41,10 +43,13 @@ createPrivilegeButton.on('click', () => {
   const createPrivilegeSubmit = PrivilegesView.createPrivilegeSubmit(
     createPrivilegeModal
   );
-  createPrivilegeSubmit.on('click', async () => {
+  createPrivilegeSubmit.off('.noginModal');
+  createPrivilegeSubmit.on('click.noginModal', async () => {
     try {
       const privilegeToCreate = PrivilegesView.getCreatePrivilegeName();
-      if (privilegeToCreate.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (privilegeToCreate.validity.tooShort) {
+      if (privilegeToCreate.value.length < tooShort) {
         privilegeToCreate.setCustomValidity(
           PrivilegesView.errorMessages.name.PleaseEnterName
         );
@@ -99,7 +104,8 @@ editPrivilegeButton.on('click', (e) => {
   const editPrivilegeCancel = PrivilegesView.editPrivilegeCancel(
     editPrivilegeModal
   );
-  editPrivilegeCancel.on('click', () => {
+  editPrivilegeCancel.off('.noginModal');
+  editPrivilegeCancel.on('click.noginModal', () => {
     editPrivilegeModal.modal('hide');
   });
 
@@ -118,9 +124,12 @@ editPrivilegeButton.on('click', (e) => {
   const editPrivilegeSubmit = PrivilegesView.editPrivilegeSubmit(
     editPrivilegeModal
   );
-  editPrivilegeSubmit.on('click', async () => {
+  editPrivilegeSubmit.off('.noginModal');
+  editPrivilegeSubmit.on('click.noginModal', async () => {
     try {
-      if (privilegeToEdit.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (privilegeToEdit.validity.tooShort) {
+      if (privilegeToEdit.value.length < tooShort) {
         privilegeToEdit.setCustomValidity(
           PrivilegesView.errorMessages.name.PleaseEnterName
         );
@@ -171,18 +180,24 @@ addPrivilegeToUserButton.on('click', (e) => {
     privilegeType
   );
 
-  PrivilegesView.addPrivilegeToUserCancel(
+  const addPrivilegeToUserCancel = PrivilegesView.addPrivilegeToUserCancel(
     addPrivilegeToUserModal
-  ).on('click', () => {
+  );
+  addPrivilegeToUserCancel.off('.noginModal');
+  addPrivilegeToUserCancel.on('click.noginModal', () => {
     addPrivilegeToUserModal.modal('hide');
   });
   addPrivilegeToUserModal.modal('show');
 
-  PrivilegesView.addPrivilegeToUserSubmit(
+  const addPrivilegeToUserSubmit = PrivilegesView.addPrivilegeToUserSubmit(
     addPrivilegeToUserModal
-  ).on('click', async () => {
+  );
+  addPrivilegeToUserSubmit.off('.noginModal');
+  addPrivilegeToUserSubmit.on('click.noginModal', async () => {
     try {
-      if (user.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (user.validity.tooShort) {
+      if (user.value.length < tooShort) {
         user.setCustomValidity(
           PrivilegesView.errorMessages.name.PleaseEnterName
         );
@@ -235,7 +250,8 @@ addPrivilegeToGroupButton.on('click', (e) => {
     addPrivilegeToGroupModal
   );
 
-  addPrivilegeToGroupCancel.on('click', () => {
+  addPrivilegeToGroupCancel.off('.noginModal');
+  addPrivilegeToGroupCancel.on('click.noginModal', () => {
     addPrivilegeToGroupModal.modal('hide');
   });
   addPrivilegeToGroupModal.modal('show');
@@ -243,9 +259,12 @@ addPrivilegeToGroupButton.on('click', (e) => {
   const addPrivilegeToGroupSubmit = PrivilegesView.addPrivilegeToGroupSubmit(
     addPrivilegeToGroupModal
   );
-  addPrivilegeToGroupSubmit.on('click', async () => {
+  addPrivilegeToGroupSubmit.off('.noginModal');
+  addPrivilegeToGroupSubmit.on('click.noginModal', async () => {
     try {
-      if (groupName.validity.tooShort) {
+      // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
+      // if (groupName.validity.tooShort) {
+      if (groupName.value.length < tooShort) {
         groupName.setCustomValidity(
           PrivilegesView.errorMessages.name.PleaseEnterName
         );

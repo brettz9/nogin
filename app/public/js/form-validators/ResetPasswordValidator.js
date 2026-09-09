@@ -2,6 +2,8 @@
 import ResetPasswordValidatorView from
   '../views/validators/ResetPasswordValidatorView.js';
 
+const tooShort = 6;
+
 /**
  * Resetting password validation.
  */
@@ -12,11 +14,10 @@ class ResetPasswordValidator {
    */
   static validatePassword (pass) {
     pass.setCustomValidity('');
-    // todo[cypress@>=17.0.0]: validity: remove this disabling of istanbul
-    //   to see if fixed
+    // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
     //   see https://github.com/cypress-io/cypress/issues/6678
-    // istanbul ignore if
-    if (pass.validity.tooShort) {
+    // if (pass.validity.tooShort) {
+    if (pass.value.length < tooShort) {
       pass.setCustomValidity(
         /** @type {string} */ (
           ResetPasswordValidatorView.messages.ShouldBeMinimumLength

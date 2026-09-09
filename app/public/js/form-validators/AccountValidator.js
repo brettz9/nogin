@@ -1,5 +1,11 @@
 import AccountValidatorView from '../views/validators/AccountValidatorView.js';
 
+const tooShort = {
+  name: 3,
+  user: 3,
+  pass: 6
+};
+
 /**
  * Ensures accounts are valid.
  */
@@ -58,11 +64,10 @@ class AccountValidator {
         field.setCustomValidity('');
       }
     });
-    // todo[cypress@>=17.0.0]: validity: remove this disabling of istanbul
-    //  to see if fixed
+    // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
     //   see https://github.com/cypress-io/cypress/issues/6678
-    // istanbul ignore if
-    if (name.validity.tooShort) {
+    // if (name.validity.tooShort) {
+    if (name.value.length < tooShort.name) {
       name.setCustomValidity(this.errorMessages.name.PleaseEnterName);
     }
     // todo[cypress@>=17.0.0]: validity: remove this disabling of istanbul
@@ -72,18 +77,19 @@ class AccountValidator {
     if (email.validity.patternMismatch) {
       email.setCustomValidity(this.errorMessages.email.PleaseEnterValidEmail);
     }
-    // todo[cypress@>=17.0.0]: validity: remove this disabling of istanbul
-    //   to see if fixed
+    // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
     //   see https://github.com/cypress-io/cypress/issues/6678
-    // istanbul ignore if
-    if (user.validity.tooShort) {
+    // if (user.validity.tooShort) {
+    if (user.value.length < tooShort.user) {
       user.setCustomValidity(this.errorMessages.user.PleaseChooseUserName);
     }
-    // todo[cypress@>=17.0.0]: validity: remove this disabling of istanbul
-    //   to see if fixed
+    // todo[cypress@>=17.0.0]: Restore if Cypress reports this correctly.
     //   see https://github.com/cypress-io/cypress/issues/6678
-    // istanbul ignore if
-    if (!this.userIsLoggedIn(pass.value) && pass.validity.tooShort) {
+    // if (!this.userIsLoggedIn(pass.value) && pass.validity.tooShort) {
+    if (
+      !this.userIsLoggedIn(pass.value) &&
+      pass.value.length < tooShort.pass
+    ) {
       pass.setCustomValidity(this.errorMessages.pass.PasswordMinimumLength);
     }
     if (this.signup && pass.value !== passConfirm.value) {

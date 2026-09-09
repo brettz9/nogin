@@ -78,7 +78,6 @@ describe('Users', function () {
       cy.get('[data-user=bretto]').click();
       cy.get('[data-confirm-type="deleteAccount"] .btn-danger').click();
       expectAlert('bretto account has been deleted');
-      cy.get('[data-name=modal-alert] button').click();
 
       cy.get('[data-name=users] tbody', {timeout: 15000}).should(
         'not.contain', 'bretto'
@@ -109,7 +108,6 @@ describe('Users', function () {
       cy.contains('button', 'Delete all accounts').click();
       cy.get('[data-confirm-type="deleteAllAccounts"] .btn-danger').click();
       expectAlert('All user accounts were deleted');
-      cy.get('[data-name=modal-alert] button').click();
 
       cy.location('pathname', {timeout: 15000}).should('eq', '/');
       cy.get('[data-name=login]').should('exist');
