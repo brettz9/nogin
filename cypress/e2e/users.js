@@ -1,45 +1,56 @@
 describe('Users', function () {
   beforeEach(function () {
-    // Login as rootUser so session grants access even
-    //   after accounts are deleted
+    // Log in as the root user. The server ends any session whose account
+    //   has been deleted, so these tests clear the user list with
+    //   `deleteAllAccountsExceptRoot` to keep the root account (and thus
+    //   the session) alive.
     cy.loginWithSession({rootUser: true});
   });
 
   it('Visit Users (Empty)', function () {
-    cy.task('deleteAllAccounts');
+    cy.task('deleteAllAccountsExceptRoot');
     cy.visit('/users');
+    cy.get('[data-name=users] tbody tr').should('have.length', 1);
   });
 
   it('Visit Users (With user)', function () {
-    cy.task('deleteAllAccounts');
+    cy.task('deleteAllAccountsExceptRoot');
     cy.task('addAccount');
     cy.task('addNonActivatedAccount');
     cy.task('addAccountWithMissingNameAndCountry');
     cy.visit('/users');
 
-    cy.get('[data-name=users] tbody tr').should('have.length', 3);
+    cy.get('[data-name=users] tbody tr').should('have.length', 4);
 
     cy.get('[data-name=users] tbody tr').eq(0).should(($row) => {
       const text = $row.text();
       expect(text).to.match(/1/v);
+      expect(text).to.match(/Root/v);
+      expect(text).to.match(/nogin1/v);
+      expect(text).to.match(/United States/v);
+    });
+
+    cy.get('[data-name=users] tbody tr').eq(1).should(($row) => {
+      const text = $row.text();
+      expect(text).to.match(/2/v);
       expect(text).to.match(/Brett/v);
       expect(text).to.match(/bretto/v);
       expect(text).to.match(/United States/v);
       expect(text).to.match(/\w+, \w+ \d{1,2}, \d{4}/v);
     });
 
-    cy.get('[data-name=users] tbody tr').eq(1).should(($row) => {
+    cy.get('[data-name=users] tbody tr').eq(2).should(($row) => {
       const text = $row.text();
-      expect(text).to.match(/2/v);
+      expect(text).to.match(/3/v);
       expect(text).to.match(/Nicole/v);
       expect(text).to.match(/nicky/v);
       expect(text).to.match(/Iran/v);
       expect(text).to.match(/\w+, \w+ \d{1,2}, \d{4}/v);
     });
 
-    cy.get('[data-name=users] tbody tr').eq(2).should(($row) => {
+    cy.get('[data-name=users] tbody tr').eq(3).should(($row) => {
       const text = $row.text();
-      expect(text).to.match(/3/v);
+      expect(text).to.match(/4/v);
       expect(text).to.match(/Joe/v);
       expect(text).to.match(/\w+, \w+ \d{1,2}, \d{4}/v);
       expect(text).to.not.match(/Brett/v);
@@ -49,12 +60,12 @@ describe('Users', function () {
 
   // https://www.npmjs.com/package/cypress-axe
   it('users has no detectable a11y violations on load (no users)', () => {
-    cy.task('deleteAllAccounts');
+    cy.task('deleteAllAccountsExceptRoot');
     cy.visitURLAndCheckAccessibility('/users');
   });
 
   it('users has no detectable a11y violations on load', () => {
-    cy.task('deleteAllAccounts');
+    cy.task('deleteAllAccountsExceptRoot');
     cy.task('addAccount');
     cy.task('addNonActivatedAccount');
     cy.visitURLAndCheckAccessibility('/users');

@@ -28,6 +28,7 @@ import {
 
 import {uuid} from '../../app/server/modules/common.js';
 import {
+  getAccountManager as getAccountManagerForDefaultDB,
   addAccounts as addAccountsToDefaultDB,
   removeAccounts as removeAccountsFromDefaultDB,
   validUserPassword as validUserPasswordOnDefaultDB,
@@ -115,6 +116,13 @@ const generateLoginKeys = (options) => generateLoginKeysOnDefaultDB(
 const generatePasswordKey = (options) => generatePasswordKeyOnDefaultDB(
   onCypressDB(options)
 );
+
+/**
+ * Connected `AccountManager` bound to {@link CYPRESS_DB_NAME}, for tasks
+ * that need account/group/privilege operations `db-basic` does not wrap.
+ * @returns {ReturnType<typeof getAccountManagerForDefaultDB>}
+ */
+const getAccountManager = () => getAccountManagerForDefaultDB(onCypressDB());
 
 /**
  * @external CypressOn
@@ -259,6 +267,101 @@ const exprt = (on, config) => {
      */
     deleteAllAccounts () {
       return removeAccounts({all: true});
+    },
+
+    /**
+     * Removes every account except the configured root user. The server
+     * now ends any session whose account has been deleted, so tests that
+     * rely on a `loginWithSession({rootUser: true})` session while
+     * clearing the user list must keep the root account itself.
+     * @returns {Promise<import('mongodb').DeleteResult>}
+     */
+    async deleteAllAccountsExceptRoot () {
+      const [rootUser] = noginConfig.rootUser;
+      const am = await getAccountManager();
+      return am.accounts.deleteMany({user: {$ne: rootUser}});
+    },
+
+    /**
+     * Removes all non-built-in groups and privileges. Built-in groups
+     * and privileges are recreated only at server start-up, so they are
+     * left intact.
+     * @returns {Promise<null>}
+     */
+    async deleteCustomGroupsAndPrivileges () {
+      const am = await getAccountManager();
+      await Promise.all([
+        am.groups.deleteMany({builtin: false}),
+        am.privileges.deleteMany({builtin: false})
+      ]);
+      return null;
+    },
+
+    /**
+     * @param {{groupName: string}} cfg
+     * @returns {Promise<
+     *   import('../../app/server/modules/account-manager.js').GroupInfo
+     * >}
+     */
+    async addGroup ({groupName}) {
+      const am = await getAccountManager();
+      return am.addNewGroup({groupName});
+    },
+
+    /**
+     * @param {{
+     *   groupName: string, userID: string
+     * }} cfg
+     * @returns {Promise<null>}
+     */
+    async addUserToGroup ({groupName, userID}) {
+      const am = await getAccountManager();
+      await am.addUserToGroup({groupName, userID});
+      return null;
+    },
+
+    /**
+     * @param {{
+     *   privilegeName: string,
+     *   description?: string,
+     *   type?: import(
+     *     '../../app/server/modules/account-manager.js'
+     *   ).PrivilegeType,
+     *   userVarying?: boolean
+     * }} cfg
+     * @returns {Promise<
+     *   import('../../app/server/modules/account-manager.js').PrivilegeInfo
+     * >}
+     */
+    async addPrivilege ({privilegeName, description = '', type, userVarying}) {
+      const am = await getAccountManager();
+      return am.addNewPrivilege({
+        privilegeName, description, type, userVarying
+      });
+    },
+
+    /**
+     * @param {{
+     *   groupName: string, privilegeName: string, value?: unknown
+     * }} cfg
+     * @returns {Promise<null>}
+     */
+    async addPrivilegeToGroup ({groupName, privilegeName, value}) {
+      const am = await getAccountManager();
+      await am.addPrivilegeToGroup({groupName, privilegeName, value});
+      return null;
+    },
+
+    /**
+     * @param {{
+     *   userID: string, privilegeName: string, value?: unknown
+     * }} cfg
+     * @returns {Promise<null>}
+     */
+    async addPrivilegeToUser ({userID, privilegeName, value}) {
+      const am = await getAccountManager();
+      await am.addPrivilegeToUser({userID, privilegeName, value});
+      return null;
     },
 
     /**

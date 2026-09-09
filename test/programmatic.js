@@ -359,6 +359,43 @@ describe('Programmatic', function () {
     });
 
     it(
+      '`activatedAccountExists` requires a present, activated account',
+      async function () {
+        this.timeout(30000);
+        const DB_NAME = 'nogin-activated-account-test';
+        const _ = await setI18n()({
+          // @ts-expect-error Why isn't the first overload accepted?
+          acceptsLanguages: () => ['en-US']
+        });
+        const am = await new AccountManager('mongodb', {
+          DB_URL: DBFactory.getURL('mongodb', false, {
+            DB_HOST: '127.0.0.1', DB_PORT: 27017, DB_NAME
+          }),
+          DB_NAME,
+          _
+        }).connect();
+
+        try {
+          expect(await am.activatedAccountExists('ghost')).to.be.false;
+
+          await am.addNewAccount({
+            user: 'pending', email: 'pending@example.name', pass: '123456',
+            name: '', country: 'US', activated: false
+          });
+          expect(await am.activatedAccountExists('pending')).to.be.false;
+
+          await am.addNewAccount({
+            user: 'live', email: 'live@example.name', pass: '123456',
+            name: '', country: 'US', activated: true
+          });
+          expect(await am.activatedAccountExists('live')).to.be.true;
+        } finally {
+          await am.accounts?.deleteMany({});
+        }
+      }
+    );
+
+    it(
       'AccountManager with bad `adapter` (passed to ' +
         '`DBFactory.createInstance`)',
       function () {

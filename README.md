@@ -467,21 +467,20 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 ## To-dos
 
-1. **Restore 100% coverage** for the orphaned-session handling added
-    alongside the `nogin-cypress-test` database isolation:
-    1. Unit-test `AccountManager.activatedAccountExists` for the present
-        activated, present deactivated, and absent account cases.
-    1. Add a Cypress test that logs in, then deletes or deactivates the
-        account out from under the session (`cy.task('deleteAllAccounts')`
-        with no re-add, or `cy.task('updateAccountToInactive')`), then
-        visits a privileged route (e.g. `/privileges` or `/_privs`) and
-        asserts the session was destroyed and the user is treated as
-        logged out — covering the `usable === false` branch of the
-        orphaned-session middleware in `app/server/routeList.js`.
-    1. The defensive `catch` fallbacks in `getUserPrivs` and the
-        `/_privs` handler are marked `istanbul ignore` because that
-        middleware makes them unreachable via HTTP; revisit if the
-        middleware is ever removed.
+1. **Coverage of the orphaned-session handling** (added alongside the
+    `nogin-cypress-test` database isolation) is provided by
+    `test/programmatic.js` (`activatedAccountExists`) and
+    `cypress/e2e/_privs.js` (the session-regeneration branch and the
+    `/_privs` cache header). The defensive `catch` fallbacks in
+    `getUserPrivs` and the `/_privs` handler are marked `istanbul ignore`
+    because that middleware makes them unreachable via HTTP; revisit if
+    the middleware is ever removed.
+1. `cypress/e2e/privileges.js` covers the root user, a logged-out
+    visitor, and readers holding `nogin.readPrivilege` alone,
+    `+ nogin.readGroup`, and `+ nogin.readUsers`. Still to add: the
+    `nogin.editPrivilege` / `nogin.addPrivilegeToGroup` non-root paths
+    (the `groups`/`users` autocomplete lists and the create/edit modals),
+    and a `cypress/e2e/groups.js` for the `groups` route/view.
 1. Recheck **coverage** tests
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)
