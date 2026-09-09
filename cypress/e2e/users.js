@@ -113,6 +113,25 @@ describe('Users', function () {
       cy.get('[data-name=login]').should('exist');
     });
 
+    it('shows an error when deleting all accounts fails', function () {
+      cy.task('deleteAllAccountsExceptRoot');
+      cy.task('addAccount');
+      cy.visit('/users');
+      cy.intercept('POST', '/reset', {
+        statusCode: 400,
+        body: 'Unable to delete all accounts'
+      }).as('deleteAllAccounts');
+      cy.intercept('GET', '/users').as('reloadUsers');
+
+      cy.contains('button', 'Delete all accounts').click();
+      cy.get('[data-confirm-type="deleteAllAccounts"] .btn-danger').click();
+      cy.wait('@deleteAllAccounts');
+      expectAlert('Unable to delete all accounts');
+      cy.wait('@reloadUsers');
+      cy.location('pathname').should('eq', '/users');
+      cy.task('getRecords', {user: ['bretto']}).should('have.length', 1);
+    });
+
     // https://www.npmjs.com/package/cypress-axe
     it('users has no detectable a11y violations on load (no users)', () => {
       cy.task('deleteAllAccountsExceptRoot');

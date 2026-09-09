@@ -63,14 +63,6 @@ const HomeView = {
   },
 
   /**
-   * @param {JQuery} accountUpdatedAlertDialog
-   * @returns {JQuery} `HTMLButtonElement`
-   */
-  getAccountUpdatedButton (accountUpdatedAlertDialog) {
-    return accountUpdatedAlertDialog.find('button');
-  },
-
-  /**
    * @returns {JQuery}
    */
   getUser () {

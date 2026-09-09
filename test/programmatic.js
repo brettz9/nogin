@@ -18,6 +18,8 @@ import {i18n as setI18n} from '../app/server/modules/i18n.js';
 import jmlEngine from '../app/server/modules/jmlEngine.js';
 import {createServer} from '../app/server/app.js';
 import {getPrivilegeValues} from '../app/server/routeList.js';
+import layoutView from '../app/server/views/layout.js';
+import doubleInputForm from '../app/server/views/modals/double-input-form.js';
 import privilegesView from '../app/server/views/privileges.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -125,6 +127,78 @@ describe('Programmatic', function () {
       );
       expect(rendered).not.to.include('privateDatabase');
     });
+
+  it('renders alternate view configurations', async function () {
+    const _ = /** @type {import('intl-dom').I18NCallback<string>} */ (
+      /** @type {unknown} */ ((/** @type {string|string[]} */ key) => (
+        Array.isArray(key) ? key[0] : key
+      ))
+    );
+    const modal = JSON.stringify(doubleInputForm({
+      _,
+      type: 'createGroup',
+      inputDirections: 'GroupName',
+      descriptionDirections: 'GroupDescription'
+    }));
+    expect(modal).not.to.include('PrivilegeType');
+    expect(modal).not.to.include('VariesByUser');
+
+    const layout = JSON.stringify(layoutView({
+      _,
+      template: 'test',
+      langDir: {lang: 'ar', dir: 'rtl'},
+      isRtl: true,
+      content: [],
+      scripts: [],
+      title: 'RTL',
+      favicon: '',
+      stylesheet: '',
+      noBuiltinStylesheets: false,
+      localScripts: false,
+      userJS: '',
+      userJSModule: '',
+      noPolyfill: false,
+      useESM: false,
+      csrfToken: '',
+      error: '',
+      triggerCoverage: false,
+      securitySourceAttributes (_tag, source) {
+        return {crossorigin: source};
+      }
+    }, {headPre: [], headPost: [], bodyPre: [], bodyPost: []}));
+    expect(layout).to.include('bootstrap-rtl');
+
+    const privileges = JSON.stringify(await privilegesView({
+      _,
+      layout: (content) => Promise.resolve(
+        /** @type {[import('jamilih').JamilihDoc]} */ (
+          /** @type {unknown} */ ([content])
+        )
+      ),
+      hasEditPrivilegeAccess: false,
+      hasAddPrivilegeToGroupAccess: false,
+      hasRemovePrivilegeFromGroupAccess: true,
+      hasReadGroupAccess: true,
+      hasReadUsersAccess: false,
+      privilegesInfo: [{
+        privilegeName: 'readReports',
+        description: 'Read reports',
+        type: 'boolean',
+        userVarying: false,
+        builtin: false,
+        usersInfo: [],
+        groupsInfo: [{
+          groupName: 'reporters',
+          builtin: false,
+          usersInfo: [{user: 'reader', _id: 'reader'}]
+        }]
+      }],
+      groups: [],
+      users: []
+    }));
+    expect(privileges).to.include('reporters');
+    expect(privileges).not.to.include('reader');
+  });
 
   describe('createServer', function () {
     it('Allows JSON options as objects', async function () {
@@ -349,6 +423,8 @@ describe('Programmatic', function () {
         await expect(am.addPrivilegeToUser({
           userID: 'typedUser', privilegeName: 'quota', value: [1, 2]
         })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
+        await am.deleteAllGroups();
+        expect(await am.getAllGroups()).to.deep.equal([]);
       } finally {
         await Promise.all([
           am.accounts?.deleteMany({}),
@@ -515,10 +591,21 @@ describe('Programmatic', function () {
     expect(() => {
       dbAbstract.getAccounts();
     }).to.throw(Error, 'Abstract method');
+
+    expect(() => {
+      dbAbstract.getGroups();
+    }).to.throw(Error, 'Abstract method');
   });
 
-  it('crypto (nogin)', function () {
-    return expect(
+  it('crypto (nogin)', async function () {
+    const hashedPassword = await cryptoNL.saltAndHash('secret');
+    expect(
+      await cryptoNL.validatePasswordV1('secret', hashedPassword)
+    ).to.be.true;
+    expect(
+      await cryptoNL.validatePasswordV1('wrong', hashedPassword)
+    ).to.be.false;
+    await expect(
       // @ts-expect-error Testing bad argument
       cryptoNL.saltAndHash(null)
     ).to.be.rejectedWith(Error);

@@ -662,6 +662,21 @@ describe('Home', function () {
       });
     });
 
+    it('reports a failure to dispatch the email-change link', function () {
+      cy.intercept('POST', '/home', {
+        statusCode: 400,
+        body: 'problem-dispatching-link'
+      }).as('updateAccount');
+      cy.clearAndType('[data-name="pass"]', 'boo123456');
+      cy.clearAndType('[data-name="name"]', 'MyNewName');
+      cy.get('[data-name="action2"]').click();
+
+      cy.wait('@updateAccount');
+      cy.get('[data-name=modal-alert] [data-name=modal-body] p').contains(
+        'While your account was otherwise updated'
+      );
+    });
+
     it('should not update when the session is lost', function () {
       this.timeout(30000);
       cy.clearCookie('login');

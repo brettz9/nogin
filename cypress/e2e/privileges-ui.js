@@ -71,6 +71,9 @@ describe('Privileges (controller UI)', function () {
       cy.task('addPrivilege', {
         privilegeName: 'betaFlag', description: 'd', userVarying: true
       });
+      cy.task('addPrivilege', {
+        privilegeName: 'quota', description: 'd', type: 'number'
+      });
       cy.visit('/privileges');
 
       openModal(
@@ -122,6 +125,18 @@ describe('Privileges (controller UI)', function () {
         const input = /** @type {HTMLInputElement} */ ($input[0]);
         expect(input.validationMessage).not.to.be.empty;
       });
+      cancelModal(
+        '#addPrivilegeToGroup', '[data-name=addPrivilegeToGroup-cancel]'
+      );
+
+      openModal('#addPrivilegeToGroup', () => {
+        return cy.contains('.table-bordered tr', 'quota').find(
+          'button.addPrivilegeToGroup'
+        ).click();
+      });
+      cy.get('#addPrivilegeToGroup-value-input').should(
+        'have.attr', 'type', 'number'
+      );
       cancelModal(
         '#addPrivilegeToGroup', '[data-name=addPrivilegeToGroup-cancel]'
       );

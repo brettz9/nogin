@@ -32,7 +32,8 @@
       "rollup.config.js",
       "node_modules/**",
       "docs/**",
-      "app/public/js/polyfills/**"
+      "app/public/js/polyfills/**",
+      "app/public-test-utils/db-basic-testing-extensions.js"
     ],
     "reporter": [
       "text",
@@ -106,6 +107,7 @@
     "start-cov": "run-p -r mongo:start-test server:delayed-start-cov",
     "watch:start": "run-p -r mongo:start-test watch:server:start",
     "server:start-test-post-login-redirect": "npm run server:start-test-base -- --disableRateLimit --postLoginRedirectPath=${NOGIN_POST_LOGIN_REDIRECT_PATH:-/}",
+    "server:start-test-signup-agreement": "NODE_V8_COVERAGE=.c8_server_output npm run server:start-test-base -- --disableRateLimit -d ../../instrumented --signupAgreement='{\"en-US\":\"Review the terms before signing up.\"}'",
     "start-test-post-login-redirect": "run-p -r mongo:start-test server:start-test-post-login-redirect",
     "start-test": "run-p -r mongo:start-test server:start-test",
     "mongo:start": "mongod --port=27017 --dbpath=db --bind_ip=127.0.0.1",
@@ -130,6 +132,7 @@
     "cypress:run-only-firefox": "cypress run --browser=chrome --reporter=mocha-multi-reporters --reporter-options configFile=mmr.json --spec=\"cypress/e2e/*.js\" -b firefox",
     "unit-and-cypress-run": "run-s -c delayed-unit-only-cov cypress:run-only",
     "cypress:run-args": "node tools/cypress-run.js",
+    "cypress:run-signup-agreement": "npm run cypress:run-args -- --preserve-coverage --spec=cypress/e2e/signup-agreement.js",
     "cypress:run-remove": "run-p -c cypress:remove-mochaawesome cypress:remove-nyc-output",
     "cypress:run": "run-s -c cypress:run-remove unit-and-cypress-run cypress:merge",
     "cypress:run-no-unit": "run-s -c cypress:run-remove cypress:run-only cypress:merge",

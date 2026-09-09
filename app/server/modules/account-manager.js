@@ -209,10 +209,10 @@ class AccountManager {
     } catch (err) {
       // Not clear on how to check; we're just rethrowing here for
       //   now anyways
-      // istanbul ignore next
+      /* c8 ignore next */
       console.error(err);
       // Ignore for reasons as stated above previous line
-      // istanbul ignore next
+      /* c8 ignore next */
       throw err;
     }
     return this;
@@ -470,11 +470,11 @@ class AccountManager {
         //  but it seems very obscure
         // See discussion under `app.get(routes.root)` for the obscure
         //  internal states that could exist to cause this
-        // istanbul ignore next
+        /* c8 ignore next */
         : null;
     } catch {
       // No special reason to expect it throwing
-      // istanbul ignore next
+      /* c8 ignore next */
       return null;
     }
   }
@@ -618,7 +618,7 @@ class AccountManager {
       }, $unset: {cookie: ''}}, {returnDocument: 'after'}));
     } catch (err) {
       // Above should not throw readily
-      // istanbul ignore next
+      /* c8 ignore next */
       e = err;
     }
 
@@ -1384,7 +1384,7 @@ class AccountManager {
     } catch {}
     // Todo: Should only occur if user established session and then we
     //  deleted their account
-    // istanbul ignore if
+    /* c8 ignore next */
     if (!oldAccount) {
       throw new Error('session-lost');
     }
@@ -1456,7 +1456,7 @@ class AccountManager {
       if (changedEmailHandler && addingTemporaryEmail) {
         await changedEmailHandler(o, user);
       }
-      // istanbul ignore if -- Should not occur?
+      /* c8 ignore next */ // Should not occur?
       if (!ret) {
         throw new Error('missing-user');
       }

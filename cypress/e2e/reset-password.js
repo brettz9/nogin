@@ -42,41 +42,27 @@ describe('Reset password', function () {
     });
   });
 
-  // eslint-disable-next-line mocha/no-pending-tests -- Cypress bug
-  it.skip('Report errors of insufficiently long passwords', function () {
-    return cy.task('generatePasswordKey', {
-      email: NL_EMAIL_USER,
-      // ipv6 read by Express
-      ip
-    }).then((
-      /** @type {string} */
-      key
-    ) => {
-      cy.log(key);
-      cy.visit('/reset-password?key=' + encodeURIComponent(key));
-      cy.get('[data-name=enter-new-pass-label]').contains(
-        'Please enter your new password'
-      );
-      // cy.get('[data-name="name"]:invalid').should('have.length', 0);
-
-      const tooShortPassword = 'a';
-      cy.get('[data-name="reset-pass"]').type(tooShortPassword);
-      // cy.get('[data-name="reset-password-submit"]').click();
-
-      // todo[cypress@>=17.0.0]: `:invalid`: see if fixed:
-      //   https://github.com/cypress-io/cypress/issues/6678
-      cy.get('[data-name="reset-pass"]:invalid').should('have.length', 1);
-      return cy.get('[data-name="reset-pass"]');
-    }).then(($input) => {
-      expect(/** @type {HTMLInputElement} */ (
-        $input[0]
-      ).checkValidity()).to.equal(false);
-      return expect(/** @type {HTMLInputElement} */ (
-        $input[0]
-      ).validity.tooShort).to.be.true;
-      // return expect($input[0].validationMessage).to.eq(
-      //  'Please enter a sufficiently long name'
-      // );
+  it('reports errors for insufficiently long passwords', function () {
+    cy.visit('/');
+    cy.intercept('POST', '/lost-password').as('lostPassword');
+    cy.get('[data-name="forgot-password"]').click();
+    cy.get('[data-name="email"]').type(NL_EMAIL_USER);
+    cy.get('[data-name=retrieve-password-submit]').click();
+    cy.wait('@lostPassword', {timeout: 70000});
+    cy.task('getRecords', {email: [NL_EMAIL_USER]}).then((records) => {
+      const accounts = /** @type {{passKey: string}[]} */ (records);
+      cy.visit('/reset-password?key=' + encodeURIComponent(
+        accounts[0].passKey
+      ));
+      cy.get('[data-name="reset-pass"]').type('a');
+      cy.get('[data-name="reset-pass"]').blur();
+      cy.get('[data-name="reset-pass"]').should(($input) => {
+        const input = /** @type {HTMLInputElement} */ ($input[0]);
+        expect(input.checkValidity()).to.equal(false);
+        expect(input.validationMessage).to.equal(
+          'Password Should Be At Least 6 Characters'
+        );
+      });
     });
   });
 

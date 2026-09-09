@@ -246,7 +246,7 @@ const routeList = async (app, config) => {
       user
         // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
         ? am.getPrivilegesForUser(user).catch(
-          // istanbul ignore next -- Defensive; see comment above
+          /* c8 ignore next */ // Defensive; see comment above
           (err) => {
             if (/** @type {Error} */ (err).message === 'user-missing') {
               return null;
@@ -495,7 +495,7 @@ const routeList = async (app, config) => {
       } catch (error) {
         // `validatePasswordKey` just looks up database records, so no reason
         //   to err
-        // istanbul ignore next
+        /* c8 ignore next */
         e = error;
       }
       if (e || isNullish(o)) {
@@ -536,7 +536,7 @@ const routeList = async (app, config) => {
           ].includes(e.message)
             ? _(e.message, {lb: '\n'})
             // Shouldn't normally throw any other errors
-            // istanbul ignore next
+            /* c8 ignore next */
             : e.message;
 
           log('message', {message});
@@ -1866,7 +1866,7 @@ const routeList = async (app, config) => {
     } catch {
       // On a lookup failure, leave the session untouched rather than
       //   logging the user out over a transient database error.
-      // istanbul ignore next
+      /* c8 ignore next */
       usable = true;
     }
     if (usable) {
@@ -1879,7 +1879,7 @@ const routeList = async (app, config) => {
   });
 
   // See https://github.com/cypress-io/code-coverage#instrument-backend-code
-  // istanbul ignore else
+  /* c8 ignore next */
   if (SERVE_COVERAGE) {
     // See https://github.com/cypress-io/code-coverage
 
@@ -1969,7 +1969,7 @@ window.Nogin = {
       //   lookup fails (e.g., a stale session whose account is gone).
       //   The orphaned-session middleware normally prevents this, so it
       //   is defensive only.
-      // istanbul ignore next -- Defensive; see comment above
+      /* c8 ignore next */ // Defensive; see comment above
       userPrivs = new Map();
     }
     const converted = {
@@ -2105,7 +2105,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
       //  reusing the same name).
       /* eslint-disable jsdoc/reject-any-type -- Work around package typing */
       const csrf = /** @type {any} */ (
-        // istanbul ignore next -- Apparent bug with @dr.pogodin/csurf types
+        /* c8 ignore next */ // Apparent bug with @dr.pogodin/csurf types
         csurfModule
       )(parseCLIJSON(csurfOptions));
 

@@ -1,6 +1,8 @@
 /* eslint-disable cypress/require-data-selectors -- The groups view
   identifies its controls by id / semantic class */
 
+/** @typedef {{groupName: string, userIDs: string[]}} GroupRecord */
+
 describe('Groups (controller UI)', function () {
   beforeEach(function () {
     cy.task('deleteCustomGroupsAndPrivileges');
@@ -83,6 +85,28 @@ describe('Groups (controller UI)', function () {
     expectAlert('already in use');
   });
 
+  it('shows a server error when deleting a group fails', function () {
+    cy.task('addGroup', {groupName: 'writers'});
+    cy.visit('/groups');
+    cy.intercept('POST', '/accessAPI', {
+      statusCode: 400,
+      body: 'Unable to delete group'
+    }).as('deleteGroup');
+
+    cy.contains('.table-bordered tr', 'writers').find(
+      'button.deleteGroup'
+    ).click();
+    cy.get('[data-confirm-type="deleteGroup"] .btn-danger').click();
+    cy.wait('@deleteGroup');
+    expectAlert('Unable to delete group');
+    cy.task('getGroups').then((groups) => {
+      const groupRecords = /** @type {GroupRecord[]} */ (groups);
+      expect(groupRecords.map(({groupName}) => groupName)).to.include(
+        'writers'
+      );
+    });
+  });
+
   it('adds a user to a group and removes the user again', function () {
     cy.task('addGroup', {groupName: 'team'});
     cy.visit('/groups');
@@ -104,6 +128,30 @@ describe('Groups (controller UI)', function () {
     cy.contains('.table-bordered tr', 'team', RELOADED).find(
       '.removeUserFromGroup[data-user=bretto]'
     ).should('not.exist');
+  });
+
+  it('shows a server error when removing a user fails', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.task('addUserToGroup', {groupName: 'team', userID: 'bretto'});
+    cy.visit('/groups');
+    cy.intercept('POST', '/accessAPI', {
+      statusCode: 400,
+      body: 'Unable to remove user from group'
+    }).as('removeUserFromGroup');
+
+    cy.contains('.table-bordered tr', 'team').find(
+      '.removeUserFromGroup[data-user=bretto]'
+    ).click();
+    cy.get(
+      '[data-confirm-type="removeUserFromGroup"] .btn-danger'
+    ).click();
+    cy.wait('@removeUserFromGroup');
+    expectAlert('Unable to remove user from group');
+    cy.task('getGroups').then((groups) => {
+      const groupRecords = /** @type {GroupRecord[]} */ (groups);
+      const team = groupRecords.find(({groupName}) => groupName === 'team');
+      expect(team?.userIDs).to.include('bretto');
+    });
   });
 
   it('assigns a typed privilege to a group and removes it again', function () {
@@ -141,6 +189,56 @@ describe('Groups (controller UI)', function () {
     expectAlert('Privilege removed from group');
     cy.contains('.table-bordered tr', 'team', RELOADED).find(
       '.removePrivilegeFromGroup[data-privilege=allowedTags]'
+    ).should('not.exist');
+  });
+
+  it('shows a server error when removing a privilege fails', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.task('addPrivilege', {
+      privilegeName: 'canX', description: 'Can X'
+    });
+    cy.task('addPrivilegeToGroup', {
+      groupName: 'team', privilegeName: 'canX'
+    });
+    cy.visit('/groups');
+    cy.intercept('POST', '/accessAPI', {
+      statusCode: 400,
+      body: 'Unable to remove privilege from group'
+    }).as('removePrivilegeFromGroup');
+
+    cy.contains('.table-bordered tr', 'team').find(
+      '.removePrivilegeFromGroup[data-privilege=canX]'
+    ).click();
+    cy.get(
+      '[data-confirm-type="removePrivilegeFromGroup"] .btn-danger'
+    ).click();
+    cy.wait('@removePrivilegeFromGroup');
+    expectAlert('Unable to remove privilege from group');
+    cy.contains('.table-bordered tr', 'team').find(
+      '.removePrivilegeFromGroup[data-privilege=canX]'
+    ).should('exist');
+  });
+
+  it('shows a server error when assigning a privilege fails', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.task('addPrivilege', {
+      privilegeName: 'canX', description: 'Can X'
+    });
+    cy.visit('/groups');
+    cy.intercept('POST', '/accessAPI', {
+      statusCode: 400,
+      body: 'Unable to add privilege to group'
+    }).as('addPrivilegeToGroup');
+
+    cy.contains('.table-bordered tr', 'team').find(
+      'button.addPrivilegeToGroup'
+    ).click();
+    cy.get('#addPrivilegeToGroup-input').type('canX');
+    cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+    cy.wait('@addPrivilegeToGroup');
+    expectAlert('Unable to add privilege to group');
+    cy.contains('.table-bordered tr', 'team').find(
+      '.removePrivilegeFromGroup[data-privilege=canX]'
     ).should('not.exist');
   });
 
