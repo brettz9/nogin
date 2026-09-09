@@ -1847,9 +1847,10 @@ const routeList = async (app, config) => {
   //   working because `hasRootAccess` only string-matches
   //   `req.session.user.user` against `rootUser` (no database lookup), so
   //   a configured root user would retain full access purely from the
-  //   session cookie. Destroy any such orphaned session so the user is
+  //   session cookie. Regenerate any such orphaned session so the user is
   //   treated as logged out, applying the same activated-account
-  //   condition as `autoLogin`/`manualLogin`.
+  //   condition as `autoLogin`/`manualLogin`. (Regenerate rather than
+  //   destroy so downstream handlers still have a valid `req.session`.)
   app.use(async (req, _res, next) => {
     const sessionUser = req.session?.user?.user;
     if (!sessionUser) {
@@ -1869,7 +1870,7 @@ const routeList = async (app, config) => {
       next();
       return;
     }
-    req.session.destroy(() => {
+    req.session.regenerate(() => {
       next();
     });
   });
