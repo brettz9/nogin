@@ -179,9 +179,10 @@ describe('Privileges', function () {
       cy.get('.editPrivilege').should('exist');
       cy.get('.deletePrivilege').should('exist');
       cy.get('.addPrivilegeToGroup').should('exist');
-      // Group and user data are kept (no stripping branch taken)
+      // Group and user data are kept (no stripping branch taken); in the
+      //   privileges view this button is labelled with the group name
       cy.get('.removePrivilegeFromGroup[data-group=editors]').should(
-        'contain', 'publish'
+        'contain', 'editors'
       );
       cy.contains('.table-bordered tr', 'betaFlag').should('contain', 'bretto');
     }

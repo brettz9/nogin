@@ -143,7 +143,7 @@
     "mochawesome-cli": "node tools/mochawesome-cli.js",
     "mochawesome-cli-dot": "npm run mochawesome-cli -- --dot",
     "report-clean": "rimraf coverage",
-    "report-lcov": "nyc report --reporter=lcov --reporter=json-summary",
+    "report-lcov": "nyc report --reporter=lcov --reporter=html --reporter=json-summary",
     "report-no-mochawesome": "run-s report-clean report-lcov report-text",
     "report-text": "nyc report --reporter=text",
     "report-text-summary": "nyc report --reporter=text-summary",

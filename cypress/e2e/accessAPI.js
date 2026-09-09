@@ -33,7 +33,7 @@ describe('accessAPI', function () {
 
   it('GET renders the placeholder page', function () {
     cy.visit('/accessAPI');
-    cy.get('h1').should('contain', '/accessAPI');
+    cy.get('h1').should('contain', 'Access API');
     cy.contains('To be added');
   });
 

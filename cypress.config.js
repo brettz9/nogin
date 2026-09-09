@@ -20,6 +20,9 @@ export default defineConfig({
       return (await import('./cypress/plugins/index.js')).default(on, config);
     },
     baseUrl: 'http://127.0.0.1:3000',
-    specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}'
+    specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+    // `all.js` just imports every other spec; without this it is swept up
+    //   by the `cypress/e2e/*.js` run globs and each test runs twice.
+    excludeSpecPattern: ['*.hot-update.js', 'cypress/e2e/all.js']
   }
 });
