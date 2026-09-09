@@ -4,9 +4,11 @@
  * @returns {void}
  */
 function router (app, opts) {
-  app.get('/dynamic-route', function (req, res) {
+  app.get('/dynamic-route', async function (req, res) {
+    const hasReadUsers = await req.hasPrivilege('nogin.read-users');
     res.end(
-      `got a dynamic route with options, e.g., ${opts.userJS}`
+      `got a dynamic route with options, e.g., ${opts.userJS}; ` +
+      `has read-users: ${hasReadUsers}`
     );
   });
 }

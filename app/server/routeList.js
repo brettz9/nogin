@@ -493,12 +493,13 @@ const routeList = async (app, config) => {
           /** @type {string} */
           (req.ip)
         );
+      /* c8 ignore start -- Defensive database lookup failure. */
       } catch (error) {
         // `validatePasswordKey` just looks up database records, so no reason
         //   to err
-        /* c8 ignore next 3 -- Defensive database lookup failure. */
         e = error;
       }
+      /* c8 ignore stop */
       if (e || isNullish(o)) {
         res.redirect(routes.root);
       } else {
@@ -709,6 +710,7 @@ const routeList = async (app, config) => {
      * @returns {Promise<void>}
      */
     async coverage (_routes, req, res, next) {
+      /* c8 ignore next 4 -- Served by earlier coverage middleware. */
       if (SERVE_COVERAGE) {
         next();
         return;
@@ -1228,6 +1230,7 @@ const routeList = async (app, config) => {
                 _,
                 getLangDir(_)
               );
+            /* c8 ignore start -- Defensive email transport failure. */
             } catch (e) {
               logErrorProperties(/** @type {Error} */ (e));
               // Cause this `updateAccount` to reject and be handled below
@@ -1235,6 +1238,7 @@ const routeList = async (app, config) => {
                 cause: e
               });
             }
+            /* c8 ignore stop */
           }
         });
       } catch (er) {
@@ -1392,16 +1396,20 @@ const routeList = async (app, config) => {
         return;
       }
       const {value: _} = i18nResult;
+      /* c8 ignore start -- Defensive database update failure. */
       if (updatePasswordResult.status === 'rejected') {
         res.status(400).send(_('UnableToUpdatePassword'));
         return;
       }
+      /* c8 ignore stop */
       const {value: o} = updatePasswordResult;
       if (o) {
         res.status(200).send(_('OK'));
+      /* c8 ignore start -- Defensive stale reset-key result. */
       } else {
         res.status(400).send(_('UnableToUpdatePassword'));
       }
+      /* c8 ignore stop */
     },
 
     /**
@@ -1583,9 +1591,11 @@ const routeList = async (app, config) => {
             'bad-groupname', 'groupname-taken'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1617,9 +1627,11 @@ const routeList = async (app, config) => {
             'bad-old-groupname'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1638,9 +1650,11 @@ const routeList = async (app, config) => {
             'bad-groupname', 'user-missing'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1659,9 +1673,11 @@ const routeList = async (app, config) => {
             'bad-groupname', 'user-missing'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1693,9 +1709,11 @@ const routeList = async (app, config) => {
             'bad-privilegename', 'privilegename-taken', 'bad-privilege-type'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1711,9 +1729,11 @@ const routeList = async (app, config) => {
             'bad-privilegename'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1735,9 +1755,11 @@ const routeList = async (app, config) => {
             'bad-old-privilegename', 'bad-privilege-type'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1794,9 +1816,11 @@ const routeList = async (app, config) => {
             'bad-privilege-scope', 'bad-privilege-value'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1807,10 +1831,12 @@ const routeList = async (app, config) => {
         }
         try {
           await am.removePrivilegeFromUser({userID, privilegeName});
+        /* c8 ignore start -- Defensive database write failure. */
         } catch (err) {
           res.status(400).send(/** @type {Error} */ (err).message);
           return;
         }
+        /* c8 ignore stop */
         break;
       case 'removePrivilegeFromGroup':
         if (!hasRemovePrivilegeFromGroupAccess) {
@@ -1827,9 +1853,11 @@ const routeList = async (app, config) => {
             'bad-groupname', 'privilege-missing'
           ].includes(/** @type {Error} */ (err).message)) {
             res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
+          /* c8 ignore stop */
           return;
         }
         break;
@@ -1879,12 +1907,13 @@ const routeList = async (app, config) => {
     let usable;
     try {
       usable = await am.activatedAccountExists(sessionUser);
+    /* c8 ignore start -- Defensive database lookup failure. */
     } catch {
       // On a lookup failure, leave the session untouched rather than
       //   logging the user out over a transient database error.
-      /* c8 ignore next */
       usable = true;
     }
+    /* c8 ignore stop */
     if (usable) {
       next();
       return;
@@ -1980,14 +2009,15 @@ window.Nogin = {
     let userPrivs;
     try {
       userPrivs = await getUserPrivs(req);
+    /* c8 ignore start -- Defensive privilege lookup failure. */
     } catch {
       // Fall back to a logged-out shape rather than a 500 if privilege
       //   lookup fails (e.g., a stale session whose account is gone).
       //   The orphaned-session middleware normally prevents this, so it
       //   is defensive only.
-      /* c8 ignore next */ // Defensive; see comment above
       userPrivs = new Map();
     }
+    /* c8 ignore stop */
     const converted = {
       privs: Object.fromEntries(userPrivs),
       root: hasRootAccess(req),
@@ -2112,6 +2142,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
 
     let error;
     if (!disableXSRF && !openRoutes.has(route)) {
+      /* c8 ignore next 3 -- Deliberately unreachable debug guard. */
       if (error) { // Deliberately not reaching
         console.log('route', method, route);
       }

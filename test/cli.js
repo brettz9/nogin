@@ -324,7 +324,8 @@ describe('CLI', function () {
           {signupText}, {usersText},
           {coverageStatus, coverageText},
           {updateAccountText},
-          {homeStatus, homeText}
+          {homeStatus, homeText},
+          {fallbackText}
           // eslint-disable-next-line promise/avoid-new -- Testing
         ] = await new Promise((resolve, reject) => {
           let settled = false;
@@ -358,6 +359,7 @@ describe('CLI', function () {
             '--favicon', 'favicon.ico',
             '--countryCodes', '["CA", "MX", "US"]',
             '--router', pathResolve(__dirname, './fixtures/router.js'),
+            '--fallback', pathResolve(__dirname, './fixtures/fallback.js'),
             '--middleware', pathResolve(__dirname, './fixtures/middleware.js'),
             '--injectHTML', pathResolve(__dirname, './fixtures/injectHTML.js'),
             '--customRoute', 'en-US=home=/updateAccount',
@@ -382,7 +384,7 @@ describe('CLI', function () {
             try {
               const [
                 res, resRTL, staticRes, dynamicRes, signupRes, usersRes,
-                covRes, updateAccountRes, homeRes
+                covRes, updateAccountRes, homeRes, fallbackRes
               ] = await Promise.all([
                 fetch(`http://127.0.0.1:${testPort}`),
                 fetch(`http://127.0.0.1:${testPort}`, {
@@ -408,7 +410,8 @@ describe('CLI', function () {
                 // Check that `/updateAccount` works as `/home` (redirects)
                 fetch(`http://127.0.0.1:${testPort}/updateAccount`),
                 // Check that `/home` is no longer available
-                fetch(`http://127.0.0.1:${testPort}/home`)
+                fetch(`http://127.0.0.1:${testPort}/home`),
+                fetch(`http://127.0.0.1:${testPort}/fallback-route`)
               ]);
 
               settleResolve([
@@ -423,7 +426,8 @@ describe('CLI', function () {
                   coverageText: await covRes.text()
                 },
                 {updateAccountText: await updateAccountRes.text()},
-                {homeStatus: homeRes.status, homeText: await homeRes.text()}
+                {homeStatus: homeRes.status, homeText: await homeRes.text()},
+                {fallbackText: await fallbackRes.text()}
               ]);
               cli?.kill();
             } catch (err) {
@@ -452,6 +456,9 @@ describe('CLI', function () {
         expect(homeStatus).to.equal(404);
         expect(homeMsg).contains(
           'the page or resource you are searching for is currently unavailable'
+        );
+        expect(fallbackText).to.equal(
+          'got a fallback route with options, e.g., userJS.js'
         );
 
         expect(
@@ -576,7 +583,8 @@ describe('CLI', function () {
         expect(json).to.deep.equal(addUsersJSON);
 
         expect(dynamicText).to.equal(
-          'got a dynamic route with options, e.g., userJS.js'
+          'got a dynamic route with options, e.g., userJS.js; ' +
+          'has read-users: false'
         );
 
         const signupDoc = (new JSDOM(signupText)).window.document;

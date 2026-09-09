@@ -42,7 +42,7 @@ const pkg = JSON.parse(
  *   noPolyfill: boolean,
  *   injectHTML: string,
  *   config: string|null,
- *   countryCodes: string,
+ *   countryCodes: string|string[],
  *   adapter: string,
  *   favicon: string,
  *   stylesheet: string,

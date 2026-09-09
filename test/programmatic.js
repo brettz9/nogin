@@ -210,6 +210,7 @@ describe('Programmatic', function () {
         PORT: 3001,
         config: null,
         noHostValidation: true,
+        countryCodes: ['CA', 'MX', 'US'],
         sessionOptions: {
           name: 'my.sessionid',
           secret: 'boo'

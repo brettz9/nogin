@@ -126,6 +126,18 @@ describe('accessAPI', function () {
       post(token, {
         verb: 'addUserToGroup', groupName: 'dup', userID: 'ghost'
       }, 400);
+      post(token, {
+        verb: 'removeUserFromGroup', groupName: '', userID: 'ghost'
+      }, 400);
+      post(token, {verb: 'deletePrivilege', privilegeName: ''}, 400);
+      post(token, {
+        verb: 'removePrivilegeFromUser', userID: 'ghost',
+        privilegeName: 'missing'
+      });
+      post(token, {
+        verb: 'removePrivilegeFromGroup', groupName: '',
+        privilegeName: 'missing'
+      }, 400);
     });
   });
 
