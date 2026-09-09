@@ -1,42 +1,36 @@
-// Dedicated opt-in coverage for postLoginRedirectPath='/' scenarios.
-// This spec is skipped by default because regular test startup does not
-// pass --postLoginRedirectPath and may not provide a non-login root handler.
+/**
+ * @typedef {Window & {Nogin: {postLoginRedirectPath?: string}}} NoginWindow
+ */
 
 describe(
   'Root postLoginRedirectPath to root',
   function () {
-    beforeEach(() => {
+    beforeEach(function () {
       cy.task('deleteAllAccounts');
       cy.task('addAccount');
+      cy.visit('/');
+      cy.window().then((win) => {
+        const pageWindow = /** @type {NoginWindow} */ (
+          /** @type {unknown} */ (win)
+        );
+        if (pageWindow.Nogin.postLoginRedirectPath !== '/') {
+          // eslint-disable-next-line mocha/no-pending-tests -- Special config
+          this.skip();
+        }
+      });
     });
 
     it(
       'does not loop when redirect target equals root for a session user',
       function () {
-        cy.env(['RUN_POST_LOGIN_REDIRECT_ROOT_TESTS']).then(({
-          RUN_POST_LOGIN_REDIRECT_ROOT_TESTS
-        }) => {
-          const shouldRun =
-            RUN_POST_LOGIN_REDIRECT_ROOT_TESTS === true ||
-            RUN_POST_LOGIN_REDIRECT_ROOT_TESTS === 'true';
+        cy.loginWithSession();
+        cy.visit('/');
 
-          if (!shouldRun) {
-            cy.log('Skipping assertions without env flag');
-            return;
-          }
-
-          cy.loginWithSession();
-          cy.visit('/');
-
-          cy.location('pathname', {
-            timeout: 10000
-          }).should('eq', '/');
-
-          // If we reached a custom logged-in root, login form should be absent.
-          // This assertion is only meaningful in environments configured with
-          // a non-login root handler.
-          cy.get('[data-name="login"]').should('not.exist');
-        });
+        cy.location('pathname', {
+          timeout: 10000
+        }).should('eq', '/');
+        cy.contains('custom logged-in root');
+        cy.get('[data-name="login"]').should('not.exist');
       }
     );
   }

@@ -1,9 +1,13 @@
 import {spawn} from 'node:child_process';
 
 const preserveCoverageFlag = '--preserve-coverage';
+const preserveResultsFlag = '--preserve-results';
 const args = process.argv.slice(2);
 const preserveCoverage = args.includes(preserveCoverageFlag);
-const cypressArgs = args.filter((arg) => arg !== preserveCoverageFlag);
+const preserveResults = args.includes(preserveResultsFlag);
+const cypressArgs = args.filter((arg) => {
+  return arg !== preserveCoverageFlag && arg !== preserveResultsFlag;
+});
 
 /**
  * @param {string} command
@@ -30,11 +34,13 @@ function run (command, commandArgs) {
   });
 }
 
-const cleanupScript = preserveCoverage
+const cleanupScript = preserveCoverage && !preserveResults
   ? 'cypress:remove-mochaawesome'
   : 'cypress:run-remove';
 try {
-  await run('npm', ['run', cleanupScript]);
+  if (!preserveResults) {
+    await run('npm', ['run', cleanupScript]);
+  }
   await run('cypress', [
     'run',
     '--browser=chrome',
