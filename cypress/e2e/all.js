@@ -7,6 +7,7 @@ import './groups.js';
 import './home.js';
 import './lang.js';
 import './privileges.js';
+import './privileges-ui.js';
 import './reset-password.js';
 import './root-post-login-redirect.js';
 import './root.js';

@@ -298,6 +298,26 @@ const exprt = (on, config) => {
     },
 
     /**
+     * @returns {Promise<
+     *   import('../../app/server/modules/account-manager.js').PrivilegeInfo[]
+     * >}
+     */
+    async getPrivileges () {
+      const am = await getAccountManager();
+      return am.getAllPrivileges();
+    },
+
+    /**
+     * @returns {Promise<
+     *   import('../../app/server/modules/account-manager.js').GroupInfo[]
+     * >}
+     */
+    async getGroups () {
+      const am = await getAccountManager();
+      return am.getAllGroups();
+    },
+
+    /**
      * @param {{groupName: string}} cfg
      * @returns {Promise<
      *   import('../../app/server/modules/account-manager.js').GroupInfo
