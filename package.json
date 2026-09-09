@@ -59,6 +59,7 @@
     "cli": "node ./bin/cli.js",
     "help": "node ./bin/cli.js --help",
     "version": "node ./bin/cli.js --version",
+    "root-user:add-command": "echo \"npm run cli -- add --DB_NAME=nogin-cypress-test --user=nogin1 --name=Root --email=root@example.name --country=US --pass='YOUR_PASSWORD' --activated\"",
     "csslint": "doiuse app/public/css/style.css node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/github-fork-ribbon-css/gh-fork-ribbon.css",
     "eslint-3rd": "eslint --no-inline-config --config .3rdparty-eslintrc.js `es-file-traverse --file ./app/server/app.js --node --cjs --ignoreResolutionErrors`",
     "eslint-arg": "eslint",

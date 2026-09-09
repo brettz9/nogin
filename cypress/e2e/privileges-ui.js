@@ -35,6 +35,95 @@ describe('Privileges (controller UI)', function () {
     cy.get('.table-bordered', RELOADED).should('contain', 'canPublish');
   });
 
+  it('cancels privilege forms and keeps invalid creation input open',
+    function () {
+      cy.task('addGroup', {groupName: 'team'});
+      cy.task('addPrivilege', {privilegeName: 'canX', description: 'd'});
+      cy.task('addPrivilege', {
+        privilegeName: 'betaFlag', description: 'd', userVarying: true
+      });
+      cy.visit('/privileges');
+
+      cy.get('button.createPrivilege').click();
+      cy.get('[data-name=createPrivilege-cancel]').click();
+      cy.get('#createPrivilege').should('not.be.visible');
+
+      cy.contains('.table-bordered tr', 'canX').find(
+        'button.editPrivilege'
+      ).click();
+      cy.get('[data-name=editPrivilege-cancel]').click();
+      cy.get('#editPrivilege').should('not.be.visible');
+
+      cy.contains('.table-bordered tr', 'canX').find(
+        'button.editPrivilege'
+      ).click();
+      cy.get('#editPrivilege-input').clear();
+      cy.get('#editPrivilege-input').type('ab');
+      cy.get('[data-name=editPrivilege-submit]').click();
+      cy.get('#editPrivilege-input').should(($input) => {
+        const input = /** @type {HTMLInputElement} */ ($input[0]);
+        expect(input.validationMessage).not.to.be.empty;
+      });
+      cy.get('[data-name=editPrivilege-cancel]').click();
+
+      cy.contains('.table-bordered tr', 'canX').find(
+        'button.addPrivilegeToGroup'
+      ).click();
+      cy.get('[data-name=addPrivilegeToGroup-cancel]').click();
+      cy.get('#addPrivilegeToGroup').should('not.be.visible');
+
+      cy.contains('.table-bordered tr', 'canX').find(
+        'button.addPrivilegeToGroup'
+      ).click();
+      cy.get('#addPrivilegeToGroup-input').type('ab');
+      cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+      cy.get('#addPrivilegeToGroup-input').should(($input) => {
+        const input = /** @type {HTMLInputElement} */ ($input[0]);
+        expect(input.validationMessage).not.to.be.empty;
+      });
+      cy.get('[data-name=addPrivilegeToGroup-cancel]').click();
+
+      cy.contains('.table-bordered tr', 'betaFlag').find(
+        'button.addPrivilegeToUser'
+      ).click();
+      cy.get('[data-name=addPrivilegeToUser-cancel]').click();
+      cy.get('#addPrivilegeToUser').should('not.be.visible');
+
+      cy.contains('.table-bordered tr', 'betaFlag').find(
+        'button.addPrivilegeToUser'
+      ).click();
+      cy.get('#addPrivilegeToUser-input').type('ab');
+      cy.get('[data-name=addPrivilegeToUser-submit]').click();
+      cy.get('#addPrivilegeToUser-input').should(($input) => {
+        const input = /** @type {HTMLInputElement} */ ($input[0]);
+        expect(input.validationMessage).not.to.be.empty;
+      });
+      cy.get('[data-name=addPrivilegeToUser-cancel]').click();
+
+      cy.get('button.createPrivilege').click();
+      cy.get('#createPrivilege-input').type('ab');
+      cy.get('#createPrivilege-description-input').type('Too short');
+      cy.get('[data-name=createPrivilege-submit]').click();
+      cy.get('#createPrivilege-input').should(($input) => {
+        const input = /** @type {HTMLInputElement} */ ($input[0]);
+        expect(input.validationMessage).not.to.be.empty;
+      });
+      cy.get('#createPrivilege').should('be.visible');
+    });
+
+  it('shows a server error when creating a duplicate privilege', function () {
+    cy.task('addPrivilege', {
+      privilegeName: 'canPublish', description: 'Existing privilege'
+    });
+    cy.visit('/privileges');
+    cy.get('button.createPrivilege').click();
+    cy.get('#createPrivilege-input').type('canPublish');
+    cy.get('#createPrivilege-description-input').type('Duplicate privilege');
+    cy.get('[data-name=createPrivilege-submit]').click();
+
+    expectAlert('already in use');
+  });
+
   it('edits a privilege', function () {
     cy.task('addPrivilege', {privilegeName: 'canX', description: 'old'});
     cy.visit('/privileges');
@@ -100,5 +189,61 @@ describe('Privileges (controller UI)', function () {
     ).click();
     expectAlert('Privilege removed from user');
     cy.get('.removePrivilegeFromUser', RELOADED).should('not.exist');
+  });
+
+  it('assigns typed JSON values through the privilege forms', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.task('addPrivilege', {
+      privilegeName: 'allowedTags', description: 'd', type: 'array'
+    });
+    cy.visit('/privileges');
+
+    cy.get('button.createPrivilege').click();
+    cy.get('#createPrivilege-input').type('preferences');
+    cy.get('#createPrivilege-description-input').type('User preferences');
+    cy.get('#createPrivilege-type-input').select('object');
+    cy.get('#createPrivilege-user-varying-input').check();
+    cy.get('[data-name=createPrivilege-submit]').click();
+    expectAlert('Privilege created');
+    cy.contains('.table-bordered tr', 'preferences', RELOADED).should(
+      'contain', 'Object'
+    );
+
+    cy.contains('.table-bordered tr', 'allowedTags').find(
+      'button.addPrivilegeToGroup'
+    ).click();
+    cy.get('#addPrivilegeToGroup-input').type('team');
+    cy.get('#addPrivilegeToGroup-value-textarea').should('be.visible').type(
+      '{not json', {parseSpecialCharSequences: false}
+    );
+    cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+    cy.get('#addPrivilegeToGroup-value-textarea').should(($textarea) => {
+      const textarea = /** @type {HTMLTextAreaElement} */ ($textarea[0]);
+      expect(textarea.validationMessage).not.to.be.empty;
+    });
+    cy.get('#addPrivilegeToGroup-value-textarea').clear();
+    cy.get('#addPrivilegeToGroup-value-textarea').type(
+      '["news","sports"]', {
+        parseSpecialCharSequences: false
+      }
+    );
+    cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+    expectAlert('Privilege added to group');
+    cy.contains('.table-bordered tr', 'allowedTags', RELOADED).find(
+      '.removePrivilegeFromGroup[data-group=team]'
+    ).should('exist');
+
+    cy.contains('.table-bordered tr', 'preferences').find(
+      'button.addPrivilegeToUser'
+    ).click();
+    cy.get('#addPrivilegeToUser-input').type('bretto');
+    cy.get('#addPrivilegeToUser-value-textarea').should('be.visible').type(
+      '{"theme":"dark"}', {parseSpecialCharSequences: false}
+    );
+    cy.get('[data-name=addPrivilegeToUser-submit]').click();
+    expectAlert('Privilege added to user');
+    cy.contains('.table-bordered tr', 'preferences', RELOADED).find(
+      '.removePrivilegeFromUser[data-user=bretto]'
+    ).should('exist');
   });
 });

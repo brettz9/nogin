@@ -1,5 +1,16 @@
 describe('Users', function () {
   describe('as the root user', function () {
+    /**
+     * @param {string} text
+     * @returns {Cypress.Chainable}
+     */
+    const expectAlert = (text) => {
+      return cy.get(
+        '[data-name=modal-alert] [data-name=modal-body] p',
+        {timeout: 20000}
+      ).should('contain', text);
+    };
+
     beforeEach(function () {
       // Log in as the root user. The server ends any session whose
       //   account has been deleted, so these tests clear the user list
@@ -57,6 +68,51 @@ describe('Users', function () {
         expect(text).to.not.match(/Brett/v);
         expect(text).to.not.match(/Nicole/v);
       });
+    });
+
+    it('deletes a selected user through the confirmation dialog', function () {
+      cy.task('deleteAllAccountsExceptRoot');
+      cy.task('addAccount');
+      cy.visit('/users');
+
+      cy.get('[data-user=bretto]').click();
+      cy.get('[data-confirm-type="deleteAccount"] .btn-danger').click();
+      expectAlert('bretto account has been deleted');
+      cy.get('[data-name=modal-alert] button').click();
+
+      cy.get('[data-name=users] tbody', {timeout: 15000}).should(
+        'not.contain', 'bretto'
+      );
+    });
+
+    it('shows an error when deleting a selected user fails', function () {
+      cy.task('deleteAllAccountsExceptRoot');
+      cy.task('addAccount');
+      cy.visit('/users');
+      cy.intercept('POST', '/delete', {
+        statusCode: 400,
+        body: 'Unable to delete account'
+      }).as('deleteAccount');
+
+      cy.get('[data-user=bretto]').click();
+      cy.get('[data-confirm-type="deleteAccount"] .btn-danger').click();
+      cy.wait('@deleteAccount');
+      expectAlert('Unable to delete account');
+      cy.task('getRecords', {user: ['bretto']}).should('have.length', 1);
+    });
+
+    it('deletes all accounts and returns to the login page', function () {
+      cy.task('deleteAllAccountsExceptRoot');
+      cy.task('addAccount');
+      cy.visit('/users');
+
+      cy.contains('button', 'Delete all accounts').click();
+      cy.get('[data-confirm-type="deleteAllAccounts"] .btn-danger').click();
+      expectAlert('All user accounts were deleted');
+      cy.get('[data-name=modal-alert] button').click();
+
+      cy.location('pathname', {timeout: 15000}).should('eq', '/');
+      cy.get('[data-name=login]').should('exist');
     });
 
     // https://www.npmjs.com/package/cypress-axe
