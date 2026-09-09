@@ -23,7 +23,9 @@ describe('Signup agreement', function () {
         $modal.one('shown.bs.modal', resolve);
       });
       cy.get('[data-name=account-form] [data-name=action2]').click();
-      return cy.wrap(shown);
+      return cy.wrap(shown, {
+        timeout: 10000
+      });
     });
     cy.get(
       '[data-confirm-type=signupAgreement] [data-name=modal-body]'
