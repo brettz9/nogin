@@ -2,12 +2,12 @@
 [![Dependencies](https://img.shields.io/librariesio/github/brettz9/nogin.svg)](https://libraries.io/github/brettz9/nogin)
 
 [![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/tests-badge.svg?sanitize=true)](doc-includes/tests-badge.svg)
-[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg)
+[![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/main/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/brettz9/nogin/badge.svg)](https://snyk.io/test/github/brettz9/nogin)
 [![CodeQL Advanced](https://github.com/brettz9/nogin/actions/workflows/codeql.yml/badge.svg)](https://github.com/brettz9/nogin/actions/workflows/codeql.yml)
 
-[![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge.svg?sanitize=true)](doc-includes/licenses-badge.svg)
+[![Licenses badge](https://raw.githubusercontent.com/brettz9/nogin/main/doc-includes/licenses-badge.svg?sanitize=true)](doc-includes/licenses-badge.svg)
 
 <small>(Note that the more restrictive [@fortawesome/fontawesome-free](https://www.npmjs.com/package/@fortawesome/fontawesome-free)
 share-alike terms are for the fonts themselves, not its CSS (which is under MIT); see also [licenses for dev. deps.](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/licenses-badge-dev.svg?sanitize=true).)</small>

@@ -22,11 +22,6 @@ declare const HomeView: {
      */
     getLockedAlertButton(lockedAlertDialog: JQuery): JQuery;
     /**
-     * @param {JQuery} accountUpdatedAlertDialog
-     * @returns {JQuery} `HTMLButtonElement`
-     */
-    getAccountUpdatedButton(accountUpdatedAlertDialog: JQuery): JQuery;
-    /**
      * @returns {JQuery}
      */
     getUser(): JQuery;

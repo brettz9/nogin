@@ -168,6 +168,16 @@ declare class AccountManager {
      */
     autoLogin(user: string, pass: string): Promise<Partial<AccountInfo> | null>;
     /**
+     * Checks whether an account with the given `user` currently exists and
+     * is activated (the same condition `autoLogin`/`manualLogin` require).
+     * Used to detect a session that has outlived a usable account, e.g.,
+     * the account was deleted or deactivated while a session remained
+     * active.
+     * @param {string} user
+     * @returns {Promise<boolean>}
+     */
+    activatedAccountExists(user: string): Promise<boolean>;
+    /**
      * @param {AccountInfoFilter} acctInfo
      * @returns {Promise<Partial<AccountInfo>[]>}
      */

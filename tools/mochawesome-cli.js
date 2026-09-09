@@ -14,9 +14,9 @@
  * "xunit"} [0="spec"] The Mocha reporter to use
  */
 
-import Suite from 'mocha/lib/suite.js';
-import Test from 'mocha/lib/test.js';
-import Runner from 'mocha/lib/runner.js';
+import {Suite} from 'mocha/lib/suite.js';
+import {Test} from 'mocha/lib/test.js';
+import {Runner} from 'mocha/lib/runner.js';
 
 import pkg from '../mochawesome.json' with {type: 'json'};
 
@@ -38,7 +38,7 @@ const reporterFile = process.argv[2]
 
 // // eslint-disable-next-line no-unsanitized/method -- Dynamic CLI script
 // eslint-disable-next-line @stylistic/max-len -- Long
-const MochaReporter = (await import(`mocha/lib/reporters/${reporterFile}.js`)).default;
+const MochaReporter = (await import(`mocha/lib/reporters/${reporterFile}.js`)).Spec;
 
 const runner = new Runner(
   new Suite('', null, true)

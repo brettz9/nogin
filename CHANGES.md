@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 8.2.1
 
 - fix: end sessions whose account was deleted or deactivated
 - fix: drop stale group members when reading groups
