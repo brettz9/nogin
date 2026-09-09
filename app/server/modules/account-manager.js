@@ -480,6 +480,22 @@ class AccountManager {
   }
 
   /**
+   * Checks whether an account with the given `user` currently exists and
+   * is activated (the same condition `autoLogin`/`manualLogin` require).
+   * Used to detect a session that has outlived a usable account, e.g.,
+   * the account was deleted or deactivated while a session remained
+   * active.
+   * @param {string} user
+   * @returns {Promise<boolean>}
+   */
+  async activatedAccountExists (user) {
+    const o = await /** @type {import('mongodb').Collection} */ (
+      this.accounts
+    ).findOne({user, activated: true});
+    return Boolean(o);
+  }
+
+  /**
    * @param {AccountInfoFilter} acctInfo
    * @returns {Promise<Partial<AccountInfo>[]>}
    */

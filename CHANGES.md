@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- fix: end sessions whose account was deleted or deactivated
+
 ## 8.2.0
 
 - feat: add object and array JSON privileges

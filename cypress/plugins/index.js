@@ -28,15 +28,93 @@ import {
 
 import {uuid} from '../../app/server/modules/common.js';
 import {
-  addAccounts, removeAccounts,
-  validUserPassword, readAccounts, updateAccounts
+  addAccounts as addAccountsToDefaultDB,
+  removeAccounts as removeAccountsFromDefaultDB,
+  validUserPassword as validUserPasswordOnDefaultDB,
+  readAccounts as readAccountsFromDefaultDB,
+  updateAccounts as updateAccountsOnDefaultDB
 } from '../../app/server/modules/db-basic.js';
 
 import {
-  generateLoginKeys, generatePasswordKey
+  generateLoginKeys as generateLoginKeysOnDefaultDB,
+  generatePasswordKey as generatePasswordKeyOnDefaultDB
 } from '../../app/public-test-utils/db-basic-testing-extensions.js';
 
 import noginConfig from '../../nogin.js';
+
+/**
+ * Name of the database used for all Cypress end-to-end runs. It is
+ * deliberately distinct from the default `nogin` database so that the
+ * suite's repeated `deleteAllAccounts` (and other destructive task)
+ * calls can never wipe accounts a developer is using for manual
+ * testing. The nogin server under test is pointed at this same database
+ * by the `--DB_NAME` flag in the `server:start-test*` and
+ * `watch:server:start` npm scripts; keep the two in sync.
+ */
+const CYPRESS_DB_NAME = 'nogin-cypress-test';
+
+/**
+ * Forces a `db-basic` options object to target {@link CYPRESS_DB_NAME}.
+ * @param {{DB_NAME?: string}} [options]
+ * @returns {{DB_NAME: string}}
+ */
+const onCypressDB = (options) => {
+  return {...options, DB_NAME: CYPRESS_DB_NAME};
+};
+
+/**
+ * @param {Parameters<typeof addAccountsToDefaultDB>[0]} options
+ * @returns {ReturnType<typeof addAccountsToDefaultDB>}
+ */
+const addAccounts = (options) => addAccountsToDefaultDB(onCypressDB(options));
+
+/**
+ * @param {Parameters<typeof removeAccountsFromDefaultDB>[0]} options
+ * @returns {ReturnType<typeof removeAccountsFromDefaultDB>}
+ */
+const removeAccounts = (options) => removeAccountsFromDefaultDB(
+  onCypressDB(options)
+);
+
+/**
+ * @param {Parameters<typeof validUserPasswordOnDefaultDB>[0]} options
+ * @returns {ReturnType<typeof validUserPasswordOnDefaultDB>}
+ */
+const validUserPassword = (options) => validUserPasswordOnDefaultDB(
+  onCypressDB(options)
+);
+
+/**
+ * @param {Parameters<typeof readAccountsFromDefaultDB>[0]} options
+ * @returns {ReturnType<typeof readAccountsFromDefaultDB>}
+ */
+const readAccounts = (options) => readAccountsFromDefaultDB(
+  onCypressDB(options)
+);
+
+/**
+ * @param {Parameters<typeof updateAccountsOnDefaultDB>[0]} options
+ * @returns {ReturnType<typeof updateAccountsOnDefaultDB>}
+ */
+const updateAccounts = (options) => updateAccountsOnDefaultDB(
+  onCypressDB(options)
+);
+
+/**
+ * @param {Parameters<typeof generateLoginKeysOnDefaultDB>[0]} options
+ * @returns {ReturnType<typeof generateLoginKeysOnDefaultDB>}
+ */
+const generateLoginKeys = (options) => generateLoginKeysOnDefaultDB(
+  onCypressDB(options)
+);
+
+/**
+ * @param {Parameters<typeof generatePasswordKeyOnDefaultDB>[0]} options
+ * @returns {ReturnType<typeof generatePasswordKeyOnDefaultDB>}
+ */
+const generatePasswordKey = (options) => generatePasswordKeyOnDefaultDB(
+  onCypressDB(options)
+);
 
 /**
  * @external CypressOn

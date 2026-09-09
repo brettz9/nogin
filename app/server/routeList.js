@@ -236,7 +236,25 @@ const routeList = async (app, config) => {
           return am.getPrivilegesForGroup(groupName);
         })
         : null,
-      user ? am.getPrivilegesForUser(user) : null
+      // A still-live session may reference an account that no longer
+      //   exists in the database (e.g., deleted out from under an active
+      //   session). Treat such a session as having no user-specific
+      //   privileges rather than throwing on every request that checks
+      //   one. In normal operation the orphaned-session middleware in
+      //   this file destroys such a session before any route runs, so
+      //   this is defensive against a mid-request deletion only.
+      user
+        // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
+        ? am.getPrivilegesForUser(user).catch(
+          // istanbul ignore next -- Defensive; see comment above
+          (err) => {
+            if (/** @type {Error} */ (err).message === 'user-missing') {
+              return null;
+            }
+            throw err;
+          }
+        )
+        : null
     ])).flat();
 
     return getPrivilegeValues(privInfos);
@@ -1824,6 +1842,38 @@ const routeList = async (app, config) => {
     );
   });
 
+  // A session can outlive a usable account: if the account is deleted or
+  //   deactivated while a session remains active, the session keeps
+  //   working because `hasRootAccess` only string-matches
+  //   `req.session.user.user` against `rootUser` (no database lookup), so
+  //   a configured root user would retain full access purely from the
+  //   session cookie. Destroy any such orphaned session so the user is
+  //   treated as logged out, applying the same activated-account
+  //   condition as `autoLogin`/`manualLogin`.
+  app.use(async (req, _res, next) => {
+    const sessionUser = req.session?.user?.user;
+    if (!sessionUser) {
+      next();
+      return;
+    }
+    let usable;
+    try {
+      usable = await am.activatedAccountExists(sessionUser);
+    } catch {
+      // On a lookup failure, leave the session untouched rather than
+      //   logging the user out over a transient database error.
+      // istanbul ignore next
+      usable = true;
+    }
+    if (usable) {
+      next();
+      return;
+    }
+    req.session.destroy(() => {
+      next();
+    });
+  });
+
   // See https://github.com/cypress-io/code-coverage#instrument-backend-code
   // istanbul ignore else
   if (SERVE_COVERAGE) {
@@ -1903,7 +1953,21 @@ window.Nogin = {
   };
 
   app.get('/_privs', async function (req, res) {
-    const userPrivs = await getUserPrivs(req);
+    // This endpoint reports the current session's live auth/privilege
+    //   state, so it must never be served stale from the browser cache.
+    res.set('Cache-Control', 'no-store');
+
+    let userPrivs;
+    try {
+      userPrivs = await getUserPrivs(req);
+    } catch {
+      // Fall back to a logged-out shape rather than a 500 if privilege
+      //   lookup fails (e.g., a stale session whose account is gone).
+      //   The orphaned-session middleware normally prevents this, so it
+      //   is defensive only.
+      // istanbul ignore next -- Defensive; see comment above
+      userPrivs = new Map();
+    }
     const converted = {
       privs: Object.fromEntries(userPrivs),
       root: hasRootAccess(req),

@@ -469,14 +469,15 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
 
 1. **Restore 100% coverage** for the orphaned-session handling added
     alongside the `nogin-cypress-test` database isolation:
-    1. Unit-test `AccountManager.accountExists` for both the present and
-        absent account cases.
-    1. Add a Cypress test that logs in, deletes the account out from
-        under the session (`cy.task('deleteAllAccounts')` with no
-        re-add), then visits a privileged route (e.g. `/privileges` or
-        `/_privs`) and asserts the session was destroyed and the user is
-        treated as logged out — covering the `exists === false` branch of
-        the orphaned-session middleware in `app/server/routeList.js`.
+    1. Unit-test `AccountManager.activatedAccountExists` for the present
+        activated, present deactivated, and absent account cases.
+    1. Add a Cypress test that logs in, then deletes or deactivates the
+        account out from under the session (`cy.task('deleteAllAccounts')`
+        with no re-add, or `cy.task('updateAccountToInactive')`), then
+        visits a privileged route (e.g. `/privileges` or `/_privs`) and
+        asserts the session was destroyed and the user is treated as
+        logged out — covering the `usable === false` branch of the
+        orphaned-session middleware in `app/server/routeList.js`.
     1. The defensive `catch` fallbacks in `getUserPrivs` and the
         `/_privs` handler are marked `istanbul ignore` because that
         middleware makes them unreachable via HTTP; revisit if the
