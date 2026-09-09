@@ -1818,7 +1818,7 @@ const routeList = async (app, config) => {
       default:
         console.log('Unrecognized verb', verb);
         pageNotFound(_, res);
-        break;
+        return;
       }
       res.status(200).json(resp);
     }
