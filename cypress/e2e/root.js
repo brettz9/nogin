@@ -49,6 +49,12 @@ describe('Root (Login)', function () {
     cy.visit('/');
   });
 
+  it('logs out through the GET route', function () {
+    cy.loginWithSession();
+    cy.request('/logout').its('redirects').should('not.be.empty');
+    cy.getCookie('login').should('be.null');
+  });
+
   it('Visit root and login with Remember Me', function () {
     // Click twice to check toggling behavior
     cy.get('[data-name=btn_remember]').click();

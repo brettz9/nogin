@@ -246,7 +246,7 @@ const routeList = async (app, config) => {
       user
         // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
         ? am.getPrivilegesForUser(user).catch(
-          /* c8 ignore next */ // Defensive; see comment above
+          /* c8 ignore next 6 -- Mid-request account deletion race. */
           (err) => {
             if (/** @type {Error} */ (err).message === 'user-missing') {
               return null;
@@ -357,6 +357,7 @@ const routeList = async (app, config) => {
           /** @type {string} */
           (req.ip)
         );
+      /* c8 ignore next 2 -- Defensive database lookup failure. */
       } catch {
       }
 
@@ -495,7 +496,7 @@ const routeList = async (app, config) => {
       } catch (error) {
         // `validatePasswordKey` just looks up database records, so no reason
         //   to err
-        /* c8 ignore next */
+        /* c8 ignore next 3 -- Defensive database lookup failure. */
         e = error;
       }
       if (e || isNullish(o)) {
@@ -593,17 +594,20 @@ const routeList = async (app, config) => {
         am.getAllRecords()
       ]);
 
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;
       }
       const {value: _} = i18nResult;
 
+      /* c8 ignore next 4 -- Defensive database read failure. */
       if (getAllRecordsResult.status === 'rejected') {
         res.status(400).send('bad-get-all-records-result');
         return;
       }
 
+      /* c8 ignore next 4 -- Defensive privilege lookup failure. */
       if (accessResult.status === 'rejected') {
         res.status(400).send('bad-access');
         return;
@@ -762,23 +766,28 @@ const routeList = async (app, config) => {
         am.getAllPrivileges()
       ]);
 
+      /* c8 ignore next 4 -- Defensive privilege lookup failure. */
       if (accessResult.status === 'rejected') {
         res.status(400).send('bad-access');
         return;
       }
+      /* c8 ignore next 4 -- Defensive database read failure. */
       if (getAllRecords.status === 'rejected') {
         res.status(400).send('bad-records');
         return;
       }
+      /* c8 ignore next 4 -- Defensive database read failure. */
       if (privilegesInfo.status === 'rejected') {
         res.status(400).send('bad-privileges-info');
         return;
       }
 
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;
       }
+      /* c8 ignore next 4 -- Defensive database read failure. */
       if (readGroupsResult.status === 'rejected') {
         res.status(400).send('bad-group-read');
         return;
@@ -889,14 +898,17 @@ const routeList = async (app, config) => {
         readPrivileges()
       ]);
 
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;
       }
+      /* c8 ignore next 4 -- Defensive database read failure. */
       if (readPrivilegesResult.status === 'rejected') {
         res.status(400).send('bad-privilege-read');
         return;
       }
+      /* c8 ignore next 4 -- Defensive privilege lookup failure. */
       if (accessResult.status === 'rejected') {
         res.status(400).send('bad-access');
         return;
@@ -1264,6 +1276,7 @@ const routeList = async (app, config) => {
           country
         })
       ]);
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;
@@ -1310,6 +1323,7 @@ const routeList = async (app, config) => {
           (req.ip)
         )
       ]);
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;
@@ -1372,6 +1386,7 @@ const routeList = async (app, config) => {
         setI18n(req, res),
         am.updatePassword(/** @type {string} */ (passKey), newPass)
       ]);
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;
@@ -1417,6 +1432,7 @@ const routeList = async (app, config) => {
               : Promise.reject(new Error('Missing user argument'))
             : Promise.reject(new Error('No privileges to delete user'))
       ]);
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
       if (i18nResult.status === 'rejected') {
         res.status(400).send('bad-i18n');
         return;

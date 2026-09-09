@@ -223,9 +223,25 @@ describe('accessAPI', function () {
   it('denies a non-privileged user with 404', function () {
     cy.loginWithSession();
     cy.getToken().then((token) => {
-      post(token, {verb: 'createGroup', groupName: 'x'}, 404);
-      post(token, {verb: 'readGroups'}, 404);
-      post(token, {verb: 'readPrivileges'}, 404);
+      [
+        'readUsers',
+        'readGroups',
+        'createGroup',
+        'deleteGroup',
+        'renameGroup',
+        'addUserToGroup',
+        'removeUserFromGroup',
+        'readPrivileges',
+        'createPrivilege',
+        'deletePrivilege',
+        'editPrivilege',
+        'addPrivilegeToGroup',
+        'addPrivilegeToUser',
+        'removePrivilegeFromUser',
+        'removePrivilegeFromGroup'
+      ].forEach((verb) => {
+        post(token, {verb}, 404);
+      });
     });
   });
 });
