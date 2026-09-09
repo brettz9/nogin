@@ -405,7 +405,7 @@ GroupsView.getRemoveUserFromGroup().on('click', (e) => {
 
 /**
  * @param {string} url
- * @param {object} [data]
+ * @param {object} data
  * @returns {Promise<void>}
  */
 function post (url, data) {
@@ -414,11 +414,9 @@ function post (url, data) {
     type: 'post',
     headers: {
       'X-XSRF-Token': xsrfCookie
-    }
+    },
+    data
   };
-  if (data) {
-    args.data = data;
-  }
 
   // eslint-disable-next-line promise/avoid-new -- our own API
   return new Promise((resolve, reject) => {

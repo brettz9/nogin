@@ -45,6 +45,9 @@ const getLangDir = function (_) {
   // @ts-expect-error For older Node compatibility
   const {direction} = locale.textInfo ?? locale.getTextInfo();
   // Don't bother to make default of "ltr" explicit
+  // No bundled locale currently resolves to RTL; retain this for custom
+  // locales.
+  /* c8 ignore next -- See comment above */
   const dir = direction === 'rtl' ? direction : undefined;
   return {
     dir,

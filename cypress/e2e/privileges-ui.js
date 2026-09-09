@@ -316,4 +316,142 @@ describe('Privileges (controller UI)', function () {
       '.removePrivilegeFromUser[data-user=bretto]'
     ).should('exist');
   });
+
+  it('assigns numeric values and rejects invalid user JSON', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.task('addPrivilege', {
+      privilegeName: 'groupQuota', description: 'd', type: 'number'
+    });
+    cy.task('addPrivilege', {
+      privilegeName: 'userQuota', description: 'd', type: 'number',
+      userVarying: true
+    });
+    cy.task('addPrivilege', {
+      privilegeName: 'preferences', description: 'd', type: 'object',
+      userVarying: true
+    });
+    cy.visit('/privileges');
+
+    cy.contains('.table-bordered tr', 'groupQuota').find(
+      'button.addPrivilegeToGroup'
+    ).click();
+    cy.get('#addPrivilegeToGroup-input').type('team');
+    cy.get('#addPrivilegeToGroup-value-input').type('25');
+    cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+    expectAlert('Privilege added to group');
+    cy.contains('.table-bordered tr', 'groupQuota', RELOADED).find(
+      '.removePrivilegeFromGroup[data-group=team]'
+    ).should('exist');
+
+    cy.contains('.table-bordered tr', 'userQuota').find(
+      'button.addPrivilegeToUser'
+    ).click();
+    cy.get('#addPrivilegeToUser-input').type('bretto');
+    cy.get('#addPrivilegeToUser-value-input').type('50');
+    cy.get('[data-name=addPrivilegeToUser-submit]').click();
+    expectAlert('Privilege added to user');
+    cy.contains('.table-bordered tr', 'userQuota', RELOADED).find(
+      '.removePrivilegeFromUser[data-user=bretto]'
+    ).should('exist');
+
+    cy.contains('.table-bordered tr', 'preferences').find(
+      'button.addPrivilegeToUser'
+    ).click();
+    cy.get('#addPrivilegeToUser-input').type('bretto');
+    cy.get('#addPrivilegeToUser-value-textarea').type('{not json', {
+      parseSpecialCharSequences: false
+    });
+    cy.get('[data-name=addPrivilegeToUser-submit]').click();
+    cy.get('#addPrivilegeToUser-value-textarea').should(($textarea) => {
+      const textarea = /** @type {HTMLTextAreaElement} */ ($textarea[0]);
+      expect(textarea.validationMessage).not.to.be.empty;
+    });
+  });
+
+  it('shows server errors for privilege mutations', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.task('addPrivilege', {privilegeName: 'canX', description: 'd'});
+    cy.task('addPrivilege', {
+      privilegeName: 'betaFlag', description: 'd', userVarying: true
+    });
+    cy.task('addPrivilegeToGroup', {
+      groupName: 'team', privilegeName: 'canX'
+    });
+    cy.task('addPrivilegeToUser', {
+      userID: 'bretto', privilegeName: 'betaFlag'
+    });
+    cy.visit('/privileges');
+
+    /**
+     * @param {string} alias
+     * @param {string} body
+     * @returns {void}
+     */
+    const failNextMutation = (alias, body) => {
+      cy.intercept('POST', '/accessAPI', {
+        statusCode: 400, body
+      }).as(alias);
+    };
+    /**
+     * @param {string} alias
+     * @param {string} message
+     * @returns {void}
+     */
+    const expectFailureAndReload = (alias, message) => {
+      cy.wait(`@${alias}`);
+      expectAlert(message);
+      cy.get('.table-bordered', RELOADED).should('be.visible');
+    };
+
+    failNextMutation('editPrivilege', 'Unable to edit privilege');
+    cy.contains('.table-bordered tr', 'canX').find(
+      'button.editPrivilege'
+    ).click();
+    cy.get('#editPrivilege-input').clear();
+    cy.get('#editPrivilege-input').type('canY');
+    cy.get('[data-name=editPrivilege-submit]').click();
+    expectFailureAndReload('editPrivilege', 'Unable to edit privilege');
+
+    failNextMutation('addPrivilegeToGroup', 'Unable to add privilege to group');
+    cy.contains('.table-bordered tr', 'canX').find(
+      'button.addPrivilegeToGroup'
+    ).click();
+    cy.get('#addPrivilegeToGroup-input').type('missingGroup');
+    cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+    expectFailureAndReload(
+      'addPrivilegeToGroup', 'Unable to add privilege to group'
+    );
+
+    failNextMutation('addPrivilegeToUser', 'Unable to add privilege to user');
+    cy.contains('.table-bordered tr', 'betaFlag').find(
+      'button.addPrivilegeToUser'
+    ).click();
+    cy.get('#addPrivilegeToUser-input').type('missingUser');
+    cy.get('[data-name=addPrivilegeToUser-submit]').click();
+    expectFailureAndReload(
+      'addPrivilegeToUser', 'Unable to add privilege to user'
+    );
+
+    failNextMutation('removeFromGroup', 'Unable to remove from group');
+    cy.get('.removePrivilegeFromGroup[data-group=team]').click();
+    cy.get(
+      '[data-confirm-type="removePrivilegeFromGroup"] .btn-danger'
+    ).click();
+    expectFailureAndReload('removeFromGroup', 'Unable to remove from group');
+
+    failNextMutation('removeFromUser', 'Unable to remove from user');
+    cy.get('.removePrivilegeFromUser[data-user=bretto]').click();
+    cy.get(
+      '[data-confirm-type="removePrivilegeFromUser"] .btn-danger'
+    ).click();
+    expectFailureAndReload('removeFromUser', 'Unable to remove from user');
+
+    failNextMutation('deletePrivilege', 'Unable to delete privilege');
+    cy.contains('.table-bordered tr', 'canX').find(
+      'button.deletePrivilege'
+    ).click();
+    cy.get('[data-confirm-type="deletePrivilege"] .btn-danger').click();
+    cy.wait('@deletePrivilege');
+    expectAlert('Unable to delete privilege');
+  });
 });

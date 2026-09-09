@@ -69,7 +69,7 @@ const ajaxFormClientSideValidate = (form, cfg) => {
     field.checkValidity();
   }, {capture: true});
 
-  // istanbul ignore if
+  /* istanbul ignore next */
   if (checkXSRF && !xsrfCookie && !Nogin.disableXSRF) {
     error({responseText: 'UnknownError'});
     return;

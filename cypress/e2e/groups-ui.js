@@ -85,6 +85,37 @@ describe('Groups (controller UI)', function () {
     expectAlert('already in use');
   });
 
+  it('shows server errors when renaming a group or adding a user', function () {
+    cy.task('addGroup', {groupName: 'team'});
+    cy.visit('/groups');
+    cy.intercept('POST', '/accessAPI', {
+      statusCode: 400,
+      body: 'Unable to rename group'
+    }).as('renameGroup');
+
+    cy.contains('.table-bordered tr', 'team').find(
+      'button.renameGroup'
+    ).click();
+    cy.get('#renameGroup-input').clear();
+    cy.get('#renameGroup-input').type('writers');
+    cy.get('[data-name=renameGroup-submit]').click();
+    cy.wait('@renameGroup');
+    expectAlert('Unable to rename group');
+    cy.contains('.table-bordered tr', 'team', RELOADED).should('exist');
+
+    cy.intercept('POST', '/accessAPI', {
+      statusCode: 400,
+      body: 'Unable to add user to group'
+    }).as('addUserToGroup');
+    cy.contains('.table-bordered tr', 'team').find(
+      'button.addUserToGroup'
+    ).click();
+    cy.get('#addUserToGroup-input').type('bretto');
+    cy.get('[data-name=addUserToGroup-submit]').click();
+    cy.wait('@addUserToGroup');
+    expectAlert('Unable to add user to group');
+  });
+
   it('shows a server error when deleting a group fails', function () {
     cy.task('addGroup', {groupName: 'writers'});
     cy.visit('/groups');
@@ -233,12 +264,12 @@ describe('Groups (controller UI)', function () {
     cy.contains('.table-bordered tr', 'team').find(
       'button.addPrivilegeToGroup'
     ).click();
-    cy.get('#addPrivilegeToGroup-input').type('canX');
+    cy.get('#addPrivilegeToGroup-input').type('unknownPrivilege');
     cy.get('[data-name=addPrivilegeToGroup-submit]').click();
     cy.wait('@addPrivilegeToGroup');
     expectAlert('Unable to add privilege to group');
     cy.contains('.table-bordered tr', 'team').find(
-      '.removePrivilegeFromGroup[data-privilege=canX]'
+      '.removePrivilegeFromGroup[data-privilege=unknownPrivilege]'
     ).should('not.exist');
   });
 
@@ -281,5 +312,45 @@ describe('Groups (controller UI)', function () {
       expect(input.validationMessage).not.to.be.empty;
     });
     cy.get('#createGroup').should('be.visible');
+    cancelModal('#createGroup', '[data-name=createGroup-cancel]');
+
+    openModal('#renameGroup', () => {
+      return cy.contains('.table-bordered tr', 'team').find(
+        'button.renameGroup'
+      ).click();
+    });
+    cy.get('#renameGroup-input').clear();
+    cy.get('#renameGroup-input').type('ab');
+    cy.get('[data-name=renameGroup-submit]').click();
+    cy.get('#renameGroup-input').should(($input) => {
+      const input = /** @type {HTMLInputElement} */ ($input[0]);
+      expect(input.validationMessage).not.to.be.empty;
+    });
+    cancelModal('#renameGroup', '[data-name=renameGroup-cancel]');
+
+    openModal('#addUserToGroup', () => {
+      return cy.contains('.table-bordered tr', 'team').find(
+        'button.addUserToGroup'
+      ).click();
+    });
+    cy.get('#addUserToGroup-input').type('ab');
+    cy.get('[data-name=addUserToGroup-submit]').click();
+    cy.get('#addUserToGroup-input').should(($input) => {
+      const input = /** @type {HTMLInputElement} */ ($input[0]);
+      expect(input.validationMessage).not.to.be.empty;
+    });
+    cancelModal('#addUserToGroup', '[data-name=addUserToGroup-cancel]');
+
+    openModal('#addPrivilegeToGroup', () => {
+      return cy.contains('.table-bordered tr', 'team').find(
+        'button.addPrivilegeToGroup'
+      ).click();
+    });
+    cy.get('#addPrivilegeToGroup-input').type('ab');
+    cy.get('[data-name=addPrivilegeToGroup-submit]').click();
+    cy.get('#addPrivilegeToGroup-input').should(($input) => {
+      const input = /** @type {HTMLInputElement} */ ($input[0]);
+      expect(input.validationMessage).not.to.be.empty;
+    });
   });
 });
