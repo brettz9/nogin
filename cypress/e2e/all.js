@@ -1,9 +1,12 @@
 import './404.js';
 import './activation.js';
 import './coverage.js';
+import './groups.js';
 import './home.js';
 import './lang.js';
+import './privileges.js';
 import './reset-password.js';
+import './root-post-login-redirect.js';
 import './root.js';
 import './signup.js';
 import './users.js';

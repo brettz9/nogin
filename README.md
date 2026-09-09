@@ -475,12 +475,12 @@ For developing docs, see [DEVELOPING](./docs/DEVELOPING.md).
     `getUserPrivs` and the `/_privs` handler are marked `istanbul ignore`
     because that middleware makes them unreachable via HTTP; revisit if
     the middleware is ever removed.
-1. `cypress/e2e/privileges.js` covers the root user, a logged-out
-    visitor, and readers holding `nogin.readPrivilege` alone,
-    `+ nogin.readGroup`, and `+ nogin.readUsers`. Still to add: the
-    `nogin.editPrivilege` / `nogin.addPrivilegeToGroup` non-root paths
-    (the `groups`/`users` autocomplete lists and the create/edit modals),
-    and a `cypress/e2e/groups.js` for the `groups` route/view.
+1. `cypress/e2e/privileges.js` and `cypress/e2e/groups.js` cover the
+    root user, a logged-out visitor, and non-root users across the read /
+    read-group / read-users / editor permutations of each route and view.
+    Still to add: driving the create / rename / edit / delete modals
+    through the UI (rather than the `cy.task` shortcuts) so the
+    controller scripts are exercised too.
 1. Recheck **coverage** tests
 1. See about removing **`@fortawesome/fontawesome-free` dependency** (and if
     so, rebuild license badges and remove note above about its license)

@@ -148,6 +148,45 @@ describe('Privileges', function () {
     }
   );
 
+  it(
+    'Renders the management controls for a non-root user granted them',
+    function () {
+      cy.loginWithSession();
+      cy.task('addGroup', {groupName: 'staff'});
+      cy.task('addUserToGroup', {groupName: 'staff', userID: 'bretto'});
+      for (const privilegeName of [
+        'nogin.readPrivilege', 'nogin.editPrivilege',
+        'nogin.addPrivilegeToGroup', 'nogin.removePrivilegeFromGroup',
+        'nogin.readGroup', 'nogin.readUsers'
+      ]) {
+        cy.task('addPrivilegeToGroup', {groupName: 'staff', privilegeName});
+      }
+      cy.task('addGroup', {groupName: 'editors'});
+      cy.task('addPrivilege', {privilegeName: 'publish', description: 'x'});
+      cy.task('addPrivilegeToGroup', {
+        groupName: 'editors', privilegeName: 'publish'
+      });
+      cy.task('addPrivilege', {
+        privilegeName: 'betaFlag', description: 'x', userVarying: true
+      });
+      cy.task('addPrivilegeToUser', {
+        userID: 'bretto', privilegeName: 'betaFlag'
+      });
+
+      cy.visit('/privileges');
+
+      // The action columns are driven by `getUserPrivs`, not just root
+      cy.get('.editPrivilege').should('exist');
+      cy.get('.deletePrivilege').should('exist');
+      cy.get('.addPrivilegeToGroup').should('exist');
+      // Group and user data are kept (no stripping branch taken)
+      cy.get('.removePrivilegeFromGroup[data-group=editors]').should(
+        'contain', 'publish'
+      );
+      cy.contains('.table-bordered tr', 'betaFlag').should('contain', 'bretto');
+    }
+  );
+
   it('Has no detectable a11y violations for the root user', function () {
     cy.loginWithSession({rootUser: true});
     cy.visitURLAndCheckAccessibility('/privileges');
