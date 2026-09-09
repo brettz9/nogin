@@ -261,6 +261,9 @@ describe('Groups (controller UI)', function () {
       body: 'Unable to add privilege to group'
     }).as('addPrivilegeToGroup');
 
+    cy.get('#addPrivilegeToGroup-value-input').invoke(
+      'removeAttr', 'data-privilege-types'
+    );
     cy.contains('.table-bordered tr', 'team').find(
       'button.addPrivilegeToGroup'
     ).click();
