@@ -1,10 +1,22 @@
+/** @typedef {Window & {Nogin: {signupAgreement?: string}}} NoginWindow */
+
 describe('Signup agreement', function () {
   beforeEach(function () {
     cy.task('deleteAllAccounts');
+    cy.visit('/signup');
+    cy.window().then((win) => {
+      const pageWindow = /** @type {NoginWindow} */ (
+        /** @type {unknown} */ (win)
+      );
+      const {signupAgreement} = pageWindow.Nogin;
+      if (!signupAgreement) {
+        // eslint-disable-next-line mocha/no-pending-tests -- Special config
+        this.skip();
+      }
+    });
   });
 
   it('requires agreement before validating signup', function () {
-    cy.visit('/signup');
     cy.intercept('POST', '/signup', {
       statusCode: 400,
       body: 'username-taken'

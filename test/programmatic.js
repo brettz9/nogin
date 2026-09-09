@@ -580,9 +580,53 @@ describe('Programmatic', function () {
           });
 
           // @ts-expect-error Testing defensive database failures
+          am.accounts.findOne = () => {
+            return Promise.reject(new Error('database-read-failed'));
+          };
+          await expect(
+            am.manualLogin('typedUser', '123456')
+          ).to.be.rejectedWith(Error, 'user-not-found');
+          await expect(am.addUserToGroup({
+            groupName: 'typed', userID: 'typedUser'
+          })).to.be.rejectedWith(Error, 'user-missing');
+          await expect(am.removeUserFromGroup({
+            groupName: 'typed', userID: 'typedUser'
+          })).to.be.rejectedWith(Error, 'user-missing');
+
+          accountLookup = 0;
+          // @ts-expect-error Testing defensive database failures
+          am.accounts.findOne = () => {
+            accountLookup++;
+            return accountLookup === 1
+              ? Promise.reject(new Error('database-read-failed'))
+              : Promise.resolve(typedAccount);
+          };
+          await am.updateAccount({
+            user: 'typedUser', email: 'typed@example.name',
+            name: 'Updated After Lookup Failure', country: 'US',
+            activated: true
+          }, {forceUpdate: true});
+
+          accountLookup = 0;
+          // @ts-expect-error Testing defensive database failures
+          am.accounts.findOne = () => {
+            accountLookup++;
+            return accountLookup === 1
+              ? Promise.resolve(null)
+              : Promise.reject(new Error('database-read-failed'));
+          };
+          await expect(am.updateAccount({
+            user: 'typedUser', email: 'typed@example.name',
+            name: 'Missing After Lookup Failure', country: 'US'
+          }, {})).to.be.rejectedWith(Error, 'session-lost');
+
+          // @ts-expect-error Testing defensive database failures
           am.groups.findOne = () => {
             return Promise.reject(new Error('database-read-failed'));
           };
+          await am.renameGroup({
+            groupName: 'missingGroup', newGroupName: 'lookupFailureRename'
+          });
           await am.addNewGroup({groupName: 'lookupFailureGroup'});
           await expect(
             am.getPrivilegesForGroup('lookupFailureGroup')
@@ -596,6 +640,9 @@ describe('Programmatic', function () {
             privilegeName: 'lookupFailurePrivilege', description: 'Lookup'
           });
           await expect(am.addPrivilegeToGroup({
+            groupName: 'typed', privilegeName: 'lookupFailurePrivilege'
+          })).to.be.rejectedWith(Error, 'privilege-missing');
+          await expect(am.removePrivilegeFromGroup({
             groupName: 'typed', privilegeName: 'lookupFailurePrivilege'
           })).to.be.rejectedWith(Error, 'privilege-missing');
           let privilegeLookup = 0;
