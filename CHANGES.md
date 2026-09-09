@@ -3,6 +3,8 @@
 ## ?
 
 - fix: end sessions whose account was deleted or deactivated
+- fix: drop stale group members when reading groups
+- fix: unrecognized verb issue
 
 ## 8.2.0
 

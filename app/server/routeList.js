@@ -1084,14 +1084,17 @@ const routeList = async (app, config) => {
         success: true,
         groupName: group.groupName,
         builtin: group.builtin,
-        usersInfo: await Promise.all(group.userIDs.map(async (usrID) => {
+        // Filter out any user IDs that no longer resolve to an account
+        //   (a group's `userIDs` can outlive its members, e.g. after a
+        //   self-delete or `/reset`, which do not scrub group membership).
+        usersInfo: (await Promise.all(group.userIDs.map(async (usrID) => {
           // eslint-disable-next-line @stylistic/max-len -- Long
           return /** @type {(Partial<import('./modules/account-manager.js').AccountInfo> & {user: string, _id: string})[]} */ (
             await am.getRecords({
               user: {$eq: usrID}
             })
           ).map(({user: usr, _id}) => ({user: usr, _id}))[0];
-        })),
+        }))).filter(Boolean),
         privileges: await am.getPrivilegesForGroup(group.groupName)
       };
     }));

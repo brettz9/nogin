@@ -187,6 +187,27 @@ describe('Privileges', function () {
     }
   );
 
+  it(
+    'Tolerates a group member whose account has been deleted',
+    function () {
+      cy.loginWithSession({rootUser: true});
+      cy.task('addAccount');
+      cy.task('addGroup', {groupName: 'team'});
+      cy.task('addUserToGroup', {groupName: 'team', userID: 'bretto'});
+      cy.task('addPrivilege', {privilegeName: 'publish', description: 'x'});
+      cy.task('addPrivilegeToGroup', {
+        groupName: 'team', privilegeName: 'publish'
+      });
+      // Drops the account but leaves the stale id in `team.userIDs`
+      cy.task('deleteAllAccountsExceptRoot');
+
+      cy.visit('/privileges');
+
+      cy.get('h1').should('contain', 'Privileges');
+      cy.contains('.table-bordered tr', 'publish').should('contain', 'team');
+    }
+  );
+
   it('Has no detectable a11y violations for the root user', function () {
     cy.loginWithSession({rootUser: true});
     cy.visitURLAndCheckAccessibility('/privileges');

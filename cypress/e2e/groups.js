@@ -120,6 +120,23 @@ describe('Groups', function () {
     }
   );
 
+  it(
+    'Tolerates a group member whose account has been deleted',
+    function () {
+      cy.loginWithSession({rootUser: true});
+      cy.task('addAccount');
+      cy.task('addGroup', {groupName: 'team'});
+      cy.task('addUserToGroup', {groupName: 'team', userID: 'bretto'});
+      // Drops the account but leaves the stale id in `team.userIDs`
+      cy.task('deleteAllAccountsExceptRoot');
+
+      cy.visit('/groups');
+
+      cy.get('h1').should('contain', 'Groups');
+      cy.get('.table-bordered').contains('team');
+    }
+  );
+
   it('Has no detectable a11y violations for the root user', function () {
     cy.loginWithSession({rootUser: true});
     cy.visitURLAndCheckAccessibility('/groups');
