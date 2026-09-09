@@ -2,6 +2,7 @@ import './404.js';
 import './accessAPI.js';
 import './activation.js';
 import './coverage.js';
+import './delete.js';
 import './groups.js';
 import './home.js';
 import './lang.js';
