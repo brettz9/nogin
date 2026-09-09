@@ -312,11 +312,34 @@ describe('Programmatic', function () {
       }).connect();
 
       try {
+        await am.listIndexes();
         await am.addNewGroup({groupName: 'typed'});
         await am.addNewAccount({
           user: 'typedUser', email: 'typed@example.name', pass: '123456',
           name: '', country: 'US', activated: true
         });
+        const typedAccount = await am.accounts?.findOne({user: 'typedUser'});
+        /** @type {{account: {unactivatedEmail?: string}, user: string}[]} */
+        const changedEmails = [];
+        await am.updateAccount({
+          user: 'typedUser', id: typedAccount?._id.toString(),
+          email: 'typed-new@example.name', pass: '123456',
+          name: 'Typed User', country: 'US'
+        }, {
+          changedEmailHandler (account, user) {
+            changedEmails.push({account, user});
+          }
+        });
+        expect(changedEmails).to.have.length(1);
+        expect(changedEmails[0]?.user).to.equal('typedUser');
+        expect(changedEmails[0]?.account).to.include({
+          unactivatedEmail: 'typed-new@example.name'
+        });
+        const updatedAccount = await am.updateAccount({
+          user: 'typedUser', email: 'typed@example.name',
+          name: 'Updated Typed User', country: 'US', activated: true
+        }, {forceUpdate: true});
+        expect(updatedAccount).to.include({name: 'Updated Typed User'});
         await Promise.all([
           am.addNewPrivilege({
             privilegeName: 'canPublish',
@@ -423,6 +446,220 @@ describe('Programmatic', function () {
         await expect(am.addPrivilegeToUser({
           userID: 'typedUser', privilegeName: 'quota', value: [1, 2]
         })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
+        await expect(am.renameGroup({
+          groupName: 'typed', newGroupName: ''
+        })).to.be.rejectedWith(Error, 'bad-groupname');
+        await expect(am.renameGroup({
+          groupName: '', newGroupName: 'renamed'
+        })).to.be.rejectedWith(Error, 'bad-old-groupname');
+        await am.addNewGroup({groupName: 'duplicateGroup'});
+        await expect(
+          am.addNewGroup({groupName: 'duplicateGroup'})
+        ).to.be.rejectedWith(Error, 'groupname-taken');
+        await expect(am.renameGroup({
+          groupName: 'typed', newGroupName: 'duplicateGroup'
+        })).to.be.rejectedWith(Error, 'groupname-taken');
+        await expect(am.addUserToGroup({
+          groupName: '', userID: 'typedUser'
+        })).to.be.rejectedWith(Error, 'bad-groupname');
+        await expect(am.addUserToGroup({
+          groupName: 'typed', userID: 'missingUser'
+        })).to.be.rejectedWith(Error, 'user-missing');
+        await expect(am.removeUserFromGroup({
+          groupName: '', userID: 'typedUser'
+        })).to.be.rejectedWith(Error, 'bad-groupname');
+        await expect(am.removeUserFromGroup({
+          groupName: 'typed', userID: 'missingUser'
+        })).to.be.rejectedWith(Error, 'user-missing');
+        await expect(am.addNewPrivilege({
+          privilegeName: '', description: 'Missing name'
+        })).to.be.rejectedWith(Error, 'bad-privilegename');
+        await expect(am.addNewPrivilege({
+          privilegeName: 'badDescription',
+          // @ts-expect-error Testing bad argument
+          description: null
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-description');
+        await expect(am.addNewPrivilege({
+          privilegeName: 'badType', description: 'Bad type',
+          // @ts-expect-error Testing bad argument
+          type: 'unknown'
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-type');
+        await am.addNewPrivilege({
+          privilegeName: 'duplicatePrivilege', description: 'First'
+        });
+        await expect(am.addNewPrivilege({
+          privilegeName: 'duplicatePrivilege', description: 'Second'
+        })).to.be.rejectedWith(Error, 'privilegename-taken');
+        await expect(am.editPrivilege({
+          privilegeName: 'canPublish',
+          newPrivilegeName: 'duplicatePrivilege',
+          description: 'Duplicate'
+        })).to.be.rejectedWith(Error, 'privilegename-taken');
+        await expect(
+          am.deletePrivilegeByPrivilegeName('')
+        ).to.be.rejectedWith(Error, 'bad-privilegename');
+        await expect(am.editPrivilege({
+          privilegeName: 'canPublish', newPrivilegeName: '', description: 'd'
+        })).to.be.rejectedWith(Error, 'bad-privilegename');
+        await expect(am.editPrivilege({
+          privilegeName: '', newPrivilegeName: 'renamed', description: 'd'
+        })).to.be.rejectedWith(Error, 'bad-old-privilegename');
+        await expect(am.editPrivilege({
+          privilegeName: 'missingPrivilege', newPrivilegeName: 'renamed',
+          description: 'd'
+        })).to.be.rejectedWith(Error, 'bad-old-privilegename');
+        await expect(am.editPrivilege({
+          privilegeName: 'canPublish', newPrivilegeName: 'canPublish',
+          // @ts-expect-error Testing bad argument
+          description: null
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-description');
+        await am.groups?.insertOne({
+          groupName: 'emptyAssignments', builtin: false, date: Date.now(),
+          privilegeIDs: [], userIDs: []
+        });
+        await am.groups?.updateOne(
+          {groupName: 'emptyAssignments'}, {$unset: {privilegeIDs: ''}}
+        );
+        expect(
+          await am.getPrivilegesForGroup('emptyAssignments')
+        ).to.deep.equal([]);
+        await am.privileges?.insertOne({
+          privilegeName: 'legacyGroupPrivilege', description: 'Legacy group',
+          builtin: false, userVarying: false, date: Date.now()
+        });
+        await am.addPrivilegeToGroup({
+          groupName: 'typed', privilegeName: 'legacyGroupPrivilege'
+        });
+        await am.privileges?.insertOne({
+          privilegeName: 'legacyUserPrivilege', description: 'Legacy user',
+          builtin: false, userVarying: true, date: Date.now()
+        });
+        await am.addPrivilegeToUser({
+          userID: 'typedUser', privilegeName: 'legacyUserPrivilege'
+        });
+        await am.editPrivilege({
+          privilegeName: 'legacyGroupPrivilege',
+          newPrivilegeName: 'legacyGroupPrivilege',
+          description: 'Updated legacy group'
+        });
+
+        const originalAccountFindOne = am.accounts?.findOne;
+        const originalGroupFindOne = am.groups?.findOne;
+        const originalPrivilegeFindOne = am.privileges?.findOne;
+        const canPublishPrivilege = await am.privileges?.findOne({
+          privilegeName: 'canPublish'
+        });
+        try {
+          let accountLookup = 0;
+          // @ts-expect-error Testing defensive database failures
+          am.accounts.findOne = () => {
+            accountLookup++;
+            if (accountLookup === 1) {
+              return Promise.reject(new Error('database-read-failed'));
+            }
+            return Promise.resolve(null);
+          };
+          await am.addNewAccount({
+            user: 'lookupFailureOne', email: 'lookup1@example.name',
+            pass: '123456', name: '', country: 'US', activated: false
+          });
+
+          accountLookup = 0;
+          // @ts-expect-error Testing defensive database failures
+          am.accounts.findOne = () => {
+            accountLookup++;
+            if (accountLookup === 2) {
+              return Promise.reject(new Error('database-read-failed'));
+            }
+            return Promise.resolve(null);
+          };
+          await am.addNewAccount({
+            user: 'lookupFailureTwo', email: 'lookup2@example.name',
+            pass: '123456', name: '', country: 'US', activated: false
+          });
+
+          // @ts-expect-error Testing defensive database failures
+          am.groups.findOne = () => {
+            return Promise.reject(new Error('database-read-failed'));
+          };
+          await am.addNewGroup({groupName: 'lookupFailureGroup'});
+          await expect(
+            am.getPrivilegesForGroup('lookupFailureGroup')
+          ).to.be.rejectedWith(Error, 'group-not-found');
+
+          // @ts-expect-error Testing defensive database failures
+          am.privileges.findOne = () => {
+            return Promise.reject(new Error('database-read-failed'));
+          };
+          await am.addNewPrivilege({
+            privilegeName: 'lookupFailurePrivilege', description: 'Lookup'
+          });
+          await expect(am.addPrivilegeToGroup({
+            groupName: 'typed', privilegeName: 'lookupFailurePrivilege'
+          })).to.be.rejectedWith(Error, 'privilege-missing');
+          let privilegeLookup = 0;
+          // @ts-expect-error Testing defensive database failures
+          am.privileges.findOne = () => {
+            privilegeLookup++;
+            return privilegeLookup === 1
+              ? Promise.resolve(canPublishPrivilege)
+              : Promise.reject(new Error('database-read-failed'));
+          };
+          await am.editPrivilege({
+            privilegeName: 'canPublish',
+            newPrivilegeName: 'lookupFailureRename',
+            description: 'Lookup rename'
+          });
+        } finally {
+          if (originalAccountFindOne && am.accounts) {
+            am.accounts.findOne = originalAccountFindOne;
+          }
+          if (originalGroupFindOne && am.groups) {
+            am.groups.findOne = originalGroupFindOne;
+          }
+          if (originalPrivilegeFindOne && am.privileges) {
+            am.privileges.findOne = originalPrivilegeFindOne;
+          }
+        }
+        await expect(am.addPrivilegeToGroup({
+          groupName: '', privilegeName: 'canPublish'
+        })).to.be.rejectedWith(Error, 'bad-groupname');
+        await expect(am.addPrivilegeToGroup({
+          groupName: 'typed', privilegeName: ''
+        })).to.be.rejectedWith(Error, 'bad-privilegename');
+        await expect(am.addPrivilegeToGroup({
+          groupName: 'typed', privilegeName: 'missingPrivilege'
+        })).to.be.rejectedWith(Error, 'privilege-missing');
+        await expect(am.removePrivilegeFromGroup({
+          groupName: '', privilegeName: 'canPublish'
+        })).to.be.rejectedWith(Error, 'bad-groupname');
+        await expect(am.removePrivilegeFromGroup({
+          groupName: 'typed', privilegeName: ''
+        })).to.be.rejectedWith(Error, 'bad-privilegename');
+        await expect(am.removePrivilegeFromGroup({
+          groupName: 'typed', privilegeName: 'missingPrivilege'
+        })).to.be.rejectedWith(Error, 'privilege-missing');
+        await expect(
+          am.getPrivilegesForGroup('missingGroup')
+        ).to.be.rejectedWith(Error, 'group-not-found');
+        await expect(am.addPrivilegeToUser({
+          userID: '', privilegeName: 'betaUser'
+        })).to.be.rejectedWith(Error, 'bad-user');
+        await expect(am.addPrivilegeToUser({
+          userID: 'typedUser', privilegeName: ''
+        })).to.be.rejectedWith(Error, 'bad-privilegename');
+        await expect(am.addPrivilegeToUser({
+          userID: 'typedUser', privilegeName: 'missingPrivilege'
+        })).to.be.rejectedWith(Error, 'privilege-missing');
+        await expect(am.addPrivilegeToUser({
+          userID: 'typedUser', privilegeName: 'userScore', value: Infinity
+        })).to.be.rejectedWith(TypeError, 'bad-privilege-value');
+        await expect(am.addPrivilegeToUser({
+          userID: 'missingUser', privilegeName: 'betaUser'
+        })).to.be.rejectedWith(Error, 'user-missing');
+        await expect(
+          am.getPrivilegesForUser('missingUser')
+        ).to.be.rejectedWith(Error, 'user-missing');
         await am.deleteAllGroups();
         expect(await am.getAllGroups()).to.deep.equal([]);
       } finally {

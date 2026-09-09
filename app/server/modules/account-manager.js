@@ -103,6 +103,7 @@ const isValidPrivilegeValue = (type, value) => {
   case 'object':
     return typeof value === 'object' && value !== null &&
       !Array.isArray(value);
+  /* c8 ignore next 2 -- Callers reject unknown privilege types. */
   default:
     return false;
   }
@@ -206,13 +207,12 @@ class AccountManager {
       await this.accounts.createIndex({
         privilegeName: 1
       });
+    /* c8 ignore next 9 -- Defensive adapter initialization failure. */
     } catch (err) {
       // Not clear on how to check; we're just rethrowing here for
       //   now anyways
-      /* c8 ignore next */
       console.error(err);
       // Ignore for reasons as stated above previous line
-      /* c8 ignore next */
       throw err;
     }
     return this;
@@ -472,9 +472,9 @@ class AccountManager {
         //  internal states that could exist to cause this
         /* c8 ignore next */
         : null;
+    /* c8 ignore next 4 -- Defensive database read failure. */
     } catch {
       // No special reason to expect it throwing
-      /* c8 ignore next */
       return null;
     }
   }
@@ -616,9 +616,9 @@ class AccountManager {
         ip: ipAddress,
         passKey
       }, $unset: {cookie: ''}}, {returnDocument: 'after'}));
+    /* c8 ignore next 5 -- Defensive database update failure. */
     } catch (err) {
       // Above should not throw readily
-      /* c8 ignore next */
       e = err;
     }
 
@@ -1384,7 +1384,7 @@ class AccountManager {
     } catch {}
     // Todo: Should only occur if user established session and then we
     //  deleted their account
-    /* c8 ignore next */
+    /* c8 ignore next 4 -- Session/account deletion race. */
     if (!oldAccount) {
       throw new Error('session-lost');
     }
@@ -1456,7 +1456,7 @@ class AccountManager {
       if (changedEmailHandler && addingTemporaryEmail) {
         await changedEmailHandler(o, user);
       }
-      /* c8 ignore next */ // Should not occur?
+      /* c8 ignore next 4 -- Upsert should always return the account. */
       if (!ret) {
         throw new Error('missing-user');
       }
