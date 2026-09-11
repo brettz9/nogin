@@ -259,8 +259,8 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
       node-pop3:
-        specifier: ^0.15.0
-        version: 0.15.0
+        specifier: ^0.15.1
+        version: 0.15.1
       nyc:
         specifier: ^18.0.0
         version: 18.0.0(supports-color@5.5.0)
@@ -5252,8 +5252,8 @@ packages:
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
 
-  node-pop3@0.15.0:
-    resolution: {integrity: sha512-xoZ8/G3V34w4PKafzbOB/zFLdYUY9fj3JxCcMiZcfHf+Q66r8WnhBv5rUjA5a3aR+ZW2Fi9w5/2jXWcCYA9uDA==}
+  node-pop3@0.15.1:
+    resolution: {integrity: sha512-VI+ykdsxePyqBc3HnpuoXMtJ0pmEVi4mdtegzRdiAb71KeOsnMI+zd9VHHJKiPSjIILUlztl8xWHEsQktySwqg==}
     engines: {node: ^20.11.0 || >= 22.0.0}
     hasBin: true
 
@@ -12610,7 +12610,7 @@ snapshots:
       undici: 6.28.1
       which: 6.0.1
 
-  node-pop3@0.15.0: {}
+  node-pop3@0.15.1: {}
 
   node-preload@0.2.1:
     dependencies:

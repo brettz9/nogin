@@ -296,7 +296,7 @@
     "mochawesome-merge": "^5.1.1",
     "mochawesome-report-generator": "^6.3.2",
     "node-fetch": "^3.3.2",
-    "node-pop3": "^0.15.0",
+    "node-pop3": "^0.15.1",
     "nyc": "^18.0.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
