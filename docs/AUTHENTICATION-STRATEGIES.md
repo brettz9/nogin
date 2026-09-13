@@ -566,6 +566,11 @@ This phase validates the adapter boundary without exposing a public plugin API.
 - Add namespaced authentication endpoints.
 - Split shared and local client behavior.
 - Document the trusted-code boundary and descriptor contract.
+- Validate the descriptor contract against at least one real non-local
+    strategy (for example, an OAuth strategy such as GitHub) before treating
+    the render/asset/route contract as stable. The local descriptor alone does
+    not exercise redirects, callbacks, or `getRenderState()`, so it cannot
+    confirm the contract generalizes.
 
 ### Phase 3: External identity linking
 
@@ -596,6 +601,11 @@ At minimum, add coverage for:
 - deactivated or deleted linked accounts; and
 - logout and remember-me behavior.
 
+The routeList.js refactor that moves root-POST login logic into the local
+adapter touches code the existing test suite already covers at 100%. That
+coverage must be preserved through the refactor, not only supplemented with
+new descriptor-specific tests.
+
 Use a small fake Passport strategy for most integration tests. It should support
 deterministic success, failure, error, and redirect cases without depending on an
 external identity provider.
@@ -603,9 +613,12 @@ external identity provider.
 ## Recommendation
 
 Start with the internal local adapter and require a canonical local Nogin account
-after every successful strategy. Prefer declarative UI contributions with a
-trusted Jamilih `render()` escape hatch. Keep Passport stateless from its own
-perspective and let Nogin remain the sole owner of application session state.
+after every successful strategy. This requirement is a Phase 1/2 simplification,
+not a final answer to open question 1 above: it must be revisited once Phase 3
+(external identity linking) is designed, since a linking flow implies at least a
+transient authenticated-but-unlinked state. Prefer declarative UI contributions
+with a trusted Jamilih `render()` escape hatch. Keep Passport stateless from its
+own perspective and let Nogin remain the sole owner of application session state.
 
 This is the smallest design that enables configurable authentication UI while
 preserving the current account, privilege, localization, and rendering systems.
