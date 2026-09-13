@@ -67,10 +67,33 @@ export default [
     };
   }),
   {
-    name: 'nogin/readme',
-    files: ['*.md/*.js'],
+    name: 'nogin/docs',
+    files: ['**/*.md/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: {
+        accountManager: 'readonly',
+        app: 'readonly',
+        createLocalStrategy: 'readonly',
+        descriptor: 'readonly',
+        getPostLoginTarget: 'readonly',
+        handleAuthenticationFailure: 'readonly',
+        linkedNoginAccount: 'readonly',
+        next: 'readonly',
+        passport: 'readonly',
+        regenerateSession: 'readonly',
+        req: 'readonly',
+        res: 'readonly'
+      }
+    },
     rules: {
-      'sonarjs/no-hardcoded-ip': 'off'
+      'jsdoc/require-jsdoc': 'off',
+      'promise/prefer-await-to-callbacks': 'off',
+      'sonarjs/no-hardcoded-ip': 'off',
+      'no-shadow': 'off',
+      'no-unused-vars': ['error', {
+        varsIgnorePattern: 'captcha|result'
+      }]
     }
   },
   {
