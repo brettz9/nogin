@@ -65,7 +65,7 @@ createGroupButton.on('click', () => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -124,7 +124,7 @@ renameGroupButton.on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -182,7 +182,7 @@ addUserToGroupButton.on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -274,7 +274,7 @@ addPrivilegeToGroupButton.on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -317,7 +317,7 @@ GroupsView.getRemovePrivilegeFromGroup().on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -365,7 +365,7 @@ GroupsView.getDeleteGroups().on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -392,7 +392,7 @@ GroupsView.getRemoveUserFromGroup().on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));

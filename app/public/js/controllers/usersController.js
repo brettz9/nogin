@@ -34,7 +34,7 @@ UsersView.getDeleteAllAccounts().on('click', () => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -64,7 +64,7 @@ UsersView.getDeleteAccounts().on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));

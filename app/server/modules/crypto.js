@@ -18,7 +18,7 @@ function pbkdf2Prom (data, salt) {
       data, salt, iterations, hashLength, hasher,
       // eslint-disable-next-line promise/prefer-await-to-callbacks -- API
       function (error, derivedKey) {
-        /* c8 ignore next 4 */
+        /* c8 ignore next 4 -- Shouldn't err? */
         if (error) {
           reject(error);
           return;
@@ -40,7 +40,7 @@ const saltAndHash = function (data) {
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line promise/prefer-await-to-callbacks -- API
     randomBytes(saltBytes, async function (err, buf) {
-      /* c8 ignore next 4 */
+      /* c8 ignore next 4 -- Shouldn't err? */
       if (err) {
         reject(err);
         return;

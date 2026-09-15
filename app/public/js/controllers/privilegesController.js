@@ -75,7 +75,7 @@ createPrivilegeButton.on('click', () => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -151,7 +151,7 @@ editPrivilegeButton.on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -294,7 +294,7 @@ addPrivilegeToGroupButton.on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -327,7 +327,7 @@ PrivilegesView.getDeletePrivileges().on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));
@@ -355,7 +355,7 @@ PrivilegesView.getRemovePrivilegeFromGroup().on('click', (e) => {
       console.error(Nogin._('ErrorFormat', {
         text: err.text,
         statusText:
-          // istanbul ignore next
+          // istanbul ignore next -- statusText should exist
           err.statusText ||
           ''
       }));

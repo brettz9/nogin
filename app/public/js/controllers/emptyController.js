@@ -10,7 +10,7 @@
 
 'use strict';
 
-// istanbul ignore else
+// istanbul ignore else -- Console log should exist
 if (typeof console !== 'undefined' && console.log) {
   console.log('placeholder code');
 }

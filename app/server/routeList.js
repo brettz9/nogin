@@ -499,7 +499,7 @@ const routeList = async (app, config) => {
         //   to err
         e = error;
       }
-      /* c8 ignore stop */
+      /* c8 ignore stop -- See start above */
       if (e || isNullish(o)) {
         res.redirect(routes.root);
       } else {
@@ -537,8 +537,7 @@ const routeList = async (app, config) => {
             'activationCodeProvidedInvalid'
           ].includes(e.message)
             ? _(e.message, {lb: '\n'})
-            // Shouldn't normally throw any other errors
-            /* c8 ignore next */
+            /* c8 ignore next -- Shouldn't normally throw any other errors */
             : e.message;
 
           log('message', {message});
@@ -1238,7 +1237,7 @@ const routeList = async (app, config) => {
                 cause: e
               });
             }
-            /* c8 ignore stop */
+            /* c8 ignore stop -- See start above */
           }
         });
       } catch (er) {
@@ -1401,7 +1400,7 @@ const routeList = async (app, config) => {
         res.status(400).send(_('UnableToUpdatePassword'));
         return;
       }
-      /* c8 ignore stop */
+      /* c8 ignore stop -- See start above */
       const {value: o} = updatePasswordResult;
       if (o) {
         res.status(200).send(_('OK'));
@@ -1409,7 +1408,7 @@ const routeList = async (app, config) => {
       } else {
         res.status(400).send(_('UnableToUpdatePassword'));
       }
-      /* c8 ignore stop */
+      /* c8 ignore stop -- See start above */
     },
 
     /**
@@ -1595,7 +1594,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1631,7 +1630,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1654,7 +1653,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1677,7 +1676,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1713,7 +1712,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1733,7 +1732,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1759,7 +1758,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1820,7 +1819,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1836,7 +1835,7 @@ const routeList = async (app, config) => {
           res.status(400).send(/** @type {Error} */ (err).message);
           return;
         }
-        /* c8 ignore stop */
+        /* c8 ignore stop -- See start above */
         break;
       case 'removePrivilegeFromGroup':
         if (!hasRemovePrivilegeFromGroupAccess) {
@@ -1857,7 +1856,7 @@ const routeList = async (app, config) => {
           } else {
             res.status(400).send(/** @type {Error} */ (err).message);
           }
-          /* c8 ignore stop */
+          /* c8 ignore stop -- See start above */
           return;
         }
         break;
@@ -1913,7 +1912,7 @@ const routeList = async (app, config) => {
       //   logging the user out over a transient database error.
       usable = true;
     }
-    /* c8 ignore stop */
+    /* c8 ignore stop -- See start above */
     if (usable) {
       next();
       return;
@@ -1924,7 +1923,7 @@ const routeList = async (app, config) => {
   });
 
   // See https://github.com/cypress-io/code-coverage#instrument-backend-code
-  /* c8 ignore next */
+  /* c8 ignore next -- Cover? */
   if (SERVE_COVERAGE) {
     // See https://github.com/cypress-io/code-coverage
 
@@ -2017,7 +2016,7 @@ window.Nogin = {
       //   is defensive only.
       userPrivs = new Map();
     }
-    /* c8 ignore stop */
+    /* c8 ignore stop -- See start above */
     const converted = {
       privs: Object.fromEntries(userPrivs),
       root: hasRootAccess(req),
@@ -2195,7 +2194,7 @@ window.NoginPrivs.hasPrivilege = function (priv) {
       //  reusing the same name).
       /* eslint-disable jsdoc/reject-any-type -- Work around package typing */
       const csrf = /** @type {any} */ (
-        /* c8 ignore next */ // Apparent bug with @dr.pogodin/csurf types
+        /* c8 ignore next -- Ok? */ // Apparent bug with @dr.pogodin/csurf types
         csurfModule
       )(parseCLIJSON(csurfOptions));
 

@@ -135,9 +135,9 @@ const LoginView = {
    */
   toggleCheckSquare (loginModal) {
     const span = this.getRememberMeButton(loginModal).find('span');
-    // todo[cypress@>=17.0.0]: class checking: remove this disabling of
-    //   istanbul to see if fixed
-    // istanbul ignore if
+    // todo[cypress@>=17.0.0]: class checking: remove this disabling of istanbul
+    //   to see if fixed
+    // istanbul ignore if -- See comment above
     if (span.hasClass('fa-square-minus')) {
       span.removeClass('fa-square-minus');
       span.addClass('fa-square-check');

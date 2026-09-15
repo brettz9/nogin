@@ -179,7 +179,7 @@ const createServer = async function (options) {
   // Doubles as limiting automated login attempts!
   const limiter = disableRateLimit
     ? null
-    // istanbul ignore next
+    // istanbul ignore next -- Testing disables for speed
     : rateLimit({
       windowMs: 1 * 60 * 1000, // 1 minute
       max: RATE_LIMIT

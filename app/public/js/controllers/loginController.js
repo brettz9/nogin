@@ -82,7 +82,7 @@ ajaxFormClientSideValidate(
     },
     success (responseText, status /* , xhr, $form */) {
       // "nocontent" (204), "notmodified" (304), "parseerror" (JSON or XML)
-      // istanbul ignore else
+      // istanbul ignore else -- should be a success status
       if (status === 'success') {
         Nogin.redirect('root');
       }

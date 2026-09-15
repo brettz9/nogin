@@ -470,7 +470,7 @@ class AccountManager {
         //  but it seems very obscure
         // See discussion under `app.get(routes.root)` for the obscure
         //  internal states that could exist to cause this
-        /* c8 ignore next */
+        /* c8 ignore next -- See comment above */
         : null;
     /* c8 ignore next 4 -- Defensive database read failure. */
     } catch {

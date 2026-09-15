@@ -150,8 +150,7 @@ const layout = ({
                 tag,
                 atts
               ]) => {
-                // Currently all scripts are controllers
-                // istanbul ignore else
+                // istanbul ignore else -- Currently all scripts are controllers
                 if (
                   typeof atts.src === 'string' &&
                   atts.src.endsWith('Controller.iife.min.js')

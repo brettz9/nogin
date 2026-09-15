@@ -73,7 +73,7 @@ class AccountValidator {
     // todo[cypress@>=17.0.0]: validity: remove this disabling of istanbul
     //   to see if fixed
     //   see https://github.com/cypress-io/cypress/issues/6678
-    // istanbul ignore if
+    // istanbul ignore if -- See comment above
     if (email.validity.patternMismatch) {
       email.setCustomValidity(this.errorMessages.email.PleaseEnterValidEmail);
     }
