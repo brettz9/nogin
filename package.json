@@ -283,7 +283,7 @@
     "github-fork-ribbon-css": "^0.2.3",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
-    "integrity-matters": "^0.14.0",
+    "integrity-matters": "^0.15.0",
     "jquery": "^4.0.0",
     "jquery-form-plus": "^3.1.1",
     "jsdoc": "^4.0.5",

@@ -82,3 +82,4 @@ minimumReleaseAgeExclude:
   - node-pop3@0.15.1
   - coveradge@0.9.0
   - license-badger@0.23.1
+  - integrity-matters@0.15.0
