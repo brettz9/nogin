@@ -584,7 +584,10 @@ describe('CLI', function () {
 
         expect(dynamicText).to.equal(
           'got a dynamic route with options, e.g., userJS.js; ' +
-          'has read-users: false'
+          'has read-users: false; ' +
+          'read-users value: undefined; ' +
+          'root: false; ' +
+          'has read-users key: false'
         );
 
         const signupDoc = (new JSDOM(signupText)).window.document;

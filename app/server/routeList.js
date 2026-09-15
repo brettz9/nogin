@@ -2073,6 +2073,49 @@ window.NoginPrivs.hasPrivilege = function (priv) {
         return hasRootAccess(req) || privs.has(priv);
       };
 
+    req.getPrivilegeValue =
+      /**
+       * Like `hasPrivilege`, but resolves to the privilege's actual stored
+       * value instead of a plain grant/no-grant boolean — needed by a
+       * consuming app to check a non-`boolean`-typed privilege's value
+       * structurally (e.g. a data-access privilege whose value is a
+       * `{db, store, path?}[]` permitted-target list), not just whether it
+       * is held at all.
+       * @param {string} priv
+       * @returns {Promise<import(
+       *   './modules/account-manager.js'
+       * ).PrivilegeValue|boolean|undefined>} `true` for root access or a
+       *   `boolean`-typed privilege's grant (mirroring `getPrivilegeValues`'
+       *   own convention); the privilege's `PrivilegeValue` for any other
+       *   type; `undefined` when the privilege isn't held at all.
+       */
+      async (priv) => {
+        if (hasRootAccess(req)) {
+          return true;
+        }
+        const privs = await getUserPrivs(req);
+        return privs.get(priv);
+      };
+
+    req.getPrivileges =
+      /**
+       * The full set of privileges the session holds, in the same
+       * `{root, privs}` shape the `/_privs` endpoint sends the browser as
+       * `window.NoginPrivs` — for a consuming app that needs to scan across
+       * every held privilege (e.g. every data-access privilege under its
+       * own naming convention) rather than check one name at a time.
+       * @returns {Promise<{
+       *   root: boolean,
+       *   privs: {[key: string]: import(
+       *     './modules/account-manager.js'
+       *   ).PrivilegeValue|boolean}
+       * }>}
+       */
+      async () => {
+        const privs = await getUserPrivs(req);
+        return {root: hasRootAccess(req), privs: Object.fromEntries(privs)};
+      };
+
     next();
   });
 

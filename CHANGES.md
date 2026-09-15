@@ -1,5 +1,16 @@
 # CHANGES for nogin
 
+## 8.3.0
+
+- feat: `req.getPrivilegeValue(priv)` and `req.getPrivileges()`, alongside
+    the existing `req.hasPrivilege(priv)`, for a mounted app that needs a
+    privilege's actual stored value (or the full `{root, privs}` set —
+    the same shape `/_privs` sends the browser as `window.NoginPrivs`) —
+    not just a grant/no-grant boolean. Lets a consuming app check a
+    non-`boolean`-typed privilege's value structurally (e.g. a data-access
+    privilege whose value is a permitted-target list) rather than only
+    whether it is held at all.
+
 ## 8.2.1
 
 - fix: end sessions whose account was deleted or deactivated
