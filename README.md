@@ -1,5 +1,4 @@
 [![npm](https://img.shields.io/npm/v/nogin.svg)](https://www.npmjs.com/package/nogin)
-[![Dependencies](https://img.shields.io/librariesio/github/brettz9/nogin.svg)](https://libraries.io/github/brettz9/nogin)
 
 [![Tests badge](https://raw.githubusercontent.com/brettz9/nogin/master/doc-includes/tests-badge.svg?sanitize=true)](doc-includes/tests-badge.svg)
 [![Coverage badge](https://raw.githubusercontent.com/brettz9/nogin/main/doc-includes/coverage-badge.svg?sanitize=true)](doc-includes/coverage-badge.svg)
