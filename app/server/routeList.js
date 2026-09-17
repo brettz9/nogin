@@ -2183,7 +2183,8 @@ window.NoginPrivs.hasPrivilege = function (priv) {
     const route = getRouteForLocale(routes, _.resolvedLocale, req);
 
     let error;
-    if (!disableXSRF && !openRoutes.has(route)) {
+    if (!disableXSRF && !openRoutes.has(route) &&
+      !req.path.startsWith('/__cypress/')) {
       /* c8 ignore next 3 -- Deliberately unreachable debug guard. */
       if (error) { // Deliberately not reaching
         console.log('route', method, route);
