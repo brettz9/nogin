@@ -357,6 +357,7 @@ describe('CLI', function () {
             '--userJSModule', 'userJSModule.js',
             '--stylesheet', 'stylesheet.css',
             '--favicon', 'favicon.ico',
+            '--rootUser', 'testRoot',
             '--countryCodes', '["CA", "MX", "US"]',
             '--router', pathResolve(__dirname, './fixtures/router.js'),
             '--fallback', pathResolve(__dirname, './fixtures/fallback.js'),
@@ -586,6 +587,7 @@ describe('CLI', function () {
           'got a dynamic route with options, e.g., userJS.js; ' +
           'has read-users: false; ' +
           'read-users value: undefined; ' +
+          'read-users value root: true; ' +
           'root: false; ' +
           'has read-users key: false'
         );
