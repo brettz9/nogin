@@ -200,7 +200,7 @@ importers:
         version: 2.1.0
       es-file-traverse:
         specifier: ^3.0.0
-        version: 3.0.0(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
+        version: 3.0.0(eslint-plugin-import-x@4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
       escape-string-regexp:
         specifier: ^5.0.0
         version: 5.0.0
@@ -209,7 +209,7 @@ importers:
         version: 10.10.0(supports-color@5.5.0)
       eslint-config-ash-nazg:
         specifier: 43.1.10
-        version: 43.1.10(@babel/core@8.0.5)(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2)
+        version: 43.1.10(@babel/core@8.0.5)(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2)
       github-fork-ribbon-css:
         specifier: ^0.2.3
         version: 0.2.3
@@ -2092,11 +2092,6 @@ packages:
 
   ajv-formats@2.1.1:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
-    peerDependencies:
-      ajv: ^8.0.0
-    peerDependenciesMeta:
-      ajv:
-        optional: true
 
   ajv-keywords@5.1.0:
     resolution: {integrity: sha512-YCS/JNFAUyr5vAuhk1DWm1CBxRHW9LbJ2ozWeemrIqpbsqKjHVxYPyi5GC0rjZIT5JxJ3virVTS8wk4i/Z+krw==}
@@ -5669,8 +5664,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  shell-quote@1.10.0:
-    resolution: {integrity: sha512-w1aiOKwKuRgtwAReIIj89puqg+I7GvX4IbLrvmhXbzQsj1+Zwi4VO3+fa6ZF91TWSjIxoEkKnMeHcLEODK5ZXA==}
+  shell-quote@1.12.0:
+    resolution: {integrity: sha512-PcByqNyT/38F2kDNi006HAMRJaULuBzq/FOsw3qdZvX/GA9W/jamDaRskgHjubHiftXK5sIFxLNkvrXUwcof6Q==}
     engines: {node: '>= 0.4'}
 
   side-channel-list@1.0.1:
@@ -8475,8 +8470,8 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  ajv-formats@2.1.1(ajv@8.20.0):
-    optionalDependencies:
+  ajv-formats@2.1.1:
+    dependencies:
       ajv: 8.20.0
 
   ajv-keywords@5.1.0(ajv@8.20.0):
@@ -9574,12 +9569,12 @@ snapshots:
 
   es-errors@1.3.0: {}
 
-  es-file-traverse@3.0.0(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0):
+  es-file-traverse@3.0.0(eslint-plugin-import-x@4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0):
     dependencies:
       '@babel/core': 8.0.5
       '@babel/eslint-parser': 8.0.5(@babel/core@8.0.5)(eslint@10.10.0(supports-color@5.5.0))
       command-line-basics: 3.0.0
-      eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
+      eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import-x@4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
       esquery: 1.7.0
       file-fetch: 2.0.1
       find-package-json: 1.2.0
@@ -9661,7 +9656,7 @@ snapshots:
       eslint: 10.10.0(supports-color@5.5.0)
       semver: 7.8.5
 
-  eslint-config-ash-nazg@43.1.10(@babel/core@8.0.5)(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2):
+  eslint-config-ash-nazg@43.1.10(@babel/core@8.0.5)(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2):
     dependencies:
       '@babel/eslint-parser': 8.0.5(@babel/core@8.0.5)(eslint@10.10.0(supports-color@5.5.0))
       '@babel/eslint-plugin': 8.0.5(@babel/core@8.0.5)(@babel/eslint-parser@8.0.5(@babel/core@8.0.5)(eslint@10.10.0(supports-color@5.5.0)))(eslint@10.10.0(supports-color@5.5.0))
@@ -9673,7 +9668,7 @@ snapshots:
       '@fintechstudios/eslint-plugin-chai-as-promised': 3.1.0
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.10.0(supports-color@5.5.0))
       browserslist: 4.28.9
-      es-file-traverse: 3.0.0(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
+      es-file-traverse: 3.0.0(eslint-plugin-import-x@4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
       eslint: 10.10.0(supports-color@5.5.0)
       eslint-plugin-array-func: 5.1.1(eslint@10.10.0(supports-color@5.5.0))
       eslint-plugin-chai-expect: 4.1.0(eslint@10.10.0(supports-color@5.5.0))
@@ -9683,7 +9678,7 @@ snapshots:
       eslint-plugin-cypress: 7.0.2(eslint@10.10.0(supports-color@5.5.0))
       eslint-plugin-escompat: 4.1.0(eslint@10.10.0(supports-color@5.5.0))
       eslint-plugin-html: 8.2.0
-      eslint-plugin-import-x: 4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
+      eslint-plugin-import-x: 4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
       eslint-plugin-jsdoc: 64.3.10(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2)
       eslint-plugin-mocha: 12.0.2(eslint@10.10.0(supports-color@5.5.0))
       eslint-plugin-mocha-cleanup: 1.11.3(eslint@10.10.0(supports-color@5.5.0))
@@ -9713,7 +9708,7 @@ snapshots:
     optionalDependencies:
       unrs-resolver: 1.12.2
 
-  eslint-import-resolver-typescript@4.4.5(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0):
+  eslint-import-resolver-typescript@4.4.5(eslint-plugin-import-x@4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       eslint: 10.10.0(supports-color@5.5.0)
@@ -9724,7 +9719,7 @@ snapshots:
       tinyglobby: 0.2.17
       unrs-resolver: 1.12.2
     optionalDependencies:
-      eslint-plugin-import-x: 4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
+      eslint-plugin-import-x: 4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -9778,7 +9773,7 @@ snapshots:
     dependencies:
       htmlparser2: 10.1.0
 
-  eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2))(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0):
+  eslint-plugin-import-x@4.17.1(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0):
     dependencies:
       '@typescript-eslint/types': 8.69.0
       comment-parser: 1.4.8
@@ -9790,8 +9785,6 @@ snapshots:
       semver: 7.8.5
       stable-hash-x: 0.2.0
       unrs-resolver: 1.12.2
-    optionalDependencies:
-      '@typescript-eslint/utils': 8.69.0(eslint@10.10.0(supports-color@5.5.0))(supports-color@5.5.0)(typescript@7.0.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -11901,7 +11894,7 @@ snapshots:
       minimatch: 3.1.5
       pidtree: 0.3.1
       read-pkg: 3.0.0
-      shell-quote: 1.10.0
+      shell-quote: 1.12.0
       string.prototype.padend: 3.1.6
 
   npm-run-path@2.0.2:
@@ -12545,7 +12538,7 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
       ajv: 8.20.0
-      ajv-formats: 2.1.1(ajv@8.20.0)
+      ajv-formats: 2.1.1
       ajv-keywords: 5.1.0(ajv@8.20.0)
 
   scslre@0.3.0:
@@ -12625,7 +12618,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shell-quote@1.10.0: {}
+  shell-quote@1.12.0: {}
 
   side-channel-list@1.0.1:
     dependencies:
