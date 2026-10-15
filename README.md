@@ -204,9 +204,9 @@ your own `nogin.js` config file.
 
 - `--secret`
 - `--NL_EMAIL_USER`
-- `--NL_EMAIL_PASS`
+- `--NL_EMAIL_PASS` (or `NL_RESEND_PASS`)
 - `--NL_EMAIL_HOST`
-- `--NL_EMAIL_FROM`
+- `--NL_EMAIL_FROM` (or `NL_RESEND_FROM`)
 - `--NL_SITE_URL`
 - `--fromText`
 - `--fromURL`

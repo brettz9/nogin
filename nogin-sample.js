@@ -8,6 +8,9 @@ const nogin = {
   NL_EMAIL_FROM: 'Node Login <do-not-reply@example.name>',
   NL_SITE_URL: 'https://example.name',
   NS_EMAIL_TIMEOUT: 50000
+  // If using `resend` service for email sending
+  // NL_SENDER_FROM: 'me@example.name',
+  // NL_SENDER_PASS: 'abc123456'
 };
 
 export default nogin;

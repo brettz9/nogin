@@ -1,6 +1,6 @@
 {
   "name": "nogin",
-  "version": "8.3.0",
+  "version": "8.4.0",
   "description": "A template for quickly building login systems on top of Node.js; a fork of the \"node-login\" project.",
   "type": "module",
   "types": "./dist/app.d.ts",
@@ -229,6 +229,7 @@
     "mongodb": "^7.6.0",
     "nodemon": "^3.1.14",
     "npm-run-all": "^4.1.5",
+    "resend": "^6.32.1",
     "safe-compare": "^1.1.4",
     "stylus": "^0.64.0",
     "uuid": "^14.0.2"
@@ -288,8 +289,8 @@
     "jquery-form-plus": "^3.1.1",
     "jsdoc": "^4.0.5",
     "license-badger": "^0.23.1",
-    "mocha": "^12.0.1",
     "lint-staged": "^17.5.1",
+    "mocha": "^12.0.1",
     "mocha-badge-generator": "^0.13.0",
     "mocha-multi-reporters": "^1.5.2",
     "mochawesome": "^8.1.1",

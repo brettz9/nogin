@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## 8.4.0
+
+- feat: allow sending email with `resend` (untested)
+
 ## 8.3.0
 
 - feat: `req.getPrivilegeValue(priv)` and `req.getPrivileges()`, alongside

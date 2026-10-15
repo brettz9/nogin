@@ -104,6 +104,8 @@ const routeList = async (app, config) => {
     NL_EMAIL_FROM,
     NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
+    NL_RESEND_PASS,
+    NL_RESEND_FROM,
     DB_URL,
     dbOpts: {DB_NAME, adapter},
     SERVE_COVERAGE,
@@ -202,6 +204,8 @@ const routeList = async (app, config) => {
     NL_EMAIL_FROM,
     NS_EMAIL_TIMEOUT,
     NL_SITE_URL,
+    NL_RESEND_PASS,
+    NL_RESEND_FROM,
     composeResetPasswordEmailView:
       composeResetPasswordEmailView &&
         typeof composeResetPasswordEmailView === 'string'

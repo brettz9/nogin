@@ -5,6 +5,7 @@ import {SMTPClient} from 'emailjs';
 // import JML from 'jamilih/dist/jml-dominum.js';
 // const jml = JML.default;
 import {jml} from 'jamilih';
+import {Resend} from 'resend';
 
 import composeResetPasswordEmailViewDefault from
   '../views/composeResetPasswordEmail.js';
@@ -19,6 +20,8 @@ import composeActivationEmailViewDefault from
  * @property {string} NL_EMAIL_FROM
  * @property {string} NL_SITE_URL
  * @property {number} NS_EMAIL_TIMEOUT
+ * @property {string} [NL_RESEND_FROM]
+ * @property {string} [NL_RESEND_PASS]
  * @property {import('../views/composeResetPasswordEmail.js').
  *   ComposeResetPasswordEmail} composeResetPasswordEmailView
  * @property {import('../views/composeActivationEmail.js').
@@ -45,11 +48,14 @@ class EmailDispatcher {
       NL_EMAIL_FROM, // = 'Node Login <do-not-reply@example.name>',
       NS_EMAIL_TIMEOUT,
       NL_SITE_URL,
+      NL_RESEND_FROM,
+      NL_RESEND_PASS,
       composeResetPasswordEmailView = composeResetPasswordEmailViewDefault,
       composeActivationEmailView = composeActivationEmailViewDefault
     } = config;
     this.NL_SITE_URL = NL_SITE_URL;
     this.NL_EMAIL_FROM = NL_EMAIL_FROM;
+    this.NL_RESEND_FROM = NL_RESEND_FROM;
     this.composeResetPasswordEmailView = composeResetPasswordEmailView;
     this.composeActivationEmailView = composeActivationEmailView;
     Object.assign(this, {
@@ -57,13 +63,52 @@ class EmailDispatcher {
       NS_EMAIL_TIMEOUT
     });
 
-    this.smtpClient = new SMTPClient({
-      host: NL_EMAIL_HOST,
-      user: NL_EMAIL_USER,
-      password: NL_EMAIL_PASS,
-      timeout: NS_EMAIL_TIMEOUT,
-      // Todo: Make configurable
-      ssl: true
+    if (NL_RESEND_PASS) {
+      if (!NL_RESEND_FROM) {
+        throw new Error('`NL_RESEND_PASS` requires `NL_RESEND_FROM`.');
+      }
+      this.resend = new Resend(NL_RESEND_PASS);
+    } else {
+      this.smtpClient = new SMTPClient({
+        host: NL_EMAIL_HOST,
+        user: NL_EMAIL_USER,
+        password: NL_EMAIL_PASS,
+        timeout: NS_EMAIL_TIMEOUT,
+        // Todo: Make configurable
+        ssl: true
+      });
+    }
+  }
+
+  /**
+   * @param {string} to
+   * @param {string} subject
+   * @param {EmailInfo[]} attachment
+   * @returns {Promise<import('emailjs').Message|
+   *   import('emailjs').MessageHeaders|
+   *   import('resend').CreateEmailResponseSuccess|null>}
+   */
+  async #send (to, subject, attachment) {
+    if (this.resend) {
+      // Resend resolves (rather than rejects) on API errors
+      const {data, error} = await this.resend.emails.send({
+        from: /** @type {string} */ (this.NL_RESEND_FROM),
+        to,
+        subject,
+        html: attachment[0].data
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    }
+
+    return await /** @type {SMTPClient} */ (this.smtpClient).sendAsync({
+      from: this.NL_EMAIL_FROM,
+      to,
+      subject,
+      text: attachment[0].data,
+      attachment
     });
   }
 
@@ -73,17 +118,15 @@ class EmailDispatcher {
    * @param {Internationalizer} _
    * @param {import('./i18n.js').LanguageDirection} langDir
    * @returns {Promise<import('emailjs').Message|
-   *   import('emailjs').MessageHeaders>}
+   *   import('emailjs').MessageHeaders|
+   *   import('resend').CreateEmailResponseSuccess|null>}
    */
-  dispatchResetPasswordLink (account, cfg, _, langDir) {
+  async dispatchResetPasswordLink (account, cfg, _, langDir) {
     const attachment = this.composeResetPasswordEmail(account, cfg, _, langDir);
-    return this.smtpClient.sendAsync({
-      from: this.NL_EMAIL_FROM,
-      to: account.email,
-      subject: /** @type {string} */ (_('PasswordReset')),
-      text: attachment[0].data,
-      attachment
-    });
+    const subject = /** @type {string} */ (_('PasswordReset'));
+    const to = account.email;
+
+    return await this.#send(to, subject, attachment);
   }
 
   /**
@@ -136,17 +179,15 @@ class EmailDispatcher {
    * @param {Internationalizer} _
    * @param {import('./i18n.js').LanguageDirection} langDir
    * @returns {Promise<import('emailjs').Message|
-   *   import('emailjs').MessageHeaders>}
+   *   import('emailjs').MessageHeaders|
+   *   import('resend').CreateEmailResponseSuccess|null>}
    */
-  dispatchActivationLink (account, cfg, _, langDir) {
+  async dispatchActivationLink (account, cfg, _, langDir) {
     const attachment = this.composeActivationEmail(account, cfg, _, langDir);
-    return this.smtpClient.sendAsync({
-      from: this.NL_EMAIL_FROM,
-      to: /** @type {string} */ (account.email),
-      subject: /** @type {string} */ (_('AccountActivation')),
-      text: attachment[0].data,
-      attachment
-    });
+    const to = /** @type {string} */ (account.email);
+    const subject = /** @type {string} */ (_('AccountActivation'));
+
+    return await this.#send(to, subject, attachment);
   }
 
   /**

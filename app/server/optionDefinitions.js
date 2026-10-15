@@ -23,6 +23,8 @@ const pkg = JSON.parse(
  *   NL_EMAIL_FROM: string,
  *   NS_EMAIL_TIMEOUT: number,
  *   NL_SITE_URL: string,
+ *   NL_RESEND_FROM?: string,
+ *   NL_RESEND_PASS?: string,
  *   PORT: number,
  *   secret: string,
  *   cwd: string,
@@ -92,7 +94,8 @@ const optionDefinitions = [
   },
   {
     name: 'NL_EMAIL_PASS', type: String,
-    description: 'Email password (for `NL_EMAIL_USER`). Required; no defaults.',
+    description: 'Email password (for `NL_EMAIL_USER`). Required unless ' +
+      'using NL_RESEND_PASS; no defaults.',
     typeLabel: '{underline pass}'
   },
   {
@@ -102,7 +105,8 @@ const optionDefinitions = [
   },
   {
     name: 'NL_EMAIL_FROM', alias: 'f', type: String,
-    description: 'Email "from". Required; no defaults.',
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    description: 'Email "from". Required unless using `NL_RESEND_FROM`; no defaults.',
     typeLabel: '{underline from}'
   },
   {
@@ -116,6 +120,17 @@ const optionDefinitions = [
     description: 'Email site URL. Base URL added within password reset and ' +
       'activation emails. Required; no defaults.',
     typeLabel: '{underline url}'
+  },
+  {
+    name: 'NL_RESEND_FROM', type: String,
+    description: 'Alternative to NL_EMAIL_FROM if using `resend` service.',
+    typeLabel: '{underline from}'
+  },
+  {
+    name: 'NL_RESEND_PASS', type: String,
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    description: 'Alternative to `NL_EMAIL_PASS`. `resend` service password. No defaults.',
+    typeLabel: '{underline pass}'
   },
   {
     name: 'PORT', type: Number,
