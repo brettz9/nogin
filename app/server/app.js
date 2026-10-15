@@ -89,7 +89,7 @@ const __dirname = getDirname(import.meta.url);
  * @returns {Promise<void>}
  */
 const createServer = async function (options) {
-  // We can't add an internationaalized log that we are awaiting the loggers!
+  // We can't add an internationalized log that we are awaiting the loggers!
   const [log, errorLog] = await Promise.all([
     getLogger(options),
     getLogger({...options, errorLog: true})
