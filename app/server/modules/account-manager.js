@@ -1642,42 +1642,43 @@ class AccountManager {
       },
       {upsert: false, returnDocument: 'after'}
     );
-    if (data.newPrivilegeName !== data.privilegeName) {
-      await /** @type {import('mongodb').Collection<GroupInfo>} */ (
-        this.groups
-      ).updateMany(
-        {privilegeIDs: data.privilegeName},
-        {$set: {'privilegeIDs.$': data.newPrivilegeName}}
-      );
-      await /** @type {import('mongodb').Collection<GroupInfo>} */ (
-        this.groups
-      ).updateMany(
-        {'privilegeIDs.privilegeName': data.privilegeName},
-        {$set: {
-          'privilegeIDs.$[assignment].privilegeName': data.newPrivilegeName
-        }},
-        {arrayFilters: [{
-          'assignment.privilegeName': data.privilegeName
-        }]}
-      );
-      await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
-        this.accounts
-      ).updateMany(
-        {privilegeIDs: data.privilegeName},
-        {$set: {'privilegeIDs.$': data.newPrivilegeName}}
-      );
-      await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
-        this.accounts
-      ).updateMany(
-        {'privilegeIDs.privilegeName': data.privilegeName},
-        {$set: {
-          'privilegeIDs.$[assignment].privilegeName': data.newPrivilegeName
-        }},
-        {arrayFilters: [{
-          'assignment.privilegeName': data.privilegeName
-        }]}
-      );
+    if (data.newPrivilegeName === data.privilegeName) {
+      return;
     }
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).updateMany(
+      {privilegeIDs: data.privilegeName},
+      {$set: {'privilegeIDs.$': data.newPrivilegeName}}
+    );
+    await /** @type {import('mongodb').Collection<GroupInfo>} */ (
+      this.groups
+    ).updateMany(
+      {'privilegeIDs.privilegeName': data.privilegeName},
+      {$set: {
+        'privilegeIDs.$[assignment].privilegeName': data.newPrivilegeName
+      }},
+      {arrayFilters: [{
+        'assignment.privilegeName': data.privilegeName
+      }]}
+    );
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {privilegeIDs: data.privilegeName},
+      {$set: {'privilegeIDs.$': data.newPrivilegeName}}
+    );
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {'privilegeIDs.privilegeName': data.privilegeName},
+      {$set: {
+        'privilegeIDs.$[assignment].privilegeName': data.newPrivilegeName
+      }},
+      {arrayFilters: [{
+        'assignment.privilegeName': data.privilegeName
+      }]}
+    );
   }
 
   /**

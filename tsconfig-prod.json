@@ -1,19 +1,11 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2024"],
     "types": ["jquery"],
-    "moduleResolution": "nodenext",
-    "module": "NodeNext",
-    "allowJs": true,
-    "checkJs": true,
     "noEmit": false,
     "emitDeclarationOnly": true,
     "declaration": true,
-    "declarationMap": true,
-    "strict": true,
-    "target": "es2024",
-    "outDir": "dist"
+    "declarationMap": true
   },
-  "include": ["app/**/*.js", "bin/**/*.js", "./typings/Nogin.d.ts", "./typings/ExpressSessionUser.d.ts", "./typings/CypressCoverage.d.ts", "./typings/ExpressHasPrivilege.d.ts"],
-  "exclude": ["node_modules"]
+  "include": ["app/**/*.js", "bin/**/*.js", "./typings/Nogin.d.ts", "./typings/ExpressSessionUser.d.ts", "./typings/CypressCoverage.d.ts", "./typings/ExpressHasPrivilege.d.ts"]
 }

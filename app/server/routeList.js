@@ -41,9 +41,8 @@ const getPrivilegeValues = (infos) => {
     if (info) {
       privileges.set(
         info.privilegeName,
-        info.type && info.type !== 'boolean'
-          ? /** @type {PrivilegeValue} */ (info.value)
-          : true
+        (!info.type || info.type === 'boolean') ||
+        /** @type {PrivilegeValue} */ (info.value)
       );
     }
     return privileges;
@@ -234,10 +233,7 @@ const routeList = async (app, config) => {
       user
         // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
         ? am.getGroupForUser(user).then((groupName) => {
-          if (!groupName) {
-            return null;
-          }
-          return am.getPrivilegesForGroup(groupName);
+          return !groupName ? null : am.getPrivilegesForGroup(groupName);
         })
         : null,
       // A still-live session may reference an account that no longer

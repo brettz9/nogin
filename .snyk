@@ -2,12 +2,9 @@
 version: v1.22.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
+  SNYK-JS-BRACES-19963945:
+    - '*':
+      reason: 'Just a devDep.'
+      expires: 9999-01-01
 # patches apply the minimum changes required to fix a vulnerability
 patch:
-  SNYK-JS-LODASH-567746:
-    - npm-consider > inquirer > lodash:
-        patched: '2020-06-27T01:57:38.135Z'
-    - jsdom > request-promise-native > request-promise-core > lodash:
-        patched: '2020-06-27T01:57:38.135Z'
-    - inquirer > lodash:
-        patched: '2020-06-27T01:57:38.135Z'

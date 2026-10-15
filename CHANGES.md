@@ -3,6 +3,7 @@
 ## 8.4.0
 
 - feat: allow sending email with `resend` (untested)
+- chore: update csurf, command-line-basics, express, express-rate-limit, jsdom, mongodb, resend, uuid, devDeps.
 
 ## 8.3.0
 

@@ -555,10 +555,9 @@ describe('Programmatic', function () {
           // @ts-expect-error Testing defensive database failures
           am.accounts.findOne = () => {
             accountLookup++;
-            if (accountLookup === 1) {
-              return Promise.reject(new Error('database-read-failed'));
-            }
-            return Promise.resolve(null);
+            return accountLookup === 1
+              ? Promise.reject(new Error('database-read-failed'))
+              : Promise.resolve(null);
           };
           await am.addNewAccount({
             user: 'lookupFailureOne', email: 'lookup1@example.name',
@@ -569,10 +568,9 @@ describe('Programmatic', function () {
           // @ts-expect-error Testing defensive database failures
           am.accounts.findOne = () => {
             accountLookup++;
-            if (accountLookup === 2) {
-              return Promise.reject(new Error('database-read-failed'));
-            }
-            return Promise.resolve(null);
+            return accountLookup === 2
+              ? Promise.reject(new Error('database-read-failed'))
+              : Promise.resolve(null);
           };
           await am.addNewAccount({
             user: 'lookupFailureTwo', email: 'lookup2@example.name',

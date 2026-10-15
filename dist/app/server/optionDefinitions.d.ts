@@ -12,6 +12,8 @@ export type MainOptionDefinitions = {
     NL_EMAIL_FROM: string;
     NS_EMAIL_TIMEOUT: number;
     NL_SITE_URL: string;
+    NL_RESEND_FROM?: string;
+    NL_RESEND_PASS?: string;
     PORT: number;
     secret: string;
     cwd: string;

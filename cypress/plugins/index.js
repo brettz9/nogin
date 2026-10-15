@@ -617,10 +617,9 @@ const exprt = (on, config) => {
      * @returns {Promise<EnvelopeMessage[]|null>}
      */
     getEmails () {
-      if (config.env.disableEmailChecking) {
-        return Promise.resolve(null);
-      }
-      return getEmails();
+      return config.env.disableEmailChecking
+        ? Promise.resolve(null)
+        : getEmails();
     },
 
     /**
@@ -629,10 +628,7 @@ const exprt = (on, config) => {
      * tasks; see {@link https://github.com/cypress-io/cypress/issues/6241}.
      */
     deleteEmails () {
-      if (config.env.disableEmailChecking) {
-        return null;
-      }
-      return deleteEmails();
+      return config.env.disableEmailChecking ? null : deleteEmails();
     },
 
     /**

@@ -42,13 +42,11 @@ const layout = ({
           // eslint-disable-next-line @stylistic/max-len -- Long
           // eslint-disable-next-line unicorn/text-encoding-identifier-case -- Required with hyphen
           ['meta', {charset: 'utf-8'}],
-          ...(csrfToken
-            ? [
-              ['meta', {
-                name: 'csrf-token',
-                content: csrfToken
-              }]
-            ]
+          (csrfToken
+            ? ['meta', {
+              name: 'csrf-token',
+              content: csrfToken
+            }]
             : ['']
           ),
           ['title', [title]],

@@ -1,4 +1,5 @@
 import { SMTPClient } from 'emailjs';
+import { Resend } from 'resend';
 export type EmailInfo = {
     data: string;
     alternative: boolean;
@@ -26,6 +27,8 @@ export type EmailDispatcherConfig = {
     NL_EMAIL_FROM: string;
     NL_SITE_URL: string;
     NS_EMAIL_TIMEOUT: number;
+    NL_RESEND_FROM?: string;
+    NL_RESEND_PASS?: string;
     composeResetPasswordEmailView: import('../views/composeResetPasswordEmail.js').ComposeResetPasswordEmail;
     composeActivationEmailView: import('../views/composeActivationEmail.js').ComposeActivationEmail;
 };
@@ -38,6 +41,8 @@ export type Internationalizer = import('intl-dom').I18NCallback<string>;
  * @property {string} NL_EMAIL_FROM
  * @property {string} NL_SITE_URL
  * @property {number} NS_EMAIL_TIMEOUT
+ * @property {string} [NL_RESEND_FROM]
+ * @property {string} [NL_RESEND_PASS]
  * @property {import('../views/composeResetPasswordEmail.js').
  *   ComposeResetPasswordEmail} composeResetPasswordEmailView
  * @property {import('../views/composeActivationEmail.js').
@@ -50,11 +55,14 @@ export type Internationalizer = import('intl-dom').I18NCallback<string>;
  * Class to send emails.
  */
 declare class EmailDispatcher {
+    #private;
     NL_SITE_URL: string;
     NL_EMAIL_FROM: string;
+    NL_RESEND_FROM: string | undefined;
     composeResetPasswordEmailView: import("../views/composeResetPasswordEmail.js").ComposeResetPasswordEmail;
     composeActivationEmailView: import("../views/composeActivationEmail.js").ComposeActivationEmail;
-    smtpClient: SMTPClient;
+    resend: Resend | undefined;
+    smtpClient: SMTPClient | undefined;
     /**
      * Sets up config and connects to server.
      * @param {EmailDispatcherConfig} config
@@ -66,9 +74,10 @@ declare class EmailDispatcher {
      * @param {Internationalizer} _
      * @param {import('./i18n.js').LanguageDirection} langDir
      * @returns {Promise<import('emailjs').Message|
-     *   import('emailjs').MessageHeaders>}
+     *   import('emailjs').MessageHeaders|
+     *   import('resend').CreateEmailResponseSuccess|null>}
      */
-    dispatchResetPasswordLink(account: UserAccountInfo, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders>;
+    dispatchResetPasswordLink(account: UserAccountInfo, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders | import('resend').CreateEmailResponseSuccess | null>;
     /**
      * @typedef {object} EmailInfo
      * @property {string} data
@@ -104,13 +113,14 @@ declare class EmailDispatcher {
      * @param {Internationalizer} _
      * @param {import('./i18n.js').LanguageDirection} langDir
      * @returns {Promise<import('emailjs').Message|
-     *   import('emailjs').MessageHeaders>}
+     *   import('emailjs').MessageHeaders|
+     *   import('resend').CreateEmailResponseSuccess|null>}
      */
     dispatchActivationLink(account: Partial<import('./account-manager.js').AccountInfo> & {
         name: string;
         user: string;
         activationCode: string;
-    }, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders>;
+    }, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders | import('resend').CreateEmailResponseSuccess | null>;
     /**
      * @param {Partial<import('./account-manager.js').AccountInfo> & {
      *   name: string,

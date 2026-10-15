@@ -5,6 +5,8 @@ export type RouteConfigFromOptions = {
     NL_EMAIL_HOST: string;
     NL_EMAIL_FROM: string;
     NS_EMAIL_TIMEOUT: number;
+    NL_RESEND_FROM?: string;
+    NL_RESEND_PASS?: string;
     NL_SITE_URL: string;
     cwd: string;
     localesBasePath: string;

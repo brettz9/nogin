@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["esnext"],
-    "types": ["mocha", "jquery"],
+    "types": ["mocha", "jquery", "react"],
     "moduleResolution": "nodenext",
     "module": "NodeNext",
     "allowJs": true,
@@ -11,7 +11,8 @@
     "declarationMap": true,
     "strict": true,
     "target": "es2024",
-    "outDir": "dist"
+    "outDir": "dist",
+    "skipLibCheck": true // https://github.com/birdofpreyru/csurf/issues/16
   },
   "include": ["app/**/*.js", "bin/**/*.js", "app/server/app.js", "test/**/*.js", "./typings/ExpressSessionUser.d.ts", "./typings/ExpressHasPrivilege.d.ts", "./typings/Nogin.d.ts", "./typings/CypressCoverage.d.ts"],
   "exclude": ["node_modules"]

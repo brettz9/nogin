@@ -204,10 +204,9 @@ function getAccountInfo (options) {
  */
 const removeAccounts = async (options) => {
   const am = await getAccountManager(options);
-  if (options.all) {
-    return am.deleteAllAccounts();
-  }
-  return am.deleteAccounts(getAccountInfo(options));
+  return options.all
+    ? am.deleteAllAccounts()
+    : am.deleteAccounts(getAccountInfo(options));
 };
 
 /**
@@ -217,10 +216,9 @@ const removeAccounts = async (options) => {
  */
 const readAccounts = async (options = {}) => {
   const am = await getAccountManager(options);
-  if (options.user) {
-    return am.getRecords(getAccountInfo(options));
-  }
-  return am.getAllRecords();
+  return options.user
+    ? am.getRecords(getAccountInfo(options))
+    : am.getAllRecords();
 };
 
 /**
