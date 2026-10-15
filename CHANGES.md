@@ -1,5 +1,9 @@
 # CHANGES for nogin
 
+## ?
+
+- chore: update `@dr.pogodin/csurf`, `jsdom`, devDep.
+
 ## 8.4.0
 
 - feat: allow sending email with `resend` (untested)
