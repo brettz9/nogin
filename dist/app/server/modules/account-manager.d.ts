@@ -1,6 +1,7 @@
 /**
  * @file Low-level operations on user accounts and groups.
  */
+export declare const builtInGroups: Set<string>;
 export type AccountInfo = {
     /**
      * Auto-set
@@ -49,6 +50,19 @@ export type AccountInfo = {
      */
     passKey?: string;
     privilegeIDs?: (string | PrivilegeAssignment)[];
+    /**
+     * Additional, expiring
+     * group memberships (e.g., from paid offers), separate from the single
+     * permanent group a user belongs to via `GroupInfo.userIDs`.
+     */
+    groupMemberships?: GroupMembership[];
+};
+export type GroupMembership = {
+    groupName: string;
+    /**
+     * Timestamp after which the membership lapses
+     */
+    expiresAt: number;
 };
 export type AccountInfoFilter = {
     user?: any;
@@ -77,7 +91,85 @@ export type PrivilegeValue = string | number | unknown[] | {
 export type PrivilegeAssignment = {
     privilegeName: string;
     value: PrivilegeValue;
+    /**
+     * Timestamp after which the assignment no
+     * longer applies; absent means permanent. Boolean privileges with an expiry
+     * are stored in this object form (with `value: true`).
+     */
+    expiresAt?: number;
 };
+/**
+ * @typedef {object} AccountInfo
+ * @property {string} [_id] Auto-set
+ * @property {string} [id]
+ * @property {string} user
+ * @property {string} name
+ * @property {string} email
+ * @property {string} country
+ * @property {string} pass Will be overwritten with hash
+ * @property {number} [passVer] Auto-generated version.
+ * @property {number} [date] Auto-generated timestamp.
+ * @property {boolean} [activated] Auto-set
+ * @property {string} [activationCode] Auto-set
+ * @property {string} [unactivatedEmail]
+ * @property {number} [activationRequestDate] Timestamp
+ * @property {string} [cookie] Auto-set
+ * @property {string} [ip] Auto-set
+ * @property {string} [passKey] Auto-set and unset
+ * @property {(string|PrivilegeAssignment)[]} [privilegeIDs]
+ * @property {GroupMembership[]} [groupMemberships] Additional, expiring
+ *   group memberships (e.g., from paid offers), separate from the single
+ *   permanent group a user belongs to via `GroupInfo.userIDs`.
+ */
+/**
+ * @typedef {object} GroupMembership
+ * @property {string} groupName
+ * @property {number} expiresAt Timestamp after which the membership lapses
+ */
+/**
+ * @typedef {object} AccountInfoFilter
+ * @property {Object<"$in",string[]>} [user]
+ * @property {Object<"$in",string[]>} [_id]
+ * @property {Object<"$in",string[]>} [name]
+ * @property {Object<"$in",string[]>} [email]
+ * @property {Object<"$in",string[]>} [country]
+ * @property {Object<"$in",string[]>} [pass]
+ * @property {Object<"$in",number[]>} [passVer]
+ * @property {Object<"$in",number[]>} [date] Timestamp
+ * @property {Object<"$in",boolean[]>} [activated]
+ * @property {Object<"$in",string[]>} [activationCode]
+ * @property {Object<"$in",string[]>} [unactivatedEmail]
+ * @property {Object<"$in",number[]>} [activationRequestDate] Timestamp
+ */
+/**
+ * @typedef {"boolean"|"string"|"number"|"array"|"object"} PrivilegeType
+ */
+/**
+ * @typedef {string|number|unknown[]|{[key: string]: unknown}} PrivilegeValue
+ */
+/**
+ * @typedef {object} PrivilegeAssignment
+ * @property {string} privilegeName
+ * @property {PrivilegeValue} value
+ * @property {number} [expiresAt] Timestamp after which the assignment no
+ *   longer applies; absent means permanent. Boolean privileges with an expiry
+ *   are stored in this object form (with `value: true`).
+ */
+/**
+ * @param {string|PrivilegeAssignment} assignment
+ * @param {number} [now]
+ * @returns {boolean}
+ */
+export declare const isExpiredAssignment: (assignment: string | PrivilegeAssignment, now?: number) => boolean;
+/**
+ * Checks whether `value` is a valid assignment value for the given non-boolean
+ * privilege `type`. Array and object privileges accept any parsed JSON of the
+ * matching kind.
+ * @param {PrivilegeType} type
+ * @param {unknown} value
+ * @returns {boolean}
+ */
+export declare const isValidPrivilegeValue: (type: PrivilegeType, value: unknown) => boolean;
 export type GroupInfo = {
     /**
      * Auto-set
@@ -254,6 +346,32 @@ declare class AccountManager {
         newGroupName: string;
     }): Promise<void>;
     /**
+     * Adds an expiring membership in `groupName` without altering the user's
+     * permanent group. Never shortens an existing active membership.
+     * @param {{userID: string, groupName: string, expiresAt: number}} data
+     * @returns {Promise<void>}
+     */
+    grantGroupMembershipUntil(data: {
+        userID: string;
+        groupName: string;
+        expiresAt: number;
+    }): Promise<void>;
+    /**
+     * @param {{userID: string, groupName: string}} data
+     * @returns {Promise<void>}
+     */
+    removeGroupMembershipFromUser(data: {
+        userID: string;
+        groupName: string;
+    }): Promise<void>;
+    /**
+     * Privileges from the user's active expiring group memberships. Memberships
+     * in groups that no longer exist are ignored.
+     * @param {string} userID
+     * @returns {Promise<PrivilegeInfo[]>}
+     */
+    getPrivilegesForTimedGroups(userID: string): Promise<PrivilegeInfo[]>;
+    /**
      * @param {Partial<GroupInfo> & {userID: string}} data
      * @returns {Promise<void>}
      */
@@ -314,7 +432,8 @@ declare class AccountManager {
      * @param {{
      *   userID: string,
      *   privilegeName: string,
-     *   value?: PrivilegeValue
+     *   value?: PrivilegeValue,
+     *   expiresAt?: number
      * }} data
      * @returns {Promise<void>}
      */
@@ -322,7 +441,32 @@ declare class AccountManager {
         userID: string;
         privilegeName: string;
         value?: PrivilegeValue;
+        expiresAt?: number;
     }): Promise<void>;
+    /**
+     * Grants a user privilege until `expiresAt`, but never shortens an existing
+     * grant (including a permanent one).
+     * @param {{
+     *   userID: string,
+     *   privilegeName: string,
+     *   expiresAt: number,
+     *   value?: PrivilegeValue
+     * }} data
+     * @returns {Promise<void>}
+     */
+    grantPrivilegeUntil(data: {
+        userID: string;
+        privilegeName: string;
+        expiresAt: number;
+        value?: PrivilegeValue;
+    }): Promise<void>;
+    /**
+     * Removes expired assignments from users and groups. Housekeeping only,
+     * as reads already ignore expired assignments.
+     * @param {number} [now]
+     * @returns {Promise<void>}
+     */
+    pruneExpiredPrivileges(now?: number): Promise<void>;
     /**
      * @param {{userID: string, privilegeName: string}} data
      * @returns {Promise<void>}

@@ -31,6 +31,7 @@ export type EmailDispatcherConfig = {
     NL_RESEND_PASS?: string;
     composeResetPasswordEmailView: import('../views/composeResetPasswordEmail.js').ComposeResetPasswordEmail;
     composeActivationEmailView: import('../views/composeActivationEmail.js').ComposeActivationEmail;
+    composePurchaseReceiptEmailView?: import('../views/composePurchaseReceiptEmail.js').ComposePurchaseReceiptEmail;
 };
 export type Internationalizer = import('intl-dom').I18NCallback<string>;
 /**
@@ -47,6 +48,8 @@ export type Internationalizer = import('intl-dom').I18NCallback<string>;
  *   ComposeResetPasswordEmail} composeResetPasswordEmailView
  * @property {import('../views/composeActivationEmail.js').
  *   ComposeActivationEmail} composeActivationEmailView
+ * @property {import('../views/composePurchaseReceiptEmail.js').
+ *   ComposePurchaseReceiptEmail} [composePurchaseReceiptEmailView]
  */
 /**
  * @typedef {import('intl-dom').I18NCallback<string>} Internationalizer
@@ -61,6 +64,7 @@ declare class EmailDispatcher {
     NL_RESEND_FROM: string | undefined;
     composeResetPasswordEmailView: import("../views/composeResetPasswordEmail.js").ComposeResetPasswordEmail;
     composeActivationEmailView: import("../views/composeActivationEmail.js").ComposeActivationEmail;
+    composePurchaseReceiptEmailView: import("../views/composePurchaseReceiptEmail.js").ComposePurchaseReceiptEmail;
     resend: Resend | undefined;
     smtpClient: SMTPClient | undefined;
     /**
@@ -137,6 +141,31 @@ declare class EmailDispatcher {
         user: string;
         activationCode: string;
     }, { fromText, fromURL }: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): EmailInfo[];
+    /**
+     * @param {{name: string, email: string}} account
+     * @param {import('./offer-manager.js').OfferInfo} offer
+     * @param {FromEmailConfig} cfg
+     * @param {Internationalizer} _
+     * @param {import('./i18n.js').LanguageDirection} langDir
+     * @returns {Promise<import('emailjs').Message|
+     *   import('emailjs').MessageHeaders|
+     *   import('resend').CreateEmailResponseSuccess|null>}
+     */
+    dispatchPurchaseReceipt(account: {
+        name: string;
+        email: string;
+    }, offer: import('./offer-manager.js').OfferInfo, cfg: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): Promise<import('emailjs').Message | import('emailjs').MessageHeaders | import('resend').CreateEmailResponseSuccess | null>;
+    /**
+     * @param {{name: string}} account
+     * @param {import('./offer-manager.js').OfferInfo} offer
+     * @param {FromEmailConfig} cfg
+     * @param {Internationalizer} _
+     * @param {import('./i18n.js').LanguageDirection} langDir
+     * @returns {EmailInfo[]}
+     */
+    composePurchaseReceiptEmail({ name }: {
+        name: string;
+    }, offer: import('./offer-manager.js').OfferInfo, { fromText, fromURL }: FromEmailConfig, _: Internationalizer, langDir: import('./i18n.js').LanguageDirection): EmailInfo[];
 }
 export default EmailDispatcher;
 //# sourceMappingURL=email-dispatcher.d.ts.map

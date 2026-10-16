@@ -85,7 +85,7 @@ declare const layoutAndTitleGetter: (config: import('./app.js').RouteConfig, jml
  * @returns {Promise<void>}
  */
 declare const checkLocaleRoutes: (getRoutes: RouteGetter, localesBasePath: string) => Promise<void>;
-export type Route = "activation" | "lostPassword" | *   "resetPassword" | "users" | "delete" | "reset" | "coverage" | "accessAPI" | *   "groups" | "privileges" | "signup" | "root" | "home" | "logout";
+export type Route = "activation" | "lostPassword" | "resetPassword" | "users" | "delete" | "reset" | "coverage" | "accessAPI" | "groups" | "privileges" | "offers" | "plans" | "purchased" | "checkout" | "portal" | "signup" | "root" | "home" | "logout";
 /**
  * @param {string[]} customRoute Equal-separated locale=route=path
  * @returns {RouteGetter}

@@ -7,6 +7,9 @@ export type RouteConfigFromOptions = {
     NS_EMAIL_TIMEOUT: number;
     NL_RESEND_FROM?: string;
     NL_RESEND_PASS?: string;
+    NL_STRIPE_SECRET?: string;
+    NL_STRIPE_PUBLISHABLE?: string;
+    NL_STRIPE_WEBHOOK_SECRET?: string;
     NL_SITE_URL: string;
     cwd: string;
     localesBasePath: string;
@@ -16,6 +19,7 @@ export type RouteConfigFromOptions = {
     crossDomainJSRedirects: boolean;
     composeResetPasswordEmailView: string;
     composeActivationEmailView: string;
+    composePurchaseReceiptEmailView: string;
     requireName: boolean;
     router: string;
     fallback: string;
@@ -32,6 +36,7 @@ export type RouteConfigFromOptions = {
     fromText: string;
     fromURL: string;
     SERVE_COVERAGE: boolean;
+    NL_PRUNE_INTERVAL?: number;
     disableXSRF: boolean;
     csurfOptions: string;
     signupAgreement?: string | {

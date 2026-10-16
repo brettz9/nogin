@@ -41,6 +41,30 @@ declare class MongoDB extends DBAbstraction {
      * >} See {@link https://mongodb.github.io/node-mongodb-native/3.4/api/Collection.html}.
      */
     getPrivileges(): Promise<import('mongodb').Collection<import('../account-manager.js').PrivilegeInfo>>;
+    /**
+     * @returns {Promise<
+     *   import('mongodb').Collection<
+     *     import('../offer-manager.js').OfferInfo
+     *   >
+     * >}
+     */
+    getOffers(): Promise<import('mongodb').Collection<import('../offer-manager.js').OfferInfo>>;
+    /**
+     * @returns {Promise<
+     *   import('mongodb').Collection<
+     *     import('../offer-manager.js').PurchaseInfo
+     *   >
+     * >}
+     */
+    getPurchases(): Promise<import('mongodb').Collection<import('../offer-manager.js').PurchaseInfo>>;
+    /**
+     * @returns {Promise<
+     *   import('mongodb').Collection<
+     *     import('../offer-manager.js').ProcessedEventInfo
+     *   >
+     * >}
+     */
+    getProcessedEvents(): Promise<import('mongodb').Collection<import('../offer-manager.js').ProcessedEventInfo>>;
 }
 export default MongoDB;
 export { MongoDB };

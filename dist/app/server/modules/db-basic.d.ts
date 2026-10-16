@@ -5,7 +5,7 @@
  * @todo Add methods for group creation/editing
  */
 import AccountManager from './account-manager.js';
-export type OtherAccountProperty = "name" | "email" | "country" | "pass" | "passVer" | *   "date" | "activated" | "activationCode" | "unactivatedEmail" | *   "activationRequestDate";
+export type OtherAccountProperty = "name" | "email" | "country" | "pass" | "passVer" | "date" | "activated" | "activationCode" | "unactivatedEmail" | "activationRequestDate";
 /**
  * @param {import('./db-factory.js').DbConfig &
  *  import('../../../bin/common-definitions.js').CommonDefinitions} options

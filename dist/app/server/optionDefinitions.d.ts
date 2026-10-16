@@ -14,6 +14,9 @@ export type MainOptionDefinitions = {
     NL_SITE_URL: string;
     NL_RESEND_FROM?: string;
     NL_RESEND_PASS?: string;
+    NL_STRIPE_SECRET?: string;
+    NL_STRIPE_PUBLISHABLE?: string;
+    NL_STRIPE_WEBHOOK_SECRET?: string;
     PORT: number;
     secret: string;
     cwd: string;
@@ -24,6 +27,7 @@ export type MainOptionDefinitions = {
     crossDomainJSRedirects: boolean;
     composeResetPasswordEmailView: string;
     composeActivationEmailView: string;
+    composePurchaseReceiptEmailView: string;
     requireName: boolean;
     staticDir: string[];
     middleware: string[];
@@ -45,6 +49,7 @@ export type MainOptionDefinitions = {
     fromURL: string;
     SERVE_COVERAGE: boolean;
     RATE_LIMIT: number;
+    NL_PRUNE_INTERVAL: number;
     disableRateLimit: boolean;
     disableXSRF: boolean;
     noHelmet: boolean;

@@ -80,6 +80,31 @@ declare class DBAbstraction {
      * >}
      */
     getGroups(): Promise<import('mongodb').Collection<import('./account-manager.js').GroupInfo>>;
+    /**
+     * @abstract
+     * @returns {Promise<
+     *   import('mongodb').Collection<import('./offer-manager.js').OfferInfo>
+     * >}
+     */
+    getOffers(): Promise<import('mongodb').Collection<import('./offer-manager.js').OfferInfo>>;
+    /**
+     * @abstract
+     * @returns {Promise<
+     *   import('mongodb').Collection<import('./offer-manager.js').PurchaseInfo>
+     * >}
+     */
+    getPurchases(): Promise<import('mongodb').Collection<import('./offer-manager.js').PurchaseInfo>>;
+    /**
+     * Payment-processor events already handled (keyed by event ID in `_id`),
+     * so webhook redeliveries are idempotent.
+     * @abstract
+     * @returns {Promise<
+     *   import('mongodb').Collection<
+     *     import('./offer-manager.js').ProcessedEventInfo
+     *   >
+     * >}
+     */
+    getProcessedEvents(): Promise<import('mongodb').Collection<import('./offer-manager.js').ProcessedEventInfo>>;
 }
 export default DBAbstraction;
 //# sourceMappingURL=db-abstraction.d.ts.map

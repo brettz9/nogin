@@ -1,0 +1,1 @@
+{"version":3,"file":"purchased.d.ts","sourceRoot":"","sources":["../../../../app/server/views/purchased.js"],"names":[],"mappings":"AAAA;;;;;;;GAOG;AACH,QAAA,MAAM,SAAS,0CAPJ;IACN,CAAC,EAAE,OAAO,UAAU,EAAE,YAAY,CAAC;IACnC,MAAM,EAAE,OAAO,kBAAkB,EAAE,cAAc,CAAC;IAClD,WAAW,EAAE,MAAM,CAAC;IACpB,SAAS,EAAE,MAAM,CAAA;CAClB,4CAaH,CAAC;eAEa,SAAS"}

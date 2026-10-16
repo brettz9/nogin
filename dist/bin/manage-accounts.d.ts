@@ -1,7 +1,7 @@
-export type ManageAccountVerb = "view" | "read" | "delete" | "remove" | "update" | "listIndexes" | *   "create" | "add";
+export type ManageAccountVerb = "view" | "read" | "delete" | "remove" | "update" | "listIndexes" | "create" | "add";
 /**
- * @typedef {"view"|"read"|"delete"|"remove"|"update"|"listIndexes"|
- *   "create"|"add"} ManageAccountVerb
+ * @typedef {"view"|"read"|"delete"|"remove"|"update"|"listIndexes"
+ *   |"create"|"add"} ManageAccountVerb
  */
 /**
  * @param {ManageAccountVerb} verb
