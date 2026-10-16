@@ -1,6 +1,6 @@
 # CHANGES for nogin
 
-## ?
+## 8.5.0-beta.1
 
 - feat: paid offers via Stripe (optional; `NL_STRIPE_SECRET`,
     `NL_STRIPE_PUBLISHABLE`, `NL_STRIPE_WEBHOOK_SECRET`). Admins define
