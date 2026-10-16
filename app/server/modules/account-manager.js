@@ -12,7 +12,7 @@ import {
   saltAndHash, validatePasswordV1
 } from './crypto.js';
 
-const builtInGroups = new Set([
+export const builtInGroups = new Set([
   'nogin.loggedInUsers',
   'nogin.guests'
 ]);
@@ -26,7 +26,9 @@ const builtInPrivileges = new Set([
   'nogin.editGroup',
   'nogin.addUserToGroup',
   'nogin.removeUserFromGroup',
-  'nogin.readGroup'
+  'nogin.readGroup',
+  'nogin.readOffers',
+  'nogin.editOffers'
 ]);
 
 /**
@@ -48,6 +50,15 @@ const builtInPrivileges = new Set([
  * @property {string} [ip] Auto-set
  * @property {string} [passKey] Auto-set and unset
  * @property {(string|PrivilegeAssignment)[]} [privilegeIDs]
+ * @property {GroupMembership[]} [groupMemberships] Additional, expiring
+ *   group memberships (e.g., from paid offers), separate from the single
+ *   permanent group a user belongs to via `GroupInfo.userIDs`.
+ */
+
+/**
+ * @typedef {object} GroupMembership
+ * @property {string} groupName
+ * @property {number} expiresAt Timestamp after which the membership lapses
  */
 
 /**
@@ -78,7 +89,21 @@ const builtInPrivileges = new Set([
  * @typedef {object} PrivilegeAssignment
  * @property {string} privilegeName
  * @property {PrivilegeValue} value
+ * @property {number} [expiresAt] Timestamp after which the assignment no
+ *   longer applies; absent means permanent. Boolean privileges with an expiry
+ *   are stored in this object form (with `value: true`).
  */
+
+/**
+ * @param {string|PrivilegeAssignment} assignment
+ * @param {number} [now]
+ * @returns {boolean}
+ */
+export const isExpiredAssignment = (assignment, now = Date.now()) => {
+  return typeof assignment !== 'string' &&
+    typeof assignment.expiresAt === 'number' &&
+    assignment.expiresAt <= now;
+};
 
 const privilegeTypes = new Set([
   'boolean', 'string', 'number', 'array', 'object'
@@ -92,7 +117,7 @@ const privilegeTypes = new Set([
  * @param {unknown} value
  * @returns {boolean}
  */
-const isValidPrivilegeValue = (type, value) => {
+export const isValidPrivilegeValue = (type, value) => {
   switch (type) {
   case 'string':
     return typeof value === 'string';
@@ -441,6 +466,38 @@ class AccountManager {
                 privilegeName: 'nogin.readGroup',
                 description: 'Privilege to allow reading and listing ' +
                                 'of groups.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.readOffers'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.readOffers',
+                description: 'Privilege to allow reading and listing of ' +
+                  'paid offers.',
+                builtin: true
+              }
+            }
+          }
+        },
+        {
+          updateOne: {
+            filter: {
+              privilegeName: 'nogin.editOffers'
+            },
+            upsert: true,
+            update: {
+              $setOnInsert: {
+                privilegeName: 'nogin.editOffers',
+                description: 'Privilege to allow creating, editing, and ' +
+                  'archiving paid offers.',
                 builtin: true
               }
             }
@@ -827,6 +884,103 @@ class AccountManager {
       },
       {upsert: false, returnDocument: 'after'}
     );
+
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {'groupMemberships.groupName': data.groupName},
+      {$set: {'groupMemberships.$[m].groupName': data.newGroupName}},
+      {arrayFilters: [{'m.groupName': data.groupName}]}
+    );
+  }
+
+  /**
+   * Adds an expiring membership in `groupName` without altering the user's
+   * permanent group. Never shortens an existing active membership.
+   * @param {{userID: string, groupName: string, expiresAt: number}} data
+   * @returns {Promise<void>}
+   */
+  async grantGroupMembershipUntil (data) {
+    if (typeof data.groupName !== 'string' || !data.groupName) {
+      throw new Error('bad-groupname');
+    }
+    if (!Number.isFinite(data.expiresAt)) {
+      throw new TypeError('bad-expiry');
+    }
+    const group = await /**
+                         * @type {import('mongodb').Collection<
+                         *Partial<GroupInfo>
+    >} */ (this.groups).findOne({groupName: data.groupName});
+    if (!group) {
+      throw new Error('group-not-found');
+    }
+    const userFilter = {user: data.userID};
+    const user = await /**
+                        * @type {import('mongodb').Collection<
+                        *Partial<AccountInfo>
+    >} */ (this.accounts).findOne(userFilter);
+    if (!user) {
+      throw new Error('user-missing');
+    }
+    const existing = (user.groupMemberships || []).find((membership) => {
+      return membership.groupName === data.groupName &&
+        membership.expiresAt > Date.now();
+    });
+    if (existing && existing.expiresAt >= data.expiresAt) {
+      return;
+    }
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne(userFilter, {
+      $pull: {groupMemberships: {groupName: data.groupName}}
+    });
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne(userFilter, {
+      $push: {groupMemberships: {
+        groupName: data.groupName, expiresAt: data.expiresAt
+      }}
+    });
+  }
+
+  /**
+   * @param {{userID: string, groupName: string}} data
+   * @returns {Promise<void>}
+   */
+  async removeGroupMembershipFromUser (data) {
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateOne({user: data.userID}, {
+      $pull: {groupMemberships: {groupName: data.groupName}}
+    });
+  }
+
+  /**
+   * Privileges from the user's active expiring group memberships. Memberships
+   * in groups that no longer exist are ignored.
+   * @param {string} userID
+   * @returns {Promise<PrivilegeInfo[]>}
+   */
+  async getPrivilegesForTimedGroups (userID) {
+    const user = await /**
+                        * @type {import('mongodb').Collection<
+                        *Partial<AccountInfo>
+    >} */ (this.accounts).findOne({user: userID});
+    if (!user) {
+      throw new Error('user-missing');
+    }
+    const now = Date.now();
+    return (await Promise.all(
+      (user.groupMemberships || []).filter(({expiresAt}) => {
+        return expiresAt > now;
+      }).map(async ({groupName}) => {
+        try {
+          return await this.getPrivilegesForGroup(groupName);
+        } catch {
+          return [];
+        }
+      })
+    )).flat();
   }
 
   /**
@@ -1159,6 +1313,9 @@ class AccountManager {
 
     return /** @type {PrivilegeInfo[]} */ (await Promise.all(
       (o.privilegeIDs || []).map(async (assignment) => {
+        if (isExpiredAssignment(assignment)) {
+          return null;
+        }
         const privilegeName = typeof assignment === 'string'
           ? assignment
           : assignment.privilegeName;
@@ -1179,7 +1336,8 @@ class AccountManager {
    * @param {{
    *   userID: string,
    *   privilegeName: string,
-   *   value?: PrivilegeValue
+   *   value?: PrivilegeValue,
+   *   expiresAt?: number
    * }} data
    * @returns {Promise<void>}
    */
@@ -1206,11 +1364,16 @@ class AccountManager {
     if (type !== 'boolean' && !isValidPrivilegeValue(type, data.value)) {
       throw new TypeError('bad-privilege-value');
     }
-    const assignment = type === 'boolean'
+    if (data.expiresAt !== undefined && !Number.isFinite(data.expiresAt)) {
+      throw new TypeError('bad-expiry');
+    }
+    const assignment = type === 'boolean' && data.expiresAt === undefined
       ? data.privilegeName
       : {
         privilegeName: data.privilegeName,
-        value: /** @type {PrivilegeValue} */ (data.value)
+        value: type === 'boolean' ||
+        /** @type {PrivilegeValue} */ (data.value),
+        ...(data.expiresAt === undefined ? {} : {expiresAt: data.expiresAt})
       };
     const userFilter = {user: data.userID};
     // eslint-disable-next-line @stylistic/max-len -- Type cast
@@ -1233,6 +1396,70 @@ class AccountManager {
     ).updateOne(userFilter, {
       $addToSet: {privilegeIDs: assignment}
     });
+  }
+
+  /**
+   * Grants a user privilege until `expiresAt`, but never shortens an existing
+   * grant (including a permanent one).
+   * @param {{
+   *   userID: string,
+   *   privilegeName: string,
+   *   expiresAt: number,
+   *   value?: PrivilegeValue
+   * }} data
+   * @returns {Promise<void>}
+   */
+  async grantPrivilegeUntil (data) {
+    // eslint-disable-next-line @stylistic/max-len -- Type cast
+    const user = await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).findOne({user: data.userID});
+    if (!user) {
+      throw new Error('user-missing');
+    }
+    const existing = (user.privilegeIDs || []).find((assignment) => {
+      return !isExpiredAssignment(assignment) && (
+        typeof assignment === 'string'
+          ? assignment
+          : assignment.privilegeName
+      ) === data.privilegeName;
+    });
+    if (existing && (
+      typeof existing === 'string' ||
+      existing.expiresAt === undefined ||
+      existing.expiresAt >= data.expiresAt
+    )) {
+      return;
+    }
+    await this.addPrivilegeToUser(data);
+  }
+
+  /**
+   * Removes expired assignments from users and groups. Housekeeping only,
+   * as reads already ignore expired assignments.
+   * @param {number} [now]
+   * @returns {Promise<void>}
+   */
+  async pruneExpiredPrivileges (now = Date.now()) {
+    const expired = {privilegeIDs: {expiresAt: {$lte: now}}};
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {'privilegeIDs.expiresAt': {$lte: now}},
+      {$pull: expired}
+    );
+    await /** @type {import('mongodb').Collection<Partial<GroupInfo>>} */ (
+      this.groups
+    ).updateMany(
+      {'privilegeIDs.expiresAt': {$lte: now}},
+      {$pull: expired}
+    );
+    await /** @type {import('mongodb').Collection<Partial<AccountInfo>>} */ (
+      this.accounts
+    ).updateMany(
+      {'groupMemberships.expiresAt': {$lte: now}},
+      {$pull: {groupMemberships: {expiresAt: {$lte: now}}}}
+    );
   }
 
   /**
@@ -1266,6 +1493,9 @@ class AccountManager {
 
     return /** @type {PrivilegeInfo[]} */ (await Promise.all(
       (user.privilegeIDs || []).map(async (assignment) => {
+        if (isExpiredAssignment(assignment)) {
+          return null;
+        }
         const privilegeName = typeof assignment === 'string'
           ? assignment
           : assignment.privilegeName;

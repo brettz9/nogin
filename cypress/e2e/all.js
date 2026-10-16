@@ -6,6 +6,8 @@ import './delete.js';
 import './groups.js';
 import './home.js';
 import './lang.js';
+import './offers.js';
+import './plans.js';
 import './privileges.js';
 import './privileges-ui.js';
 import './reset-password.js';

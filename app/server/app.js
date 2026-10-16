@@ -39,6 +39,9 @@ import getDirname from './modules/getDirname.js';
  *   NS_EMAIL_TIMEOUT: number,
  *   NL_RESEND_FROM?: string,
  *   NL_RESEND_PASS?: string,
+ *   NL_STRIPE_SECRET?: string,
+ *   NL_STRIPE_PUBLISHABLE?: string,
+ *   NL_STRIPE_WEBHOOK_SECRET?: string,
  *   NL_SITE_URL: string,
  *   cwd: string,
  *   localesBasePath: string,
@@ -48,6 +51,7 @@ import getDirname from './modules/getDirname.js';
  *   crossDomainJSRedirects: boolean,
  *   composeResetPasswordEmailView: string,
  *   composeActivationEmailView: string,
+ *   composePurchaseReceiptEmailView: string,
  *   requireName: boolean,
  *   router: string,
  *   fallback: string,
@@ -64,6 +68,7 @@ import getDirname from './modules/getDirname.js';
  *   fromText: string,
  *   fromURL: string,
  *   SERVE_COVERAGE: boolean,
+ *   NL_PRUNE_INTERVAL?: number,
  *   disableXSRF: boolean,
  *   csurfOptions: string,
  *   signupAgreement?: string|{[locale: string]: string},
@@ -129,6 +134,9 @@ const createServer = async function (options) {
     NL_SITE_URL,
     NL_RESEND_FROM,
     NL_RESEND_PASS,
+    NL_STRIPE_SECRET,
+    NL_STRIPE_PUBLISHABLE,
+    NL_STRIPE_WEBHOOK_SECRET,
     secret,
     PORT = 3000,
     JS_DIR = '../public',
@@ -137,9 +145,11 @@ const createServer = async function (options) {
     router,
     fallback,
     RATE_LIMIT = 700,
+    NL_PRUNE_INTERVAL,
     SERVE_COVERAGE = false,
     composeResetPasswordEmailView,
     composeActivationEmailView,
+    composePurchaseReceiptEmailView,
     injectHTML,
     favicon,
     stylesheet,
@@ -203,6 +213,9 @@ const createServer = async function (options) {
   }
   // Todo: Use https://github.com/ebourmalo/cookie-encrypter also?
   app.use(cookieParser(secret));
+
+  // Stripe signature verification needs the unparsed body
+  app.use('/stripe-webhook', express.raw({type: 'application/json'}));
 
   // See https://stackoverflow.com/questions/19917401/error-request-entity-too-large
   app.use(express.json({limit: transferLimit ?? '50mb'}));
@@ -304,10 +317,15 @@ const createServer = async function (options) {
     NL_SITE_URL,
     NL_RESEND_FROM,
     NL_RESEND_PASS,
+    NL_STRIPE_SECRET,
+    NL_STRIPE_PUBLISHABLE,
+    NL_STRIPE_WEBHOOK_SECRET,
     DB_URL,
     SERVE_COVERAGE,
+    NL_PRUNE_INTERVAL,
     composeResetPasswordEmailView,
     composeActivationEmailView,
+    composePurchaseReceiptEmailView,
     dbOpts,
     injectHTML,
     favicon,

@@ -673,6 +673,21 @@
     "route_privileges": {
       "message": "/privileges"
     },
+    "route_offers": {
+      "message": "/offers"
+    },
+    "route_plans": {
+      "message": "/plans"
+    },
+    "route_purchased": {
+      "message": "/purchased"
+    },
+    "route_checkout": {
+      "message": "/checkout"
+    },
+    "route_portal": {
+      "message": "/portal"
+    },
 
     "COUNTRIES (BUSINESS LOGIC)": true,
     "PleaseSelectACountry": {

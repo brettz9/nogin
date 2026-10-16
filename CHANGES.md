@@ -2,6 +2,17 @@
 
 ## ?
 
+- feat: paid offers via Stripe (optional; `NL_STRIPE_SECRET`,
+    `NL_STRIPE_PUBLISHABLE`, `NL_STRIPE_WEBHOOK_SECRET`). Admins define
+    offers (`offers` route; `nogin.readOffers`/`nogin.editOffers`
+    privileges) granting privileges and group memberships, optionally
+    recurring with a configurable grace period. Public `plans` and
+    `purchased` pages, Stripe Checkout, billing-portal "Manage
+    subscription" button, `/stripe-webhook` (idempotent; handles renewals,
+    failures, cancellations, refunds and disputes), and a purchase receipt
+    email (`--composePurchaseReceiptEmailView`).
+- feat: expiring privileges and group memberships (`expiresAt`), filtered
+    on read and pruned periodically (`NL_PRUNE_INTERVAL`, default hourly).
 - chore: update `@dr.pogodin/csurf`, `jsdom`, devDep.
 
 ## 8.4.0

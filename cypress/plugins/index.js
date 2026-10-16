@@ -27,6 +27,7 @@ import {
 } from '../../test/utilities/EmailChecker.js';
 
 import {uuid} from '../../app/server/modules/common.js';
+import OfferManager from '../../app/server/modules/offer-manager.js';
 import {
   getAccountManager as getAccountManagerForDefaultDB,
   addAccounts as addAccountsToDefaultDB,
@@ -293,6 +294,29 @@ const exprt = (on, config) => {
       await Promise.all([
         am.groups.deleteMany({builtin: false}),
         am.privileges.deleteMany({builtin: false})
+      ]);
+      return null;
+    },
+
+    /**
+     * @param {Parameters<OfferManager['createOffer']>[0]} offer
+     * @returns {Promise<null>}
+     */
+    async addOffer (offer) {
+      const om = await new OfferManager(await getAccountManager()).connect();
+      await om.createOffer(offer);
+      return null;
+    },
+
+    /**
+     * @returns {Promise<null>}
+     */
+    async deleteAllOffers () {
+      const om = await new OfferManager(await getAccountManager()).connect();
+      await Promise.all([
+        om.offers?.deleteMany({}),
+        om.purchases?.deleteMany({}),
+        om.processedEvents?.deleteMany({})
       ]);
       return null;
     },

@@ -50,6 +50,8 @@ export default [
     'homeController.js',
     'usersController.js',
     'loginController.js',
+    'offersController.js',
+    'plansController.js',
     'privilegesController.js',
     'resetPasswordController.js',
     'signupController.js'

@@ -614,6 +614,15 @@
     "AccountActivation": {
       "message": "Account Activation"
     },
+    "PurchaseReceipt": {
+      "message": "Your purchase receipt"
+    },
+    "ThanksForPurchase": {
+      "message": "Thank you for purchasing {offer}."
+    },
+    "ReceiptAmount": {
+      "message": "Amount: {price} ({billing})"
+    },
 
     "APP.JS (BUSINESS LOGIC)": true,
     "express_server_listening": {
@@ -1444,6 +1453,213 @@
     },
     "countryZW": {
       "message": "Zimbabwe"
+    },
+    "Offers": {
+      "message": "Offers"
+    },
+    "OfferStripeNotConfigured": {
+      "message": "Payments are not set up yet, so people cannot buy offers. Offers you save here will be sent to Stripe once payments are set up."
+    },
+    "OfferSlug": {
+      "message": "Short name for the web address (lowercase letters, numbers, dashes)"
+    },
+    "OfferPrice": {
+      "message": "Price"
+    },
+    "OfferBilling": {
+      "message": "Billing"
+    },
+    "OfferGrants": {
+      "message": "What the buyer gets"
+    },
+    "OfferStatus": {
+      "message": "Status"
+    },
+    "editOffer": {
+      "message": "Edit offer"
+    },
+    "archiveOffer": {
+      "message": "Archive"
+    },
+    "restoreOffer": {
+      "message": "Restore"
+    },
+    "OfferActive": {
+      "message": "On sale"
+    },
+    "OfferArchived": {
+      "message": "Archived"
+    },
+    "BillingOneTime": {
+      "message": "One time (lifetime access)"
+    },
+    "BillingYearly": {
+      "message": "Every year"
+    },
+    "BillingMonthly": {
+      "message": "Every month"
+    },
+    "BillingWeekly": {
+      "message": "Every week"
+    },
+    "BillingDaily": {
+      "message": "Every day"
+    },
+    "BillingEveryN": {
+      "message": "Every {count} {unit}s"
+    },
+    "UnitYear": {
+      "message": "year"
+    },
+    "UnitMonth": {
+      "message": "month"
+    },
+    "UnitWeek": {
+      "message": "week"
+    },
+    "UnitDay": {
+      "message": "day"
+    },
+    "createOffer": {
+      "message": "Create offer"
+    },
+    "OfferPricingNote": {
+      "message": "Price and billing cannot be changed once someone has bought an offer. Archive it and create a new one instead."
+    },
+    "OfferCurrency": {
+      "message": "Currency (3-letter code, e.g. usd)"
+    },
+    "OfferEvery": {
+      "message": "Charge every this many billing periods"
+    },
+    "OfferGraceUnit": {
+      "message": "Keep access after a missed payment for"
+    },
+    "OfferGraceStandard": {
+      "message": "The usual amount for this billing period"
+    },
+    "OfferGraceCount": {
+      "message": "How many of those"
+    },
+    "OfferRevokeOnPartialRefund": {
+      "message": "Also remove access when only part of a payment is refunded"
+    },
+    "OfferPrivileges": {
+      "message": "Privileges included"
+    },
+    "OfferNoPrivileges": {
+      "message": "No privileges can be offered yet."
+    },
+    "OfferPrivilegeValue": {
+      "message": "Value for {privilege}"
+    },
+    "OfferGroups": {
+      "message": "Groups included"
+    },
+    "OfferReceiptText": {
+      "message": "Message shown and emailed to the buyer after paying"
+    },
+    "saveOffer": {
+      "message": "Save offer"
+    },
+    "ConfirmLifetimeOffer": {
+      "message": "A one-time offer gives buyers permanent access that never expires. Are you sure?"
+    },
+    "bad-offer": {
+      "message": "The offer could not be read."
+    },
+    "bad-offer-slug": {
+      "message": "The short name may only use lowercase letters, numbers, and dashes."
+    },
+    "bad-offer-name": {
+      "message": "Please enter a name."
+    },
+    "bad-offer-description": {
+      "message": "Please enter a description."
+    },
+    "bad-offer-amount": {
+      "message": "Please enter a valid price."
+    },
+    "bad-offer-currency": {
+      "message": "Please enter a valid 3-letter currency code."
+    },
+    "bad-offer-interval": {
+      "message": "Please choose a valid billing period."
+    },
+    "bad-offer-grace": {
+      "message": "Please enter a valid time to keep access after a missed payment."
+    },
+    "bad-offer-receipttext": {
+      "message": "The message to the buyer is not valid."
+    },
+    "bad-offer-grants": {
+      "message": "The privileges or groups chosen are not valid."
+    },
+    "offer-grants-nothing": {
+      "message": "Please choose at least one privilege or group."
+    },
+    "group-not-found": {
+      "message": "That group could not be found."
+    },
+    "offerslug-taken": {
+      "message": "Another offer already uses that short name."
+    },
+    "offer-missing": {
+      "message": "That offer could not be found."
+    },
+    "offer-in-use": {
+      "message": "This offer already has buyers, so its price and billing cannot be changed."
+    },
+    "route_offers": {
+      "message": "/offers"
+    },
+    "route_plans": {
+      "message": "/plans"
+    },
+    "route_purchased": {
+      "message": "/purchased"
+    },
+    "route_checkout": {
+      "message": "/checkout"
+    },
+    "route_portal": {
+      "message": "/portal"
+    },
+    "Plans": {
+      "message": "Plans and pricing"
+    },
+    "PlanBuy": {
+      "message": "Buy"
+    },
+    "PlanLoginToBuy": {
+      "message": "Log in to buy"
+    },
+    "PlanUnavailable": {
+      "message": "Buying is not available right now."
+    },
+    "PlanNoOffers": {
+      "message": "Nothing is for sale right now."
+    },
+    "ManageSubscription": {
+      "message": "Manage subscription"
+    },
+    "PurchaseThanks": {
+      "message": "Thank you for your purchase"
+    },
+    "PurchaseThanksBody": {
+      "message": "Your payment was received. It can take a moment for your access to show up."
+    },
+    "PlanBackToPlans": {
+      "message": "Back to plans"
+    },
+    "payments-unavailable": {
+      "message": "Buying is not available right now."
+    },
+    "login-required": {
+      "message": "Please log in first."
+    },
+    "no-purchase": {
+      "message": "You have no purchases to manage."
     }
   }
 }

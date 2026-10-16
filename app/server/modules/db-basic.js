@@ -14,9 +14,9 @@ import getLogger from './getLogger.js';
 import {i18n} from './i18n.js';
 
 /**
- * @typedef {"name"|"email"|"country"|"pass"|"passVer"|
- *   "date"|"activated"|"activationCode"|"unactivatedEmail"|
- *   "activationRequestDate"} OtherAccountProperty
+ * @typedef {"name"|"email"|"country"|"pass"|"passVer"
+ *   |"date"|"activated"|"activationCode"|"unactivatedEmail"
+ *   |"activationRequestDate"} OtherAccountProperty
  */
 
 const setI18n = i18n();

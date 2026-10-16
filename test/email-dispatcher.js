@@ -39,6 +39,12 @@ const cfg = {fromText: 'Site', fromURL: 'https://example.name'};
 const resetAccount = {
   name: 'Bob', user: 'bob', passKey: 'abc', email: 'bob@example.name'
 };
+/** @type {import('../app/server/modules/offer-manager.js').OfferInfo} */
+const receiptOffer = {
+  slug: 'pro', name: 'Pro plan', description: 'All of it', amount: 2000,
+  currency: 'usd', interval: 'year', intervalCount: 1, privilegeIDs: [],
+  groupNames: [], receiptText: 'Welcome aboard!', active: true, date: 0
+};
 const activationAccount = {
   name: 'Bob', user: 'bob', activationCode: 'xyz', email: 'bob@example.name'
 };
@@ -138,6 +144,28 @@ describe('EmailDispatcher', function () {
         subject: _('AccountActivation')
       });
       expect(sent[0]).to.have.property('attachment').with.lengthOf(1);
+    });
+
+    it('sends a purchase receipt email', async function () {
+      await dispatcher.dispatchPurchaseReceipt(
+        {name: 'Bob', email: 'bob@example.name'}, receiptOffer, cfg, _, langDir
+      );
+      expect(sent).to.have.lengthOf(1);
+      expect(sent[0]).to.include({
+        from: baseConfig.NL_EMAIL_FROM,
+        to: 'bob@example.name',
+        subject: _('PurchaseReceipt')
+      });
+      const [{data}] = dispatcher.composePurchaseReceiptEmail(
+        {name: 'Bob'}, receiptOffer, cfg, _, langDir
+      );
+      expect(data).to.include('Pro plan').and.to.include('$20.00').
+        and.to.include('Welcome aboard!');
+      const [{data: bare}] = dispatcher.composePurchaseReceiptEmail(
+        {name: 'Bob'}, {...receiptOffer, receiptText: undefined},
+        cfg, _, langDir
+      );
+      expect(bare).to.not.include('Welcome aboard!');
     });
 
     it('rejects when the SMTP client rejects', async function () {

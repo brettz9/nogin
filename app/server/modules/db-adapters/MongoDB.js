@@ -104,6 +104,63 @@ class MongoDB extends DBAbstraction {
       privileges
     );
   }
+
+  /**
+   * @returns {Promise<
+   *   import('mongodb').Collection<
+   *     import('../offer-manager.js').OfferInfo
+   *   >
+   * >}
+   */
+  async getOffers () {
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    const offers = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (
+      this.db
+    ).collection('offers'));
+
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    return /** @type {import('mongodb').Collection<import('../offer-manager.js').OfferInfo>} */ (
+      offers
+    );
+  }
+
+  /**
+   * @returns {Promise<
+   *   import('mongodb').Collection<
+   *     import('../offer-manager.js').PurchaseInfo
+   *   >
+   * >}
+   */
+  async getPurchases () {
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    const purchases = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (
+      this.db
+    ).collection('purchases'));
+
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    return /** @type {import('mongodb').Collection<import('../offer-manager.js').PurchaseInfo>} */ (
+      purchases
+    );
+  }
+
+  /**
+   * @returns {Promise<
+   *   import('mongodb').Collection<
+   *     import('../offer-manager.js').ProcessedEventInfo
+   *   >
+   * >}
+   */
+  async getProcessedEvents () {
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    const events = /** @type {unknown} */ (await /** @type {import('mongodb').Db} */ (
+      this.db
+    ).collection('processedEvents'));
+
+    // eslint-disable-next-line @stylistic/max-len -- Long
+    return /** @type {import('mongodb').Collection<import('../offer-manager.js').ProcessedEventInfo>} */ (
+      events
+    );
+  }
 }
 
 export default MongoDB;

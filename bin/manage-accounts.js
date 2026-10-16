@@ -9,8 +9,8 @@ import getDirname from '../app/server/modules/getDirname.js';
 const __dirname = getDirname(import.meta.url);
 
 /**
- * @typedef {"view"|"read"|"delete"|"remove"|"update"|"listIndexes"|
- *   "create"|"add"} ManageAccountVerb
+ * @typedef {"view"|"read"|"delete"|"remove"|"update"|"listIndexes"
+ *   |"create"|"add"} ManageAccountVerb
  */
 
 /**

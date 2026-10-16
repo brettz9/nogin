@@ -25,6 +25,9 @@ const pkg = JSON.parse(
  *   NL_SITE_URL: string,
  *   NL_RESEND_FROM?: string,
  *   NL_RESEND_PASS?: string,
+ *   NL_STRIPE_SECRET?: string,
+ *   NL_STRIPE_PUBLISHABLE?: string,
+ *   NL_STRIPE_WEBHOOK_SECRET?: string,
  *   PORT: number,
  *   secret: string,
  *   cwd: string,
@@ -35,6 +38,7 @@ const pkg = JSON.parse(
  *   crossDomainJSRedirects: boolean,
  *   composeResetPasswordEmailView: string,
  *   composeActivationEmailView: string,
+ *   composePurchaseReceiptEmailView: string,
  *   requireName: boolean,
  *   staticDir: string[],
  *   middleware: string[],
@@ -56,6 +60,7 @@ const pkg = JSON.parse(
  *   fromURL: string,
  *   SERVE_COVERAGE: boolean,
  *   RATE_LIMIT: number,
+ *   NL_PRUNE_INTERVAL: number,
  *   disableRateLimit: boolean,
  *   disableXSRF: boolean,
  *   noHelmet: boolean,
@@ -131,6 +136,23 @@ const optionDefinitions = [
     // eslint-disable-next-line @stylistic/max-len -- Long
     description: 'Alternative to `NL_EMAIL_PASS`. `resend` service password. No defaults.',
     typeLabel: '{underline pass}'
+  },
+  {
+    name: 'NL_STRIPE_SECRET', type: String,
+    description: 'Stripe secret API key, enabling paid offers. All three ' +
+      'Stripe options must be supplied together; no defaults.',
+    typeLabel: '{underline key}'
+  },
+  {
+    name: 'NL_STRIPE_PUBLISHABLE', type: String,
+    description: 'Stripe publishable API key (sent to the browser).',
+    typeLabel: '{underline key}'
+  },
+  {
+    name: 'NL_STRIPE_WEBHOOK_SECRET', type: String,
+    description: 'Stripe webhook signing secret used to verify events ' +
+      'posted to the Stripe webhook route.',
+    typeLabel: '{underline secret}'
   },
   {
     name: 'PORT', type: Number,
@@ -213,6 +235,15 @@ const optionDefinitions = [
       'accepts the template options (_, jml, baseurl, name, user, ' +
       'activationCode, fromText, fromURL). Defaults to ' +
       '`/app/server/views/composeActivationEmail.js`.',
+    typeLabel: '{underline path}'
+  },
+  {
+    name: 'composePurchaseReceiptEmailView', type: String,
+    description: 'Path to a Node file that will be imported. The file must ' +
+      'have an ESM default function export that ' +
+      'accepts the template options (_, langDir, jml, baseurl, name, ' +
+      'offerName, priceText, billingText, receiptText, fromText, fromURL). ' +
+      'Defaults to `/app/server/views/composePurchaseReceiptEmail.js`.',
     typeLabel: '{underline path}'
   },
   {
@@ -350,6 +381,14 @@ const optionDefinitions = [
     name: 'RATE_LIMIT', alias: 'r', type: Number,
     description: 'Used for mitigating DoS attacks; defaults to 700',
     typeLabel: '{underline rate limit}'
+  },
+  {
+    name: 'NL_PRUNE_INTERVAL', type: Number,
+    description: 'Seconds between removals of expired privilege ' +
+      'assignments and group memberships (reads already ignore expired ' +
+      'ones, so this is housekeeping only); defaults to 3600. Use 0 to ' +
+      'prune only at startup.',
+    typeLabel: '{underline seconds}'
   },
   {
     name: 'disableRateLimit', type: Boolean,

@@ -211,6 +211,54 @@ your own `nogin.js` config file.
 - `--fromText`
 - `--fromURL`
 
+##### Paid offers (optional)
+
+Supplying all three enables offers that grant expiring privileges and group
+memberships on payment via Stripe (all three or none).
+
+- `--NL_STRIPE_SECRET` (Stripe secret API key)
+- `--NL_STRIPE_PUBLISHABLE` (Stripe publishable key, sent to the browser)
+- `--NL_STRIPE_WEBHOOK_SECRET` (Signing secret for the Stripe webhook
+    endpoint, which must point at `/stripe-webhook`)
+
+Payment happens on Stripe's hosted Checkout page, so card data never touches
+Nogin. Keep the secret and webhook signing keys out of source control.
+
+Public routes: `/plans` (lists active offers; guests are asked to log in),
+`/purchased?offer=<slug>` (thank-you page showing the offer's receipt text).
+Logged-in users start payment via `/checkout` and open Stripe's billing
+portal via `/portal` (only for users with a prior purchase).
+
+**Legal and compliance (your responsibility as the deployer).** This is not
+legal advice, and requirements vary by jurisdiction. Nogin does not do the
+following for you:
+
+- **Personal data:** Nogin stores purchase records (user, Stripe customer,
+    subscription and payment IDs, amounts, dates). Your privacy policy
+    should cover payments and Stripe as a processor, and you need a process
+    for data export and deletion requests. Deleting an account does not
+    currently remove its purchase records; you may need to retain them for
+    tax or accounting purposes.
+- **Recurring billing:** Auto-renewing subscriptions are regulated in many
+    places. Disclose price, interval, and renewal clearly before purchase,
+    and give payers an easy way to cancel. The plans page shows a "Manage
+    subscription" button that opens Stripe's Customer Portal, which you must
+    enable and configure (cancellation, payment methods, invoices) in the
+    Stripe dashboard.
+- **Terms and refunds:** Nogin collects no consent to terms of sale and
+    shows no refund policy. State these (Stripe Checkout can show a terms
+    checkbox), and note any consumer withdrawal rights that apply to digital
+    goods. Nogin reacts to refunds and disputes made in Stripe by revoking
+    the access they granted; it does not decide when to refund.
+- **Access terms:** State in each offer's description how long access lasts,
+    the grace period after a missed payment, and what happens at expiry.
+- **Taxes:** Checkout is not configured to collect sales tax, VAT, or GST,
+    or tax IDs or addresses. Enable Stripe Tax or handle taxes otherwise.
+- **Receipts and invoices:** Enable Stripe's receipts in your dashboard.
+    An offer's receipt text is a courtesy message, not a tax invoice.
+- **Stripe account:** You are the merchant, subject to Stripe's terms,
+    restricted-business rules, and identity verification.
+
 ##### Security
 
 - `--disableXSRF` (Boolean; defaults to `false`.)
@@ -218,6 +266,9 @@ your own `nogin.js` config file.
 - `--noHostValidation` (Boolean; defaults to `false`.)
 - `--disableRateLimit` (Boolean; defaults to `false`.)
 - `--RATE_LIMIT` (A number defaulting to 700 for a rate limit.)
+- `--NL_PRUNE_INTERVAL` (Seconds between removals of expired privilege
+    assignments and group memberships; defaults to 3600; 0 prunes only at
+    startup. Reads ignore expired entries regardless.)
 - `--transferLimit` (A string like "50mb" to be passed to `express.json()`
     and `express.urlencoded()`)
 - `--csurfOptions` (A string, or, in config, an object; defaults to
@@ -260,6 +311,7 @@ is rendered in emails or on the server.
 
 - `--composeResetPasswordEmailView` (Defaults to `/app/server/views/composeResetPasswordEmail.js`)
 - `--composeActivationEmailView` (Defaults to `/app/server/views/composeActivationEmail.js`)
+- `--composePurchaseReceiptEmailView` (Defaults to `/app/server/views/composePurchaseReceiptEmail.js`)
 - `--injectHTML` (No extra HTML is injected by default)
 - `--favicon` (String path; defaults to blank.)
 

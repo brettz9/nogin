@@ -301,9 +301,10 @@ const checkLocaleRoutes = async (getRoutes, localesBasePath) => {
 };
 
 /**
- * @typedef {"activation"|"lostPassword"|
- *   "resetPassword"|"users"|"delete"|"reset"|"coverage"|"accessAPI"|
- *   "groups"|"privileges"|"signup"|"root"|"home"|"logout"} Route
+ * @typedef {"activation"|"lostPassword"
+ *   |"resetPassword"|"users"|"delete"|"reset"|"coverage"|"accessAPI"
+ *   |"groups"|"privileges"|"offers"|"plans"|"purchased"|"checkout"|"portal"
+ *   |"signup"|"root"|"home"|"logout"} Route
  */
 
 const routeMap = new Map();
@@ -339,7 +340,8 @@ function routeGetter (customRoute) {
     const routeObj = /** @type {Route[]} */ ([
       'root', 'logout', 'home', 'signup', 'activation',
       'lostPassword', 'resetPassword', 'users', 'delete',
-      'reset', 'coverage', 'accessAPI', `groups`, 'privileges'
+      'reset', 'coverage', 'accessAPI', `groups`, 'privileges', 'offers',
+      'plans', 'purchased', 'checkout', 'portal'
     ]).reduce((o, route) => {
       const i18nRoute = _(`route_${route}`);
       o[route] = (

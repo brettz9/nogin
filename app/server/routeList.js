@@ -13,9 +13,12 @@ import {
   checkLocaleRoutes, routeGetter, layoutAndTitleGetter
 } from './routeUtils.js';
 
-import AccountManager from './modules/account-manager.js';
+import AccountManager, {
+  isExpiredAssignment
+} from './modules/account-manager.js';
 import {isNullish, hasOwn, parseCLIJSON} from './modules/common.js';
 import EmailDispatcher from './modules/email-dispatcher.js';
+import OfferManager from './modules/offer-manager.js';
 import getLogger from './modules/getLogger.js';
 import {i18n, getLangDir} from './modules/i18n.js';
 import {emailPattern} from './modules/patterns.js';
@@ -105,11 +108,16 @@ const routeList = async (app, config) => {
     NL_SITE_URL,
     NL_RESEND_PASS,
     NL_RESEND_FROM,
+    NL_STRIPE_SECRET,
+    NL_STRIPE_PUBLISHABLE,
+    NL_STRIPE_WEBHOOK_SECRET,
     DB_URL,
     dbOpts: {DB_NAME, adapter},
     SERVE_COVERAGE,
+    NL_PRUNE_INTERVAL = 3600,
     composeResetPasswordEmailView,
     composeActivationEmailView,
+    composePurchaseReceiptEmailView,
     fromText,
     fromURL,
     requireName,
@@ -196,6 +204,20 @@ const routeList = async (app, config) => {
     log,
     _: globalI18n
   }).connect());
+
+  const prune = async () => {
+    try {
+      await am.pruneExpiredPrivileges();
+    /* c8 ignore next 3 -- Defensive; database failure during housekeeping. */
+    } catch (err) {
+      logErrorProperties(/** @type {Error} */ (err));
+    }
+  };
+  await prune();
+  if (NL_PRUNE_INTERVAL > 0) {
+    setInterval(prune, NL_PRUNE_INTERVAL * 1000).unref();
+  }
+
   const ed = new EmailDispatcher({
     NL_EMAIL_HOST,
     NL_EMAIL_USER,
@@ -218,8 +240,49 @@ const routeList = async (app, config) => {
         typeof composeActivationEmailView === 'string'
         // // eslint-disable-next-line no-unsanitized/method -- User path
         ? (await import(pathResolve(cwd, composeActivationEmailView))).default
+        : undefined,
+    composePurchaseReceiptEmailView:
+      composePurchaseReceiptEmailView &&
+        typeof composePurchaseReceiptEmailView === 'string'
+        // // eslint-disable-next-line no-unsanitized/method -- User path
+        ? (await import(
+          pathResolve(cwd, composePurchaseReceiptEmailView)
+        )).default
         : undefined
   });
+
+  const om = await new OfferManager(am).connect();
+  // Imported lazily as the Stripe SDK has import-time side effects
+  const PaymentManager = NL_STRIPE_SECRET && NL_STRIPE_PUBLISHABLE &&
+    NL_STRIPE_WEBHOOK_SECRET
+    ? (await import('./modules/payments.js')).default
+    : null;
+  const payments = PaymentManager && NL_STRIPE_SECRET &&
+    NL_STRIPE_WEBHOOK_SECRET
+    ? new PaymentManager(om, {
+      secret: NL_STRIPE_SECRET,
+      webhookSecret: NL_STRIPE_WEBHOOK_SECRET,
+      async onFulfilled ({userID}, offer) {
+        // A failed receipt must not fail the webhook (Stripe would retry)
+        try {
+          const [account] = await am.getRecords({user: userID});
+          if (!account?.email) {
+            return;
+          }
+          await ed.dispatchPurchaseReceipt(
+            {name: account.name || userID, email: account.email},
+            offer,
+            composeResetPasswordEmailConfig,
+            globalI18n,
+            getLangDir(globalI18n)
+          );
+        /* c8 ignore next 3 -- Defensive email transport failure. */
+        } catch (err) {
+          logErrorProperties(/** @type {Error} */ (err));
+        }
+      }
+    })
+    : null;
 
   /**
    * @param {import('express').Request} req
@@ -243,6 +306,18 @@ const routeList = async (app, config) => {
       //   one. In normal operation the orphaned-session middleware in
       //   this file destroys such a session before any route runs, so
       //   this is defensive against a mid-request deletion only.
+      user
+        // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
+        ? am.getPrivilegesForTimedGroups(user).catch(
+          /* c8 ignore next 6 -- Mid-request account deletion race. */
+          (err) => {
+            if (/** @type {Error} */ (err).message === 'user-missing') {
+              return null;
+            }
+            throw err;
+          }
+        )
+        : null,
       user
         // eslint-disable-next-line promise/prefer-await-to-then -- Convenient
         ? am.getPrivilegesForUser(user).catch(
@@ -994,6 +1069,181 @@ const routeList = async (app, config) => {
           ? (await am.getAllRecords()).map(({user}) => user)
           : []
       });
+    },
+
+    /**
+     * View, create, edit, and archive paid offers.
+     * @param {import('./routeUtils.js').Routes} _routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async offers (_routes, req, res) {
+      const [accessResult, i18nResult] = await Promise.allSettled([
+        getUserAccess(req, ['nogin.readOffers', 'nogin.editOffers']),
+        setI18n(req, res)
+      ]);
+
+      /* c8 ignore next 4 -- Locale setup failure has no localized response. */
+      if (i18nResult.status === 'rejected') {
+        res.status(400).send('bad-i18n');
+        return;
+      }
+      /* c8 ignore next 4 -- Defensive privilege lookup failure. */
+      if (accessResult.status === 'rejected') {
+        res.status(400).send('bad-access');
+        return;
+      }
+      const {value: _} = i18nResult;
+      const [hasReadOffersAccess, hasEditOffersAccess] = accessResult.value;
+      if (!hasReadOffersAccess) {
+        pageNotFound(_, res);
+        return;
+      }
+
+      const title = _('Offers');
+      res.render('offers', {
+        ...getLayoutAndTitle({
+          _, title, template: 'offers',
+          csrfToken: req.csrfToken()
+        }),
+        hasEditOffersAccess,
+        paymentsConfigured: Boolean(payments),
+        offersInfo: await om.getOffers(),
+        privileges: hasEditOffersAccess
+          ? (await am.getAllPrivileges()).filter(
+            ({userVarying, builtin}) => userVarying && !builtin
+          ).map(({privilegeName, type, description}) => {
+            return {privilegeName, type: type ?? 'boolean', description};
+          })
+          : [],
+        groups: hasEditOffersAccess
+          ? (await am.getAllGroups()).filter(({builtin}) => !builtin).map(
+            ({groupName}) => groupName
+          )
+          : []
+      });
+    },
+
+    /**
+     * Public list of offers for sale.
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async plans (routes, req, res) {
+      const _ = await setI18n(req, res);
+      const userID = req.session.user?.user;
+      const title = _('Plans');
+      res.render('plans', {
+        ...getLayoutAndTitle({
+          _, title, template: 'plans', csrfToken: req.csrfToken()
+        }),
+        offersInfo: await om.getOffers({activeOnly: true}),
+        loggedIn: Boolean(userID),
+        paymentsConfigured: Boolean(payments),
+        canManage: Boolean(
+          payments && userID && await om.getCustomerId(userID)
+        ),
+        loginPath: routes.root
+      });
+    },
+
+    /**
+     * Where Stripe Checkout returns after payment; shows the offer's
+     * receipt text.
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async purchased (routes, req, res) {
+      const _ = await setI18n(req, res);
+      const {offer: slug} = req.query;
+      const offer = typeof slug === 'string' ? await om.getOffer(slug) : null;
+      const title = _('PurchaseThanks');
+      res.render('purchased', {
+        ...getLayoutAndTitle({_, title, template: 'purchased'}),
+        receiptText: offer?.receiptText ?? '',
+        plansPath: routes.plans
+      });
+    }
+  };
+
+  /**
+   * @param {import('express').Request} req
+   * @returns {string}
+   */
+  const getSiteOrigin = (req) => {
+    return NL_SITE_URL
+      ? new URL(NL_SITE_URL).origin
+      : `${req.protocol}://${req.get('host')}`;
+  };
+
+  const offerErrors = new Set([
+    'bad-offer', 'bad-offer-slug', 'bad-offer-name', 'bad-offer-description',
+    'bad-offer-amount', 'bad-offer-currency', 'bad-offer-interval',
+    'bad-offer-grace', 'bad-offer-receipttext', 'bad-offer-grants',
+    'offer-grants-nothing', 'bad-privilegename', 'privilege-missing',
+    'bad-privilege-scope', 'bad-privilege-value', 'bad-groupname',
+    'group-not-found', 'offerslug-taken', 'offer-missing', 'offer-in-use'
+  ]);
+
+  /**
+   * Parses the JSON offer sent by the admin form. Typed privilege values
+   * arrive as raw strings and are coerced as on the privileges page.
+   * @param {unknown} json
+   * @returns {Promise<Partial<import('./modules/offer-manager.js').
+   *   OfferInfo>>}
+   */
+  const parseOfferInput = async (json) => {
+    let data;
+    try {
+      data = JSON.parse(/** @type {string} */ (json));
+    } catch (err) {
+      throw new Error('bad-offer', {cause: err});
+    }
+    if (!data || typeof data !== 'object' ||
+      !Array.isArray(data.privilegeIDs)
+    ) {
+      throw new TypeError('bad-offer');
+    }
+    data.privilegeIDs = await Promise.all(
+      data.privilegeIDs.map(async (
+        /** @type {{privilegeName: string, value?: string}} */ assignment
+      ) => {
+        const privilege = await am.getPrivilege(assignment?.privilegeName);
+        if (!privilege || !privilege.type || privilege.type === 'boolean') {
+          return assignment?.privilegeName;
+        }
+        try {
+          return {
+            privilegeName: assignment.privilegeName,
+            value: coercePrivilegeValue(
+              privilege.type, /** @type {string} */ (assignment.value)
+            )
+          };
+        } catch (err) {
+          throw new Error('bad-privilege-value', {cause: err});
+        }
+      })
+    );
+    return data;
+  };
+
+  /**
+   * Keeps the Stripe product and price in step with a saved offer. Failure
+   * is logged but does not fail the save, as checkout syncs lazily.
+   * @param {import('./modules/offer-manager.js').OfferInfo} offer
+   * @returns {Promise<void>}
+   */
+  const syncOfferWithStripe = async (offer) => {
+    try {
+      await payments?.syncOffer(offer);
+    /* c8 ignore next 3 -- Needs a failing Stripe API. */
+    } catch (err) {
+      logErrorProperties(/** @type {Error} */ (err));
     }
   };
 
@@ -1036,9 +1286,10 @@ const routeList = async (app, config) => {
         usersInfo: userVarying
           ? accounts.filter(({privilegeIDs = []}) => {
             return privilegeIDs.some((assignment) => {
-              return (typeof assignment === 'string'
-                ? assignment
-                : assignment.privilegeName) === privilegeName;
+              return !isExpiredAssignment(assignment) &&
+                (typeof assignment === 'string'
+                  ? assignment
+                  : assignment.privilegeName) === privilegeName;
             });
           }).map(({user}) => ({user: /** @type {string} */ (user)}))
           : [],
@@ -1506,7 +1757,9 @@ const routeList = async (app, config) => {
         hasReadPrivilegeAccess,
         hasEditPrivilegeAccess,
         hasAddPrivilegeToGroupAccess,
-        hasRemovePrivilegeFromGroupAccess
+        hasRemovePrivilegeFromGroupAccess,
+        hasReadOffersAccess,
+        hasEditOffersAccess
       ] = await getUserAccess(req, [
         'nogin.readUsers',
         'nogin.readGroup',
@@ -1516,7 +1769,9 @@ const routeList = async (app, config) => {
         'nogin.readPrivilege',
         'nogin.editPrivilege',
         'nogin.addPrivilegeToGroup',
-        'nogin.removePrivilegeFromGroup'
+        'nogin.removePrivilegeFromGroup',
+        'nogin.readOffers',
+        'nogin.editOffers'
       ]);
 
       const {
@@ -1529,7 +1784,10 @@ const routeList = async (app, config) => {
         newPrivilegeName,
         type,
         value,
-        userVarying
+        userVarying,
+        offer,
+        slug,
+        active
       } = req.body;
 
       /**
@@ -1539,7 +1797,7 @@ const routeList = async (app, config) => {
        *   value?: ({
        *     groupName: string,
        *     usersInfo: {user: string, _id: string}[]
-       *   }|string|{
+       *   }|string|import('./modules/offer-manager.js').OfferInfo|{
        *   privilegeName: string,
        *   groupsInfo: {
        *     groupName: string,
@@ -1861,12 +2119,129 @@ const routeList = async (app, config) => {
         }
         break;
 
+      case 'readOffers':
+        if (!hasReadOffersAccess) {
+          pageNotFound(_, res);
+          return;
+        }
+        resp = {
+          success: true,
+          value: await om.getOffers()
+        };
+        break;
+      case 'createOffer':
+      case 'editOffer':
+      case 'archiveOffer':
+        if (!hasEditOffersAccess) {
+          pageNotFound(_, res);
+          return;
+        }
+        try {
+          if (verb === 'archiveOffer') {
+            await om.setOfferActive(slug, active === true || active === 'true');
+          } else {
+            const data = await parseOfferInput(offer);
+            const saved = verb === 'createOffer'
+              ? await om.createOffer(data)
+              : await om.editOffer(
+                /** @type {import('./modules/offer-manager.js').OfferInfo} */
+                (data)
+              );
+            await syncOfferWithStripe(saved);
+          }
+        } catch (err) {
+          if (offerErrors.has(/** @type {Error} */ (err).message)) {
+            res.status(400).send(_(/** @type {Error} */ (err).message));
+          /* c8 ignore start -- Defensive unexpected manager failure. */
+          } else {
+            res.status(400).send(/** @type {Error} */ (err).message);
+          }
+          /* c8 ignore stop -- See start above */
+          return;
+        }
+        break;
+
       default:
         console.log('Unrecognized verb', verb);
         pageNotFound(_, res);
         return;
       }
       res.status(200).json(resp);
+    },
+
+    /**
+     * Starts Stripe Checkout for the logged-in user.
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async checkout (routes, req, res) {
+      const _ = await setI18n(req, res);
+      const userID = req.session.user?.user;
+      if (!userID) {
+        res.status(401).send(_('login-required'));
+        return;
+      }
+      if (!payments) {
+        res.status(400).send(_('payments-unavailable'));
+        return;
+      }
+      const {slug} = req.body;
+      const origin = getSiteOrigin(req);
+      try {
+        const url = await payments.createCheckout({
+          userID,
+          offerSlug: String(slug),
+          successURL: `${origin}${routes.purchased}?offer=${
+            encodeURIComponent(String(slug))
+          }`,
+          cancelURL: `${origin}${routes.plans}`
+        });
+        res.status(200).json({url});
+      } catch (err) {
+        const {message} = /** @type {Error} */ (err);
+        if (message === 'offer-missing') {
+          res.status(400).send(_(message));
+          return;
+        }
+        logErrorProperties(/** @type {Error} */ (err));
+        res.status(500).send(_('payments-unavailable'));
+      }
+    },
+
+    /**
+     * Opens the Stripe billing portal for the logged-in user.
+     * @param {import('./routeUtils.js').Routes} routes
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async portal (routes, req, res) {
+      const _ = await setI18n(req, res);
+      const userID = req.session.user?.user;
+      if (!userID) {
+        res.status(401).send(_('login-required'));
+        return;
+      }
+      if (!payments) {
+        res.status(400).send(_('payments-unavailable'));
+        return;
+      }
+      try {
+        const url = await payments.createPortalSession({
+          userID, returnURL: `${getSiteOrigin(req)}${routes.plans}`
+        });
+        res.status(200).json({url});
+      } catch (err) {
+        const {message} = /** @type {Error} */ (err);
+        if (message === 'no-purchase') {
+          res.status(400).send(_(message));
+          return;
+        }
+        logErrorProperties(/** @type {Error} */ (err));
+        res.status(500).send(_('payments-unavailable'));
+      }
     }
   };
 
@@ -2213,6 +2588,30 @@ window.NoginPrivs.hasPrivilege = function (priv) {
 
     return {_, route, routes, error};
   };
+
+  // Body is raw here (see `app.js`) as needed for signature verification;
+  //   authenticated by that signature, so exempt from CSRF.
+  app.post('/stripe-webhook', async function (req, res) {
+    const signature = req.headers['stripe-signature'];
+    if (!payments || typeof signature !== 'string') {
+      res.sendStatus(400);
+      return;
+    }
+    try {
+      await payments.handleWebhook(req.body, signature);
+    } catch (err) {
+      const {type} = /** @type {{type?: string}} */ (err);
+      if (type === 'StripeSignatureVerificationError') {
+        res.sendStatus(400);
+        return;
+      }
+      // Non-2xx makes Stripe retry later
+      logErrorProperties(/** @type {Error} */ (err));
+      res.sendStatus(500);
+      return;
+    }
+    res.sendStatus(200);
+  });
 
   app.post('/{*path}', async function (req, res, next) {
     const {

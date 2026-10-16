@@ -92,6 +92,40 @@ class DBAbstraction {
   getGroups () {
     throw new Error('Abstract method');
   }
+
+  /**
+   * @abstract
+   * @returns {Promise<
+   *   import('mongodb').Collection<import('./offer-manager.js').OfferInfo>
+   * >}
+   */
+  getOffers () {
+    throw new Error('Abstract method');
+  }
+
+  /**
+   * @abstract
+   * @returns {Promise<
+   *   import('mongodb').Collection<import('./offer-manager.js').PurchaseInfo>
+   * >}
+   */
+  getPurchases () {
+    throw new Error('Abstract method');
+  }
+
+  /**
+   * Payment-processor events already handled (keyed by event ID in `_id`),
+   * so webhook redeliveries are idempotent.
+   * @abstract
+   * @returns {Promise<
+   *   import('mongodb').Collection<
+   *     import('./offer-manager.js').ProcessedEventInfo
+   *   >
+   * >}
+   */
+  getProcessedEvents () {
+    throw new Error('Abstract method');
+  }
 }
 
 export default DBAbstraction;

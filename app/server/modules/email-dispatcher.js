@@ -11,6 +11,9 @@ import composeResetPasswordEmailViewDefault from
   '../views/composeResetPasswordEmail.js';
 import composeActivationEmailViewDefault from
   '../views/composeActivationEmail.js';
+import composePurchaseReceiptEmailViewDefault from
+  '../views/composePurchaseReceiptEmail.js';
+import {getOfferFormatters} from '../views/offerFormat.js';
 
 /**
  * @typedef {object} EmailDispatcherConfig
@@ -26,6 +29,8 @@ import composeActivationEmailViewDefault from
  *   ComposeResetPasswordEmail} composeResetPasswordEmailView
  * @property {import('../views/composeActivationEmail.js').
  *   ComposeActivationEmail} composeActivationEmailView
+ * @property {import('../views/composePurchaseReceiptEmail.js').
+ *   ComposePurchaseReceiptEmail} [composePurchaseReceiptEmailView]
  */
 
 /**
@@ -51,13 +56,15 @@ class EmailDispatcher {
       NL_RESEND_FROM,
       NL_RESEND_PASS,
       composeResetPasswordEmailView = composeResetPasswordEmailViewDefault,
-      composeActivationEmailView = composeActivationEmailViewDefault
+      composeActivationEmailView = composeActivationEmailViewDefault,
+      composePurchaseReceiptEmailView = composePurchaseReceiptEmailViewDefault
     } = config;
     this.NL_SITE_URL = NL_SITE_URL;
     this.NL_EMAIL_FROM = NL_EMAIL_FROM;
     this.NL_RESEND_FROM = NL_RESEND_FROM;
     this.composeResetPasswordEmailView = composeResetPasswordEmailView;
     this.composeActivationEmailView = composeActivationEmailView;
+    this.composePurchaseReceiptEmailView = composePurchaseReceiptEmailView;
     Object.assign(this, {
       NL_EMAIL_HOST, NL_EMAIL_USER, NL_EMAIL_PASS,
       NS_EMAIL_TIMEOUT
@@ -208,6 +215,50 @@ class EmailDispatcher {
 
     const jamilih = this.composeActivationEmailView({
       _, langDir, jml, baseurl, name, user, activationCode,
+      fromText, fromURL
+    });
+    const html = jml.toXML(jamilih);
+    return [{data: html, alternative: true}];
+  }
+
+  /**
+   * @param {{name: string, email: string}} account
+   * @param {import('./offer-manager.js').OfferInfo} offer
+   * @param {FromEmailConfig} cfg
+   * @param {Internationalizer} _
+   * @param {import('./i18n.js').LanguageDirection} langDir
+   * @returns {Promise<import('emailjs').Message|
+   *   import('emailjs').MessageHeaders|
+   *   import('resend').CreateEmailResponseSuccess|null>}
+   */
+  async dispatchPurchaseReceipt (account, offer, cfg, _, langDir) {
+    const attachment = this.composePurchaseReceiptEmail(
+      account, offer, cfg, _, langDir
+    );
+    const subject = /** @type {string} */ (_('PurchaseReceipt'));
+
+    return await this.#send(account.email, subject, attachment);
+  }
+
+  /**
+   * @param {{name: string}} account
+   * @param {import('./offer-manager.js').OfferInfo} offer
+   * @param {FromEmailConfig} cfg
+   * @param {Internationalizer} _
+   * @param {import('./i18n.js').LanguageDirection} langDir
+   * @returns {EmailInfo[]}
+   */
+  composePurchaseReceiptEmail (
+    {name}, offer, {fromText, fromURL}, _, langDir
+  ) {
+    const {formatPrice, formatBilling} = getOfferFormatters(_);
+
+    const jamilih = this.composePurchaseReceiptEmailView({
+      _, langDir, jml, baseurl: this.NL_SITE_URL, name,
+      offerName: offer.name,
+      priceText: formatPrice(offer),
+      billingText: String(formatBilling(offer)),
+      receiptText: offer.receiptText,
       fromText, fromURL
     });
     const html = jml.toXML(jamilih);

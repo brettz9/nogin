@@ -297,6 +297,172 @@ describe('Programmatic', function () {
   });
 
   describe('AccountManager', function () {
+    it('expires privilege assignments', async function () {
+      this.timeout(30000);
+      const DB_NAME = 'nogin-expiring-privileges-test';
+      const _ = await setI18n()({
+        // @ts-expect-error Why isn't the first overload accepted?
+        acceptsLanguages: () => ['en-US']
+      });
+      const am = await new AccountManager('mongodb', {
+        DB_URL: DBFactory.getURL('mongodb', false, {
+          DB_HOST: '127.0.0.1', DB_PORT: 27017, DB_NAME
+        }),
+        DB_NAME,
+        _
+      }).connect();
+
+      try {
+        await am.deleteAllAccounts();
+        await am.addNewAccount({
+          user: 'expUser', email: 'exp@example.name', pass: '123456',
+          name: '', country: 'US', activated: true
+        });
+        await Promise.all([
+          am.addNewPrivilege({
+            privilegeName: 'expBool', description: 'b', userVarying: true
+          }),
+          am.addNewPrivilege({
+            privilegeName: 'expNum', description: 'n', type: 'number',
+            userVarying: true
+          })
+        ]);
+        const now = Date.now();
+        const names = async () => Object.fromEntries(getPrivilegeValues(
+          await am.getPrivilegesForUser('expUser')
+        ));
+
+        await am.grantPrivilegeUntil({
+          userID: 'expUser', privilegeName: 'expBool', expiresAt: now + 10000
+        });
+        await am.grantPrivilegeUntil({
+          userID: 'expUser', privilegeName: 'expNum', value: 5,
+          expiresAt: now - 1
+        });
+        expect(await names()).to.deep.equal({expBool: true});
+
+        // Never shortens
+        await am.grantPrivilegeUntil({
+          userID: 'expUser', privilegeName: 'expBool', expiresAt: now + 5000
+        });
+        let account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.privilegeIDs).to.deep.include({
+          privilegeName: 'expBool', value: true, expiresAt: now + 10000
+        });
+        // Extends
+        await am.grantPrivilegeUntil({
+          userID: 'expUser', privilegeName: 'expBool', expiresAt: now + 20000
+        });
+        account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.privilegeIDs).to.deep.include({
+          privilegeName: 'expBool', value: true, expiresAt: now + 20000
+        });
+
+        // Permanent grants are never replaced
+        await am.addPrivilegeToUser({
+          userID: 'expUser', privilegeName: 'expBool'
+        });
+        await am.grantPrivilegeUntil({
+          userID: 'expUser', privilegeName: 'expBool', expiresAt: now + 30000
+        });
+        account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.privilegeIDs).to.have.deep.members(['expBool', {
+          privilegeName: 'expNum', value: 5, expiresAt: now - 1
+        }]);
+
+        await expect(am.grantPrivilegeUntil({
+          userID: 'missing', privilegeName: 'expBool', expiresAt: now
+        })).to.be.rejectedWith(Error, 'user-missing');
+        await expect(am.addPrivilegeToUser({
+          userID: 'expUser', privilegeName: 'expBool',
+          expiresAt: NaN
+        })).to.be.rejectedWith(TypeError, 'bad-expiry');
+
+        // Pruning only removes expired entries
+        await am.pruneExpiredPrivileges();
+        account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.privilegeIDs).to.deep.equal(['expBool']);
+
+        // Expiring group memberships
+        await am.addNewPrivilege({
+          privilegeName: 'expGroupPriv', description: 'g'
+        });
+        await am.addNewGroup({groupName: 'expGroup'});
+        await am.addPrivilegeToGroup({
+          groupName: 'expGroup', privilegeName: 'expGroupPriv'
+        });
+        const timed = async () => (await am.getPrivilegesForTimedGroups(
+          'expUser'
+        )).map(({privilegeName}) => privilegeName);
+        await am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup', expiresAt: now + 10000
+        });
+        expect(await timed()).to.deep.equal(['expGroupPriv']);
+        expect(await am.getGroupForUser('expUser')).to.be.undefined;
+        await am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup', expiresAt: now + 5000
+        });
+        account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.groupMemberships).to.deep.equal([
+          {groupName: 'expGroup', expiresAt: now + 10000}
+        ]);
+        await am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup', expiresAt: now + 20000
+        });
+        await am.editPrivilege({
+          privilegeName: 'expGroupPriv', newPrivilegeName: 'expGroupPriv2',
+          description: 'g'
+        });
+        await am.renameGroup({
+          groupName: 'expGroup', newGroupName: 'expGroup2'
+        });
+        account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.groupMemberships).to.deep.equal([
+          {groupName: 'expGroup2', expiresAt: now + 20000}
+        ]);
+        expect(await timed()).to.deep.equal(['expGroupPriv2']);
+        await am.removeGroupMembershipFromUser({
+          userID: 'expUser', groupName: 'expGroup2'
+        });
+        expect(await timed()).to.deep.equal([]);
+        await am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup2', expiresAt: now - 1
+        });
+        expect(await timed()).to.deep.equal([]);
+        await am.pruneExpiredPrivileges();
+        account = await am.accounts?.findOne({user: 'expUser'});
+        expect(account?.groupMemberships).to.deep.equal([]);
+        await am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup2', expiresAt: now + 10000
+        });
+        await am.deleteGroupByGroupName('expGroup2');
+        expect(await timed()).to.deep.equal([]);
+        await expect(am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: '', expiresAt: now
+        })).to.be.rejectedWith(Error, 'bad-groupname');
+        await expect(am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup2', expiresAt: now
+        })).to.be.rejectedWith(Error, 'group-not-found');
+        await expect(am.grantGroupMembershipUntil({
+          userID: 'expUser', groupName: 'expGroup2', expiresAt: NaN
+        })).to.be.rejectedWith(TypeError, 'bad-expiry');
+        await am.addNewGroup({groupName: 'expGroup3'});
+        await expect(am.grantGroupMembershipUntil({
+          userID: 'missing', groupName: 'expGroup3', expiresAt: now
+        })).to.be.rejectedWith(Error, 'user-missing');
+        await expect(
+          am.getPrivilegesForTimedGroups('missing')
+        ).to.be.rejectedWith(Error, 'user-missing');
+        await am.deleteGroupByGroupName('expGroup3');
+      } finally {
+        await am.deletePrivilegeByPrivilegeName('expGroupPriv');
+        await am.deletePrivilegeByPrivilegeName('expGroupPriv2');
+        await am.deleteAllAccounts();
+        await am.deletePrivilegeByPrivilegeName('expBool');
+        await am.deletePrivilegeByPrivilegeName('expNum');
+      }
+    });
+
     it('stores typed privilege values by group and user', async function () {
       this.timeout(30000);
       const DB_NAME = 'nogin-typed-privileges-test';
