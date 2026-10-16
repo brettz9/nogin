@@ -229,6 +229,43 @@ Public routes: `/plans` (lists active offers; guests are asked to log in),
 Logged-in users start payment via `/checkout` and open Stripe's billing
 portal via `/portal` (only for users with a prior purchase).
 
+**Stripe dashboard setup.**
+
+- Nogin takes payments directly into your own Stripe account with your API
+    keys, so you do not need Stripe Connect. If Stripe asks whether you want
+    to build a platform or connect to a platform, neither applies.
+- Products to enable: accepting online payments (Nogin uses hosted
+    Checkout) and, if you have recurring offers, subscriptions (Stripe
+    Billing). You do not need Stripe's "Send invoices" product (manually
+    created invoices); subscription invoices are generated automatically.
+- Enable the Customer Portal in the dashboard's billing settings, or the
+    "Manage subscription" button will not work.
+- To get `NL_STRIPE_WEBHOOK_SECRET`, open Developers → Webhooks (in newer
+    dashboards, Workbench's Webhooks tab or "Event destinations") and add an
+    endpoint for your own account (not Connect). Set its URL to
+    `https://<your-site>/stripe-webhook`, choose the **snapshot** payload
+    style (not thin; Nogin reads the full object from the event), and use
+    the default API version, which should match the one the installed
+    `stripe` package is pinned to (currently `2026-09-30.endive`). Select
+    exactly these events (others are ignored):
+    - `checkout.session.completed`
+    - `checkout.session.async_payment_succeeded`
+    - `invoice.paid`
+    - `invoice.payment_failed`
+    - `invoice.voided`
+    - `customer.subscription.updated`
+    - `customer.subscription.deleted`
+    - `charge.refunded`
+    - `charge.dispute.created`
+
+    Then click Reveal under "Signing secret" (it starts with `whsec_`).
+- Test-mode and live-mode keys and webhook endpoints are separate; create a
+    live endpoint and use its secret when you go live.
+- For local testing, use the Stripe CLI instead of a public endpoint:
+    `stripe listen --forward-to localhost:3000/stripe-webhook`. It prints
+    its own `whsec_…` secret for that session; use that as
+    `NL_STRIPE_WEBHOOK_SECRET` while testing.
+
 **Legal and compliance (your responsibility as the deployer).** This is not
 legal advice, and requirements vary by jurisdiction. Nogin does not do the
 following for you:
