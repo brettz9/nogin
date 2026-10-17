@@ -224,6 +224,12 @@ memberships on payment via Stripe (all three or none).
 Payment happens on Stripe's hosted Checkout page, so card data never touches
 Nogin. Keep the secret and webhook signing keys out of source control.
 
+Admin page: `/offers` (the default localized route; `--customRoute` can
+change it). Viewing it requires the `nogin.readOffers` privilege and
+creating or editing offers requires `nogin.editOffers`. Create offers
+there, not in the Stripe dashboard: Nogin creates the matching Stripe
+product and price itself when the Stripe keys are configured.
+
 Public routes: `/plans` (lists active offers; guests are asked to log in),
 `/purchased?offer=<slug>` (thank-you page showing the offer's receipt text).
 Logged-in users start payment via `/checkout` and open Stripe's billing
