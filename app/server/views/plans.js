@@ -39,7 +39,9 @@ const plans = ({
 
   return layout({
     content: [
-      ['div', {role: 'main'}, /** @type {JamilihChildren} */ ([
+      ['div', {
+        class: 'plans-page', role: 'main'
+      }, /** @type {JamilihChildren} */ ([
         ['h1', [_('Plans')]],
         offersInfo.length ? '' : ['p', [_('PlanNoOffers')]],
         ...offersInfo.map((offer) => {

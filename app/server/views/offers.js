@@ -29,7 +29,9 @@ const offers = ({
 
   return layout({
     content: [
-      ['div', {role: 'main'}, /** @type {JamilihChildren} */ ([
+      ['div', {
+        class: 'offers-page', role: 'main'
+      }, /** @type {JamilihChildren} */ ([
         ['h1', [_('Offers')]],
         paymentsConfigured
           ? ''

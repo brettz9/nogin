@@ -1539,7 +1539,7 @@
       "message": "The usual amount for this billing period"
     },
     "OfferGraceCount": {
-      "message": "How many of those"
+      "message": "Length of that grace period (a number; 0 for none)"
     },
     "OfferRevokeOnPartialRefund": {
       "message": "Also remove access when only part of a payment is refunded"
