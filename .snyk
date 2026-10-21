@@ -6,5 +6,10 @@ ignore:
     - '*':
       reason: 'Just a devDep.'
       expires: 9999-01-01
+  SNYK-JS-PICOMATCH-21248802:
+    - '*':
+      reason: 'Just a devDep.'
+      expires: 9999-01-01
+
 # patches apply the minimum changes required to fix a vulnerability
 patch:

@@ -49,7 +49,7 @@ minimumReleaseAgeExclude:
   - rollup@4.62.5 || 4.63.3 || 4.64.7
   - intl-locale-textinfo-polyfill@3.0.1
   - mocha-badge-generator@0.13.0
-  - snyk@1.1307.1 || 1.1307.2 || 1.1308.1
+  - snyk@1.1307.1 || 1.1307.2 || 1.1308.1 || 1.1308.2
   - mocha-multi-reporters@1.5.2
   - react-dom@19.3.0 || 19.3.1
   - react@19.3.0 || 19.3.1
@@ -88,3 +88,4 @@ minimumReleaseAgeExclude:
   - resend@6.33.0
   - '@asamuzakjp/dom-selector@10.0.3'
   - '@dr.pogodin/csurf@1.18.2'
+  - '@rollup/plugin-terser@1.0.2'
